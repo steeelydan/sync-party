@@ -1,0 +1,145 @@
+/* Global */
+
+body {
+    color: white;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.noCursor {
+    cursor: none;
+}
+
+/* Shadows */
+
+.textShadow {
+    text-shadow: 2px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.iconShadow {
+    filter: drop-shadow(2px 1px 2px rgba(0, 0, 0, 0.8));
+}
+
+/* Backgrounds */
+
+.backgroundShade {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Player Progress Slider */
+
+.slider {
+    cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 22px;
+    background: #9f7aea;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 10px;
+    height: 22px;
+    background: #9f7aea;
+    cursor: pointer;
+    border-radius: 0;
+}
+
+.slider-alt::-webkit-slider-thumb {
+    background: #5ef09b;
+}
+
+.slider-alt::-moz-range-thumb {
+    background: #5ef09b;
+}
+
+.slider-small::-webkit-slider-thumb {
+    width: 7px;
+    height: 15px;
+}
+
+.slider-small::-moz-range-thumb {
+    width: 7px;
+    height: 15px;
+}
+
+.slider::-moz-range-track {
+    height: 22px;
+    cursor: pointer;
+}
+
+input[type='range']::-moz-focus-outer {
+    border: 0;
+}
+
+/* Media Menu */
+
+.sidebar {
+    width: 320px;
+    max-height: 75vh;
+}
+
+.addMedia {
+    min-height: 175px;
+}
+
+.partyItemList {
+    max-height: 38vh;
+    overflow: auto;
+}
+
+.userItemList {
+    max-height: 30vh;
+    overflow: auto;
+}
+
+.fileupload {
+    opacity: 0;
+}
+
+.addMedia progress::-moz-progress-bar {
+    background: #9f7aea;
+}
+.addMedia progress::-webkit-progress-value {
+    background: #9f7aea;
+}
+
+.dropzone {
+    background-color: rgba(0, 0, 0, 0.85);
+    height: 125px;
+}
+
+/* Scroll Bars */
+
+::-webkit-scrollbar {
+    width: 5px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-track {
+    width: 10px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* React Player */
+
+.reactPlayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+}

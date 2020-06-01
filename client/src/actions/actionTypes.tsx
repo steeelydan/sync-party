@@ -1,0 +1,1 @@
+export const SET_GLOBAL_STATE = 'SET_GLOBAL_STATE';
