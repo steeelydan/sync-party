@@ -97,6 +97,7 @@ In `/server/admin-cli`: `admin.js` +
 
 -   Server & client: Implement CSRF protection
 -   Client: Fix a bug regarding `this.player` in `react-player` library
+-   Nasty issue when awakening computer from sleep: App freezes completely (page reload solves the issue, though)
 
 ## Changelog
 
