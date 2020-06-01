@@ -8,12 +8,12 @@ Use cases:
 -   Listen to a podcast together
 -   Listen to the radio together, just like the old times, they say
 -   Listen to an audiobook with your Australian boyfriend
--   Make party in the literal sense. Useful when it isn't feasible to meet in real life, COVID-19 I'm looking at you 😠 Just fire up a Zoom/Jitsi/what-have-you session, put headphones on, turn up some music and go for it.
+-   Make party in the literal sense! 🤘 Useful when it isn't feasible to meet in real life, COVID-19 I'm looking at you 😠 Just fire up a Zoom/Jitsi/what-have-you session. Put headphones on. Turn up some music. Go for it!
 -   Annoy your friends with your latest recordings
 -   Review your recordings with your producer / manager
 -   Present your films to your friends
 -   Discuss your films with the team. Make sure everyone's on the same page - even the same split second this time.
--   Listen to the 20k tracks on your hard drive you collected before Spotify, in random fashion
+-   Listen to the 20k tracks on your hard drive, in random fashion
 -   Watch something in a foreign language & learn together
 -   Watch a coding tutorial in sync with a coworker & improve your skills
 -   Watch a cooking tutorial and do your deeds once in each kitchen
@@ -28,8 +28,9 @@ Supported media sources:
     -   Freely available public TV content, e.g. MediathekViewWeb content
     -   Online radios
     -   Files hosted somewhere
+    -   You name it...
 
-As this application is self-hosted, your & your friends' data stays as private as your server is secure. This project is completely open source and there is no tracking etc. involved. However, if you're watching content on YouTube or similar sites, their usual tracking strategies will take place.
+As this application is self-hosted, your & your friends' data stays as private as your server is secure. This project is completely open source and there is no tracking involved. However, if you're watching content on YouTube or similar sites, the 3rd party's usual tracking will happen.
 
 ## Contributing
 
@@ -44,7 +45,7 @@ If you spot a bug or want to contribute feel free to create an issue.
 
 ## Setup
 
--   Pull the repository
+-   Clone the repository
 -   In `/server` & in `/client`:
     -   `npm install`
     -   Copy `.env.example`
