@@ -71,6 +71,17 @@ If you spot a bug or want to contribute feel free to create an issue.
 -   In `/client`: `npm install && npm start`
 -   In `/server`: `npm install && npm start`
 
+### Architecture
+
+The server is written in Express, using Sequelize, sqlite, express-session. Cookie-based authentication: Passport.js.
+The client is a React application in TypeScript.
+
+Realtime communication is realized with Socket.io.
+
+In production mode, the client application is delivered via the back end app.
+
+In development, you'll want to run the front end via a separate server. CORS issues can be mitigated in the corresponding `.env` file.
+
 ## Admin CLI
 
 In `/server/admin-cli`: `admin.js` +
