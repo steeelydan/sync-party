@@ -135,9 +135,6 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     const playerTimeoutStateRef = useRef(playerTimeoutState);
     playerTimeoutStateRef.current = playerTimeoutState;
 
-    // Refs for React Player
-    const containerRef = useRef<HTMLDivElement>(null);
-
     // Clear all timeouts
     const clearAllTimeouts = (): void => {
         if (playerTimeoutStateRef.current.uiTimeout) {
@@ -637,7 +634,6 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
 
     return (
         <div
-            ref={containerRef}
             onMouseMove={(): void => {
                 handleMouseMovementOverUi();
             }}
