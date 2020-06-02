@@ -100,7 +100,6 @@ In `/server/admin-cli`: `admin.js` +
 ## To Do
 
 -   Server & client: Implement CSRF protection
--   Client: Fix a bug regarding `this.player` in `react-player` library
 -   CSP: disallow 'unsafe-inline' scripts
 
 ## Changelog
