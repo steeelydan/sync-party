@@ -97,11 +97,7 @@ In `/server/admin-cli`: `admin.js` +
 -   `delete-all-users`
 -   `[SPACE] change-password <USERNAME> <NEW PASSWORD>`
 
-## To Do
-
--   Server & client: Implement CSRF protection
--   CSP: disallow 'unsafe-inline' scripts
-
 ## Changelog
 
+0.5.1: Bugfix: this.player sometimes undefined when trying to seek at media item change
 0.5.0: Initial release
