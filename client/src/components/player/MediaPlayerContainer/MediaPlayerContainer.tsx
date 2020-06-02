@@ -81,7 +81,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     );
 
     // Local states & their refs
-    const [player, setPlayer] = useState<ReactPlayer>();
+    const [reactPlayer, setReactPlayer] = useState<ReactPlayer>();
     const [joinedParty, setJoinedParty] = useState(false);
     const [freshlyJoined, setFreshlyJoined] = useState(true);
 
@@ -163,8 +163,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     };
 
     const getCurrentPosition = (): number | undefined => {
-        if (player) {
-            return player.getCurrentTime() / player.getDuration();
+        if (reactPlayer) {
+            return reactPlayer.getCurrentTime() / reactPlayer.getDuration();
         }
     };
 
@@ -400,7 +400,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     // Sync procedure finish: Seek, isPlaying, start buffering state
     useEffect(() => {
         if (
-            player &&
+            reactPlayer &&
             playerState.duration &&
             playerState.playOrder &&
             playerState.isSyncing &&
@@ -420,7 +420,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 setFreshlyJoined(false);
             }
 
-            player.seekTo(playerState.playOrder.position + offset);
+            reactPlayer.seekTo(playerState.playOrder.position + offset);
 
             const site = getSite(playerState.playingItem.url);
 
@@ -436,16 +436,23 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                         playerState.playingItem.type === 'file')
             });
         }
-    }, [player, playerState, initialServerTimeOffset, freshlyJoined, dispatch]);
+    }, [
+        reactPlayer,
+        playerState,
+        initialServerTimeOffset,
+        freshlyJoined,
+        dispatch
+    ]);
 
     // Socket 3/3: Emit syncStatus in intervals
     useInterval(() => {
-        if (player && socket && user && party) {
+        if (reactPlayer && socket && user && party) {
             const syncStatus: SyncStatusOutgoing = {
                 partyId: party.id,
                 userId: user.id,
                 timestamp: Date.now(),
-                position: player.getCurrentTime() / player.getDuration(),
+                position:
+                    reactPlayer.getCurrentTime() / reactPlayer.getDuration(),
                 isPlaying: playerStateRef.current.isPlaying
             };
 
@@ -521,8 +528,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         (screenfull as Screenfull).toggle();
     };
 
-    const handleReady = (player: ReactPlayer): void => {
-        setPlayer(player);
+    const handleReady = (reactPlayer: ReactPlayer): void => {
+        setReactPlayer(reactPlayer);
     };
 
     const handleBufferEnd = (): void => {
