@@ -65,7 +65,7 @@ If you spot a bug or want to contribute feel free to create an issue.
 -   Make sure your firewall is configured correctly
 -   You might want to use a tool like `authbind` to run pm2 without root; see https://pm2.keymetrics.io/docs/usage/specifics/#listening-on-port-80-w-o-root
 -   In `/client`: `npm run deploy`
--   In `/server`: `npm run deploy` or `npm install && [sudo] npm run start-production`
+-   In `/server`: `npm run deploy` or `npm install && npm run setup && [sudo] npm run start-production`
 
 ## Development
 
