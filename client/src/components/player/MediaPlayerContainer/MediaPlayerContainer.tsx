@@ -460,7 +460,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     };
 
     const handleProgress = (reactPlayerState: ReactPlayerState): void => {
-        if (!playerStateRef.current.isSeeking) {
+        if (!playerState.isSeeking) {
             setPlayerState({
                 position: reactPlayerState.played
             });
