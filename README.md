@@ -99,5 +99,5 @@ In `/server/admin-cli`: `admin.js` +
 
 ## Changelog
 
-0.5.1: Bugfix: this.player sometimes undefined when trying to seek at media item change
-0.5.0: Initial release
+-   0.5.1: Bugfix: this.player sometimes undefined when trying to seek at media item change
+-   0.5.0: Initial release
