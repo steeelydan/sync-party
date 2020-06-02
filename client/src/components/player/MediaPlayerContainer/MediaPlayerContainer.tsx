@@ -81,6 +81,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     );
 
     // Local states & their refs
+    const [reactPlayer, setReactPlayer] = useState<ReactPlayer>();
     const [joinedParty, setJoinedParty] = useState(false);
     const [freshlyJoined, setFreshlyJoined] = useState(true);
 
@@ -134,11 +135,6 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     const playerTimeoutStateRef = useRef(playerTimeoutState);
     playerTimeoutStateRef.current = playerTimeoutState;
 
-    // Refs for React Player
-    const containerRef = useRef<HTMLDivElement>(null);
-    // https://github.com/CookPete/react-player/issues/511
-    const playerRef = useRef<ReactPlayer>(null);
-
     // Clear all timeouts
     const clearAllTimeouts = (): void => {
         if (playerTimeoutStateRef.current.uiTimeout) {
@@ -167,11 +163,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     };
 
     const getCurrentPosition = (): number | undefined => {
-        if (playerRef.current) {
-            return (
-                playerRef.current.getCurrentTime() /
-                playerRef.current.getDuration()
-            );
+        if (reactPlayer) {
+            return reactPlayer.getCurrentTime() / reactPlayer.getDuration();
         }
     };
 
@@ -240,7 +233,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
 
     // Emit joinParty when everything is set up; subscribe to play orders; subscribe to syncStatus updates
     useEffect(() => {
-        if (socket && party && playerRef.current && user) {
+        if (socket && party && user) {
             if (!joinedParty) {
                 socket.emit('joinParty', {
                     userId: user.id,
@@ -402,20 +395,12 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         return (): void => {
             clearAllTimeouts();
         };
-    }, [
-        dispatch,
-        joinedParty,
-        user,
-        party,
-        socket,
-        playerRef,
-        updatePlaylistIndex
-    ]);
+    }, [socket, party, user, joinedParty, dispatch, updatePlaylistIndex]);
 
     // Sync procedure finish: Seek, isPlaying, start buffering state
     useEffect(() => {
         if (
-            playerRef.current &&
+            reactPlayer &&
             playerState.duration &&
             playerState.playOrder &&
             playerState.isSyncing &&
@@ -435,15 +420,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 setFreshlyJoined(false);
             }
 
-            try {
-                playerRef.current.seekTo(
-                    playerState.playOrder.position + offset
-                ); // FIXME perhaps in lib: 'this.player' is undefined sometimes despite valid playerRef
-            } catch (error) {
-                dispatch(
-                    setGlobalState({ errorMessage: JSON.stringify(error) })
-                );
-            }
+            reactPlayer.seekTo(playerState.playOrder.position + offset);
 
             const site = getSite(playerState.playingItem.url);
 
@@ -459,18 +436,23 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                         playerState.playingItem.type === 'file')
             });
         }
-    }, [playerState, initialServerTimeOffset, freshlyJoined, dispatch]);
+    }, [
+        reactPlayer,
+        playerState,
+        initialServerTimeOffset,
+        freshlyJoined,
+        dispatch
+    ]);
 
     // Socket 3/3: Emit syncStatus in intervals
     useInterval(() => {
-        if (playerRef.current && socket && user && party) {
+        if (reactPlayer && socket && user && party) {
             const syncStatus: SyncStatusOutgoing = {
                 partyId: party.id,
                 userId: user.id,
                 timestamp: Date.now(),
                 position:
-                    playerRef.current.getCurrentTime() /
-                    playerRef.current.getDuration(),
+                    reactPlayer.getCurrentTime() / reactPlayer.getDuration(),
                 isPlaying: playerStateRef.current.isPlaying
             };
 
@@ -485,7 +467,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     };
 
     const handleProgress = (reactPlayerState: ReactPlayerState): void => {
-        if (!playerStateRef.current.isSeeking) {
+        if (!playerState.isSeeking) {
             setPlayerState({
                 position: reactPlayerState.played
             });
@@ -546,12 +528,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         (screenfull as Screenfull).toggle();
     };
 
-    const handleReady = (): void => {
-        if (!playerState.isPlaying) {
-            setPlayerState({
-                isBuffering: false
-            });
-        }
+    const handleReady = (reactPlayer: ReactPlayer): void => {
+        setReactPlayer(reactPlayer);
     };
 
     const handleBufferEnd = (): void => {
@@ -663,7 +641,6 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
 
     return (
         <div
-            ref={containerRef}
             onMouseMove={(): void => {
                 handleMouseMovementOverUi();
             }}
@@ -684,7 +661,6 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 ></MediaPlayerOverlay>
                 <div className="flex w-full h-full pointer-events-none">
                     <ReactPlayer
-                        ref={playerRef}
                         config={{ youtube: { playerVars: { disablekb: 1 } } }}
                         url={playerState.sourceUrl}
                         playing={playerState.isPlaying}
