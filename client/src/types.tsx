@@ -32,6 +32,11 @@ export type GlobalStateActionProperties = {
     initialServerTimeOffset?: number;
 };
 
+export type AppAction = {
+    type: string;
+    globalStateProperties: GlobalStateActionProperties;
+};
+
 export type PlayerState = {
     playOrder: PlayOrder | null;
     isPlaying: boolean;
@@ -86,11 +91,6 @@ export type PartyPartialState = {
     memberStatus: MemberStatus | null;
     actionMessage: ActionMessage | null;
     playingItem: MediaItem | null;
-};
-
-export type AppAction = {
-    type: string;
-    globalStateProperties: GlobalStateActionProperties;
 };
 
 export type User = {
