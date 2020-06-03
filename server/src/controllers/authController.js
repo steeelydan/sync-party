@@ -10,7 +10,6 @@
  * @apiSuccess {Object} user User Object containing id, username & role.
  * @apiError notAuthenticated Client did not provide a cookie or authenticated session does not exist.
  */
-/* eslint-disable-next-line */
 const auth = async (req, res, logger) => {
     if (req.isAuthenticated()) {
         return res.json({
