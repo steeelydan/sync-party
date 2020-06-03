@@ -5,6 +5,7 @@ import Axios from 'axios';
 import { axiosConfig } from '../../../common/helpers';
 import { useTranslation } from 'react-i18next';
 
+import InputText from '../../input/InputText/InputText';
 import Button from '../../input/Button/Button';
 import Alert from '../../display/Alert/Alert';
 
@@ -19,17 +20,60 @@ export default function ScreenLogin(): JSX.Element {
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
+    const handleUsernameChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ): void => {
+        setAlert('');
+        setUsername(event.target.value.trim());
+    };
+
+    const handleUsernameEnter = (event: React.KeyboardEvent): void => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            if (username !== '') {
+                setDisplayState('password');
+            } else {
+                setAlert(t('validation.usernameMissing'));
+            }
+        }
+    };
+
+    const handleNextButtonClick = (event: React.MouseEvent): void => {
+        event.preventDefault();
+        if (username !== '') {
+            handleNextToPasswordForm();
+        } else {
+            setAlert(t('validation.usernameMissing'));
+        }
+    };
+
     const handleNextToPasswordForm = (): void => {
         if (username !== '') {
             setDisplayState('password');
         }
     };
 
+    const handlePasswordChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ): void => {
+        setAlert('');
+        setPassword(event.target.value.trim());
+    };
+
     const handleBackToUsername = (): void => {
         setDisplayState('username');
     };
 
-    const handleSubmit = async (): Promise<void> => {
+    const handleSubmitButtonClick = (event: React.MouseEvent): void => {
+        event.preventDefault();
+        if (password !== '') {
+            submit();
+        } else {
+            setAlert(t('validation.passwordMissing'));
+        }
+    };
+
+    const submit = async (): Promise<void> => {
         try {
             const response = await Axios.post(
                 process.env.REACT_APP_API_ROUTE + 'login',
@@ -99,44 +143,19 @@ export default function ScreenLogin(): JSX.Element {
                     {displayState === 'username' && (
                         <>
                             <div className="flex-row">
-                                <input
+                                <InputText
                                     id="username"
-                                    onKeyDown={(event): void => {
-                                        if (event.key === 'Enter') {
-                                            event.preventDefault();
-                                            if (username !== '') {
-                                                setDisplayState('password');
-                                            } else {
-                                                setAlert(
-                                                    t(
-                                                        'validation.usernameMissing'
-                                                    )
-                                                );
-                                            }
-                                        }
-                                    }}
-                                    className="bg-white text-gray-800 focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-2 block w-full appearance-none"
+                                    onKeyDown={handleUsernameEnter}
+                                    className="bg-white text-gray-800 focus:shadow-outline border-gray-300 py-2 px-2 block"
                                     type="text"
-                                    autoFocus
-                                    onChange={(event): void => {
-                                        setAlert('');
-                                        setUsername(event.target.value.trim());
-                                    }}
+                                    autoFocus={true}
+                                    onChange={handleUsernameChange}
                                     value={username}
-                                ></input>
+                                ></InputText>
                             </div>
                             <div className="flex-row mt-4">
                                 <Button
-                                    onClick={(event): void => {
-                                        event.preventDefault();
-                                        if (username !== '') {
-                                            handleNextToPasswordForm();
-                                        } else {
-                                            setAlert(
-                                                t('validation.usernameMissing')
-                                            );
-                                        }
-                                    }}
+                                    onClick={handleNextButtonClick}
                                     text={t('common.next')}
                                 ></Button>
                             </div>
@@ -145,17 +164,14 @@ export default function ScreenLogin(): JSX.Element {
                     {displayState === 'password' && (
                         <>
                             <div className="flex-row">
-                                <input
+                                <InputText
                                     id="password"
-                                    className="bg-white text-gray-800 focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-2 block w-full appearance-none"
+                                    className="bg-white text-gray-800 focus:shadow-outline border-gray-300 py-2 px-2 block"
                                     type="password"
                                     autoFocus
-                                    onChange={(event): void => {
-                                        setAlert('');
-                                        setPassword(event.target.value.trim());
-                                    }}
+                                    onChange={handlePasswordChange}
                                     value={password}
-                                ></input>
+                                ></InputText>
                             </div>
                             <div className="flex-row flex mt-4">
                                 <Button
@@ -169,16 +185,7 @@ export default function ScreenLogin(): JSX.Element {
                                     className="ml-auto text-green-500 w-40"
                                     color="text-green-500 border-green-500 hover:text-green-400 hover:border-green-400"
                                     type="submit"
-                                    onClick={(event): void => {
-                                        event.preventDefault();
-                                        if (password !== '') {
-                                            handleSubmit();
-                                        } else {
-                                            setAlert(
-                                                t('validation.passwordMissing')
-                                            );
-                                        }
-                                    }}
+                                    onClick={handleSubmitButtonClick}
                                     text={t('common.submit')}
                                 ></Button>
                             </div>

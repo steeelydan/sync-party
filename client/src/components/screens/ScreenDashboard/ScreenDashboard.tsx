@@ -158,7 +158,7 @@ export default function ScreenDashboard(props: Props): JSX.Element | null {
                                 <div className="flex flex-row">
                                     <div>
                                         <InputText
-                                            className="w-full"
+                                            containerClassName="w-full"
                                             label={
                                                 t('dashboard.newParty') + ':'
                                             }
