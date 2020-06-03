@@ -4,6 +4,7 @@ import { setGlobalState } from '../../../actions/globalActions';
 import Axios from 'axios';
 import { axiosConfig } from '../../../common/helpers';
 import { useTranslation } from 'react-i18next';
+
 import Button from '../../input/Button/Button';
 import Alert from '../../display/Alert/Alert';
 
@@ -18,7 +19,7 @@ export default function ScreenLogin(): JSX.Element {
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
-    const handleToPasswordForm = (): void => {
+    const handleNextToPasswordForm = (): void => {
         if (username !== '') {
             setDisplayState('password');
         }
@@ -28,43 +29,41 @@ export default function ScreenLogin(): JSX.Element {
         setDisplayState('username');
     };
 
-    const handlePasswordSubmit = async (): Promise<void> => {
-        if (username !== '' && password !== '') {
-            try {
-                const response = await Axios.post(
-                    process.env.REACT_APP_API_ROUTE + 'login',
-                    {
-                        username: username,
-                        password: password
-                    },
-                    axiosConfig()
+    const handleSubmit = async (): Promise<void> => {
+        try {
+            const response = await Axios.post(
+                process.env.REACT_APP_API_ROUTE + 'login',
+                {
+                    username: username,
+                    password: password
+                },
+                axiosConfig()
+            );
+
+            if (response.data.success === true) {
+                dispatch(
+                    setGlobalState({
+                        loggedIn: true,
+                        user: response.data.user
+                    })
                 );
-
-                if (response.data.success === true) {
-                    dispatch(
-                        setGlobalState({
-                            loggedIn: true,
-                            user: response.data.user
-                        })
-                    );
-                } else {
-                    dispatch(
-                        setGlobalState({
-                            loggedIn: false
-                        })
-                    );
-
-                    setAlert(t(`apiResponseMessages.${response.data.msg}`));
-                }
-            } catch (error) {
+            } else {
                 dispatch(
                     setGlobalState({
                         loggedIn: false
                     })
                 );
 
-                setAlert(t('apiResponseMessages.wrongUsernameOrPassword'));
+                setAlert(t(`apiResponseMessages.${response.data.msg}`));
             }
+        } catch (error) {
+            dispatch(
+                setGlobalState({
+                    loggedIn: false
+                })
+            );
+
+            setAlert(t('apiResponseMessages.wrongUsernameOrPassword'));
         }
     };
 
@@ -131,7 +130,7 @@ export default function ScreenLogin(): JSX.Element {
                                     onClick={(event): void => {
                                         event.preventDefault();
                                         if (username !== '') {
-                                            handleToPasswordForm();
+                                            handleNextToPasswordForm();
                                         } else {
                                             setAlert(
                                                 t('validation.usernameMissing')
@@ -173,7 +172,7 @@ export default function ScreenLogin(): JSX.Element {
                                     onClick={(event): void => {
                                         event.preventDefault();
                                         if (password !== '') {
-                                            handlePasswordSubmit();
+                                            handleSubmit();
                                         } else {
                                             setAlert(
                                                 t('validation.passwordMissing')

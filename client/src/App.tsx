@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setGlobalState } from './actions/globalActions';
+import { RootAppState } from './types';
+import socketIOClient from 'socket.io-client';
 import i18n from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
+
+import { getUpdatedUserParties, getUpdatedUserItems } from './common/requests';
+import { updateCurrentParty } from './common/helpers';
 import translations from './translations';
+
 import Auth from './components/wrappers/Auth/Auth';
 import ScreenDashboard from './components/screens/ScreenDashboard/ScreenDashboard';
-import socketIOClient from 'socket.io-client';
-import { useSelector, useDispatch } from 'react-redux';
 import ScreenParty from './components/screens/ScreenParty/ScreenParty';
 import ScreenUser from './components/screens/ScreenUser/ScreenUser';
-import { getUpdatedUserParties, getUpdatedUserItems } from './common/requests';
 import ScreenEditParty from './components/screens/ScreenEditParty/ScreenEditParty';
 import ScreenMediaItems from './components/screens/ScreenMediaItems/ScreenMediaItems';
-import { RootAppState } from './types';
-import { updateCurrentParty } from './common/helpers';
-import { setGlobalState } from './actions/globalActions';
 
 i18n.use(initReactI18next).init({
     resources: translations,
