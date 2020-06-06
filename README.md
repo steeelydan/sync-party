@@ -2,6 +2,8 @@
 
 Watch videos or listen to music synchronously with your friends. Imagine a virtual living room of a shared flat in a terribly cool city.
 
+Demo video: https://www.youtube.com/watch?v=6t5-cAwSfjk
+
 Use cases:
 
 -   Watch a documentary or a vlog on YouTube with a friend from another country
