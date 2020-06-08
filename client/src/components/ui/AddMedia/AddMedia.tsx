@@ -59,8 +59,8 @@ export default function AddMedia({
     const [uploadStartTime, setUploadStartTime] = useState(0);
     const [isUploading, setIsUploading] = useState(false);
     const [progress, setProgress] = useState(0);
-    const [uploadIsFinished, setUploadIsFinished] = useState(false);
-    const [lastCreatedItem, setLastCreatedItem] = useState('');
+    const [addedSuccessfully, setAddedSuccessfully] = useState(false);
+    const [lastCreatedItem, setLastCreatedItem] = useState<NewMediaItem>();
     const [uploadError, setUploadError] = useState(false);
 
     const dispatch = useDispatch();
@@ -126,7 +126,8 @@ export default function AddMedia({
                     getUpdatedUserItems(dispatch, t);
                     resetUploadForm();
                     setIsUploading(false);
-                    setUploadIsFinished(true);
+                    setLastCreatedItem(mediaItem);
+                    setAddedSuccessfully(true);
                     hideFinishInAFewSecs();
                     toggleCollapseAddMediaMenu();
                 } else {
@@ -158,7 +159,7 @@ export default function AddMedia({
             formData.append('file', file);
             formData.append('partyId', party.id);
             setIsUploading(true);
-            setUploadIsFinished(false);
+            setAddedSuccessfully(false);
             setUploadStartTime(Date.now());
             try {
                 const response = await Axios.post(
@@ -183,9 +184,9 @@ export default function AddMedia({
                     updatePartyAndUserParties();
                     getUpdatedUserItems(dispatch, t);
                     resetUploadForm();
-                    setLastCreatedItem(file.name);
+                    setLastCreatedItem(mediaItem);
                     setIsUploading(false);
-                    setUploadIsFinished(true);
+                    setAddedSuccessfully(true);
                     hideFinishInAFewSecs();
                     toggleCollapseAddMediaMenu();
                 } else {
@@ -278,7 +279,7 @@ export default function AddMedia({
 
     const hideFinishInAFewSecs = (): void => {
         setTimeout(() => {
-            setUploadIsFinished(false);
+            setAddedSuccessfully(false);
         }, 5000);
     };
 
@@ -366,14 +367,16 @@ export default function AddMedia({
                         }
                         onClick={toggleCollapseAddMediaMenu}
                     ></Button>
-                    {uploadIsFinished && (
+                    {addedSuccessfully && lastCreatedItem && (
                         <div className="my-3">
                             <FontAwesomeIcon
                                 className="text-purple-400"
                                 icon={faThumbsUp}
                             ></FontAwesomeIcon>{' '}
-                            {t('mediaMenu.uploadFinished')}
-                            {lastCreatedItem}
+                            {lastCreatedItem.type === 'file'
+                                ? t('mediaMenu.uploadFinished')
+                                : t('mediaMenu.addingFinished')}
+                            {lastCreatedItem.name}
                         </div>
                     )}
                 </>

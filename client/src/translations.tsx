@@ -57,6 +57,7 @@ const translations = {
                 userItemsUpload:
                     'Feel free to upload an item or add media from the web.',
                 uploadFinished: 'Upload finished. File: ',
+                addingFinished: 'New item was added. Name: ',
                 uploadError: 'An error occured during the upload.',
                 uploadLabel: 'Upload',
                 clearLabel: 'Clear',
