@@ -67,7 +67,7 @@ const login = async (req: Request, res: Response, logger: Logger) => {
  * @apiPermission user
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
  */
-const logout = async (req, res, logger) => {
+const logout = async (req: Request, res: Response, logger: Logger) => {
     try {
         req.logout();
         return res.status(200).json({ success: true, msg: 'logoutSuccessful' });
