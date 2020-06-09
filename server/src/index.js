@@ -349,7 +349,7 @@ const runApp = async () => {
     });
 
     app.delete('/api/mediaItem/:id', isAuthenticated, async (req, res) => {
-        mediaItemController.deleteMediaItem(req, res, models);
+        mediaItemController.deleteMediaItem(req, res, models, logger);
     });
 
     // UserItems
