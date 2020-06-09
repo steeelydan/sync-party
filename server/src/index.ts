@@ -1,45 +1,44 @@
-require('dotenv').config();
-const https = require('https');
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
+import dotenv from 'dotenv';
+import https from 'https';
+import http from 'http';
+import fs from 'fs';
+import path from 'path';
 
-const Sequelize = require('sequelize');
+import { Sequelize } from 'sequelize';
 
-const morgan = require('morgan');
+import morgan from 'morgan';
 
-const socketio = require('socket.io');
-const express = require('express');
+import socketio from 'socket.io';
+import express from 'express';
 
-const helmet = require('helmet');
-const bodyParser = require('body-parser');
-const expressSession = require('express-session');
-const SequelizeStore = require('connect-session-sequelize')(
-    expressSession.Store
-);
-// const csurf = require('csurf'); TBI
-const compression = require('compression');
-const passportSocketIo = require('passport.socketio');
-const cookieParser = require('cookie-parser');
-const configurePassport = require('./middleware/passport');
-const configureSession = require('./middleware/session');
-const rateLimiters = require('./middleware/rateLimiters');
-const { isAuthenticated, isAdmin } = require('./middleware/auth');
+import helmet from 'helmet';
+import bodyParser from 'body-parser';
+import expressSession from 'express-session';
+import { SequelizeStore } from 'connect-session-sequelize';
+// import csurf from 'csurf'; TBI
+import compression from 'compression';
+import passportSocketIo from 'passport.socketio';
+import cookieParser from 'cookie-parser';
+import configurePassport from './middleware/passport';
+import configureSession from './middleware/session';
+import rateLimiters from './middleware/rateLimiters';
+import { isAuthenticated, isAdmin } from './middleware/auth';
 
-const authController = require('./controllers/authController');
-const fileController = require('./controllers/fileController');
-const mediaItemController = require('./controllers/mediaItemController');
-const userController = require('./controllers/userController');
-const partyController = require('./controllers/partyController');
-const partyItemController = require('./controllers/partyItemController');
-const partyMetadataController = require('./controllers/partyMetadataController');
-const userPartyController = require('./controllers/userPartyController');
-const userItemController = require('./controllers/userItemController');
+import authController from './controllers/authController';
+import fileController from './controllers/fileController';
+import mediaItemController from './controllers/mediaItemController';
+import userController from './controllers/userController';
+import partyController from './controllers/partyController';
+import partyItemController from './controllers/partyItemController';
+import partyMetadataController from './controllers/partyMetadataController';
+import userPartyController from './controllers/userPartyController';
+import userItemController from './controllers/userItemController';
 
-const helpers = require('./common/helpers');
-const createModels = require('./database/createModels');
+import helpers from './common/helpers';
+import createModels from './database/createModels';
 
 // Config
+dotenv.config();
 const port = process.env.PORT || 4000;
 
 // Init app
@@ -187,8 +186,8 @@ const runApp = async () => {
             key: 'connect.sid',
             secret: process.env.SESSION_SECRET,
             store: sessionStore,
-            passport: passport,
-            cookieParser: cookieParser
+            passport
+            // cookieParser
         })
     );
 
@@ -208,51 +207,60 @@ const runApp = async () => {
             );
         });
 
-        const joinParty = (data) => {
-            io.in(data.partyId).clients(async (err, clients) => {
-                if (!clients.includes(socketUserId)) {
-                    try {
-                        const party = await models.Party.findOne({
-                            where: {
-                                id: data.partyId
-                            }
-                        });
+        // FIXME custom types
+        const joinParty = (data: {
+            partyId: string;
+            timestamp: number;
+        }) => {
+            io.in(data.partyId).clients(
+                async (err: Error, clients: string[]) => {
+                    if (!clients.includes(socketUserId)) {
+                        try {
+                            const party = await models.Party.findOne({
+                                where: {
+                                    id: data.partyId
+                                }
+                            });
 
-                        if (!party || !party.members.includes(socketUserId)) {
-                            return Promise.reject(
-                                new Error('User not member in party')
+                            if (
+                                !party ||
+                                !party.members.includes(socketUserId)
+                            ) {
+                                return Promise.reject(
+                                    new Error('User not member in party')
+                                );
+                            }
+                        } catch (error) {
+                            logger.log('error', error);
+                        }
+
+                        socket.join(data.partyId);
+
+                        socket.emit(
+                            'serverTimeOffset',
+                            Date.now() - data.timestamp
+                        );
+
+                        logger.log(
+                            'info',
+                            `Web Sockets: User ${socketUserId} joined party ${data.partyId}`
+                        );
+
+                        if (currentPlayWishes[data.partyId]) {
+                            socket.emit(
+                                'playOrder',
+                                currentPlayWishes[data.partyId]
                             );
                         }
-                    } catch (error) {
-                        logger.log('error', error);
-                    }
 
-                    socket.join(data.partyId);
-
-                    socket.emit(
-                        'serverTimeOffset',
-                        Date.now() - data.timestamp
-                    );
-
-                    logger.log(
-                        'info',
-                        `Web Sockets: User ${socketUserId} joined party ${data.partyId}`
-                    );
-
-                    if (currentPlayWishes[data.partyId]) {
-                        socket.emit(
-                            'playOrder',
-                            currentPlayWishes[data.partyId]
+                        return Promise.resolve();
+                    } else {
+                        return Promise.reject(
+                            new Error('User already joined the party')
                         );
                     }
-
-                    return Promise.resolve();
-                } else {
-                    return Promise.reject(
-                        new Error('User already joined the party')
-                    );
                 }
-            });
+            );
         };
 
         socket.on('joinParty', (data) => {

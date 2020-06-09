@@ -31,6 +31,4 @@ const getUserItems = async (req, res, models, logger) => {
     }
 };
 
-module.exports = {
-    getUserItems
-};
+export default { getUserItems };

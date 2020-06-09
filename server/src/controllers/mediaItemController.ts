@@ -161,7 +161,7 @@ const deleteMediaItem = async (req, res, models, logger) => {
     }
 };
 
-module.exports = {
+export default {
     getAllMediaItems,
     createMediaItem,
     editMediaItem,

@@ -71,4 +71,4 @@ Otherwise you must define a custom field mapping, see below. */
     return passport;
 };
 
-module.exports = configurePassport;
+export default configurePassport;

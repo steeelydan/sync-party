@@ -68,10 +68,4 @@ const changePassword = async (models, username, newPasswordRaw) => {
     );
 };
 
-module.exports = {
-    createUser,
-    deleteUser,
-    listUsers,
-    deleteAllUsers,
-    changePassword
-};
+export default { createUser, deleteUser, listUsers, deleteAllUsers, changePassword };

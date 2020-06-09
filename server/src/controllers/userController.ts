@@ -32,6 +32,4 @@ const getAllUsers = async (req, res, models) => {
     }
 };
 
-module.exports = {
-    getAllUsers
-};
+export default { getAllUsers };

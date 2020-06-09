@@ -118,7 +118,4 @@ const editParty = async (req, res, models, logger) => {
     }
 };
 
-module.exports = {
-    createParty,
-    editParty
-};
+export default { createParty, editParty };

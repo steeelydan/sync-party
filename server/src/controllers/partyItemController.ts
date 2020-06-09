@@ -164,8 +164,4 @@ const updatePartyItems = async (req, res, models, logger) => {
     }
 };
 
-module.exports = {
-    removeItemFromParty,
-    addItemToParty,
-    updatePartyItems
-};
+export default { removeItemFromParty, addItemToParty, updatePartyItems };

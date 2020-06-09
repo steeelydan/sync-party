@@ -80,4 +80,4 @@ const getUpdatedUserItems = async (
     }
 };
 
-export { getUpdatedUserParties, getUpdatedUserItems };
+export default { getUpdatedUserParties, getUpdatedUserItems };

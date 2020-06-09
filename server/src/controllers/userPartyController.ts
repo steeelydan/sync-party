@@ -83,6 +83,4 @@ const getUserParties = async (req, res, models) => {
     });
 };
 
-module.exports = {
-    getUserParties
-};
+export default { getUserParties };

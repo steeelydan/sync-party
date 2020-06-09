@@ -108,6 +108,6 @@ const createModels = (Sequelize, sequelizeInstance) => {
     return models;
 };
 
-module.exports = (Sequelize, sequelizeInstance) => {
+export default (Sequelize, sequelizeInstance) => {
     return createModels(Sequelize, sequelizeInstance);
 };

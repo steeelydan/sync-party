@@ -53,7 +53,7 @@ const partyMetadataValidator = Joi.object({
     played: Joi.object().unknown()
 });
 
-module.exports = {
+export default {
     newMediaItemValidator,
     mediaItemValidator,
     partyMediaItemsValidator,

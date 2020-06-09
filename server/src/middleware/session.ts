@@ -22,4 +22,4 @@ const configureSession = (sequelize, SequelizeStore, expressSession) => {
     return { session, sessionStore };
 };
 
-module.exports = configureSession;
+export default configureSession;

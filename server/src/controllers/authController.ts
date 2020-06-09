@@ -75,8 +75,4 @@ const logout = async (req, res, logger) => {
     }
 };
 
-module.exports = {
-    auth,
-    login,
-    logout
-};
+export default { auth, login, logout };

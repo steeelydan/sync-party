@@ -171,7 +171,4 @@ const upload = (req, res, models, logger) => {
     });
 };
 
-module.exports = {
-    getFile,
-    upload
-};
+export default { getFile, upload };

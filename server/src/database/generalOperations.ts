@@ -40,7 +40,4 @@ const insertNewMediaItem = async (req, newMediaItem, models, logger) => {
     }
 };
 
-module.exports = {
-    updatePartyItems,
-    insertNewMediaItem
-};
+export default { updatePartyItems, insertNewMediaItem };

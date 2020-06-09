@@ -7,4 +7,4 @@ const rateLimiters = {
     })
 };
 
-module.exports = rateLimiters;
+export default rateLimiters;

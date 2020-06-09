@@ -101,7 +101,7 @@ const createUserToken = () => {
     return crypto.randomBytes(64).toString('base64');
 };
 
-module.exports = {
+export default {
     envCheck,
     getFileFromId,
     createLogger,

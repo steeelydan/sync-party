@@ -53,6 +53,4 @@ const updatePartyMetadata = async (req, res, models, logger) => {
     }
 };
 
-module.exports = {
-    updatePartyMetadata
-};
+export default { updatePartyMetadata };
