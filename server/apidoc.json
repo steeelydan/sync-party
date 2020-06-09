@@ -1,6 +1,6 @@
 {
     "name": "Sync Party API",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "description": "API for Sync Party",
     "header": {
         "title": "Default params & responses",
