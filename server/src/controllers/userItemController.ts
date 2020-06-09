@@ -20,7 +20,7 @@ const getUserItems = async (req, res, models, logger) => {
         return res.status(200).json({
             success: true,
             msg: 'fetchingSuccessful',
-            userItems: userItems
+            userItems
         });
     } catch (error) {
         logger.log('error', error);

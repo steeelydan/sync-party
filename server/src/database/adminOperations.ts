@@ -24,7 +24,7 @@ const createUser = async (models, username, role, passwordRaw) => {
 };
 
 const deleteUser = async (models, username) => {
-    await models.User.findOne({ where: { username: username } }).then(
+    await models.User.findOne({ where: { username } }).then(
         (user) => {
             if (!user) {
                 console.log(
@@ -56,7 +56,7 @@ const deleteAllUsers = async (models) => {
 };
 
 const changePassword = async (models, username, newPasswordRaw) => {
-    const user = await models.User.findOne({ where: { username: username } });
+    const user = await models.User.findOne({ where: { username } });
     if (!user) {
         throw new Error(`User ${username} does not exist!`);
     }
@@ -64,7 +64,7 @@ const changePassword = async (models, username, newPasswordRaw) => {
     user.password = newPasswordHashed;
     await models.User.update(
         { password: newPasswordHashed },
-        { where: { username: username } }
+        { where: { username } }
     );
 };
 

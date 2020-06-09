@@ -22,7 +22,7 @@ const getAllMediaItems = async (req, res, models, logger) => {
         return res.status(200).json({
             success: true,
             msg: 'fetchingSuccessful',
-            allMediaItems: allMediaItems
+            allMediaItems
         });
     } catch (error) {
         logger.log('error', error);
@@ -99,7 +99,7 @@ const editMediaItem = async (req, res, models, logger) => {
 
     const dbMediaItem = await models.MediaItem.findOne({
         where: {
-            id: id
+            id
         }
     });
 

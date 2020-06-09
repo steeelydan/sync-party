@@ -12,7 +12,7 @@ Otherwise you must define a custom field mapping, see below. */
         try {
             const user = await models.User.findOne({
                 where: {
-                    username: username
+                    username
                 }
             });
 
