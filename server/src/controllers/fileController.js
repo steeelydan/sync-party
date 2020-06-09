@@ -32,14 +32,14 @@ const uploadFile = multer({
 // ENDPOINTS
 
 /**
- * @api {get} /api/file/:id File Access
+ * @api {get} /api/file/:id?party=xyz File Access
  * @apiName getFile
  * @apiGroup fileController
  * @apiDescription Get a single file from disk; no user specific auth: partyToken is sufficient!
  * @apiPermission user
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
  * @apiParam {String} id MediaItem ID
- * @apiParam {String} party Party ID
+ * @apiParam {String} party Party ID (query param)
  * @apiSuccess {File} YourFile The requested file.
  * @apiError noFileAccess User is not member of party or file was not found or party is not active.
  */

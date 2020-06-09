@@ -7,7 +7,7 @@ const { newPartyValidator, partyValidator } = require('../common/validation');
  * @apiDescription Creates a new party
  * @apiPermission admin
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
- * @apiParam {String} [partyName] Name for the new party.
+ * @apiParam {String} partyName Name for the new party.
  * @apiSuccess createPartySuccessful Party was created successfully.
  * @apiError partyWithSameName A party with that name already exists.
  * @apiError notAuthorized Requesting user is not admin.
@@ -75,8 +75,8 @@ const createParty = async (req, res, models, logger) => {
  * @apiDescription Edits a party. Possibilities: Change party status; add member; remove member; delete party.
  * @apiPermission admin
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
- * @apiParam {Boolean} [deleteParty] Party is up for deletion.
- * @apiParam {Object} [party] Edited party.
+ * @apiParam {Boolean} deleteParty Party is up for deletion.
+ * @apiParam {Object} party Edited party.
  * @apiSuccess partyEditSuccessful Party was edited successfully.
  * @apiError notAuthorized Requesting user is not admin.
  */

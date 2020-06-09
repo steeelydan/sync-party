@@ -10,8 +10,8 @@ const {
  * @apiDescription Removes an item from the party playlist. Removes played metadata as well.
  * @apiPermission user
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
- * @apiParam {String} [itemId] ID of the item to be removed.
- * @apiParam {String} [partyId] ID of the party.
+ * @apiParam {String} itemId ID of the item to be removed.
+ * @apiParam {String} partyId ID of the party.
  * @apiSuccess removePartyItemSuccessful Item was successfully removed from the party.
  * @apiError notAuthorized Requesting user is not authorized or not a member of the party or party is not active.
  */
@@ -60,8 +60,8 @@ const removeItemFromParty = async (req, res, models) => {
  * @apiDescription Adds an item to the party playlist.
  * @apiPermission user
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
- * @apiParam {Object} [mediaItem] MediaItem to be added.
- * @apiParam {String} [partyId] ID of the party.
+ * @apiParam {Object} mediaItem MediaItem to be added.
+ * @apiParam {String} partyId ID of the party.
  * @apiSuccess addItemSuccessful Item was added successfully.
  * @apiError notAuthorized Requesting user not a member of the party or party is not active.
  * @apiError itemAlreadyInParty Item is already in party.
@@ -118,8 +118,8 @@ const addItemToParty = async (req, res, models, logger) => {
  * @apiDescription Modify Party Playlist order.
  * @apiPermission user
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
- * @apiParam {Object[]} [orderedItems] Party MediaItems in new order.
- * @apiParam {String} [partyId] ID of the party.
+ * @apiParam {Object[]} orderedItems Party MediaItems in new order.
+ * @apiParam {String} partyId ID of the party.
  * @apiSuccess itemsUpdateSuccessful Items were updated successfully.
  * @apiError notAuthorized Requesting user is not authorized or not a member of the party or party is not active.
  */

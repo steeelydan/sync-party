@@ -7,8 +7,8 @@ const { partyMetadataValidator } = require('../common/validation');
  * @apiDescription Update Party Metadata (played state only atm).
  * @apiPermission user
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
- * @apiParam {Object} [metadata] New party metadata.
- * @apiParam {String} [partyId] ID of the party.
+ * @apiParam {Object} metadata New party metadata.
+ * @apiParam {String} partyId ID of the party.
  * @apiSuccess metadataUpdateSuccessful Metadata was updated successfully.
  * @apiError notAuthorized Requesting user is not a member of the party / not admin or party is not active.
  */

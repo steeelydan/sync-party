@@ -40,8 +40,8 @@ const getAllMediaItems = async (req, res, models, logger) => {
  * @apiDescription Create a new MediaItem and add it to corresponding party. Only applies to non-file media items.
  * @apiPermission user
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
- * @apiParam {String} [mediaItem] New MediaItem.
- * @apiParam {String} [partyId] Party ID.
+ * @apiParam {String} mediaItem New MediaItem.
+ * @apiParam {String} partyId Party ID.
  * @apiError notAuthorized Requesting user is not admin or party is not active.
  */
 const createMediaItem = async (req, res, models, logger) => {
@@ -74,13 +74,13 @@ const createMediaItem = async (req, res, models, logger) => {
 };
 
 /**
- * @api {put} /api/mediaItem Edit MediaItem
+ * @api {put} /api/mediaItem/:id Edit MediaItem
  * @apiName editMediaItem
  * @apiGroup mediaItemController
  * @apiDescription Edit a mediaItem (name only atm)
  * @apiPermission user
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
- * @apiParam {String} [id] MediaItem ID.
+ * @apiParam {String} id MediaItem ID.
  * @apiError notAuthorized Requesting user is not admin or party is not active.
  */
 const editMediaItem = async (req, res, models, logger) => {
@@ -118,13 +118,13 @@ const editMediaItem = async (req, res, models, logger) => {
 };
 
 /**
- * @api {delete} /api/mediaItem Delete MediaItem
+ * @api {delete} /api/mediaItem/:id Delete MediaItem
  * @apiName deleteMediaItem
  * @apiGroup mediaItemController
  * @apiDescription Delete a mediaItem. Users can only delete their items, admin can delete every item
  * @apiPermission user
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
- * @apiParam {String} [id] MediaItem ID.
+ * @apiParam {String} id MediaItem ID.
  * @apiError notAuthorized Requesting user is not admin or party is not active.
  */
 const deleteMediaItem = async (req, res, models, logger) => {
