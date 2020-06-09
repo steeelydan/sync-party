@@ -1,4 +1,5 @@
 import { Op } from 'sequelize';
+import { Request, Response } from 'express';
 
 /**
  * @api {get} /api/userParties Get All User Parties
@@ -9,7 +10,8 @@ import { Op } from 'sequelize';
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
  * @apiSuccess {Object[]} userParties All media items.
  */
-const getUserParties = async (req, res, models) => {
+// FIXME models type
+const getUserParties = async (req: Request, res: Response, models: any) => {
     const allParties = await models.Party.findAll();
 
     // Restrict parties to those where given user is member

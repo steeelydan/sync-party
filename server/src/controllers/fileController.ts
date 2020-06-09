@@ -6,6 +6,8 @@ import {
     newFileMediaItemValidator,
     multerFileValidator
 } from '../common/validation';
+import { Request, Response } from 'express';
+import { Logger } from 'winston';
 
 // HELPERS
 
@@ -17,7 +19,8 @@ const storage = multer.diskStorage({
         );
         callback(null, uploadPath);
     },
-    filename: (req, file, callback) => {
+    // FIXME Typing
+    filename: (req: any, file, callback) => {
         const newFileId = uuid();
         callback(null, `${newFileId}-${file.originalname}`);
         req.newFileId = newFileId;
@@ -43,7 +46,13 @@ const uploadFile = multer({
  * @apiSuccess {File} YourFile The requested file.
  * @apiError noFileAccess User is not member of party or file was not found or party is not active.
  */
-const getFile = async (req, res, models, helpers) => {
+// FIXME Typing
+const getFile = async (
+    req: Request,
+    res: Response,
+    models: any,
+    helpers: any
+) => {
     const userId = req.user.id;
     const mediaItemId = req.params.id || '';
     const requestPartyId = req.query.party || '';
@@ -65,7 +74,7 @@ const getFile = async (req, res, models, helpers) => {
         }
 
         const wantedItem = requestParty.items.find(
-            (itemId) => itemId === mediaItemId
+            (itemId: string) => itemId === mediaItemId
         );
 
         if (wantedItem) {
@@ -104,8 +113,9 @@ const getFile = async (req, res, models, helpers) => {
  * @apiParam {String} name Name for the new item, chosen by the user
  * @apiError fileUploadError An error occurred during upload.
  */
-const upload = (req, res, models, logger) => {
-    uploadFile(req, res, (err) => {
+// FIXME types
+const upload = (req: Request, res: Response, models: any, logger: Logger) => {
+    uploadFile(req, res, (err: any) => {
         if (err instanceof multer.MulterError) {
             logger.log('error', 'Multer error uploading file', err);
             return res.status(500).json(err);
@@ -115,6 +125,7 @@ const upload = (req, res, models, logger) => {
         }
 
         const newMediaItem = {
+            // @ts-ignore FIXME
             id: req.newFileId, // Implicitly set by multer
             type: 'file',
             owner: req.body.owner,

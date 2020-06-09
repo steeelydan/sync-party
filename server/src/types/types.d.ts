@@ -4,6 +4,7 @@ declare namespace Express {
             id?: string;
             username?: string;
             role?: string;
+            newFileId?: string;
         };
     }
 }

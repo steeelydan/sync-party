@@ -1,3 +1,6 @@
+import { Request, Response } from 'express';
+import { Logger } from 'winston';
+
 /**
  * @api {get} /api/userItems Get User MediaItems
  * @apiName getUserItems
@@ -7,7 +10,13 @@
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
  * @apiSuccess {Object[]} userItems MediaItems owned by requesting user.
  */
-const getUserItems = async (req, res, models, logger) => {
+const getUserItems = async (
+    req: Request,
+    res: Response,
+    // FIXME type
+    models: any,
+    logger: Logger
+) => {
     const userId = req.user.id;
 
     try {

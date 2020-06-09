@@ -1,4 +1,12 @@
-const updatePartyItems = async (models, partyId, mediaItemId) => {
+import { Request } from 'express';
+import { Logger } from 'winston';
+
+// FIXME types
+const updatePartyItems = async (
+    models: any,
+    partyId: string,
+    mediaItemId: string
+) => {
     const party = await models.Party.findOne({ where: { id: partyId } });
     const newPartyItems = [...party.items];
     if (!newPartyItems.includes(mediaItemId)) {
@@ -11,7 +19,13 @@ const updatePartyItems = async (models, partyId, mediaItemId) => {
     }
 };
 
-const insertNewMediaItem = async (req, newMediaItem, models, logger) => {
+const insertNewMediaItem = async (
+    req: Request,
+    newMediaItem: any,
+    // FIXME type
+    models: any,
+    logger: Logger
+) => {
     const requestPartyId = req.body.partyId;
 
     const requestParty = await models.Party.findOne({

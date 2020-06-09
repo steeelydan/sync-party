@@ -1,4 +1,6 @@
 import { newPartyValidator, partyValidator } from '../common/validation';
+import { Logger } from 'winston';
+import { Request, Response } from 'express';
 
 /**
  * @api {post} /api/party Create New Party (Admin only)
@@ -12,7 +14,12 @@ import { newPartyValidator, partyValidator } from '../common/validation';
  * @apiError partyWithSameName A party with that name already exists.
  * @apiError notAuthorized Requesting user is not admin.
  */
-const createParty = async (req, res, models, logger) => {
+const createParty = async (
+    req: Request,
+    res: Response,
+    models: any,
+    logger: Logger
+) => {
     const requestUser = req.user;
 
     if (req.body.partyName !== '') {
@@ -80,7 +87,13 @@ const createParty = async (req, res, models, logger) => {
  * @apiSuccess partyEditSuccessful Party was edited successfully.
  * @apiError notAuthorized Requesting user is not admin.
  */
-const editParty = async (req, res, models, logger) => {
+const editParty = async (
+    req: Request,
+    res: Response,
+    // FIXME type
+    models: any,
+    logger: Logger
+) => {
     const deleteParty = req.body.deleteParty;
 
     const requestParty = req.body.party;

@@ -1,4 +1,6 @@
 import { partyMetadataValidator } from '../common/validation';
+import { Logger } from 'winston';
+import { Request, Response } from 'express';
 
 /**
  * @api {put} /api/partyMetadata Update Party Metadata
@@ -12,7 +14,13 @@ import { partyMetadataValidator } from '../common/validation';
  * @apiSuccess metadataUpdateSuccessful Metadata was updated successfully.
  * @apiError notAuthorized Requesting user is not a member of the party / not admin or party is not active.
  */
-const updatePartyMetadata = async (req, res, models, logger) => {
+const updatePartyMetadata = async (
+    req: Request,
+    res: Response,
+    // FIXME type
+    models: any,
+    logger: Logger
+) => {
     const requestUser = req.user;
     const partyId = req.body.partyId;
     const updatedMetadata = req.body.metadata;

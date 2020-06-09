@@ -5,6 +5,8 @@ import {
     mediaItemValidator,
     newMediaItemValidator
 } from '../common/validation';
+import { Request, Response } from 'express';
+import { Logger } from 'winston';
 
 /**
  * @api {get} /api/allMediaItems Get All MediaItems (Admin only)
@@ -16,7 +18,13 @@ import {
  * @apiSuccess {Object[]} allMediaItems All media items.
  * @apiError notAuthorized Requesting user is not admin.
  */
-const getAllMediaItems = async (req, res, models, logger) => {
+const getAllMediaItems = async (
+    req: Request,
+    res: Response,
+    // FIXME: Type
+    models: any,
+    logger: Logger
+) => {
     try {
         const allMediaItems = await models.MediaItem.findAll();
         return res.status(200).json({
@@ -44,7 +52,13 @@ const getAllMediaItems = async (req, res, models, logger) => {
  * @apiParam {String} partyId Party ID.
  * @apiError notAuthorized Requesting user is not admin or party is not active.
  */
-const createMediaItem = async (req, res, models, logger) => {
+const createMediaItem = async (
+    req: Request,
+    res: Response,
+    // FIXME type
+    models: any,
+    logger: Logger
+) => {
     const newMediaItem = req.body.mediaItem;
 
     if (newMediaItemValidator.validate(newMediaItem).error) {
@@ -83,7 +97,13 @@ const createMediaItem = async (req, res, models, logger) => {
  * @apiParam {String} id MediaItem ID.
  * @apiError notAuthorized Requesting user is not admin or party is not active.
  */
-const editMediaItem = async (req, res, models, logger) => {
+const editMediaItem = async (
+    req: Request,
+    res: Response,
+    // FIXME type
+    models: any,
+    logger: Logger
+) => {
     const id = req.params.id;
     const editedMediaItem = req.body;
 
@@ -127,7 +147,13 @@ const editMediaItem = async (req, res, models, logger) => {
  * @apiParam {String} id MediaItem ID.
  * @apiError notAuthorized Requesting user is not admin or party is not active.
  */
-const deleteMediaItem = async (req, res, models, logger) => {
+const deleteMediaItem = async (
+    req: Request,
+    res: Response,
+    // FIXME type
+    models: any,
+    logger: Logger
+) => {
     const requestUser = req.user;
 
     const mediaItemId = req.params.id;
@@ -137,7 +163,7 @@ const deleteMediaItem = async (req, res, models, logger) => {
                 id: mediaItemId
             }
         });
-        if (item.owner === requestUser.Id || requestUser.role === 'admin') {
+        if (item.owner === requestUser.id || requestUser.role === 'admin') {
             if (item.type === 'file') {
                 fs.unlinkSync(
                     path.join(__dirname, '/../../uploads/', item.url)
