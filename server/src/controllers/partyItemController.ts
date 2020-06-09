@@ -1,7 +1,7 @@
-const {
+import {
     mediaItemValidator,
     partyMediaItemsValidator
-} = require('../common/validation');
+} from '../common/validation';
 
 /**
  * @api {delete} /api/partyItems Remove Item From Party

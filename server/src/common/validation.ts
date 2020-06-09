@@ -1,4 +1,4 @@
-const Joi = require('@hapi/joi');
+import Joi from '@hapi/joi';
 
 const newMediaItemValidator = Joi.object({
     name: Joi.string().max(256).required(),
@@ -53,7 +53,7 @@ const partyMetadataValidator = Joi.object({
     played: Joi.object().unknown()
 });
 
-export default {
+export {
     newMediaItemValidator,
     mediaItemValidator,
     partyMediaItemsValidator,

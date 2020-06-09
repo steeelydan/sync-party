@@ -49,6 +49,8 @@ const runApp = async () => {
     const logger = helpers.createLogger();
     app.use(
         morgan(
+            // FIXME typing
+            // @ts-ignore
             ':remote-addr - :remote-user :method :url HTTP/:http-version :status :res[content-length] :referrer :user-agent - :response-time ms',
             { stream: logger.stream }
         )
@@ -102,8 +104,12 @@ const runApp = async () => {
 
     // DEFAULT VALUES
 
-    const currentSyncStatus = {};
-    const currentPlayWishes = {};
+    const currentSyncStatus: {
+        [partyId: string]: { [userId: string]: object };
+    } = {};
+    const currentPlayWishes: {
+        [partyId: string]: object;
+    } = {};
 
     // MIDDLEWARE
 
@@ -208,10 +214,7 @@ const runApp = async () => {
         });
 
         // FIXME custom types
-        const joinParty = (data: {
-            partyId: string;
-            timestamp: number;
-        }) => {
+        const joinParty = (data: { partyId: string; timestamp: number }) => {
             io.in(data.partyId).clients(
                 async (err: Error, clients: string[]) => {
                     if (!clients.includes(socketUserId)) {

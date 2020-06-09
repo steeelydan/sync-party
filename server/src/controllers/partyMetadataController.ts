@@ -1,4 +1,4 @@
-const { partyMetadataValidator } = require('../common/validation');
+import { partyMetadataValidator } from '../common/validation';
 
 /**
  * @api {put} /api/partyMetadata Update Party Metadata

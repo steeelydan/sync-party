@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+import bcrypt from 'bcryptjs';
 
 const createUser = async (models, username, role, passwordRaw) => {
     const user = {};
@@ -68,4 +68,10 @@ const changePassword = async (models, username, newPasswordRaw) => {
     );
 };
 
-export default { createUser, deleteUser, listUsers, deleteAllUsers, changePassword };
+export default {
+    createUser,
+    deleteUser,
+    listUsers,
+    deleteAllUsers,
+    changePassword
+};

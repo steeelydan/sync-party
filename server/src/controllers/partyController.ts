@@ -1,4 +1,4 @@
-const { newPartyValidator, partyValidator } = require('../common/validation');
+import { newPartyValidator, partyValidator } from '../common/validation';
 
 /**
  * @api {post} /api/party Create New Party (Admin only)

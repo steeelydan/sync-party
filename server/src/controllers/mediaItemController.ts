@@ -1,10 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const { insertNewMediaItem } = require('../database/generalOperations');
-const {
+import fs from 'fs';
+import path from 'path';
+import { insertNewMediaItem } from '../database/generalOperations';
+import {
     mediaItemValidator,
     newMediaItemValidator
-} = require('../common/validation');
+} from '../common/validation';
 
 /**
  * @api {get} /api/allMediaItems Get All MediaItems (Admin only)

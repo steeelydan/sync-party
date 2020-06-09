@@ -1,6 +1,6 @@
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcryptjs');
+import passport from 'passport';
+import LocalStrategy from 'passport-local';
+import bcrypt from 'bcryptjs';
 
 const configurePassport = (models, logger) => {
     /* The verify result is passed to the done function.

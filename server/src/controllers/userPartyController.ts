@@ -1,4 +1,4 @@
-const { Op } = require('sequelize');
+import { Op } from 'sequelize';
 
 /**
  * @api {get} /api/userParties Get All User Parties

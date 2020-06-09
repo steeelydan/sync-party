@@ -1,5 +1,8 @@
 // ENDPOINTS
 
+import { Request, Response } from 'express';
+import { Logger } from 'winston';
+
 /**
  * @api {post} /api/auth User Authentication
  * @apiName auth
@@ -10,7 +13,7 @@
  * @apiSuccess {Object} user User Object containing id, username & role.
  * @apiError notAuthenticated Client did not provide a cookie or authenticated session does not exist.
  */
-const auth = async (req, res, logger) => {
+const auth = async (req: Request, res: Response, logger: Logger) => {
     if (req.isAuthenticated()) {
         return res.json({
             success: true,
@@ -42,7 +45,7 @@ const auth = async (req, res, logger) => {
  * @apiSuccess {Header} setCookie Session cookie.
  * @apiError notAuthenticated Username was not found or password is wrong.
  */
-const login = async (req, res, logger) => {
+const login = async (req: Request, res: Response, logger: Logger) => {
     // At this point the user is already authenticated by passport middleware.
     logger.log('info', `User logged in: ${req.user.id}`);
     res.json({

@@ -1,11 +1,11 @@
-const multer = require('multer');
-const path = require('path');
-const { v4: uuid } = require('uuid');
-const { insertNewMediaItem } = require('../database/generalOperations');
-const {
+import multer from 'multer';
+import path from 'path';
+import { v4 as uuid } from 'uuid';
+import { insertNewMediaItem } from '../database/generalOperations';
+import {
     newFileMediaItemValidator,
     multerFileValidator
-} = require('../common/validation');
+} from '../common/validation';
 
 // HELPERS
 
