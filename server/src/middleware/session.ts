@@ -8,8 +8,8 @@ const configureSession = (
     expressSession: (options?: SessionOptions) => RequestHandler
 ) => {
     const sessionStore = new SequelizeStore({
-        db: sequelize
-        // FIXME no table name?
+        db: sequelize,
+        tableName: 'sessions'
     });
 
     sessionStore.sync();

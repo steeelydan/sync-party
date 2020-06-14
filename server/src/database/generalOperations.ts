@@ -13,6 +13,7 @@ const updatePartyItems = async (
         newPartyItems.push(mediaItemId);
         party.items = newPartyItems;
         party.save();
+
         return Promise.resolve();
     } else {
         return Promise.reject(new Error('Item already in party'));
@@ -43,13 +44,16 @@ const insertNewMediaItem = async (
         try {
             const dbMediaItem = await models.MediaItem.create(newMediaItem);
             await updatePartyItems(models, requestParty.id, dbMediaItem.id);
+
             return Promise.resolve(true);
         } catch (error) {
             logger.log('error', error);
+
             return Promise.reject();
         }
     } else {
         logger.log('error', 'error creating new mediaItem');
+
         return Promise.reject();
     }
 };

@@ -29,6 +29,7 @@ const auth = async (req: Request, res: Response, logger: Logger) => {
             'info',
             'Unauthenticated user tried to visit protected route.'
         );
+
         return res.status(401).json({ msg: 'notAuthenticated' });
     }
 };
@@ -45,7 +46,7 @@ const auth = async (req: Request, res: Response, logger: Logger) => {
  * @apiSuccess {Header} setCookie Session cookie.
  * @apiError notAuthenticated Username was not found or password is wrong.
  */
-const login = async (req: Request, res: Response, logger: Logger) => {
+const login = (req: Request, res: Response, logger: Logger) => {
     // At this point the user is already authenticated by passport middleware.
     logger.log('info', `User logged in: ${req.user.id}`);
     res.json({
@@ -70,10 +71,12 @@ const login = async (req: Request, res: Response, logger: Logger) => {
 const logout = async (req: Request, res: Response, logger: Logger) => {
     try {
         req.logout();
+
         return res.status(200).json({ success: true, msg: 'logoutSuccessful' });
     } catch (error) {
         logger.log('error', error);
         res.status(500).json({ success: false, msg: 'error' });
+
         return Promise.reject(new Error(error));
     }
 };

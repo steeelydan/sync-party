@@ -41,6 +41,7 @@ const createParty = async (
                         newPartyValidator.validate(newParty).error
                     )}`
                 );
+
                 return res
                     .status(400)
                     .json({ success: false, msg: 'validationError' });
@@ -65,6 +66,7 @@ const createParty = async (
             }
         } catch (error) {
             logger.log('error', error);
+
             return Promise.reject();
         }
     } else {
@@ -105,6 +107,7 @@ const editParty = async (
                 partyValidator.validate(requestParty).error
             )}`
         );
+
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
@@ -127,6 +130,7 @@ const editParty = async (
         });
     } catch (error) {
         logger.log('error', error);
+
         return Promise.reject();
     }
 };

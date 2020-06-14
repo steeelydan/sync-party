@@ -63,3 +63,8 @@ type MediaItem = {
     createdAt: string;
     updatedAt: string;
 };
+
+type PlayWish = {
+    timestamp: number;
+    partyId: string;
+};

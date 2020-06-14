@@ -6,7 +6,7 @@ import {
     listUsers,
     deleteAllUsers,
     changePassword
-} from '../database/adminOperations';
+} from './operations';
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -50,6 +50,7 @@ const runAdminCli = async () => {
     if (mode === 'delete-user') {
         if (!process.argv[3]) {
             console.log('Specify username');
+
             return;
         }
         const username = process.argv[3];
@@ -80,4 +81,6 @@ const runAdminCli = async () => {
     }
 };
 
-runAdminCli();
+runAdminCli().catch((err) => {
+    console.log(err);
+});

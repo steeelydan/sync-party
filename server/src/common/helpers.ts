@@ -55,7 +55,8 @@ const envCheck = (logger: Logger) => {
     logger.log('info', `Environment: ${process.env.NODE_ENV}`);
 };
 
-const getFileFromId = (dbMediaItemId: string) => {
+// FIXME type
+const getFileFromId = (dbMediaItemId: string): any => {
     return path.resolve(path.join(__dirname, '/../../uploads/', dbMediaItemId));
 };
 

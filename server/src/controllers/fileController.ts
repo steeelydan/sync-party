@@ -54,8 +54,8 @@ const getFile = async (
     helpers: any
 ) => {
     const userId = req.user.id;
-    const mediaItemId = req.params.id || '';
-    const requestPartyId = req.query.party || '';
+    const mediaItemId = req.params.id;
+    const requestPartyId = req.query.party;
     const download = req.query.download;
 
     try {
@@ -84,12 +84,13 @@ const getFile = async (
 
             if (download) {
                 const fileNameWithoutUuid = dbMediaItem.url.substr(37);
-                return res.download(
+
+                res.download(
                     helpers.getFileFromId(dbMediaItem.url),
                     fileNameWithoutUuid
                 );
             } else {
-                return res.sendFile(helpers.getFileFromId(dbMediaItem.url));
+                res.sendFile(helpers.getFileFromId(dbMediaItem.url));
             }
         } else {
             return res
@@ -118,9 +119,11 @@ const upload = (req: Request, res: Response, models: any, logger: Logger) => {
     uploadFile(req, res, (err: any) => {
         if (err instanceof multer.MulterError) {
             logger.log('error', 'Multer error uploading file', err);
+
             return res.status(500).json(err);
         } else if (err) {
             logger.log('error', 'Error uploading file', err);
+
             return res.status(500).json(err);
         }
 
@@ -141,6 +144,7 @@ const upload = (req: Request, res: Response, models: any, logger: Logger) => {
                     multerFileValidator.validate(req.file).error
                 )}`
             );
+
             return res
                 .status(400)
                 .json({ success: false, msg: 'validationError' });
@@ -153,6 +157,7 @@ const upload = (req: Request, res: Response, models: any, logger: Logger) => {
                     newFileMediaItemValidator.validate(newMediaItem).error
                 )}`
             );
+
             return res
                 .status(400)
                 .json({ success: false, msg: 'validationError' });

@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 
 // FIXME: Type
-const createUser = async (
+const createUser = (
     models: any,
     username: string,
     role: UserRole,
@@ -34,6 +34,7 @@ const deleteUser = async (models: any, username: string) => {
     await models.User.findOne({ where: { username } }).then((user: any) => {
         if (!user) {
             console.log(`No user found with username: ${username}. Exiting`);
+
             return;
         }
 
@@ -75,10 +76,4 @@ const changePassword = async (
     );
 };
 
-export {
-    createUser,
-    deleteUser,
-    listUsers,
-    deleteAllUsers,
-    changePassword
-};
+export { createUser, deleteUser, listUsers, deleteAllUsers, changePassword };

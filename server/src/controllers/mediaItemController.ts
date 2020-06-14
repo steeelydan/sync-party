@@ -27,6 +27,7 @@ const getAllMediaItems = async (
 ) => {
     try {
         const allMediaItems = await models.MediaItem.findAll();
+
         return res.status(200).json({
             success: true,
             msg: 'fetchingSuccessful',
@@ -34,6 +35,7 @@ const getAllMediaItems = async (
         });
     } catch (error) {
         logger.log('error', error);
+
         return res.status(500).json({
             success: false,
             msg: 'error'
@@ -68,6 +70,7 @@ const createMediaItem = async (
                 newMediaItemValidator.validate(newMediaItem).error
             )}`
         );
+
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
@@ -114,6 +117,7 @@ const editMediaItem = async (
                 mediaItemValidator.validate(editedMediaItem).error
             )}`
         );
+
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
@@ -129,6 +133,7 @@ const editMediaItem = async (
         dbMediaItem.name = editedMediaItem.name;
 
         dbMediaItem.save();
+
         return res
             .status(200)
             .json({ success: true, msg: 'mediaItemEditSuccessful' });
@@ -183,6 +188,7 @@ const deleteMediaItem = async (
         }
     } catch (error) {
         logger.log('error', error);
+
         return res.status(500).json({ success: false, msg: 'error' });
     }
 };

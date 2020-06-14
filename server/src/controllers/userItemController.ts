@@ -33,6 +33,7 @@ const getUserItems = async (
         });
     } catch (error) {
         logger.log('error', error);
+
         return res.status(500).json({
             success: false,
             msg: 'error'

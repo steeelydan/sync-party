@@ -32,6 +32,7 @@ const updatePartyMetadata = async (
                 partyMetadataValidator.validate(updatedMetadata).error
             )}`
         );
+
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
@@ -51,6 +52,7 @@ const updatePartyMetadata = async (
             });
         } catch (error) {
             logger.log('error', error);
+
             return Promise.reject();
         }
     } else {

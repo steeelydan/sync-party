@@ -33,7 +33,9 @@ const removeItemFromParty = async (
         party.members.includes(requestUser.id) &&
         (party.status === 'active' || requestUser.role === 'admin')
     ) {
-        const newPartyItems = party.items.filter((item: MediaItem) => item !== itemId);
+        const newPartyItems = party.items.filter(
+            (item: MediaItem) => item !== itemId
+        );
         party.items = newPartyItems;
 
         const newPartyMetadata = {
@@ -91,6 +93,7 @@ const addItemToParty = async (
                 mediaItemValidator.validate(item).error
             )}`
         );
+
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
@@ -154,6 +157,7 @@ const updatePartyItems = async (
                 partyMediaItemsValidator.validate(updatedItems).error
             )}`
         );
+
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
@@ -173,6 +177,7 @@ const updatePartyItems = async (
             });
         } catch (error) {
             logger.log('error', error);
+
             return Promise.reject();
         }
     } else {
