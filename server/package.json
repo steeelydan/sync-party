@@ -8,10 +8,12 @@
     "license": "MIT",
     "scripts": {
         "setup": "([ -d './uploads' ] && echo './uploads folder exists.') || (mkdir './uploads' && echo './uploads folder created.')",
-        "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+        "doc": "apidoc -i src/ -o doc/",
         "build": "tsc",
-        "prestart": "npm run build",
-        "start": "node ."
+        "start": "npm run setup && npm run doc && tsc-watch --project ./src --outDir ./dist --onSuccess \"nodemon ./dist/index.js\"",
+        "start-production": "pm2 start ./dist/index.js",
+        "stop": "pm2 stop all && pm2 delete all",
+        "deploy": "npm install && npm run setup && npm build && sudo npm run start-production && sudo pm2 log"
     },
     "dependencies": {
         "@hapi/joi": "^17.1.1",
@@ -63,6 +65,7 @@
         "eslint-plugin-import": "^2.20.2",
         "eslint-plugin-prettier": "^3.1.3",
         "prettier": "^2.0.5",
+        "tsc-watch": "^4.2.8",
         "tslint": "^6.1.2",
         "typescript": "^3.9.5"
     }

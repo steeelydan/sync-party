@@ -1,7 +1,15 @@
-const configureSession = (sequelize, SequelizeStore, expressSession) => {
+import { Sequelize } from 'sequelize';
+import { SessionOptions } from 'express-session';
+import { RequestHandler } from 'express';
+
+const configureSession = (
+    sequelize: Sequelize,
+    SequelizeStore: any, // FIXME type
+    expressSession: (options?: SessionOptions) => RequestHandler
+) => {
     const sessionStore = new SequelizeStore({
-        db: sequelize,
-        tableName: 'sessions'
+        db: sequelize
+        // FIXME no table name?
     });
 
     sessionStore.sync();

@@ -14,8 +14,9 @@ import express from 'express';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import expressSession from 'express-session';
-import { SequelizeStore } from 'connect-session-sequelize';
-// import csurf from 'csurf'; TBI
+const SequelizeStore = require('connect-session-sequelize')(
+    expressSession.Store
+); // FIXME
 import compression from 'compression';
 import passportSocketIo from 'passport.socketio';
 import cookieParser from 'cookie-parser';
@@ -67,7 +68,7 @@ const runApp = async () => {
         logging: false
     });
 
-    const models = createModels(Sequelize, sequelize);
+    const models = createModels(sequelize);
 
     try {
         await sequelize.sync({ alter: true });

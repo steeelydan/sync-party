@@ -14,7 +14,7 @@ import { Request, Response } from 'express';
 const getAllUsers = async (req: Request, res: Response, models: any) => {
     const users = await models.User.findAll();
     if (users) {
-        const formattedUsers = users.map((user) => {
+        const formattedUsers = users.map((user: AppUser) => {
             return {
                 username: user.username,
                 id: user.id

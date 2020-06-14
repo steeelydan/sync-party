@@ -33,7 +33,7 @@ const removeItemFromParty = async (
         party.members.includes(requestUser.id) &&
         (party.status === 'active' || requestUser.role === 'admin')
     ) {
-        const newPartyItems = party.items.filter((item) => item !== itemId);
+        const newPartyItems = party.items.filter((item: MediaItem) => item !== itemId);
         party.items = newPartyItems;
 
         const newPartyMetadata = {

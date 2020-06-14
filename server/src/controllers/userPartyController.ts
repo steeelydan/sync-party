@@ -15,15 +15,15 @@ const getUserParties = async (req: Request, res: Response, models: any) => {
     const allParties = await models.Party.findAll();
 
     // Restrict parties to those where given user is member
-    const userParties = allParties.filter((party) => {
+    const userParties = allParties.filter((party: Party) => {
         return party.members.includes(req.user.id);
     });
 
     // Get lists of ALL users & items of bespoke parties (later assigned to specific party)
-    const userPartiesMemberList = [];
-    const userPartiesItemList = [];
+    const userPartiesMemberList: string[] = [];
+    const userPartiesItemList: string[] = [];
 
-    userParties.forEach((userParty) => {
+    userParties.forEach((userParty: Party) => {
         userParty.members.forEach((member) => {
             if (!userPartiesMemberList.includes(member)) {
                 userPartiesMemberList.push(member);
@@ -39,7 +39,7 @@ const getUserParties = async (req: Request, res: Response, models: any) => {
 
     // Get all formatted users (only id & username) & complete items for all parties this user is member of
 
-    const userPartiesMembers = await models.User.findAll({
+    const userPartiesMembers: AppUser[] = await models.User.findAll({
         attributes: ['id', 'username'],
         where: {
             id: {
@@ -48,7 +48,7 @@ const getUserParties = async (req: Request, res: Response, models: any) => {
         }
     });
 
-    const userPartiesItems = await models.MediaItem.findAll({
+    const userPartiesItems: MediaItem[] = await models.MediaItem.findAll({
         where: {
             id: {
                 [Op.in]: userPartiesItemList
@@ -57,21 +57,25 @@ const getUserParties = async (req: Request, res: Response, models: any) => {
     });
 
     // Create final user parties array with respective members & items
-    const formattedUserParties = userParties.map((userParty) => {
+    const formattedUserParties = userParties.map((userParty: Party) => {
         return {
             id: userParty.id,
             owner: userParty.owner,
             name: userParty.name,
             status: userParty.status,
-            members: userPartiesMembers.filter((member) => {
+            members: userPartiesMembers.filter((member: PartyMember) => {
                 return userParty.members.includes(member.id);
             }),
             items: userParty.items
-                .filter((itemId) =>
-                    userPartiesItems.find((item) => item.id === itemId)
+                .filter((itemId: string) =>
+                    userPartiesItems.find(
+                        (item: MediaItem) => item.id === itemId
+                    )
                 )
                 .map((itemId) => {
-                    return userPartiesItems.find((item) => item.id === itemId);
+                    return userPartiesItems.find(
+                        (item: MediaItem) => item.id === itemId
+                    );
                 }),
             metadata: userParty.metadata || {},
             settings: userParty.settings || {}

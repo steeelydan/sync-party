@@ -1,7 +1,13 @@
 import bcrypt from 'bcryptjs';
 
-const createUser = async (models, username, role, passwordRaw) => {
-    const user = {};
+// FIXME: Type
+const createUser = async (
+    models: any,
+    username: string,
+    role: UserRole,
+    passwordRaw: string
+) => {
+    const user: NewUser = {} as NewUser;
 
     bcrypt.hash(passwordRaw, 10, (error, passwordHashed) => {
         user.username = username;
@@ -9,7 +15,7 @@ const createUser = async (models, username, role, passwordRaw) => {
         user.role = role;
 
         models.User.findOne({ where: { username: user.username } }).then(
-            async (previousUser) => {
+            async (previousUser: AppUser) => {
                 if (!previousUser) {
                     const newUser = await models.User.create(user);
 
@@ -23,23 +29,20 @@ const createUser = async (models, username, role, passwordRaw) => {
     });
 };
 
-const deleteUser = async (models, username) => {
-    await models.User.findOne({ where: { username } }).then(
-        (user) => {
-            if (!user) {
-                console.log(
-                    `No user found with username: ${username}. Exiting`
-                );
-                return;
-            }
-
-            user.destroy();
-            console.log(`User deleted: ${username} (id: ${user.id})`);
+// FIXME: Models & User typing
+const deleteUser = async (models: any, username: string) => {
+    await models.User.findOne({ where: { username } }).then((user: any) => {
+        if (!user) {
+            console.log(`No user found with username: ${username}. Exiting`);
+            return;
         }
-    );
+
+        user.destroy();
+        console.log(`User deleted: ${username} (id: ${user.id})`);
+    });
 };
 
-const listUsers = async (models) => {
+const listUsers = async (models: any) => {
     const allUsers = await models.User.findAll();
 
     if (allUsers.length === 0) {
@@ -49,13 +52,17 @@ const listUsers = async (models) => {
     }
 };
 
-const deleteAllUsers = async (models) => {
+const deleteAllUsers = async (models: any) => {
     await models.User.destroy({ where: {}, truncate: true });
 
     console.log('All users deleted.');
 };
 
-const changePassword = async (models, username, newPasswordRaw) => {
+const changePassword = async (
+    models: any,
+    username: string,
+    newPasswordRaw: string
+) => {
     const user = await models.User.findOne({ where: { username } });
     if (!user) {
         throw new Error(`User ${username} does not exist!`);
@@ -68,7 +75,7 @@ const changePassword = async (models, username, newPasswordRaw) => {
     );
 };
 
-export default {
+export {
     createUser,
     deleteUser,
     listUsers,

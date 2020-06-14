@@ -279,7 +279,7 @@ const reorderItems = (
     return idResult;
 };
 
-export default {
+export {
     baseState,
     noPartyState,
     axiosConfig,

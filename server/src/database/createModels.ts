@@ -1,4 +1,9 @@
-const createModels = (Sequelize, sequelizeInstance) => {
+import * as Sequelize from 'sequelize';
+import { Sequelize as SequelizeType } from 'sequelize';
+
+const createModels = (
+    sequelizeInstance: SequelizeType
+): { [model: string]: any } => { // FIXME type
     const models = {
         User: sequelizeInstance.define('user', {
             id: {
@@ -108,6 +113,6 @@ const createModels = (Sequelize, sequelizeInstance) => {
     return models;
 };
 
-export default (Sequelize, sequelizeInstance) => {
-    return createModels(Sequelize, sequelizeInstance);
+export default (sequelizeInstance: SequelizeType) => {
+    return createModels(sequelizeInstance);
 };
