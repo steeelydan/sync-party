@@ -44,7 +44,7 @@ const runAdminCli = async () => {
         }
         const username = process.argv[3];
         const passwordRaw = process.argv[4];
-        await createUser(models, username, role, passwordRaw);
+        createUser(models, username, role, passwordRaw);
     }
 
     if (mode === 'delete-user') {
