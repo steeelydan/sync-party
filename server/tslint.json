@@ -154,13 +154,7 @@
         "encoding": true,
         "cyclomatic-complexity": [true, 20],
         "max-file-line-count": [true, 500],
-        "max-line-length": [
-            true,
-            {
-                "limit": 120,
-                "ignore-pattern": "^import |^export {(.*?)}|class [a-zA-Z]+ implements |// "
-            }
-        ],
+        "max-line-length": false,
         "indent": [true, "spaces", 2],
         "eofline": true,
         "curly": true,
