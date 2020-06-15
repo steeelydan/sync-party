@@ -24,7 +24,6 @@ const storage = multer.diskStorage({
     filename: (req: Request, file, callback) => {
         const newFileId = uuid();
         callback(null, `${newFileId}-${file.originalname}`);
-        // @ts-ignore FIXME
         req.newFileId = newFileId;
     }
 });
@@ -128,7 +127,6 @@ const upload = (
         }
 
         const newMediaItem = {
-            // @ts-ignore FIXME
             id: req.newFileId, // Implicitly set by multer
             type: 'file',
             owner: req.body.owner,
