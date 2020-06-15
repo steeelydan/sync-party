@@ -1,6 +1,5 @@
 import React, { MouseEventHandler, ChangeEventHandler } from 'react';
 import { useSelector } from 'react-redux';
-import { RootAppState, PlayerState } from '../../../types';
 
 import RangeSlider from '../../input/RangeSlider/RangeSlider';
 import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';

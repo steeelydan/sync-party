@@ -1,3 +1,5 @@
+import { Request, Response } from 'express';
+
 /**
  * @api {get} /api/allUsers Get All Users (Admin only)
  * @apiName getAllUsers
@@ -8,10 +10,10 @@
  * @apiSuccess {Object[]} allUsers Array of all users, formatted.
  * @apiError notAuthorized Requesting user is not admin.
  */
-const getAllUsers = async (req, res, models) => {
+const getAllUsers = async (req: Request, res: Response, models: Models) => {
     const users = await models.User.findAll();
     if (users) {
-        const formattedUsers = users.map((user) => {
+        const formattedUsers = users.map((user: AppUser) => {
             return {
                 username: user.username,
                 id: user.id
@@ -32,6 +34,4 @@ const getAllUsers = async (req, res, models) => {
     }
 };
 
-module.exports = {
-    getAllUsers
-};
+export default { getAllUsers };

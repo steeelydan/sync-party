@@ -1,11 +1,10 @@
 import React, { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NewMediaItem } from '../../../types';
 import InputText from '../../input/InputText/InputText';
 import Button from '../../input/Button/Button';
 
 interface Props {
-    file: any;
+    file: File | null;
     setFile: Function;
     mediaItem: NewMediaItem;
     setMediaItem: Function;

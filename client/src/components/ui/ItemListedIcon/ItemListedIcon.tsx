@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getIconFromFileType } from '../../../common/helpers';
-import { MediaItem } from '../../../types';
 
 type Props = {
     item: MediaItem;

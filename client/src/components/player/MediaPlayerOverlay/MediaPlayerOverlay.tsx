@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { PlayerState, RootAppState, PlayerTimeoutState } from '../../../types';
 import { testMediaType } from '../../../common/helpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSync } from '@fortawesome/free-solid-svg-icons';

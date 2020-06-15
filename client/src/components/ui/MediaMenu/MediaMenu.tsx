@@ -5,12 +5,6 @@ import { useTranslation } from 'react-i18next';
 import Axios from 'axios';
 import { axiosConfig, reorderItems } from '../../../common/helpers';
 import { getUpdatedUserItems } from '../../../common/requests';
-import {
-    MediaItem,
-    ClientParty,
-    RootAppState,
-    PlayerState
-} from '../../../types';
 
 import {
     DragDropContext,

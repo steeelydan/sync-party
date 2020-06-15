@@ -1,19 +1,19 @@
-const Sequelize = require('sequelize');
-const createModels = require('../src/database/createModels');
-const {
+import { Sequelize } from 'sequelize';
+import createModels from '../database/createModels';
+import {
     createUser,
     deleteUser,
     listUsers,
     deleteAllUsers,
     changePassword
-} = require('../src/database/adminOperations');
+} from './operations';
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: '../db'
+    storage: '../../db'
 });
 
-const models = createModels(Sequelize, sequelize);
+const models = createModels(sequelize);
 
 const mode = process.argv[2].trim();
 if (
@@ -38,18 +38,19 @@ const runAdminCli = async () => {
             );
             process.exit(1);
         }
-        let role = 'user';
+        let role: UserRole = 'user';
         if (process.argv[5] === 'admin') {
             role = 'admin';
         }
         const username = process.argv[3];
         const passwordRaw = process.argv[4];
-        await createUser(models, username, role, passwordRaw);
+        createUser(models, username, role, passwordRaw);
     }
 
     if (mode === 'delete-user') {
         if (!process.argv[3]) {
             console.log('Specify username');
+
             return;
         }
         const username = process.argv[3];
@@ -80,4 +81,6 @@ const runAdminCli = async () => {
     }
 };
 
-runAdminCli();
+runAdminCli().catch((err) => {
+    console.log(err);
+});

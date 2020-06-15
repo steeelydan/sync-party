@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import { MediaItem } from '../../../types';
 
 interface Props {
     item: MediaItem;

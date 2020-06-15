@@ -1,7 +1,9 @@
-const {
+import {
     mediaItemValidator,
     partyMediaItemsValidator
-} = require('../common/validation');
+} from '../common/validation';
+import { Request, Response } from 'express';
+import { Logger } from 'winston';
 
 /**
  * @api {delete} /api/partyItems Remove Item From Party
@@ -15,7 +17,11 @@ const {
  * @apiSuccess removePartyItemSuccessful Item was successfully removed from the party.
  * @apiError notAuthorized Requesting user is not authorized or not a member of the party or party is not active.
  */
-const removeItemFromParty = async (req, res, models) => {
+const removeItemFromParty = async (
+    req: Request,
+    res: Response,
+    models: Models
+) => {
     const requestUser = req.user;
     const partyId = req.body.partyId;
     const itemId = req.body.itemId;
@@ -26,7 +32,9 @@ const removeItemFromParty = async (req, res, models) => {
         party.members.includes(requestUser.id) &&
         (party.status === 'active' || requestUser.role === 'admin')
     ) {
-        const newPartyItems = party.items.filter((item) => item !== itemId);
+        const newPartyItems = party.items.filter(
+            (item: MediaItem) => item !== itemId
+        );
         party.items = newPartyItems;
 
         const newPartyMetadata = {
@@ -66,7 +74,12 @@ const removeItemFromParty = async (req, res, models) => {
  * @apiError notAuthorized Requesting user not a member of the party or party is not active.
  * @apiError itemAlreadyInParty Item is already in party.
  */
-const addItemToParty = async (req, res, models, logger) => {
+const addItemToParty = async (
+    req: Request,
+    res: Response,
+    models: Models,
+    logger: Logger
+) => {
     const requestUser = req.user;
     const partyId = req.body.partyId;
     const item = req.body.mediaItem;
@@ -78,6 +91,7 @@ const addItemToParty = async (req, res, models, logger) => {
                 mediaItemValidator.validate(item).error
             )}`
         );
+
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
@@ -123,7 +137,12 @@ const addItemToParty = async (req, res, models, logger) => {
  * @apiSuccess itemsUpdateSuccessful Items were updated successfully.
  * @apiError notAuthorized Requesting user is not authorized or not a member of the party or party is not active.
  */
-const updatePartyItems = async (req, res, models, logger) => {
+const updatePartyItems = async (
+    req: Request,
+    res: Response,
+    models: Models,
+    logger: Logger
+) => {
     const requestUser = req.user;
     const partyId = req.body.partyId;
     const updatedItems = req.body.orderedItems;
@@ -135,6 +154,7 @@ const updatePartyItems = async (req, res, models, logger) => {
                 partyMediaItemsValidator.validate(updatedItems).error
             )}`
         );
+
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
@@ -154,6 +174,7 @@ const updatePartyItems = async (req, res, models, logger) => {
             });
         } catch (error) {
             logger.log('error', error);
+
             return Promise.reject();
         }
     } else {
@@ -164,8 +185,4 @@ const updatePartyItems = async (req, res, models, logger) => {
     }
 };
 
-module.exports = {
-    removeItemFromParty,
-    addItemToParty,
-    updatePartyItems
-};
+export default { removeItemFromParty, addItemToParty, updatePartyItems };

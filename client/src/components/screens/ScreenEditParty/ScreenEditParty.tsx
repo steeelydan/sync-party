@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useLocation, useParams, Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { ClientParty, RootAppState } from '../../../types';
 import Heading from '../../display/Heading/Heading';
 import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
 import EditParty from '../../ui/EditParty/EditParty';

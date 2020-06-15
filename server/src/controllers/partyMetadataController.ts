@@ -1,4 +1,6 @@
-const { partyMetadataValidator } = require('../common/validation');
+import { partyMetadataValidator } from '../common/validation';
+import { Logger } from 'winston';
+import { Request, Response } from 'express';
 
 /**
  * @api {put} /api/partyMetadata Update Party Metadata
@@ -12,7 +14,12 @@ const { partyMetadataValidator } = require('../common/validation');
  * @apiSuccess metadataUpdateSuccessful Metadata was updated successfully.
  * @apiError notAuthorized Requesting user is not a member of the party / not admin or party is not active.
  */
-const updatePartyMetadata = async (req, res, models, logger) => {
+const updatePartyMetadata = async (
+    req: Request,
+    res: Response,
+    models: Models,
+    logger: Logger
+) => {
     const requestUser = req.user;
     const partyId = req.body.partyId;
     const updatedMetadata = req.body.metadata;
@@ -24,6 +31,7 @@ const updatePartyMetadata = async (req, res, models, logger) => {
                 partyMetadataValidator.validate(updatedMetadata).error
             )}`
         );
+
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
@@ -43,6 +51,7 @@ const updatePartyMetadata = async (req, res, models, logger) => {
             });
         } catch (error) {
             logger.log('error', error);
+
             return Promise.reject();
         }
     } else {
@@ -53,6 +62,4 @@ const updatePartyMetadata = async (req, res, models, logger) => {
     }
 };
 
-module.exports = {
-    updatePartyMetadata
-};
+export default { updatePartyMetadata };

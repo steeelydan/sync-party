@@ -11,7 +11,6 @@ import {
     getUpdatedUserItems,
     getUpdatedUserParties
 } from '../../../common/requests';
-import { User, MediaItem, RootAppState } from '../../../types';
 import Heading from '../../display/Heading/Heading';
 import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

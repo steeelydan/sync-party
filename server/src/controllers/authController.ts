@@ -1,5 +1,8 @@
 // ENDPOINTS
 
+import { Request, Response } from 'express';
+import { Logger } from 'winston';
+
 /**
  * @api {post} /api/auth User Authentication
  * @apiName auth
@@ -10,8 +13,8 @@
  * @apiSuccess {Object} user User Object containing id, username & role.
  * @apiError notAuthenticated Client did not provide a cookie or authenticated session does not exist.
  */
-const auth = async (req, res, logger) => {
-    if (req.isAuthenticated()) {
+const auth = async (req: Request, res: Response, logger: Logger) => {
+    if (req.isAuthenticated() && req.user) {
         return res.json({
             success: true,
             msg: 'isAuthenticated',
@@ -26,6 +29,7 @@ const auth = async (req, res, logger) => {
             'info',
             'Unauthenticated user tried to visit protected route.'
         );
+
         return res.status(401).json({ msg: 'notAuthenticated' });
     }
 };
@@ -42,7 +46,7 @@ const auth = async (req, res, logger) => {
  * @apiSuccess {Header} setCookie Session cookie.
  * @apiError notAuthenticated Username was not found or password is wrong.
  */
-const login = async (req, res, logger) => {
+const login = (req: Request, res: Response, logger: Logger) => {
     // At this point the user is already authenticated by passport middleware.
     logger.log('info', `User logged in: ${req.user.id}`);
     res.json({
@@ -64,19 +68,17 @@ const login = async (req, res, logger) => {
  * @apiPermission user
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
  */
-const logout = async (req, res, logger) => {
+const logout = async (req: Request, res: Response, logger: Logger) => {
     try {
         req.logout();
+
         return res.status(200).json({ success: true, msg: 'logoutSuccessful' });
     } catch (error) {
         logger.log('error', error);
         res.status(500).json({ success: false, msg: 'error' });
+
         return Promise.reject(new Error(error));
     }
 };
 
-module.exports = {
-    auth,
-    login,
-    logout
-};
+export default { auth, login, logout };

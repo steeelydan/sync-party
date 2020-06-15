@@ -1,17 +1,30 @@
-const updatePartyItems = async (models, partyId, mediaItemId) => {
+import { Request } from 'express';
+import { Logger } from 'winston';
+
+const updatePartyItems = async (
+    models: Models,
+    partyId: string,
+    mediaItemId: string
+) => {
     const party = await models.Party.findOne({ where: { id: partyId } });
     const newPartyItems = [...party.items];
     if (!newPartyItems.includes(mediaItemId)) {
         newPartyItems.push(mediaItemId);
         party.items = newPartyItems;
         party.save();
+
         return Promise.resolve();
     } else {
         return Promise.reject(new Error('Item already in party'));
     }
 };
 
-const insertNewMediaItem = async (req, newMediaItem, models, logger) => {
+const insertNewMediaItem = async (
+    req: Request,
+    newMediaItem: any,
+    models: Models,
+    logger: Logger
+) => {
     const requestPartyId = req.body.partyId;
 
     const requestParty = await models.Party.findOne({
@@ -29,18 +42,18 @@ const insertNewMediaItem = async (req, newMediaItem, models, logger) => {
         try {
             const dbMediaItem = await models.MediaItem.create(newMediaItem);
             await updatePartyItems(models, requestParty.id, dbMediaItem.id);
+
             return Promise.resolve(true);
         } catch (error) {
             logger.log('error', error);
+
             return Promise.reject();
         }
     } else {
         logger.log('error', 'error creating new mediaItem');
+
         return Promise.reject();
     }
 };
 
-module.exports = {
-    updatePartyItems,
-    insertNewMediaItem
-};
+export { updatePartyItems, insertNewMediaItem };

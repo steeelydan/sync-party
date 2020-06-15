@@ -1,4 +1,6 @@
-const isAuthenticated = (req, res, next) => {
+import { Request, Response, NextFunction } from 'express';
+
+const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
         next();
     } else {
@@ -6,7 +8,7 @@ const isAuthenticated = (req, res, next) => {
     }
 };
 
-const isAdmin = (req, res, next) => {
+const isAdmin = (req: Request, res: Response, next: NextFunction) => {
     if (req.user.role === 'admin') {
         next();
     } else {
@@ -14,7 +16,4 @@ const isAdmin = (req, res, next) => {
     }
 };
 
-module.exports = {
-    isAuthenticated,
-    isAdmin
-};
+export { isAuthenticated, isAdmin };

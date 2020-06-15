@@ -1,18 +1,24 @@
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcryptjs');
+import passport from 'passport';
+import * as PassportLocal from 'passport-local';
+const LocalStrategy = PassportLocal.Strategy;
+import bcrypt from 'bcryptjs';
+import { Logger } from 'winston';
 
-const configurePassport = (models, logger) => {
+const configurePassport = (models: Models, logger: Logger) => {
     /* The verify result is passed to the done function.
 You have to make sure the return values are what passport expects.
 Apart from that the implementation is up to you.
 username & password params should be called exactly that.
 Otherwise you must define a custom field mapping, see below. */
-    const verifyCallback = async (username, password, done) => {
+    const verifyCallback = async (
+        username: string,
+        password: string,
+        done: (err: any, user?: Express.User | false) => void
+    ) => {
         try {
             const user = await models.User.findOne({
                 where: {
-                    username: username
+                    username
                 }
             });
 
@@ -49,7 +55,7 @@ Otherwise you must define a custom field mapping, see below. */
     passport.use(strategy);
 
     // Attach a user property with the user id as value to req.passport
-    passport.serializeUser((user, done) => {
+    passport.serializeUser((user: AuthenticatedPassportUser, done) => {
         done(null, user.id);
     });
 
@@ -71,4 +77,4 @@ Otherwise you must define a custom field mapping, see below. */
     return passport;
 };
 
-module.exports = configurePassport;
+export default configurePassport;

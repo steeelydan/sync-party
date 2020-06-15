@@ -1,11 +1,15 @@
-const multer = require('multer');
-const path = require('path');
-const { v4: uuid } = require('uuid');
-const { insertNewMediaItem } = require('../database/generalOperations');
-const {
+import multer from 'multer';
+import path from 'path';
+import { v4 as uuid } from 'uuid';
+import { insertNewMediaItem } from '../database/generalOperations';
+import {
     newFileMediaItemValidator,
     multerFileValidator
-} = require('../common/validation');
+} from '../common/validation';
+import { Request, Response } from 'express';
+import { Logger } from 'winston';
+import helpers from '../common/helpers';
+import { Model } from 'sequelize';
 
 // HELPERS
 
@@ -17,7 +21,7 @@ const storage = multer.diskStorage({
         );
         callback(null, uploadPath);
     },
-    filename: (req, file, callback) => {
+    filename: (req: Request, file, callback) => {
         const newFileId = uuid();
         callback(null, `${newFileId}-${file.originalname}`);
         req.newFileId = newFileId;
@@ -25,7 +29,7 @@ const storage = multer.diskStorage({
 });
 
 const uploadFile = multer({
-    storage: storage,
+    storage,
     limits: { fileSize: 3000000000 }
 }).single('file');
 
@@ -43,10 +47,10 @@ const uploadFile = multer({
  * @apiSuccess {File} YourFile The requested file.
  * @apiError noFileAccess User is not member of party or file was not found or party is not active.
  */
-const getFile = async (req, res, models, helpers) => {
+const getFile = async (req: Request, res: Response, models: Models) => {
     const userId = req.user.id;
-    const mediaItemId = req.params.id || '';
-    const requestPartyId = req.query.party || '';
+    const mediaItemId = req.params.id;
+    const requestPartyId = req.query.party;
     const download = req.query.download;
 
     try {
@@ -65,7 +69,7 @@ const getFile = async (req, res, models, helpers) => {
         }
 
         const wantedItem = requestParty.items.find(
-            (itemId) => itemId === mediaItemId
+            (itemId: string) => itemId === mediaItemId
         );
 
         if (wantedItem) {
@@ -75,12 +79,13 @@ const getFile = async (req, res, models, helpers) => {
 
             if (download) {
                 const fileNameWithoutUuid = dbMediaItem.url.substr(37);
-                return res.download(
-                    helpers.getFileFromId(dbMediaItem.url),
+
+                res.download(
+                    helpers.getFilePathFromId(dbMediaItem.url),
                     fileNameWithoutUuid
                 );
             } else {
-                return res.sendFile(helpers.getFileFromId(dbMediaItem.url));
+                res.sendFile(helpers.getFilePathFromId(dbMediaItem.url));
             }
         } else {
             return res
@@ -104,13 +109,20 @@ const getFile = async (req, res, models, helpers) => {
  * @apiParam {String} name Name for the new item, chosen by the user
  * @apiError fileUploadError An error occurred during upload.
  */
-const upload = (req, res, models, logger) => {
-    uploadFile(req, res, (err) => {
+const upload = (
+    req: Request,
+    res: Response,
+    models: Models,
+    logger: Logger
+) => {
+    uploadFile(req, res, (err: any) => {
         if (err instanceof multer.MulterError) {
             logger.log('error', 'Multer error uploading file', err);
+
             return res.status(500).json(err);
         } else if (err) {
             logger.log('error', 'Error uploading file', err);
+
             return res.status(500).json(err);
         }
 
@@ -130,6 +142,7 @@ const upload = (req, res, models, logger) => {
                     multerFileValidator.validate(req.file).error
                 )}`
             );
+
             return res
                 .status(400)
                 .json({ success: false, msg: 'validationError' });
@@ -142,6 +155,7 @@ const upload = (req, res, models, logger) => {
                     newFileMediaItemValidator.validate(newMediaItem).error
                 )}`
             );
+
             return res
                 .status(400)
                 .json({ success: false, msg: 'validationError' });
@@ -171,7 +185,4 @@ const upload = (req, res, models, logger) => {
     });
 };
 
-module.exports = {
-    getFile,
-    upload
-};
+export default { getFile, upload };

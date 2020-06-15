@@ -1,4 +1,12 @@
-const configureSession = (sequelize, SequelizeStore, expressSession) => {
+import { Sequelize } from 'sequelize';
+import { SessionOptions } from 'express-session';
+import { RequestHandler } from 'express';
+
+const configureSession = (
+    sequelize: Sequelize,
+    SequelizeStore: any,
+    expressSession: (options?: SessionOptions) => RequestHandler
+) => {
     const sessionStore = new SequelizeStore({
         db: sequelize,
         tableName: 'sessions'
@@ -22,4 +30,4 @@ const configureSession = (sequelize, SequelizeStore, expressSession) => {
     return { session, sessionStore };
 };
 
-module.exports = configureSession;
+export default configureSession;

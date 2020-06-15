@@ -1,5 +1,4 @@
 import { setGlobalState } from '../actions/globalActions';
-import { ClientParty, MediaItem, AppAction } from '../types';
 import { Dispatch } from 'react';
 import { TFunction } from 'i18next';
 import Axios from 'axios';

@@ -1,5 +1,4 @@
 import { SET_GLOBAL_STATE } from '../actions/actionTypes';
-import { AppState, AppAction } from '../types';
 
 const initialState: AppState = {
     loggedIn: null,
