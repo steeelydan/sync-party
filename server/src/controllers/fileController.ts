@@ -8,6 +8,7 @@ import {
 } from '../common/validation';
 import { Request, Response } from 'express';
 import { Logger } from 'winston';
+import helpers from '../common/helpers';
 
 // HELPERS
 
@@ -19,8 +20,7 @@ const storage = multer.diskStorage({
         );
         callback(null, uploadPath);
     },
-    // FIXME Typing
-    filename: (req: any, file, callback) => {
+    filename: (req: Request, file, callback) => {
         const newFileId = uuid();
         callback(null, `${newFileId}-${file.originalname}`);
         req.newFileId = newFileId;
@@ -51,7 +51,6 @@ const getFile = async (
     req: Request,
     res: Response,
     models: any,
-    helpers: any
 ) => {
     const userId = req.user.id;
     const mediaItemId = req.params.id;
@@ -128,7 +127,6 @@ const upload = (req: Request, res: Response, models: any, logger: Logger) => {
         }
 
         const newMediaItem = {
-            // @ts-ignore FIXME
             id: req.newFileId, // Implicitly set by multer
             type: 'file',
             owner: req.body.owner,

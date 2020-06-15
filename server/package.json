@@ -59,6 +59,7 @@
         "@types/socket.io": "^2.1.8",
         "@types/uuid": "^8.0.0",
         "@types/validator": "^13.0.0",
+        "@types/winston": "^2.4.4",
         "prettier": "^2.0.5",
         "tsc-watch": "^4.2.8",
         "tslint": "^6.1.2",

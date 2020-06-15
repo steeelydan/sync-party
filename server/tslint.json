@@ -35,7 +35,7 @@
             "allow-public",
             "allow-protected"
         ],
-        "no-unbound-method": [true, "ignore-static"],
+        "no-unbound-method": false,
         "no-invalid-this": [true, "check-function-in-method"],
         "static-this": true,
         "no-this-assignment": true,
@@ -243,7 +243,8 @@
         "no-unused-expression": [true, "allow-fast-null-checks"],
         "no-empty": true,
         "no-sparse-arrays": true,
-        "ban-comma-operator": true
+        "ban-comma-operator": true,
+        "no-suspicious-comment": true
     },
     "rulesDirectory": []
 }

@@ -16,7 +16,7 @@ import bodyParser from 'body-parser';
 import expressSession from 'express-session';
 const SequelizeStore = require('connect-session-sequelize')(
     expressSession.Store
-); // FIXME
+);
 import compression from 'compression';
 import passportSocketIo from 'passport.socketio';
 import cookieParser from 'cookie-parser';
@@ -49,10 +49,8 @@ const app = express();
 const logger = helpers.createLogger();
 app.use(
     morgan(
-        // FIXME typing
         // @ts-ignore
         ':remote-addr - :remote-user :method :url HTTP/:http-version :status :res[content-length] :referrer :user-agent - :response-time ms',
-        // @ts-ignore
         { stream: logger.stream }
     )
 );
@@ -205,7 +203,6 @@ io.on('connection', (socket) => {
         logger.log('info', `Web Sockets: User disconnected: ${socketUserId}`);
     });
 
-    // FIXME custom types
     const joinParty = (data: { partyId: string; timestamp: number }) => {
         io.in(data.partyId).clients(async (err: Error, clients: string[]) => {
             if (!clients.includes(socketUserId)) {
@@ -350,7 +347,7 @@ app.get('/api/userItems', isAuthenticated, async (req, res) => {
 // Files
 
 app.get('/api/file/:id', isAuthenticated, async (req, res) => {
-    await fileController.getFile(req, res, models, helpers);
+    await fileController.getFile(req, res, models);
 });
 
 app.post('/api/file', isAuthenticated, (req, res) => {
