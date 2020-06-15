@@ -13,7 +13,7 @@ Otherwise you must define a custom field mapping, see below. */
     const verifyCallback = async (
         username: string,
         password: string,
-        done: (err: any, user?: any) => void // FIXME User Typing
+        done: (err: any, user?: Express.User | false) => void
     ) => {
         try {
             const user = await models.User.findOne({
