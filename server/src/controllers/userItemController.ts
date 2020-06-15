@@ -13,8 +13,7 @@ import { Logger } from 'winston';
 const getUserItems = async (
     req: Request,
     res: Response,
-    // FIXME type
-    models: any,
+    models: Models,
     logger: Logger
 ) => {
     const userId = req.user.id;

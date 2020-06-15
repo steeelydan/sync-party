@@ -7,8 +7,10 @@
     },
     "rules": {
         "trailing-comma": [false],
+        "no-unused-variable": true,
         "no-console": false,
         "no-var-requires": false,
+        "max-classes-per-file": false,
         "no-unnecessary-class": [
             true,
             "allow-constructor-only",
@@ -98,7 +100,7 @@
         "no-inferrable-types": true,
         "use-default-type-parameter": true,
         "no-object-literal-type-assertion": false,
-        "no-angle-bracket-type-assertion": true,
+        "no-angle-bracket-type-assertion": false,
         "no-unnecessary-type-assertion": true,
         "callable-types": true,
         "no-null-keyword": false,

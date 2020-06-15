@@ -21,8 +21,7 @@ import { Logger } from 'winston';
 const getAllMediaItems = async (
     req: Request,
     res: Response,
-    // FIXME: Type
-    models: any,
+    models: Models,
     logger: Logger
 ) => {
     try {
@@ -57,8 +56,7 @@ const getAllMediaItems = async (
 const createMediaItem = async (
     req: Request,
     res: Response,
-    // FIXME type
-    models: any,
+    models: Models,
     logger: Logger
 ) => {
     const newMediaItem = req.body.mediaItem;
@@ -103,8 +101,7 @@ const createMediaItem = async (
 const editMediaItem = async (
     req: Request,
     res: Response,
-    // FIXME type
-    models: any,
+    models: Models,
     logger: Logger
 ) => {
     const id = req.params.id;
@@ -155,8 +152,7 @@ const editMediaItem = async (
 const deleteMediaItem = async (
     req: Request,
     res: Response,
-    // FIXME type
-    models: any,
+    models: Models,
     logger: Logger
 ) => {
     const requestUser = req.user;

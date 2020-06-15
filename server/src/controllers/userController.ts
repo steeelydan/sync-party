@@ -10,8 +10,7 @@ import { Request, Response } from 'express';
  * @apiSuccess {Object[]} allUsers Array of all users, formatted.
  * @apiError notAuthorized Requesting user is not admin.
  */
-// FIXME type
-const getAllUsers = async (req: Request, res: Response, models: any) => {
+const getAllUsers = async (req: Request, res: Response, models: Models) => {
     const users = await models.User.findAll();
     if (users) {
         const formattedUsers = users.map((user: AppUser) => {

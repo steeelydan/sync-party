@@ -4,7 +4,7 @@ import { RequestHandler } from 'express';
 
 const configureSession = (
     sequelize: Sequelize,
-    SequelizeStore: any, // FIXME type
+    SequelizeStore: any,
     expressSession: (options?: SessionOptions) => RequestHandler
 ) => {
     const sessionStore = new SequelizeStore({

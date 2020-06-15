@@ -2,9 +2,6 @@
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/23976#issuecomment-546404481
 declare namespace Express {
     interface User extends RequestUser {}
-    interface Request {
-        newFileId?: string;
-    }
 }
 
 type RequestUser = {
@@ -16,6 +13,12 @@ type RequestUser = {
 type AuthenticatedPassportUser = {
     id: string;
 };
+
+type Models = {
+    User: any;
+    Party: any;
+    MediaItem: any;
+}
 
 type AppUser = {
     // Named this way to prevent conflict with passport & express session user types

@@ -1,8 +1,7 @@
 import bcrypt from 'bcryptjs';
 
-// FIXME: Type
 const createUser = (
-    models: any,
+    models: Models,
     username: string,
     role: UserRole,
     passwordRaw: string
@@ -29,9 +28,10 @@ const createUser = (
     });
 };
 
-// FIXME: Models & User typing
-const deleteUser = async (models: any, username: string) => {
-    await models.User.findOne({ where: { username } }).then((user: any) => {
+const deleteUser = async (models: Models, username: string) => {
+    try {
+        const user = await models.User.findOne({ where: { username } });
+
         if (!user) {
             console.log(`No user found with username: ${username}. Exiting`);
 
@@ -40,10 +40,12 @@ const deleteUser = async (models: any, username: string) => {
 
         user.destroy();
         console.log(`User deleted: ${username} (id: ${user.id})`);
-    });
+    } catch (error) {
+        console.log(error);
+    }
 };
 
-const listUsers = async (models: any) => {
+const listUsers = async (models: Models) => {
     const allUsers = await models.User.findAll();
 
     if (allUsers.length === 0) {
@@ -53,14 +55,14 @@ const listUsers = async (models: any) => {
     }
 };
 
-const deleteAllUsers = async (models: any) => {
+const deleteAllUsers = async (models: Models) => {
     await models.User.destroy({ where: {}, truncate: true });
 
     console.log('All users deleted.');
 };
 
 const changePassword = async (
-    models: any,
+    models: Models,
     username: string,
     newPasswordRaw: string
 ) => {

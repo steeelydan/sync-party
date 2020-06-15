@@ -17,7 +17,7 @@ import { Request, Response } from 'express';
 const createParty = async (
     req: Request,
     res: Response,
-    models: any,
+    models: Models,
     logger: Logger
 ) => {
     const requestUser = req.user;
@@ -92,8 +92,7 @@ const createParty = async (
 const editParty = async (
     req: Request,
     res: Response,
-    // FIXME type
-    models: any,
+    models: Models,
     logger: Logger
 ) => {
     const deleteParty = req.body.deleteParty;

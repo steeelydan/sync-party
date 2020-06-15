@@ -1,9 +1,8 @@
 import { Request } from 'express';
 import { Logger } from 'winston';
 
-// FIXME types
 const updatePartyItems = async (
-    models: any,
+    models: Models,
     partyId: string,
     mediaItemId: string
 ) => {
@@ -23,8 +22,7 @@ const updatePartyItems = async (
 const insertNewMediaItem = async (
     req: Request,
     newMediaItem: any,
-    // FIXME type
-    models: any,
+    models: Models,
     logger: Logger
 ) => {
     const requestPartyId = req.body.partyId;

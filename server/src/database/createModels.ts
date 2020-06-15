@@ -1,118 +1,161 @@
-import * as Sequelize from 'sequelize';
-import { Sequelize as SequelizeType } from 'sequelize';
+import { Sequelize, Model, DataTypes } from 'sequelize';
 
-const createModels = (
-    sequelizeInstance: SequelizeType
-): { [model: string]: any } => { // FIXME type
-    const models = {
-        User: sequelizeInstance.define('user', {
+class User extends Model {
+    id!: string;
+    username!: string;
+    role!: string;
+    password!: string;
+    settings!: object;
+    readonly createdAt!: Date;
+    readonly updatedAt!: Date;
+}
+
+class Party extends Model {
+    id!: string;
+    owner!: string;
+    name!: string;
+    status!: 'active | stopped';
+    members!: string[];
+    items: MediaItem[];
+    readonly createdAt!: Date;
+    readonly updatedAt!: Date;
+}
+
+class MediaItem extends Model {
+    id!: string;
+    owner!: string;
+    name!: string;
+    url!: string;
+    type!: 'web' | 'file';
+    settings!: object;
+}
+
+const createModels = (sequelize: Sequelize): any => {
+    User.init(
+        {
             id: {
                 allowNull: false,
                 primaryKey: true,
-                type: Sequelize.UUID,
-                defaultValue: Sequelize.UUIDV4
+                type: DataTypes.UUID,
+                defaultValue: DataTypes.UUIDV4
             },
             username: {
-                type: Sequelize.STRING,
+                type: DataTypes.STRING,
                 defaultValue: '',
                 allowNull: false
             },
             role: {
-                type: Sequelize.STRING,
+                type: DataTypes.STRING,
                 defaultValue: '',
                 allowNull: false
             },
             password: {
-                type: Sequelize.STRING,
+                type: DataTypes.STRING,
                 defaultValue: '',
                 allowNull: false
             },
             settings: {
-                type: Sequelize.JSON,
+                type: DataTypes.JSON,
                 defaultValue: {},
                 allowNull: false
             }
-        }),
-        Party: sequelizeInstance.define('party', {
+        },
+        {
+            tableName: 'users',
+            sequelize
+        }
+    );
+
+    Party.init(
+        {
             id: {
                 allowNull: false,
                 primaryKey: true,
-                type: Sequelize.UUID,
-                defaultValue: Sequelize.UUIDV4
+                type: DataTypes.UUID,
+                defaultValue: DataTypes.UUIDV4
             },
             owner: {
-                type: Sequelize.UUID,
+                type: DataTypes.UUID,
                 defaultValue: '',
                 allowNull: false
             },
             name: {
-                type: Sequelize.STRING,
+                type: DataTypes.STRING,
                 defaultValue: '',
                 allowNull: false
             },
             status: {
-                type: Sequelize.STRING,
+                type: DataTypes.STRING,
                 defaultValue: '',
                 allowNull: false
             },
             members: {
-                type: Sequelize.JSON,
+                type: DataTypes.JSON,
                 defaultValue: [],
                 allowNull: false
             },
             items: {
-                type: Sequelize.JSON,
+                type: DataTypes.JSON,
                 allowNull: false
             },
             metadata: {
-                type: Sequelize.JSON,
+                type: DataTypes.JSON,
                 defaultValue: {},
                 allowNull: false
             },
             settings: {
-                type: Sequelize.JSON,
+                type: DataTypes.JSON,
                 defaultValue: {},
                 allowNull: false
             }
-        }),
-        MediaItem: sequelizeInstance.define('media_item', {
+        },
+        {
+            tableName: 'parties',
+            sequelize
+        }
+    );
+
+    MediaItem.init(
+        {
             id: {
                 allowNull: false,
                 primaryKey: true,
-                type: Sequelize.UUID,
-                defaultValue: Sequelize.UUIDV4
+                type: DataTypes.UUID,
+                defaultValue: DataTypes.UUIDV4
             },
             name: {
-                type: Sequelize.STRING,
+                type: DataTypes.STRING,
                 defaultValue: '',
                 allowNull: false
             },
             url: {
-                type: Sequelize.STRING,
+                type: DataTypes.STRING,
                 defaultValue: '',
                 allowNull: false
             },
             type: {
-                type: Sequelize.STRING,
+                type: DataTypes.STRING,
                 defaultValue: '',
                 allowNull: false
             },
             owner: {
-                type: Sequelize.UUID,
+                type: DataTypes.UUID,
                 defaultValue: '',
                 allowNull: false
             },
             settings: {
-                type: Sequelize.JSON,
+                type: DataTypes.JSON,
                 defaultValue: {},
                 allowNull: false
             }
-        })
-    };
+        },
+        {
+            tableName: 'media_items',
+            sequelize
+        }
+    );
 
-    return models;
+    return { User, Party, MediaItem };
 };
 
-export default (sequelizeInstance: SequelizeType) => {
-    return createModels(sequelizeInstance);
-};
+export default createModels;

@@ -9,6 +9,7 @@ import {
 import { Request, Response } from 'express';
 import { Logger } from 'winston';
 import helpers from '../common/helpers';
+import { Model } from 'sequelize';
 
 // HELPERS
 
@@ -23,6 +24,7 @@ const storage = multer.diskStorage({
     filename: (req: Request, file, callback) => {
         const newFileId = uuid();
         callback(null, `${newFileId}-${file.originalname}`);
+        // @ts-ignore FIXME
         req.newFileId = newFileId;
     }
 });
@@ -46,12 +48,7 @@ const uploadFile = multer({
  * @apiSuccess {File} YourFile The requested file.
  * @apiError noFileAccess User is not member of party or file was not found or party is not active.
  */
-// FIXME Typing
-const getFile = async (
-    req: Request,
-    res: Response,
-    models: any,
-) => {
+const getFile = async (req: Request, res: Response, models: Models) => {
     const userId = req.user.id;
     const mediaItemId = req.params.id;
     const requestPartyId = req.query.party;
@@ -85,11 +82,11 @@ const getFile = async (
                 const fileNameWithoutUuid = dbMediaItem.url.substr(37);
 
                 res.download(
-                    helpers.getFileFromId(dbMediaItem.url),
+                    helpers.getFilePathFromId(dbMediaItem.url),
                     fileNameWithoutUuid
                 );
             } else {
-                res.sendFile(helpers.getFileFromId(dbMediaItem.url));
+                res.sendFile(helpers.getFilePathFromId(dbMediaItem.url));
             }
         } else {
             return res
@@ -113,8 +110,12 @@ const getFile = async (
  * @apiParam {String} name Name for the new item, chosen by the user
  * @apiError fileUploadError An error occurred during upload.
  */
-// FIXME types
-const upload = (req: Request, res: Response, models: any, logger: Logger) => {
+const upload = (
+    req: Request,
+    res: Response,
+    models: Models,
+    logger: Logger
+) => {
     uploadFile(req, res, (err: any) => {
         if (err instanceof multer.MulterError) {
             logger.log('error', 'Multer error uploading file', err);
@@ -127,6 +128,7 @@ const upload = (req: Request, res: Response, models: any, logger: Logger) => {
         }
 
         const newMediaItem = {
+            // @ts-ignore FIXME
             id: req.newFileId, // Implicitly set by multer
             type: 'file',
             owner: req.body.owner,

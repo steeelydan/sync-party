@@ -55,8 +55,7 @@ const envCheck = (logger: Logger) => {
     logger.log('info', `Environment: ${process.env.NODE_ENV}`);
 };
 
-// FIXME type
-const getFileFromId = (dbMediaItemId: string): string => {
+const getFilePathFromId = (dbMediaItemId: string): string => {
     return path.resolve(path.join(__dirname, '/../../uploads/', dbMediaItemId));
 };
 
@@ -106,7 +105,7 @@ const createUserToken = () => {
 
 export default {
     envCheck,
-    getFileFromId,
+    getFilePathFromId,
     createLogger,
     createPartyToken,
     createUserToken

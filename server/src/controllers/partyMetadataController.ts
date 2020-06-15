@@ -17,8 +17,7 @@ import { Request, Response } from 'express';
 const updatePartyMetadata = async (
     req: Request,
     res: Response,
-    // FIXME type
-    models: any,
+    models: Models,
     logger: Logger
 ) => {
     const requestUser = req.user;

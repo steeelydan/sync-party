@@ -10,8 +10,7 @@ import { Request, Response } from 'express';
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
  * @apiSuccess {Object[]} userParties All media items.
  */
-// FIXME models type
-const getUserParties = async (req: Request, res: Response, models: any) => {
+const getUserParties = async (req: Request, res: Response, models: Models) => {
     const allParties = await models.Party.findAll();
 
     // Restrict parties to those where given user is member

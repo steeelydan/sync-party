@@ -20,8 +20,7 @@ import { Logger } from 'winston';
 const removeItemFromParty = async (
     req: Request,
     res: Response,
-    // FIXME type
-    models: any
+    models: Models
 ) => {
     const requestUser = req.user;
     const partyId = req.body.partyId;
@@ -78,8 +77,7 @@ const removeItemFromParty = async (
 const addItemToParty = async (
     req: Request,
     res: Response,
-    // FIXME type
-    models: any,
+    models: Models,
     logger: Logger
 ) => {
     const requestUser = req.user;
@@ -142,8 +140,7 @@ const addItemToParty = async (
 const updatePartyItems = async (
     req: Request,
     res: Response,
-    // FIXME type
-    models: any,
+    models: Models,
     logger: Logger
 ) => {
     const requestUser = req.user;

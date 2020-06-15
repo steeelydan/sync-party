@@ -5,7 +5,7 @@ import InputText from '../../input/InputText/InputText';
 import Button from '../../input/Button/Button';
 
 interface Props {
-    file: any;
+    file: File | null;
     setFile: Function;
     mediaItem: NewMediaItem;
     setMediaItem: Function;

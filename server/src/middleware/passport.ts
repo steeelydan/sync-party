@@ -4,8 +4,7 @@ const LocalStrategy = PassportLocal.Strategy;
 import bcrypt from 'bcryptjs';
 import { Logger } from 'winston';
 
-const configurePassport = (models: any, logger: Logger) => {
-    // FIXME Type
+const configurePassport = (models: Models, logger: Logger) => {
     /* The verify result is passed to the done function.
 You have to make sure the return values are what passport expects.
 Apart from that the implementation is up to you.
@@ -14,7 +13,7 @@ Otherwise you must define a custom field mapping, see below. */
     const verifyCallback = async (
         username: string,
         password: string,
-        done: (err: any, user?: any) => void // FIXME Typing
+        done: (err: any, user?: any) => void // FIXME User Typing
     ) => {
         try {
             const user = await models.User.findOne({

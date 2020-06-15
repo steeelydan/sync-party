@@ -14,7 +14,7 @@ import { Logger } from 'winston';
  * @apiError notAuthenticated Client did not provide a cookie or authenticated session does not exist.
  */
 const auth = async (req: Request, res: Response, logger: Logger) => {
-    if (req.isAuthenticated()) {
+    if (req.isAuthenticated() && req.user) {
         return res.json({
             success: true,
             msg: 'isAuthenticated',
