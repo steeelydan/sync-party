@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { ClientPartyMember, RootAppState } from '../../../types';
 import Avatar from '../Avatar/Avatar';
 
 export default function Avatars(): JSX.Element | null {

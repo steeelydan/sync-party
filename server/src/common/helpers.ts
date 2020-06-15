@@ -1,8 +1,8 @@
-const path = require('path');
-const winston = require('winston');
-const crypto = require('crypto');
+import path from 'path';
+import winston, { Logger } from 'winston';
+import crypto from 'crypto';
 
-const envCheck = (logger) => {
+const envCheck = (logger: Logger) => {
     if (!process.env.NODE_ENV) {
         throw new Error(
             'No environment setting found. Did you configure the .env file? Options: "development", "production"'
@@ -55,7 +55,7 @@ const envCheck = (logger) => {
     logger.log('info', `Environment: ${process.env.NODE_ENV}`);
 };
 
-const getFileFromId = (dbMediaItemId) => {
+const getFilePathFromId = (dbMediaItemId: string): string => {
     return path.resolve(path.join(__dirname, '/../../uploads/', dbMediaItemId));
 };
 
@@ -85,6 +85,8 @@ const createLogger = () => {
     }
 
     logger.stream = {
+        // FIXME: https://github.com/winstonjs/winston/issues/1385
+        // @ts-ignore
         write: (message) => {
             logger.info(message);
         }
@@ -101,9 +103,9 @@ const createUserToken = () => {
     return crypto.randomBytes(64).toString('base64');
 };
 
-module.exports = {
+export default {
     envCheck,
-    getFileFromId,
+    getFilePathFromId,
     createLogger,
     createPartyToken,
     createUserToken

@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ClientParty, User, ClientPartyMember } from '../../../types';
 import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
 import Avatar from '../../display/Avatar/Avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

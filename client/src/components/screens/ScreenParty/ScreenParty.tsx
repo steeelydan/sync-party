@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCurrentParty } from '../../../common/helpers';
-import { ClientParty, RootAppState } from '../../../types';
 import MediaPlayerContainer from '../../player/MediaPlayerContainer/MediaPlayerContainer';
 
 type Props = {

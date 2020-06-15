@@ -1,7 +1,12 @@
-const bcrypt = require('bcryptjs');
+import bcrypt from 'bcryptjs';
 
-const createUser = async (models, username, role, passwordRaw) => {
-    const user = {};
+const createUser = (
+    models: Models,
+    username: string,
+    role: UserRole,
+    passwordRaw: string
+) => {
+    const user: NewUser = {} as NewUser;
 
     bcrypt.hash(passwordRaw, 10, (error, passwordHashed) => {
         user.username = username;
@@ -9,7 +14,7 @@ const createUser = async (models, username, role, passwordRaw) => {
         user.role = role;
 
         models.User.findOne({ where: { username: user.username } }).then(
-            async (previousUser) => {
+            async (previousUser: AppUser) => {
                 if (!previousUser) {
                     const newUser = await models.User.create(user);
 
@@ -23,23 +28,24 @@ const createUser = async (models, username, role, passwordRaw) => {
     });
 };
 
-const deleteUser = async (models, username) => {
-    await models.User.findOne({ where: { username: username } }).then(
-        (user) => {
-            if (!user) {
-                console.log(
-                    `No user found with username: ${username}. Exiting`
-                );
-                return;
-            }
+const deleteUser = async (models: Models, username: string) => {
+    try {
+        const user = await models.User.findOne({ where: { username } });
 
-            user.destroy();
-            console.log(`User deleted: ${username} (id: ${user.id})`);
+        if (!user) {
+            console.log(`No user found with username: ${username}. Exiting`);
+
+            return;
         }
-    );
+
+        user.destroy();
+        console.log(`User deleted: ${username} (id: ${user.id})`);
+    } catch (error) {
+        console.log(error);
+    }
 };
 
-const listUsers = async (models) => {
+const listUsers = async (models: Models) => {
     const allUsers = await models.User.findAll();
 
     if (allUsers.length === 0) {
@@ -49,14 +55,18 @@ const listUsers = async (models) => {
     }
 };
 
-const deleteAllUsers = async (models) => {
+const deleteAllUsers = async (models: Models) => {
     await models.User.destroy({ where: {}, truncate: true });
 
     console.log('All users deleted.');
 };
 
-const changePassword = async (models, username, newPasswordRaw) => {
-    const user = await models.User.findOne({ where: { username: username } });
+const changePassword = async (
+    models: Models,
+    username: string,
+    newPasswordRaw: string
+) => {
+    const user = await models.User.findOne({ where: { username } });
     if (!user) {
         throw new Error(`User ${username} does not exist!`);
     }
@@ -64,14 +74,8 @@ const changePassword = async (models, username, newPasswordRaw) => {
     user.password = newPasswordHashed;
     await models.User.update(
         { password: newPasswordHashed },
-        { where: { username: username } }
+        { where: { username } }
     );
 };
 
-module.exports = {
-    createUser,
-    deleteUser,
-    listUsers,
-    deleteAllUsers,
-    changePassword
-};
+export { createUser, deleteUser, listUsers, deleteAllUsers, changePassword };

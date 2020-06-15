@@ -1,10 +1,12 @@
-const fs = require('fs');
-const path = require('path');
-const { insertNewMediaItem } = require('../database/generalOperations');
-const {
+import fs from 'fs';
+import path from 'path';
+import { insertNewMediaItem } from '../database/generalOperations';
+import {
     mediaItemValidator,
     newMediaItemValidator
-} = require('../common/validation');
+} from '../common/validation';
+import { Request, Response } from 'express';
+import { Logger } from 'winston';
 
 /**
  * @api {get} /api/allMediaItems Get All MediaItems (Admin only)
@@ -16,16 +18,23 @@ const {
  * @apiSuccess {Object[]} allMediaItems All media items.
  * @apiError notAuthorized Requesting user is not admin.
  */
-const getAllMediaItems = async (req, res, models, logger) => {
+const getAllMediaItems = async (
+    req: Request,
+    res: Response,
+    models: Models,
+    logger: Logger
+) => {
     try {
         const allMediaItems = await models.MediaItem.findAll();
+
         return res.status(200).json({
             success: true,
             msg: 'fetchingSuccessful',
-            allMediaItems: allMediaItems
+            allMediaItems
         });
     } catch (error) {
         logger.log('error', error);
+
         return res.status(500).json({
             success: false,
             msg: 'error'
@@ -44,7 +53,12 @@ const getAllMediaItems = async (req, res, models, logger) => {
  * @apiParam {String} partyId Party ID.
  * @apiError notAuthorized Requesting user is not admin or party is not active.
  */
-const createMediaItem = async (req, res, models, logger) => {
+const createMediaItem = async (
+    req: Request,
+    res: Response,
+    models: Models,
+    logger: Logger
+) => {
     const newMediaItem = req.body.mediaItem;
 
     if (newMediaItemValidator.validate(newMediaItem).error) {
@@ -54,6 +68,7 @@ const createMediaItem = async (req, res, models, logger) => {
                 newMediaItemValidator.validate(newMediaItem).error
             )}`
         );
+
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
@@ -83,7 +98,12 @@ const createMediaItem = async (req, res, models, logger) => {
  * @apiParam {String} id MediaItem ID.
  * @apiError notAuthorized Requesting user is not admin or party is not active.
  */
-const editMediaItem = async (req, res, models, logger) => {
+const editMediaItem = async (
+    req: Request,
+    res: Response,
+    models: Models,
+    logger: Logger
+) => {
     const id = req.params.id;
     const editedMediaItem = req.body;
 
@@ -94,12 +114,13 @@ const editMediaItem = async (req, res, models, logger) => {
                 mediaItemValidator.validate(editedMediaItem).error
             )}`
         );
+
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
     const dbMediaItem = await models.MediaItem.findOne({
         where: {
-            id: id
+            id
         }
     });
 
@@ -109,6 +130,7 @@ const editMediaItem = async (req, res, models, logger) => {
         dbMediaItem.name = editedMediaItem.name;
 
         dbMediaItem.save();
+
         return res
             .status(200)
             .json({ success: true, msg: 'mediaItemEditSuccessful' });
@@ -127,7 +149,12 @@ const editMediaItem = async (req, res, models, logger) => {
  * @apiParam {String} id MediaItem ID.
  * @apiError notAuthorized Requesting user is not admin or party is not active.
  */
-const deleteMediaItem = async (req, res, models, logger) => {
+const deleteMediaItem = async (
+    req: Request,
+    res: Response,
+    models: Models,
+    logger: Logger
+) => {
     const requestUser = req.user;
 
     const mediaItemId = req.params.id;
@@ -137,7 +164,7 @@ const deleteMediaItem = async (req, res, models, logger) => {
                 id: mediaItemId
             }
         });
-        if (item.owner === requestUser.Id || requestUser.role === 'admin') {
+        if (item.owner === requestUser.id || requestUser.role === 'admin') {
             if (item.type === 'file') {
                 fs.unlinkSync(
                     path.join(__dirname, '/../../uploads/', item.url)
@@ -157,11 +184,12 @@ const deleteMediaItem = async (req, res, models, logger) => {
         }
     } catch (error) {
         logger.log('error', error);
+
         return res.status(500).json({ success: false, msg: 'error' });
     }
 };
 
-module.exports = {
+export default {
     getAllMediaItems,
     createMediaItem,
     editMediaItem,

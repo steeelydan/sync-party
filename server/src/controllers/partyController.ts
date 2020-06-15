@@ -1,4 +1,6 @@
-const { newPartyValidator, partyValidator } = require('../common/validation');
+import { newPartyValidator, partyValidator } from '../common/validation';
+import { Logger } from 'winston';
+import { Request, Response } from 'express';
 
 /**
  * @api {post} /api/party Create New Party (Admin only)
@@ -12,12 +14,17 @@ const { newPartyValidator, partyValidator } = require('../common/validation');
  * @apiError partyWithSameName A party with that name already exists.
  * @apiError notAuthorized Requesting user is not admin.
  */
-const createParty = async (req, res, models, logger) => {
+const createParty = async (
+    req: Request,
+    res: Response,
+    models: Models,
+    logger: Logger
+) => {
     const requestUser = req.user;
 
     if (req.body.partyName !== '') {
         try {
-            const newParty = {
+            const newParty: NewParty = {
                 owner: requestUser.id,
                 name: req.body.partyName,
                 status: 'active',
@@ -34,6 +41,7 @@ const createParty = async (req, res, models, logger) => {
                         newPartyValidator.validate(newParty).error
                     )}`
                 );
+
                 return res
                     .status(400)
                     .json({ success: false, msg: 'validationError' });
@@ -58,6 +66,7 @@ const createParty = async (req, res, models, logger) => {
             }
         } catch (error) {
             logger.log('error', error);
+
             return Promise.reject();
         }
     } else {
@@ -80,7 +89,12 @@ const createParty = async (req, res, models, logger) => {
  * @apiSuccess partyEditSuccessful Party was edited successfully.
  * @apiError notAuthorized Requesting user is not admin.
  */
-const editParty = async (req, res, models, logger) => {
+const editParty = async (
+    req: Request,
+    res: Response,
+    models: Models,
+    logger: Logger
+) => {
     const deleteParty = req.body.deleteParty;
 
     const requestParty = req.body.party;
@@ -92,6 +106,7 @@ const editParty = async (req, res, models, logger) => {
                 partyValidator.validate(requestParty).error
             )}`
         );
+
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
@@ -114,11 +129,9 @@ const editParty = async (req, res, models, logger) => {
         });
     } catch (error) {
         logger.log('error', error);
+
         return Promise.reject();
     }
 };
 
-module.exports = {
-    createParty,
-    editParty
-};
+export default { createParty, editParty };

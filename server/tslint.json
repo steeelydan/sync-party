@@ -1,0 +1,246 @@
+{
+    "defaultSeverity": "error",
+    "extends": ["tslint:recommended", "tslint-config-prettier"],
+    "jsRules": {},
+    "linterOptions": {
+        "exclude": ["*.json", "**/*.json"]
+    },
+    "rules": {
+        "trailing-comma": [false],
+        "no-unused-variable": true,
+        "no-console": false,
+        "no-var-requires": false,
+        "max-classes-per-file": false,
+        "no-unnecessary-class": [
+            true,
+            "allow-constructor-only",
+            "allow-static-only",
+            "allow-empty-class"
+        ],
+        "member-access": [true, "no-public"],
+        "member-ordering": [
+            true,
+            "public-before-private",
+            "static-before-instance",
+            "variables-before-functions"
+        ],
+        "prefer-readonly": true,
+        "adjacent-overload-signatures": [
+            true,
+            {
+                "ignore-accessors": true
+            }
+        ],
+        "unified-signatures": true,
+        "prefer-function-over-method": [
+            true,
+            "allow-public",
+            "allow-protected"
+        ],
+        "no-unbound-method": false,
+        "no-invalid-this": [true, "check-function-in-method"],
+        "static-this": true,
+        "no-this-assignment": true,
+        "unnecessary-constructor": [
+            true,
+            {
+                "check-super-calls": true
+            }
+        ],
+        "no-duplicate-super": true,
+        "new-parens": true,
+        "no-misused-new": true,
+        "no-construct": true,
+        "no-empty-interface": true,
+        "prefer-method-signature": true,
+        "interface-over-type-literal": true,
+        "function-constructor": true,
+        "no-parameter-reassignment": true,
+        "no-void-expression": false,
+        "invalid-void": [
+            true,
+            {
+                "allow-generics": ["EventEmitter", "Promise", "Observable"]
+            }
+        ],
+        "return-undefined": true,
+        "no-arg": true,
+        "only-arrow-functions": true,
+        "arrow-parens": false,
+        "arrow-return-shorthand": false,
+        "no-unnecessary-callback-wrapper": true,
+        "unnecessary-bind": true,
+        "promise-function-async": true,
+        "await-promise": true,
+        "no-async-without-await": true,
+        "no-return-await": true,
+        "no-floating-promises": true,
+        "no-promise-as-boolean": true,
+        "prefer-const": true,
+        "no-var-keyword": true,
+        "no-shadowed-variable": [
+            true,
+            {
+                "temporalDeadZone": false
+            }
+        ],
+        "one-variable-per-declaration": [true, "ignore-for-loop"],
+        "no-duplicate-variable": [true, "check-parameters"],
+        "no-unnecessary-initializer": true,
+        "no-implicit-dependencies": true,
+        "no-import-side-effect": true,
+        "ordered-imports": false,
+        "no-duplicate-imports": true,
+        "import-blacklist": [true, "rxjs/Rx"],
+        "no-require-imports": false,
+        "no-default-import": false,
+        "no-default-export": false,
+        "no-reference": true,
+        "typedef": [true, "call-signature", "property-declaration"],
+        "no-inferrable-types": true,
+        "use-default-type-parameter": true,
+        "no-object-literal-type-assertion": false,
+        "no-angle-bracket-type-assertion": false,
+        "no-unnecessary-type-assertion": true,
+        "callable-types": true,
+        "no-null-keyword": false,
+        "no-null-undefined-union": true,
+        "no-non-null-assertion": true,
+        "array-type": false,
+        "prefer-object-spread": true,
+        "object-literal-shorthand": true,
+        "object-literal-key-quotes": [true, "as-needed"],
+        "no-string-literal": true,
+        "quotemark": [true, "single", "avoid-template", "avoid-escape"],
+        "prefer-template": true,
+        "no-invalid-template-strings": true,
+        "strict-string-expressions": true,
+        "triple-equals": [true, "allow-null-check"],
+        "strict-comparisons": [
+            true,
+            {
+                "allow-object-equal-comparison": true,
+                "allow-string-order-comparison": false
+            }
+        ],
+        "increment-decrement": [true, "allow-post"],
+        "restrict-plus-operands": true,
+        "binary-expression-operand-order": true,
+        "no-dynamic-delete": false,
+        "use-isnan": true,
+        "no-conditional-assignment": true,
+        "prefer-conditional-expression": [true, "check-else-if"],
+        "no-tautology-expression": true,
+        "no-boolean-literal-compare": false,
+        "unnecessary-else": false,
+        "strict-boolean-expressions": [
+            true,
+            "allow-undefined-union",
+            "allow-string",
+            "allow-enum",
+            "allow-number",
+            "allow-mix",
+            "allow-rhs"
+        ],
+        "prefer-while": true,
+        "prefer-for-of": true,
+        "forin": true,
+        "no-for-in-array": true,
+        "no-for-in": true,
+        "switch-default": true,
+        "no-switch-case-fall-through": true,
+        "no-unsafe-finally": true,
+        "no-duplicate-switch-case": true,
+        "encoding": true,
+        "cyclomatic-complexity": [true, 20],
+        "max-file-line-count": [true, 500],
+        "max-line-length": false,
+        "indent": [true, "spaces", 2],
+        "eofline": true,
+        "curly": true,
+        "whitespace": [
+            true,
+            "check-branch",
+            "check-decl",
+            "check-operator",
+            "check-module",
+            "check-separator",
+            "check-rest-spread",
+            "check-type",
+            "check-typecast",
+            "check-type-operator",
+            "check-preblock"
+        ],
+        "typedef-whitespace": [
+            true,
+            {
+                "call-signature": "nospace",
+                "index-signature": "nospace",
+                "parameter": "nospace",
+                "property-declaration": "nospace",
+                "variable-declaration": "nospace"
+            },
+            {
+                "call-signature": "onespace",
+                "index-signature": "onespace",
+                "parameter": "onespace",
+                "property-declaration": "onespace",
+                "variable-declaration": "onespace"
+            }
+        ],
+        "space-before-function-paren": [
+            true,
+            {
+                "anonymous": "never",
+                "named": "never",
+                "asyncArrow": "always",
+                "method": "never",
+                "constructor": "never"
+            }
+        ],
+        "import-spacing": true,
+        "no-trailing-whitespace": true,
+        "newline-before-return": true,
+        "newline-per-chained-call": false,
+        "one-line": [
+            true,
+            "check-open-brace",
+            "check-whitespace",
+            "check-else",
+            "check-catch",
+            "check-finally"
+        ],
+        "no-consecutive-blank-lines": [true, 1],
+        "semicolon": [true, "always", "strict-bound-class-methods"],
+        "align": [true, "elements", "members", "parameters", "statements"],
+        "file-name-casing": [true, "camel-case"],
+        "class-name": true,
+        "interface-name": [true, "never-prefix"],
+        "variable-name": [
+            true,
+            "allow-pascal-case",
+            "check-format",
+            "allow-leading-underscore",
+            "require-const-for-all-caps",
+            "ban-keywords"
+        ],
+        "comment-type": [true, "singleline", "multiline", "doc"],
+        "comment-format": [true, "check-space"],
+        "jsdoc-format": [true, "check-multiline-start"],
+        "no-redundant-jsdoc": true,
+        "ban-ts-ignore": true,
+        "no-debugger": true,
+        "no-eval": true,
+        "no-string-throw": true,
+        "no-namespace": true,
+        "no-internal-module": true,
+        "number-literal-format": true,
+        "radix": true,
+        "no-unused-expression": [true, "allow-fast-null-checks"],
+        "no-empty": true,
+        "no-sparse-arrays": true,
+        "ban-comma-operator": true,
+        "no-suspicious-comment": true
+    },
+    "rulesDirectory": []
+}

@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
-import { RootAppState } from '../../../types';
 
 import Avatars from '../../display/Avatars/Avatars';
 import TitleDisplay from '../TitleDisplay/TitleDisplay';

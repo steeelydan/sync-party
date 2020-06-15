@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { setGlobalState } from '../../../actions/globalActions';
 import Axios from 'axios';
 import { baseState, axiosConfig } from '../../../common/helpers';
-import { RootAppState } from '../../../types';
 
 import ButtonLink from '../../input/ButtonLink/ButtonLink';
 import Heading from '../../display/Heading/Heading';

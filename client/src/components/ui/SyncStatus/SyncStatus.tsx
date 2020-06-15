@@ -1,10 +1,4 @@
 import React, { ReactElement } from 'react';
-import {
-    PlayerState,
-    ClientParty,
-    SyncStatusReceiveMember,
-    MemberStatus
-} from '../../../types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUnlink } from '@fortawesome/free-solid-svg-icons';
 

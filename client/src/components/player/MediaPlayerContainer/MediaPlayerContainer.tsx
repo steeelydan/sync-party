@@ -7,22 +7,6 @@ import React, {
 } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
-import {
-    RootAppState,
-    PlayerState,
-    PlayerStateActionProperties,
-    PlayerTimeoutState,
-    PlayerTimeoutStateActionProperties,
-    MediaItem,
-    SyncStatusIncoming,
-    SyncStatusOutgoing,
-    SyncStatusReceiveMember,
-    ClientPartyMember,
-    PlayOrder,
-    PlayWish,
-    ReactPlayerState,
-    MemberStatus
-} from '../../../types';
 
 import {
     useInterval,

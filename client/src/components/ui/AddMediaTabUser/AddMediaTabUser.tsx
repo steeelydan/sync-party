@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MediaItem, ClientParty } from '../../../types';
 import ItemListed from '../ItemListed/ItemListed';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSadCry } from '@fortawesome/free-solid-svg-icons';

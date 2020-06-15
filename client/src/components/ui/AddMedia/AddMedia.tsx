@@ -1,10 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import {
-    MediaItem,
-    ClientParty,
-    RootAppState,
-    NewMediaItem
-} from '../../../types';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 import Axios from 'axios';
@@ -54,7 +48,7 @@ export default function AddMedia({
 
     const [collapsed, setCollapsed] = useState(true);
     const [activeTab, setActiveTab] = useState<'user' | 'web' | 'file'>('file');
-    const [file, setFile] = useState<any>(); // FIXME: Typing
+    const [file, setFile] = useState<File | null>(null);
     const [mediaItem, setMediaItem] = useState(mediaItemDefault);
     const [uploadStartTime, setUploadStartTime] = useState(0);
     const [isUploading, setIsUploading] = useState(false);
@@ -323,7 +317,7 @@ export default function AddMedia({
                                 {activeTab === 'file' && (
                                     <AddMediaTabFile
                                         file={file}
-                                        setFile={(file: any): void =>
+                                        setFile={(file: File): void =>
                                             setFile(file)
                                         }
                                         mediaItem={mediaItem}

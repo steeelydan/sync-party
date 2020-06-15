@@ -5,12 +5,6 @@ import { setGlobalState } from '../../../actions/globalActions';
 import { useTranslation } from 'react-i18next';
 import Axios from 'axios';
 import { axiosConfig } from '../../../common/helpers';
-import {
-    ClientParty,
-    User,
-    ClientPartyMember,
-    ServerParty
-} from '../../../types';
 
 import Heading from '../../display/Heading/Heading';
 import ButtonLink from '../../input/ButtonLink/ButtonLink';

@@ -1,8 +1,8 @@
-export type RootAppState = {
+type RootAppState = {
     globalState: AppState;
 };
 
-export type AppState = {
+type AppState = {
     loggedIn: boolean | null;
     user: User | null;
     uiVisible: boolean;
@@ -17,7 +17,7 @@ export type AppState = {
     initialServerTimeOffset: number;
 };
 
-export type GlobalStateActionProperties = {
+type GlobalStateActionProperties = {
     loggedIn?: boolean | null;
     user?: User | null;
     uiVisible?: boolean;
@@ -32,12 +32,12 @@ export type GlobalStateActionProperties = {
     initialServerTimeOffset?: number;
 };
 
-export type AppAction = {
+type AppAction = {
     type: string;
     globalStateProperties: GlobalStateActionProperties;
 };
 
-export type PlayerState = {
+type PlayerState = {
     playOrder: PlayOrder | null;
     isPlaying: boolean;
     isFocused: boolean;
@@ -53,7 +53,7 @@ export type PlayerState = {
     volume: number;
 };
 
-export type PlayerStateActionProperties = {
+type PlayerStateActionProperties = {
     playOrder?: PlayOrder | null;
     isPlaying?: boolean;
     isFocused?: boolean;
@@ -69,7 +69,7 @@ export type PlayerStateActionProperties = {
     volume?: number;
 };
 
-export type PlayerTimeoutState = {
+type PlayerTimeoutState = {
     actionMessageTimeout: ReturnType<typeof setTimeout> | null;
     actionMessageTimeoutDone: boolean;
     uiTimeout: ReturnType<typeof setTimeout> | null;
@@ -77,7 +77,7 @@ export type PlayerTimeoutState = {
     uiTimeoutTimestamp: number;
 };
 
-export type PlayerTimeoutStateActionProperties = {
+type PlayerTimeoutStateActionProperties = {
     actionMessageTimeout?: ReturnType<typeof setTimeout> | null;
     actionMessageTimeoutDone?: boolean;
     uiTimeout?: ReturnType<typeof setTimeout> | null;
@@ -85,7 +85,7 @@ export type PlayerTimeoutStateActionProperties = {
     uiTimeoutTimestamp?: number;
 };
 
-export type PartyPartialState = {
+type PartyPartialState = {
     party: ClientParty | null;
     syncStatus: SyncStatusReceiveMember[] | null;
     memberStatus: MemberStatus | null;
@@ -93,20 +93,20 @@ export type PartyPartialState = {
     playingItem: MediaItem | null;
 };
 
-export type User = {
+type User = {
     id: string;
     username: string;
-    role: string;
+    role: 'admin' | 'user';
 };
 
-export type ServerParty = {
+type ServerParty = {
     id: string;
     name: string;
     status: 'active' | 'stopped';
     members: string[];
 };
 
-export type ClientParty = {
+type ClientParty = {
     id: string;
     name: string;
     status: 'active' | 'stopped';
@@ -119,12 +119,12 @@ export type ClientParty = {
     };
 };
 
-export type ClientPartyMember = {
+type ClientPartyMember = {
     id: string;
     username: string;
 };
 
-export type MediaItem = {
+type MediaItem = {
     id: string;
     type: 'web' | 'file';
     name: string;
@@ -134,18 +134,18 @@ export type MediaItem = {
     updatedAt: string;
 };
 
-export type NewMediaItem = {
+type NewMediaItem = {
     type: 'web' | 'file';
     name: string;
     owner: string | null;
     url: string;
 };
 
-export type SyncStatusIncoming = {
+type SyncStatusIncoming = {
     [userId: string]: SyncStatusPartyMember;
 };
 
-export type SyncStatusOutgoing = {
+type SyncStatusOutgoing = {
     partyId: string;
     userId: string;
     timestamp: number;
@@ -153,7 +153,7 @@ export type SyncStatusOutgoing = {
     isPlaying: boolean;
 };
 
-export type SyncStatusPartyMember = {
+type SyncStatusPartyMember = {
     id: string;
     position: number;
     timestamp: number;
@@ -161,21 +161,21 @@ export type SyncStatusPartyMember = {
     serverTimeOffset: number;
 };
 
-export type SyncStatusReceiveMember = {
+type SyncStatusReceiveMember = {
     id: string;
     username: string;
     delta: number;
 };
 
-export type MemberStatus = {
+type MemberStatus = {
     [userId: string]: { online: boolean; serverTimeOffset: number };
 };
 
-export type ActionMessage = {
+type ActionMessage = {
     text: string | JSX.Element;
 };
 
-export type PlayWish = {
+type PlayWish = {
     issuer: string;
     partyId: string;
     mediaItemId: string;
@@ -186,7 +186,7 @@ export type PlayWish = {
     direction?: 'left' | 'right';
 };
 
-export type PlayOrder = {
+type PlayOrder = {
     issuer: string;
     partyId: string;
     mediaItemId: string;
@@ -197,7 +197,7 @@ export type PlayOrder = {
     direction?: 'left' | 'right';
 };
 
-export type AxiosConfig = {
+type AxiosConfig = {
     withCredentials: boolean;
     /* TBI
     xsrfCookieName: string;
@@ -205,9 +205,9 @@ export type AxiosConfig = {
     */
 };
 
-export type MediaTypes = 'audio' | 'video' | 'stream';
+type MediaTypes = 'audio' | 'video' | 'stream';
 
-export type ReactPlayerState = {
+type ReactPlayerState = {
     played: number;
     playedSeconds: number;
     loaded: number;

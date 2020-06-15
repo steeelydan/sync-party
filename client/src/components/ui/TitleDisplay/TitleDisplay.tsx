@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getIconFromFileType } from '../../../common/helpers';
-import { RootAppState } from '../../../types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function TitleDisplay(): JSX.Element | null {

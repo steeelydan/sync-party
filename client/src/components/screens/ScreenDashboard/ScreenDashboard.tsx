@@ -2,7 +2,6 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
-import { ClientParty, RootAppState } from '../../../types';
 
 import Axios from 'axios';
 import {
