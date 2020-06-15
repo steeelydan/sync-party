@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NewMediaItem } from '../../../types';
 import InputText from '../../input/InputText/InputText';
 import Button from '../../input/Button/Button';
 

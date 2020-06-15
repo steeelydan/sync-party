@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from './actions/globalActions';
-import { RootAppState } from './types';
 import socketIOClient from 'socket.io-client';
 import i18n from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';

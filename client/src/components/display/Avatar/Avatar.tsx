@@ -1,5 +1,4 @@
 import React from 'react';
-import { User } from '../../../types';
 import { useTranslation } from 'react-i18next';
 
 type Props = {

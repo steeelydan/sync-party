@@ -1,10 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import {
-    MediaItem,
-    ClientParty,
-    RootAppState,
-    NewMediaItem
-} from '../../../types';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 import Axios from 'axios';

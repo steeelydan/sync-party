@@ -4,7 +4,6 @@ import { setGlobalState } from '../../../actions/globalActions';
 import Axios from 'axios';
 import { axiosConfig } from '../../../common/helpers';
 import { useTranslation } from 'react-i18next';
-import { RootAppState } from '../../../types';
 
 import Spinner from '../../display/Spinner/Spinner';
 import ScreenLogin from '../../screens/ScreenLogin/ScreenLogin';

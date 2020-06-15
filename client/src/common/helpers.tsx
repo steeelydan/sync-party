@@ -1,18 +1,5 @@
 import { useRef, useEffect, Dispatch } from 'react';
 import { setGlobalState } from '../actions/globalActions';
-
-import {
-    ClientParty,
-    AppState,
-    PartyPartialState,
-    AxiosConfig,
-    MediaTypes,
-    AppAction,
-    PlayerState,
-    User,
-    SyncStatusPartyMember,
-    MediaItem
-} from '../types';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import {
