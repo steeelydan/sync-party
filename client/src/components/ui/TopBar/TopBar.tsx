@@ -39,8 +39,6 @@ export default function TopBar({ socket }: Props): JSX.Element {
 
     if (party && redirect !== '') {
         if (redirect === 'home' && socket) {
-            socket.emit('leaveParty', { partyId: party.id });
-
             return <Redirect push to="/"></Redirect>;
         }
     }

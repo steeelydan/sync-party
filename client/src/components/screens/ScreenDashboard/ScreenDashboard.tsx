@@ -43,7 +43,7 @@ export default function ScreenDashboard(props: Props): JSX.Element | null {
     const { t } = useTranslation();
 
     useEffect(() => {
-        if (props.socket && party) {
+        if (props.socket && party && !redirectToParty) {
             props.socket.emit('leaveParty', { partyId: party.id });
             dispatch(setGlobalState(noPartyState));
         }
