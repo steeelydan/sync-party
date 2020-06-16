@@ -47,7 +47,7 @@ export default function ScreenDashboard(props: Props): JSX.Element | null {
             props.socket.emit('leaveParty', { partyId: party.id });
             dispatch(setGlobalState(noPartyState));
         }
-    }, [props.socket, party, dispatch]);
+    }, [props.socket, party, dispatch, redirectToParty]);
 
     const handleCreateParty = async (
         event: React.MouseEvent
