@@ -312,7 +312,7 @@ app.post(
     rateLimiters.authRateLimiter,
     passport.authenticate('local'),
     (req, res) => {
-        authController.login(req, res, logger);
+        authController.login(req, res);
     }
 );
 

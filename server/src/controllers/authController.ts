@@ -46,9 +46,8 @@ const auth = async (req: Request, res: Response, logger: Logger) => {
  * @apiSuccess {Header} setCookie Session cookie.
  * @apiError notAuthenticated Username was not found or password is wrong.
  */
-const login = (req: Request, res: Response, logger: Logger) => {
+const login = (req: Request, res: Response) => {
     // At this point the user is already authenticated by passport middleware.
-    logger.log('info', `User logged in: ${req.user.id}`);
     res.json({
         success: true,
         msg: 'loginSuccessful',
