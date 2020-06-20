@@ -114,6 +114,12 @@ input[type='range']::-moz-focus-outer {
     height: 125px;
 }
 
+.breakLongWords {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
 /* Scroll Bars */
 
 ::-webkit-scrollbar {

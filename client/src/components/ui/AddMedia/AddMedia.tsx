@@ -362,7 +362,7 @@ export default function AddMedia({
                         onClick={toggleCollapseAddMediaMenu}
                     ></Button>
                     {addedSuccessfully && lastCreatedItem && (
-                        <div className="my-3">
+                        <div className="my-3 breakLongWords">
                             <FontAwesomeIcon
                                 className="text-purple-400"
                                 icon={faThumbsUp}

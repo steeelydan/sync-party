@@ -27,7 +27,7 @@ export default function ItemListedBody({
             }}
         >
             {!editMode || !nameEditingAllowed ? (
-                <span>{item.name}</span>
+                <span className="breakLongWords">{item.name}</span>
             ) : (
                 <input
                     className="bg-gray-200 text-gray-800 w-full"
