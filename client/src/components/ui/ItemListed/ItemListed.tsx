@@ -93,7 +93,7 @@ export default function ItemListed({
                 setHovering(false);
             }}
         >
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-row justify-between break-all">
                 <div className="flex">
                     <ItemListedIcon
                         item={item}
