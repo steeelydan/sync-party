@@ -85,13 +85,11 @@ input[type='range']::-moz-focus-outer {
 }
 
 .partyItemList {
-    min-height: 15vh;
     overflow: auto;
 }
 
 .userItemList {
     max-height: 25vh;
-    min-height: 10vh;
     overflow: auto;
 }
 
