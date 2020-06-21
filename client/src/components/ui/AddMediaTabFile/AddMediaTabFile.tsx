@@ -39,8 +39,6 @@ export default function AddMediaTabFile({
                         </div>
                         <input
                             className="w-56 h-32 fileupload z-10"
-                            onFocus={(): void => setPlayerFocused(false)}
-                            onBlur={(): void => setPlayerFocused(true)}
                             onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
                             ): void => {
@@ -63,6 +61,8 @@ export default function AddMediaTabFile({
                     <InputText
                         value={mediaItem.name}
                         placeholder={t('mediaMenu.addNameDescription')}
+                        onFocus={(): void => setPlayerFocused(false)}
+                        onBlur={(): void => setPlayerFocused(true)}
                         onChange={(
                             event: React.ChangeEvent<HTMLInputElement>
                         ): void => {
