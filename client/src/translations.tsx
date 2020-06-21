@@ -111,6 +111,8 @@ const translations = {
                 addItemError: 'Error adding item',
                 addToPartyError: 'Error adding item to party',
                 removeItemError: 'Error removing item from party',
+                removeLastItemError:
+                    'You cannot remove the last playing item from the playlist.',
                 deleteItemError: 'Error deleting item',
                 itemSaveError: 'Error editing item',
                 reorderError: 'Error reordering items in playlist',

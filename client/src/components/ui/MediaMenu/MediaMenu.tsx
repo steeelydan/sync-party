@@ -51,6 +51,19 @@ export default function MediaMenu({
         item: MediaItem
     ): Promise<void> => {
         if (socket && party) {
+            if (
+                playerState.playingItem &&
+                playerState.playingItem.id === item.id
+            ) {
+                dispatch(
+                    setGlobalState({
+                        errorMessage: t(`errors.removeLastItemError`)
+                    })
+                );
+
+                return Promise.reject();
+            }
+
             try {
                 const response = await Axios.delete(
                     process.env.REACT_APP_API_ROUTE + 'partyItems',
