@@ -79,22 +79,19 @@ input[type='range']::-moz-focus-outer {
 
 /* Media Menu */
 
-.sidebar {
+.mediaMenu {
+    max-height: 70vh;
     width: 320px;
-    max-height: 75vh;
-}
-
-.addMedia {
-    min-height: 175px;
 }
 
 .partyItemList {
-    max-height: 38vh;
+    min-height: 15vh;
     overflow: auto;
 }
 
 .userItemList {
-    max-height: 30vh;
+    max-height: 25vh;
+    min-height: 10vh;
     overflow: auto;
 }
 

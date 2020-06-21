@@ -189,7 +189,7 @@ export default function MediaMenu({
     return (
         <div
             className={
-                'absolute top-0 mt-16 right-0 p-2 border border-gray-500 rounded m-2 shadow-md backgroundShade sidebar flex flex-col' +
+                'mediaMenu fixed top-0 right-0 flex flex-col mt-16 p-2 border border-gray-500 rounded m-2 shadow-md backgroundShade' +
                 (uiVisible || !playingItem || !playingItem.url ? '' : ' hidden')
             }
             onMouseOver={(): void => freezeUiVisible(true)}
