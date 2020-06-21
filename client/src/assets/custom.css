@@ -85,6 +85,7 @@ input[type='range']::-moz-focus-outer {
 }
 
 .partyItemList {
+    max-height: 35vh;
     overflow: auto;
 }
 
