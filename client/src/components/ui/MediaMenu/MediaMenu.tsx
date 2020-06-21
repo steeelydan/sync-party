@@ -52,6 +52,7 @@ export default function MediaMenu({
     ): Promise<void> => {
         if (socket && party) {
             if (
+                party.items.length === 1 &&
                 playerState.playingItem &&
                 playerState.playingItem.id === item.id
             ) {
