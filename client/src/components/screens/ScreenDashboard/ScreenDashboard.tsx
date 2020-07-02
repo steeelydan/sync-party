@@ -139,15 +139,19 @@ export default function ScreenDashboard(props: Props): JSX.Element | null {
                     </div>
                 )}
                 {errorMessage && (
-                    <div className="m-auto max-w-lg">
-                        <Alert
-                            className="w-full"
-                            mode="error"
-                            text={errorMessage}
-                            onCloseButton={(): void => {
-                                dispatch(setGlobalState({ errorMessage: '' }));
-                            }}
-                        ></Alert>
+                    <div className="w-full absolute">
+                        <div className="mx-auto mt-4 max-w-lg">
+                            <Alert
+                                className="w-full"
+                                mode="error"
+                                text={errorMessage}
+                                onCloseButton={(): void => {
+                                    dispatch(
+                                        setGlobalState({ errorMessage: '' })
+                                    );
+                                }}
+                            ></Alert>
+                        </div>
                     </div>
                 )}
                 {user && (
