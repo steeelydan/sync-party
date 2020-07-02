@@ -4,6 +4,8 @@ import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
 import Avatar from '../../display/Avatar/Avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch } from 'react-redux';
+import { setGlobalState } from '../../../actions/globalActions';
 
 interface Props {
     user: User;
@@ -18,6 +20,7 @@ export default function PartyTile({
     handlePartyChoose,
     setRedirectToPartySettings
 }: Props): ReactElement {
+    const dispatch = useDispatch();
     const { t } = useTranslation();
 
     return (
@@ -27,6 +30,12 @@ export default function PartyTile({
             onClick={(): void => {
                 if (userParty.status === 'active' || user.role === 'admin') {
                     handlePartyChoose(userParty);
+                } else {
+                    dispatch(
+                        setGlobalState({
+                            errorMessage: t(`errors.joinInactivePartyError`)
+                        })
+                    );
                 }
             }}
             title={t('dashboard.partyTileTitle')}

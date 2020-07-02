@@ -117,7 +117,8 @@ const translations = {
                 itemSaveError: 'Error editing item',
                 reorderError: 'Error reordering items in playlist',
                 logoutError: 'Error logging out',
-                metadataUpdateError: 'Error updating metadata'
+                metadataUpdateError: 'Error updating metadata',
+                joinInactivePartyError: 'You cannot join an inactive party.'
             },
             apiResponseMessages: {
                 // Not used in client atm
