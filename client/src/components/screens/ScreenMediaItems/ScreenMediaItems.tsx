@@ -111,6 +111,7 @@ export default function ScreenMediaItems({
                 fetchAllUsers();
             } else {
                 setAllMediaItems(userItems);
+                setSortedMediaItems(userItems);
                 setAllUsers({});
             }
         }
@@ -284,76 +285,69 @@ export default function ScreenMediaItems({
                         </tr>
                     </thead>
                     <tbody>
-                        {Object.keys(allUsers).length &&
-                            sortedMediaItems.map((mediaItem) => {
-                                return (
-                                    <tr
-                                        key={mediaItem.id}
-                                        className="border-b border-gray-700"
-                                    >
-                                        <td className="pr-3 py-3">
-                                            {mediaItem.name}
-                                        </td>
-                                        {user.role === 'admin' && allUsers && (
-                                            <>
-                                                <td className="pr-3">
-                                                    {mediaItem.type}
-                                                </td>
-                                                <td className="pr-3">
-                                                    {allUsers[mediaItem.owner]}
-                                                </td>
-                                            </>
-                                        )}
-                                        <td className="pr-3">
-                                            {user.role === 'admin'
-                                                ? mediaItem.url
-                                                : mediaItem.type === 'file'
-                                                ? mediaItem.url.substr(37)
-                                                : mediaItem.url}
-                                        </td>
-                                        {user.role === 'admin' && (
+                        {sortedMediaItems.map((mediaItem) => {
+                            return (
+                                <tr
+                                    key={mediaItem.id}
+                                    className="border-b border-gray-700"
+                                >
+                                    <td className="pr-3 py-3">
+                                        {mediaItem.name}
+                                    </td>
+                                    {user.role === 'admin' && allUsers && (
+                                        <>
                                             <td className="pr-3">
-                                                {mediaItem.id}
+                                                {mediaItem.type}
                                             </td>
+                                            <td className="pr-3">
+                                                {allUsers[mediaItem.owner]}
+                                            </td>
+                                        </>
+                                    )}
+                                    <td className="pr-3">
+                                        {user.role === 'admin'
+                                            ? mediaItem.url
+                                            : mediaItem.type === 'file'
+                                            ? mediaItem.url.substr(37)
+                                            : mediaItem.url}
+                                    </td>
+                                    {user.role === 'admin' && (
+                                        <td className="pr-3">{mediaItem.id}</td>
+                                    )}
+                                    <td className="pr-3">
+                                        {moment(mediaItem.createdAt).format(
+                                            'YYYY-MM-DD, HH:mm'
                                         )}
+                                    </td>
+                                    {user.role === 'admin' && (
                                         <td className="pr-3">
-                                            {moment(mediaItem.createdAt).format(
+                                            {moment(mediaItem.updatedAt).format(
                                                 'YYYY-MM-DD, HH:mm'
                                             )}
                                         </td>
-                                        {user.role === 'admin' && (
-                                            <td className="pr-3">
-                                                {moment(
-                                                    mediaItem.updatedAt
-                                                ).format('YYYY-MM-DD, HH:mm')}
-                                            </td>
-                                        )}
-                                        <td className="pr-3">
-                                            <div className="flex flex-row">
-                                                <ButtonIcon
-                                                    className="m-auto"
-                                                    color="text-gray-200"
-                                                    title={t(
-                                                        'mediaItems.delete'
-                                                    )}
-                                                    icon={
-                                                        <FontAwesomeIcon
-                                                            icon={faTrash}
-                                                        ></FontAwesomeIcon>
-                                                    }
-                                                    onClick={(): Promise<
-                                                        void
-                                                    > =>
-                                                        handleDeleteButton(
-                                                            mediaItem.id
-                                                        )
-                                                    }
-                                                ></ButtonIcon>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                                    )}
+                                    <td className="pr-3">
+                                        <div className="flex flex-row">
+                                            <ButtonIcon
+                                                className="m-auto"
+                                                color="text-gray-200"
+                                                title={t('mediaItems.delete')}
+                                                icon={
+                                                    <FontAwesomeIcon
+                                                        icon={faTrash}
+                                                    ></FontAwesomeIcon>
+                                                }
+                                                onClick={(): Promise<void> =>
+                                                    handleDeleteButton(
+                                                        mediaItem.id
+                                                    )
+                                                }
+                                            ></ButtonIcon>
+                                        </div>
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>
