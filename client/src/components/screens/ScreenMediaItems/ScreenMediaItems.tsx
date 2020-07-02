@@ -329,7 +329,6 @@ export default function ScreenMediaItems({
                                     <td className="pr-3">
                                         <div className="flex flex-row">
                                             <ButtonIcon
-                                                className="m-auto"
                                                 color="text-gray-200"
                                                 title={t('mediaItems.delete')}
                                                 icon={
