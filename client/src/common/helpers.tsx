@@ -82,7 +82,7 @@ const getIconFromFileType = (url: string): IconProp => {
 const getSite = (url: string): string => {
     let site = '';
 
-    if (url.includes('youtube.')) {
+    if (url.includes('youtube.') || url.includes('youtu.be')) {
         site = 'youtube';
     } else if (url.includes('facebook.')) {
         site = 'facebook';
