@@ -60,7 +60,7 @@ const getFile = async (req: Request, res: Response, models: Models) => {
 
         if (
             !requestParty ||
-            requestParty.status !== 'active' ||
+            (requestParty.status !== 'active' && req.user.role !== 'admin') ||
             !requestParty.members.includes(userId)
         ) {
             return res
