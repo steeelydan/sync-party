@@ -7,7 +7,7 @@
     "scripts": {
         "start": "npm run watch:css && react-scripts start",
         "build": "npm run build:css && react-scripts build && rm -rf ../server/client-build && cp -r ./build ../server/client-build",
-        "deploy": "npm install && npm run build",
+        "deploy": "npm ci && npm run build",
         "test": "react-scripts test",
         "build:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
         "watch:css": "postcss src/assets/tailwind.css -o src/assets/main.css"
