@@ -95,18 +95,8 @@ const createLogger = () => {
     return logger;
 };
 
-const createPartyToken = () => {
-    return crypto.randomBytes(16).toString('hex');
-};
-
-const createUserToken = () => {
-    return crypto.randomBytes(64).toString('base64');
-};
-
 export default {
     envCheck,
     getFilePathFromId,
-    createLogger,
-    createPartyToken,
-    createUserToken
+    createLogger
 };
