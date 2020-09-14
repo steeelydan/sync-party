@@ -1,6 +1,5 @@
 import path from 'path';
 import winston, { Logger } from 'winston';
-import crypto from 'crypto';
 
 const envCheck = (logger: Logger) => {
     if (!process.env.NODE_ENV) {
