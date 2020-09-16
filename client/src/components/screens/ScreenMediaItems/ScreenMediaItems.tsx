@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
-import moment from 'moment';
 import { Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Axios from 'axios';
@@ -315,15 +314,11 @@ export default function ScreenMediaItems({
                                         <td className="pr-3">{mediaItem.id}</td>
                                     )}
                                     <td className="pr-3">
-                                        {moment(mediaItem.createdAt).format(
-                                            'YYYY-MM-DD, HH:mm'
-                                        )}
+                                        {mediaItem.createdAt}
                                     </td>
                                     {user.role === 'admin' && (
                                         <td className="pr-3">
-                                            {moment(mediaItem.updatedAt).format(
-                                                'YYYY-MM-DD, HH:mm'
-                                            )}
+                                            {mediaItem.updatedAt}
                                         </td>
                                     )}
                                     <td className="pr-3">

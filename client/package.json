@@ -36,7 +36,6 @@
         "@fortawesome/react-fontawesome": "~0.1.10",
         "axios": "~0.19.2",
         "i18next": "~19.4.4",
-        "moment": "~2.26.0",
         "react": "~16.13.1",
         "react-beautiful-dnd": "~13.0.0",
         "react-copy-to-clipboard": "~5.0.2",
