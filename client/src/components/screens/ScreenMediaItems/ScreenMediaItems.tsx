@@ -285,6 +285,9 @@ export default function ScreenMediaItems({
                     </thead>
                     <tbody>
                         {sortedMediaItems.map((mediaItem) => {
+                            const createdAtRaw = new Date(mediaItem.createdAt);
+                            const updatedAtRaw = new Date(mediaItem.updatedAt);
+
                             return (
                                 <tr
                                     key={mediaItem.id}
@@ -314,11 +317,11 @@ export default function ScreenMediaItems({
                                         <td className="pr-3">{mediaItem.id}</td>
                                     )}
                                     <td className="pr-3">
-                                        {mediaItem.createdAt}
+                                        {createdAtRaw.toLocaleString()}
                                     </td>
                                     {user.role === 'admin' && (
                                         <td className="pr-3">
-                                            {mediaItem.updatedAt}
+                                            {updatedAtRaw.toLocaleString()}
                                         </td>
                                     )}
                                     <td className="pr-3">
