@@ -69,8 +69,11 @@ export default function Chat({
                     textInputRef.current.focus();
                 }
             } else {
-                setIsActive(false);
                 freezeUiVisible(false);
+                if (textInputRef.current) {
+                    textInputRef.current.blur();
+                }
+                setPlayerFocused(true);
             }
         }
     };
