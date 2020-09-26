@@ -65,6 +65,7 @@ export default function Chat({
         } else if (event.key === 'Escape') {
             if (showEmojiPicker) {
                 setShowEmojiPicker(false);
+                freezeUiVisible(false);
                 if (textInputRef.current) {
                     textInputRef.current.focus();
                 }
