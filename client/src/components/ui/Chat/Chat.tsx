@@ -167,7 +167,7 @@ export default function Chat({
                                 ></Picker>
                             </div>
                         )}
-                        {!showEmojiPicker && (
+                        {!showEmojiPicker && uiVisible && (
                             <FontAwesomeIcon
                                 icon={faSmile}
                                 className="ml-2 cursor-pointer text-2xl mb-1"
