@@ -67,7 +67,8 @@ const translations = {
             chat: {
                 writeSomething: 'Write something',
                 open: 'Enable chat',
-                close: 'Disable chat'
+                close: 'Disable chat',
+                me: 'Me'
             },
             dashboard: {
                 newParty: 'New Party',

@@ -6,12 +6,16 @@ interface Props {
         [party: string]: FormattedChatMessage[];
     };
     party: ClientParty;
+    userId: string;
+    t: Function;
 }
 
 export default function ChatHistory({
     chatHistoryRef,
     chat,
-    party
+    party,
+    userId,
+    t
 }: Props): ReactElement {
     return (
         <div
@@ -24,8 +28,19 @@ export default function ChatHistory({
                         key={index}
                         className={chat[party.id].length > 1 ? 'pb-1' : ''}
                     >
-                        <span className="text-purple-400">
-                            {chatMessage.userName}:{' '}
+                        <span
+                            className={
+                                userId !== chatMessage.userId
+                                    ? 'text-purple-400'
+                                    : ''
+                            }
+                        >
+                            {userId !== chatMessage.userId ? (
+                                chatMessage.userName
+                            ) : (
+                                <strong>{t('chat.me')}</strong>
+                            )}
+                            :{' '}
                         </span>
                         {chatMessage.message.map((element, index) => {
                             return <span key={index}>{element}</span>;

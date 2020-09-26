@@ -81,11 +81,14 @@ export default function Chat({
                 <>
                     {(uiVisible || !chatHistoryTimeoutDone) &&
                         party &&
+                        user &&
                         chat[party.id] && (
                             <ChatHistory
                                 chatHistoryRef={chatHistoryRef}
                                 chat={chat}
                                 party={party}
+                                userId={user.id}
+                                t={t}
                             ></ChatHistory>
                         )}
                     {uiVisible && (
