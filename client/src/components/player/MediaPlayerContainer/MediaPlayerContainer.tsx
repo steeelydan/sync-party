@@ -34,6 +34,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
+import Chat from '../../ui/Chat/Chat';
 
 type Props = {
     socket: SocketIOClient.Socket | null;
@@ -660,6 +661,13 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     ></ReactPlayer>
                 </div>
             </div>
+            <Chat
+                socket={socket}
+                setPlayerFocused={(focused: boolean): void =>
+                    setPlayerState({ isFocused: focused })
+                }
+                freezeUiVisible={freezeUiVisible}
+            ></Chat>
             <BottomBar
                 playerState={playerState}
                 handlePlayPause={handlePlayPause}

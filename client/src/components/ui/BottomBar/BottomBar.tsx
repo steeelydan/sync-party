@@ -44,7 +44,7 @@ export default function BottomBar({
 
     return (
         <div className="flex flex-col">
-            <div className="w-full absolute bottom-0 pb-12 z-50 align-bottom flex flex-row justify-end">
+            <div className="w-full absolute bottom-0 pb-12 z-40 align-bottom flex flex-row justify-end">
                 <SyncStatus
                     party={party}
                     playerState={playerState}

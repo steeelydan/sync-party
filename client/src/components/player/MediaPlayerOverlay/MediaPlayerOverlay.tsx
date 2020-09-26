@@ -81,7 +81,7 @@ export default function MediaPlayerOverlay(props: Props): JSX.Element {
                 <div className="flex w-full h-full absolute">
                     <div
                         className={
-                            'mr-auto mt-auto ml-2 py-2 px-3 rounded backgroundShade' +
+                            'mr-auto mb-auto mt-8 py-2 px-3 rounded backgroundShade' +
                             (uiVisible ? ' mb-12' : ' mb-2')
                         }
                     >

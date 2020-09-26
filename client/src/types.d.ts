@@ -15,6 +15,9 @@ type AppState = {
     actionMessage: ActionMessage | null;
     errorMessage: string | null;
     initialServerTimeOffset: number;
+    chat: {
+        [party: string]: FormattedChatMessage[];
+    };
 };
 
 type GlobalStateActionProperties = {
@@ -30,6 +33,9 @@ type GlobalStateActionProperties = {
     actionMessage?: ActionMessage | null;
     errorMessage?: string | null;
     initialServerTimeOffset?: number;
+    chat?: {
+        [party: string]: FormattedChatMessage[];
+    };
 };
 
 type AppAction = {
@@ -196,6 +202,17 @@ type PlayOrder = {
     timestamp: number;
     direction?: 'left' | 'right';
 };
+
+interface ChatMessage {
+    partyId: string;
+    userId: string;
+    userName: string;
+    message: string;
+}
+
+interface FormattedChatMessage extends ChatMessage {
+    message: JSX.Element[];
+}
 
 type AxiosConfig = {
     withCredentials: boolean;

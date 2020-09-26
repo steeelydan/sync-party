@@ -12,7 +12,8 @@ const initialState: AppState = {
     userItems: null,
     actionMessage: null,
     errorMessage: null,
-    initialServerTimeOffset: 0
+    initialServerTimeOffset: 0,
+    chat: {}
 };
 
 export default (

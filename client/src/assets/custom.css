@@ -116,6 +116,13 @@ input[type='range']::-moz-focus-outer {
     overflow-wrap: break-word;
 }
 
+/* Chat */
+.chatContainer {
+    width: 20rem;
+    max-height: 40vh;
+    overflow: auto;
+}
+
 /* Scroll Bars */
 
 ::-webkit-scrollbar {
