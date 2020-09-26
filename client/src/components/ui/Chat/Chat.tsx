@@ -67,6 +67,7 @@ export default function Chat({
                 setShowEmojiPicker(false);
             } else {
                 setIsActive(false);
+                freezeUiVisible(false);
             }
         }
     };
