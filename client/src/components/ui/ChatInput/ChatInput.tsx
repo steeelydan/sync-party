@@ -1,11 +1,13 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, Ref } from 'react';
 
 interface Props {
     textInput: string;
     setPlayerFocused: Function;
     freezeUiVisible: Function;
-    sendMessage: Function;
+    handleInputFieldKeyDown: Function;
+    handleInputFieldClick: Function;
     setTextInput: Function;
+    textInputRef: Ref<HTMLTextAreaElement>;
     t: Function;
 }
 
@@ -13,14 +15,18 @@ export default function ChatInput({
     textInput,
     setPlayerFocused,
     freezeUiVisible,
-    sendMessage,
+    handleInputFieldKeyDown,
+    handleInputFieldClick,
     setTextInput,
+    textInputRef,
     t
 }: Props): ReactElement {
     return (
         <div className="h-auto mb-2 py-1 px-2 chatContainer backgroundShade text-sm rounded border border-purple-400">
             <textarea
-                className="appearance-none text-white bg-transparent focus:outline-none placeholder-gray-600 resize-none w-full"
+                autoFocus={true}
+                ref={textInputRef}
+                className="appearance-none text-white bg-transparent focus:outline-none placeholder-gray-600 resize-none w-full text-base"
                 value={textInput}
                 onFocus={(): void => {
                     setPlayerFocused(false);
@@ -31,15 +37,11 @@ export default function ChatInput({
                     freezeUiVisible(false);
                 }}
                 onKeyDown={(event): boolean => {
-                    if (event.key === 'Enter') {
-                        event.preventDefault();
-                        sendMessage(textInput);
-                        freezeUiVisible(false);
-
-                        return false;
-                    } else {
-                        return true;
-                    }
+                    handleInputFieldKeyDown(event);
+                    return false;
+                }}
+                onClick={(): void => {
+                    handleInputFieldClick();
                 }}
                 placeholder={t('chat.writeSomething')}
                 onChange={(event): void => {

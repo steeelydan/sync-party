@@ -118,7 +118,7 @@ input[type='range']::-moz-focus-outer {
 
 /* Chat */
 .chatContainer {
-    width: 20rem;
+    width: 24rem;
     max-height: 40vh;
     overflow: auto;
 }
@@ -151,4 +151,14 @@ input[type='range']::-moz-focus-outer {
     top: 0;
     left: 0;
     background-color: black;
+}
+
+/* Emoji mart */
+
+.emoji-mart-preview {
+    display: none;
+}
+
+.emoji-mart-emoji::before {
+    cursor: pointer;
 }

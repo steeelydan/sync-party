@@ -1,8 +1,10 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { Picker } from 'emoji-mart';
+import 'emoji-mart/css/emoji-mart.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-solid-svg-icons';
+import { faComment, faSmile } from '@fortawesome/free-solid-svg-icons';
 import ChatHistory from '../ChatHistory/ChatHistory';
 import ChatInput from '../ChatInput/ChatInput';
 
@@ -28,9 +30,11 @@ export default function Chat({
 
     const [textInput, setTextInput] = useState('');
     const [isActive, setIsActive] = useState(false);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [chatHistoryTimeoutDone, setChatHistoryTimeoutDone] = useState(false);
 
     const chatHistoryRef = useRef<HTMLDivElement | null>(null);
+    const textInputRef = useRef<HTMLTextAreaElement | null>(null);
 
     const scrollHistoryToBottom = (): void => {
         if (chatHistoryRef && chatHistoryRef.current) {
@@ -40,7 +44,7 @@ export default function Chat({
     };
 
     const sendMessage = (message: string): void => {
-        if (socket && user && party) {
+        if (socket && user && party && message !== '') {
             const chatMessage = {
                 userId: user.id,
                 partyId: party.id,
@@ -49,6 +53,34 @@ export default function Chat({
             };
             socket.emit('chatMessage', chatMessage);
             setTextInput('');
+        }
+    };
+
+    const handleInputFieldKeyDown = (event: KeyboardEvent): void => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            sendMessage(textInput);
+            setShowEmojiPicker(false);
+            freezeUiVisible(false);
+        } else if (event.key === 'Escape') {
+            if (showEmojiPicker) {
+                setShowEmojiPicker(false);
+            } else {
+                setIsActive(false);
+            }
+        }
+    };
+
+    const handleInputFieldClick = (): void => {
+        setShowEmojiPicker(false);
+    };
+
+    const addEmoji = (emoji: any): void => {
+        setTextInput(textInput + emoji.native);
+        setPlayerFocused(false);
+
+        if (textInputRef.current) {
+            textInputRef.current.focus();
         }
     };
 
@@ -78,35 +110,83 @@ export default function Chat({
             }
         >
             {isActive && (
-                <>
-                    {(uiVisible || !chatHistoryTimeoutDone) &&
-                        party &&
-                        user &&
-                        chat[party.id] && (
-                            <ChatHistory
-                                chatHistoryRef={chatHistoryRef}
-                                chat={chat}
-                                party={party}
-                                userId={user.id}
-                                t={t}
-                            ></ChatHistory>
+                <div className="flex flex-row">
+                    <div className="flex flex-col mt-auto">
+                        {(uiVisible || !chatHistoryTimeoutDone) &&
+                            party &&
+                            user &&
+                            chat[party.id] && (
+                                <ChatHistory
+                                    chatHistoryRef={chatHistoryRef}
+                                    chat={chat}
+                                    party={party}
+                                    userId={user.id}
+                                    t={t}
+                                ></ChatHistory>
+                            )}
+                        {uiVisible && (
+                            <div className="mt-auto">
+                                <ChatInput
+                                    textInputRef={textInputRef}
+                                    textInput={textInput}
+                                    setPlayerFocused={setPlayerFocused}
+                                    freezeUiVisible={freezeUiVisible}
+                                    handleInputFieldKeyDown={
+                                        handleInputFieldKeyDown
+                                    }
+                                    handleInputFieldClick={
+                                        handleInputFieldClick
+                                    }
+                                    setTextInput={setTextInput}
+                                    t={t}
+                                ></ChatInput>
+                            </div>
                         )}
-                    {uiVisible && (
-                        <ChatInput
-                            textInput={textInput}
-                            setPlayerFocused={setPlayerFocused}
-                            freezeUiVisible={freezeUiVisible}
-                            sendMessage={sendMessage}
-                            setTextInput={setTextInput}
-                            t={t}
-                        ></ChatInput>
-                    )}
-                </>
+                    </div>
+                    <div className="mt-auto">
+                        {showEmojiPicker && (
+                            <div
+                                className="ml-2 mb-1"
+                                onKeyDown={(event): void => {
+                                    if (event.key === 'Enter') {
+                                        setShowEmojiPicker(false);
+                                    } else if (event.key === 'Escape') {
+                                        setShowEmojiPicker(false);
+                                    }
+                                }}
+                            >
+                                <Picker
+                                    native={true}
+                                    sheetSize={16}
+                                    showPreview={false}
+                                    useButton={false}
+                                    onSelect={(emoji): void => {
+                                        addEmoji(emoji);
+                                    }}
+                                    autoFocus={true}
+                                ></Picker>
+                            </div>
+                        )}
+                        {!showEmojiPicker && (
+                            <FontAwesomeIcon
+                                icon={faSmile}
+                                className="ml-2 cursor-pointer text-2xl mb-1"
+                                onClick={(): void => {
+                                    setShowEmojiPicker(!showEmojiPicker);
+                                    setPlayerFocused(!showEmojiPicker);
+                                    freezeUiVisible(!showEmojiPicker);
+                                }}
+                            ></FontAwesomeIcon>
+                        )}
+                    </div>
+                </div>
             )}
             {uiVisible && (
                 <FontAwesomeIcon
                     className="cursor-pointer"
-                    onClick={(): void => setIsActive(!isActive)}
+                    onClick={(): void => {
+                        setIsActive(!isActive);
+                    }}
                     opacity={isActive ? 1 : 0.7}
                     icon={faComment}
                     size="lg"

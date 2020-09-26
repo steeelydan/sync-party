@@ -19,7 +19,7 @@ export default function ChatHistory({
 }: Props): ReactElement {
     return (
         <div
-            className="mb-2 py-1 px-2 chatContainer z-50 backgroundShade rounded text-sm"
+            className="mb-2 py-1 px-2 chatContainer z-50 backgroundShade rounded text-base"
             ref={chatHistoryRef}
         >
             {chat[party.id].map((chatMessage, index) => {
