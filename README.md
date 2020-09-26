@@ -63,11 +63,43 @@ If you spot a bug or want to contribute feel free to create an issue.
 
 ## Production
 
--   If required, configure the `.env` files to run the app exposing only a local port and use a reverse proxy
+-   If required, configure the `.env` files to run the app exposing only a local port and use a reverse proxy (see example below)
 -   Make sure your firewall is configured correctly
 -   You might want to use a tool like `authbind` to run pm2 without root; see https://pm2.keymetrics.io/docs/usage/specifics/#listening-on-port-80-w-o-root
 -   In `/client`: `npm run deploy`
 -   In `/server`: `npm run deploy` or `npm install && npm run setup && npm run start-production`
+
+### nginx Reverse Proxy Example
+
+```conf
+    server_name syncparty.YOURSITE.xyz;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /socket.io/ {
+        proxy_pass http://localhost:3000/socket.io/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+    }
+
+    client_max_body_size 50M;
+    proxy_connect_timeout 600;
+    proxy_send_timeout 600;
+    proxy_read_timeout 600;
+    send_timeout 600;
+
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/syncparty.YOURSITE.xyz/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/syncparty.YOURSITE.xyz/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+```
 
 ## Development
 
@@ -102,8 +134,8 @@ In `/server/build/admin-cli`: `admin.js` +
 ## Changelog
 
 -   0.6.0:
-    - Ported the back end to TypeScript
-    - Global type definitions in the client app
+    -   Ported the back end to TypeScript
+    -   Global type definitions in the client app
 -   0.5.2: Several minor refactorings & bugfixes
 -   0.5.1: Bugfix: this.player sometimes undefined when trying to seek at media item change
 -   0.5.0: Initial release
