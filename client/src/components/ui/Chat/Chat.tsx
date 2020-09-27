@@ -56,6 +56,18 @@ export default function Chat({
         }
     };
 
+    const focusTextInput = (): void => {
+        if (textInputRef.current) {
+            textInputRef.current.focus();
+        }
+    };
+
+    const blurTextInput = (): void => {
+        if (textInputRef.current) {
+            textInputRef.current.blur();
+        }
+    };
+
     const handleInputFieldKeyDown = (event: KeyboardEvent): void => {
         if (event.key === 'Enter') {
             event.preventDefault();
@@ -66,29 +78,54 @@ export default function Chat({
             if (showEmojiPicker) {
                 setShowEmojiPicker(false);
                 freezeUiVisible(false);
-                if (textInputRef.current) {
-                    textInputRef.current.focus();
-                }
+                focusTextInput();
             } else {
                 freezeUiVisible(false);
-                if (textInputRef.current) {
-                    textInputRef.current.blur();
-                }
                 setPlayerFocused(true);
+                blurTextInput();
             }
         }
     };
 
-    const handleInputFieldClick = (): void => {
+    const closeEmojiPicker = (): void => {
         setShowEmojiPicker(false);
+        focusTextInput();
+    };
+
+    const handleEmojiPickerIconClick = (): void => {
+        setShowEmojiPicker(!showEmojiPicker);
+        setPlayerFocused(!showEmojiPicker);
+        freezeUiVisible(!showEmojiPicker);
+        focusTextInput();
     };
 
     const addEmoji = (emoji: any): void => {
-        setTextInput(textInput + emoji.native);
         setPlayerFocused(false);
 
         if (textInputRef.current) {
-            textInputRef.current.focus();
+            const textInput = textInputRef.current;
+            textInput.focus();
+
+            const cursorPosition = textInput.selectionStart;
+            const emojiLength = emoji.native.length;
+            const textBeforeCursorPosition = textInput.value.substring(
+                0,
+                cursorPosition
+            );
+            const textAfterCursorPosition = textInput.value.substring(
+                cursorPosition,
+                textInput.value.length
+            );
+
+            setTextInput(
+                textBeforeCursorPosition +
+                    emoji.native +
+                    textAfterCursorPosition
+            );
+
+            setTimeout(() => {
+                textInput.selectionEnd = cursorPosition + emojiLength;
+            }, 0.1);
         }
     };
 
@@ -142,9 +179,6 @@ export default function Chat({
                                     handleInputFieldKeyDown={
                                         handleInputFieldKeyDown
                                     }
-                                    handleInputFieldClick={
-                                        handleInputFieldClick
-                                    }
                                     setTextInput={setTextInput}
                                     t={t}
                                 ></ChatInput>
@@ -152,14 +186,12 @@ export default function Chat({
                         )}
                     </div>
                     <div className="mt-auto">
-                        {showEmojiPicker && (
+                        {showEmojiPicker && uiVisible && (
                             <div
                                 className="ml-2 mb-1"
                                 onKeyDown={(event): void => {
-                                    if (event.key === 'Enter') {
-                                        setShowEmojiPicker(false);
-                                    } else if (event.key === 'Escape') {
-                                        setShowEmojiPicker(false);
+                                    if (event.key === 'Escape') {
+                                        closeEmojiPicker();
                                     }
                                 }}
                             >
@@ -171,7 +203,6 @@ export default function Chat({
                                     onSelect={(emoji): void => {
                                         addEmoji(emoji);
                                     }}
-                                    autoFocus={true}
                                 ></Picker>
                             </div>
                         )}
@@ -179,11 +210,7 @@ export default function Chat({
                             <FontAwesomeIcon
                                 icon={faSmile}
                                 className="ml-2 cursor-pointer text-2xl mb-1"
-                                onClick={(): void => {
-                                    setShowEmojiPicker(!showEmojiPicker);
-                                    setPlayerFocused(!showEmojiPicker);
-                                    freezeUiVisible(!showEmojiPicker);
-                                }}
+                                onClick={handleEmojiPickerIconClick}
                             ></FontAwesomeIcon>
                         )}
                     </div>
@@ -193,6 +220,11 @@ export default function Chat({
                 <FontAwesomeIcon
                     className="cursor-pointer"
                     onClick={(): void => {
+                        if (!isActive) {
+                            setTimeout(() => {
+                                focusTextInput();
+                            }, 50);
+                        }
                         setIsActive(!isActive);
                     }}
                     opacity={isActive ? 1 : 0.7}
