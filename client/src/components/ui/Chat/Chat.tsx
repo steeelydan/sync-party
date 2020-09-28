@@ -95,7 +95,6 @@ export default function Chat({
     const handleEmojiPickerIconClick = (): void => {
         setShowEmojiPicker(!showEmojiPicker);
         setPlayerFocused(!showEmojiPicker);
-        freezeUiVisible(!showEmojiPicker);
         focusTextInput();
     };
 
@@ -134,6 +133,11 @@ export default function Chat({
     useEffect(() => {
         scrollHistoryToBottom();
     }, []);
+
+    // If ui visibility changes
+    useEffect(() => {
+        scrollHistoryToBottom();
+    }, [uiVisible]);
 
     // If there is a new message
     useEffect(() => {
@@ -223,6 +227,7 @@ export default function Chat({
                     onClick={(): void => {
                         if (!isActive) {
                             setTimeout(() => {
+                                scrollHistoryToBottom();
                                 focusTextInput();
                             }, 50);
                         }
