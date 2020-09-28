@@ -31,7 +31,6 @@ export default function ChatInput({
                 }}
                 onBlur={(): void => {
                     setPlayerFocused(true);
-                    freezeUiVisible(false);
                 }}
                 onKeyDown={(event): boolean => {
                     handleInputFieldKeyDown(event);
