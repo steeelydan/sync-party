@@ -59,12 +59,14 @@ export default function Chat({
     const focusTextInput = (): void => {
         if (textInputRef.current) {
             textInputRef.current.focus();
+            freezeUiVisible(true);
         }
     };
 
     const blurTextInput = (): void => {
         if (textInputRef.current) {
             textInputRef.current.blur();
+            freezeUiVisible(false);
         }
     };
 
@@ -77,10 +79,8 @@ export default function Chat({
         } else if (event.key === 'Escape') {
             if (showEmojiPicker) {
                 setShowEmojiPicker(false);
-                freezeUiVisible(false);
                 focusTextInput();
             } else {
-                freezeUiVisible(false);
                 setPlayerFocused(true);
                 blurTextInput();
             }
