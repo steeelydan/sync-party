@@ -29,7 +29,6 @@ export default function Chat({
     const { t } = useTranslation();
 
     const [textInput, setTextInput] = useState('');
-    const [cursorPosition, setCursorPosition] = useState(0);
     const [isActive, setIsActive] = useState(false);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [chatHistoryTimeoutDone, setChatHistoryTimeoutDone] = useState(false);
@@ -101,32 +100,33 @@ export default function Chat({
     };
 
     const addEmoji = (emoji: any): void => {
-        setPlayerFocused(false);
-
         if (textInputRef.current) {
-            const textInput = textInputRef.current;
-            textInput.focus();
-
-            const emojiLength = emoji.native.length;
-            const textBeforeCursorPosition = textInput.value.substring(
-                0,
-                cursorPosition
-            );
-            const textAfterCursorPosition = textInput.value.substring(
-                cursorPosition,
-                textInput.value.length
-            );
-
-            setTextInput(
-                textBeforeCursorPosition +
-                    emoji.native +
-                    textAfterCursorPosition
-            );
+            textInputRef.current.focus();
 
             setTimeout(() => {
-                textInput.selectionStart = cursorPosition + emojiLength;
-                textInput.selectionEnd = cursorPosition + emojiLength;
-            }, 0.1);
+                if (textInputRef.current) {
+                    const newCursorPosition =
+                        textInputRef.current.selectionStart +
+                        emoji.native.length;
+
+                    const textBeforeCursorPosition = textInputRef.current.value.substring(
+                        0,
+                        textInputRef.current.selectionStart
+                    );
+                    const textAfterCursorPosition = textInputRef.current.value.substring(
+                        textInputRef.current.selectionStart,
+                        textInputRef.current.value.length
+                    );
+
+                    setTextInput(
+                        textBeforeCursorPosition +
+                            emoji.native +
+                            textAfterCursorPosition
+                    );
+
+                    textInputRef.current.selectionStart = textInputRef.current.selectionEnd = newCursorPosition;
+                }
+            }, 10);
         }
     };
 
@@ -181,7 +181,6 @@ export default function Chat({
                                         handleInputFieldKeyDown
                                     }
                                     setTextInput={setTextInput}
-                                    setCursorPosition={setCursorPosition}
                                     t={t}
                                 ></ChatInput>
                             </div>
