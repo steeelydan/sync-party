@@ -7,7 +7,7 @@ import i18n from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
 
 import { getUpdatedUserParties, getUpdatedUserItems } from './common/requests';
-import { detectLinks, updateCurrentParty } from './common/helpers';
+import { formatChatMessage, updateCurrentParty } from './common/helpers';
 import translations from './translations';
 
 import Auth from './components/wrappers/Auth/Auth';
@@ -73,7 +73,7 @@ function App(): JSX.Element {
                 if (party && chat) {
                     const formattedChatMessage = {
                         ...chatMessage,
-                        message: detectLinks(chatMessage.message)
+                        message: formatChatMessage(chatMessage.message)
                     };
 
                     const newChat = chat[party.id]

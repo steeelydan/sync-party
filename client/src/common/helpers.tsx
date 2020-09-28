@@ -268,10 +268,11 @@ const reorderItems = (
     return idResult;
 };
 
-const detectLinks = (message: string): JSX.Element[] => {
+const formatChatMessage = (message: string): JSX.Element[] => {
     let remainingText = message;
     const textElements = [];
 
+    // Detect links
     if (remainingText.includes('https://')) {
         while (remainingText.includes('https://')) {
             const linkPosition = remainingText.indexOf('https://');
@@ -325,5 +326,5 @@ export {
     handleKeyCommands,
     calculateSyncDelta,
     reorderItems,
-    detectLinks
+    formatChatMessage
 };
