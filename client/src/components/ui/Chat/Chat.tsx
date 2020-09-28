@@ -29,6 +29,7 @@ export default function Chat({
     const { t } = useTranslation();
 
     const [textInput, setTextInput] = useState('');
+    const [cursorPosition, setCursorPosition] = useState(0);
     const [isActive, setIsActive] = useState(false);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [chatHistoryTimeoutDone, setChatHistoryTimeoutDone] = useState(false);
@@ -106,7 +107,6 @@ export default function Chat({
             const textInput = textInputRef.current;
             textInput.focus();
 
-            const cursorPosition = textInput.selectionStart;
             const emojiLength = emoji.native.length;
             const textBeforeCursorPosition = textInput.value.substring(
                 0,
@@ -180,6 +180,7 @@ export default function Chat({
                                         handleInputFieldKeyDown
                                     }
                                     setTextInput={setTextInput}
+                                    setCursorPosition={setCursorPosition}
                                     t={t}
                                 ></ChatInput>
                             </div>

@@ -6,6 +6,7 @@ interface Props {
     freezeUiVisible: Function;
     handleInputFieldKeyDown: Function;
     setTextInput: Function;
+    setCursorPosition: Function;
     textInputRef: Ref<HTMLTextAreaElement>;
     t: Function;
 }
@@ -16,6 +17,7 @@ export default function ChatInput({
     freezeUiVisible,
     handleInputFieldKeyDown,
     setTextInput,
+    setCursorPosition,
     textInputRef,
     t
 }: Props): ReactElement {
@@ -41,6 +43,12 @@ export default function ChatInput({
                 onChange={(event): void => {
                     freezeUiVisible(true);
                     setTextInput(event.target.value);
+                    setCursorPosition(event.target.selectionEnd);
+                }}
+                onSelect={(
+                    event: React.ChangeEvent<HTMLTextAreaElement>
+                ): void => {
+                    setCursorPosition(event.target.selectionEnd);
                 }}
             ></textarea>
         </div>
