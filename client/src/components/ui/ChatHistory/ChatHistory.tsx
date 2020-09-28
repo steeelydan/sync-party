@@ -26,7 +26,7 @@ export default function ChatHistory({
                 return (
                     <div
                         key={index}
-                        className={chat[party.id].length > 1 ? 'pb-1' : ''}
+                        className={chat[party.id].length > 1 ? 'mb-2' : ''}
                     >
                         <span
                             className={
