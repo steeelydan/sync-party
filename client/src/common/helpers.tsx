@@ -19,6 +19,9 @@ const baseState: AppState = {
     loggedIn: false,
     user: null,
     uiVisible: true,
+    uiFocused: {
+        chat: false
+    },
     playingItem: null,
     party: null,
     syncStatus: null,

@@ -123,6 +123,10 @@ input[type='range']::-moz-focus-outer {
     overflow: auto;
 }
 
+.chatHistoryHideScrollbar {
+    overflow: hidden;
+}
+
 /* Scroll Bars */
 
 ::-webkit-scrollbar {

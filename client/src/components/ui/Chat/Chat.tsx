@@ -1,12 +1,13 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Picker } from 'emoji-mart';
 import 'emoji-mart/css/emoji-mart.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faSmile } from '@fortawesome/free-solid-svg-icons';
 import ChatHistory from '../ChatHistory/ChatHistory';
 import ChatInput from '../ChatInput/ChatInput';
+import { setGlobalState } from '../../../actions/globalActions';
 
 interface Props {
     socket: SocketIOClient.Socket | null;
@@ -25,11 +26,15 @@ export default function Chat({
     const uiVisible = useSelector(
         (state: RootAppState) => state.globalState.uiVisible
     );
+    const uiFocused = useSelector(
+        (state: RootAppState) => state.globalState.uiFocused
+    );
 
     const { t } = useTranslation();
+    const dispatch = useDispatch();
 
-    const [textInput, setTextInput] = useState('');
     const [isActive, setIsActive] = useState(false);
+    const [textInput, setTextInput] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [chatHistoryTimeoutDone, setChatHistoryTimeoutDone] = useState(false);
 
@@ -41,6 +46,26 @@ export default function Chat({
             chatHistoryRef.current.scrollTop =
                 chatHistoryRef.current.scrollHeight;
         }
+    };
+
+    const toggleChat = (): void => {
+        if (!isActive) {
+            setTimeout(() => {
+                scrollHistoryToBottom();
+                focusTextInput();
+            }, 50);
+        }
+
+        dispatch(
+            setGlobalState({
+                uiFocused: {
+                    ...uiFocused,
+                    chat: !isActive
+                }
+            })
+        );
+
+        setIsActive(!isActive);
     };
 
     const sendMessage = (message: string): void => {
@@ -66,7 +91,6 @@ export default function Chat({
     const blurTextInput = (): void => {
         if (textInputRef.current) {
             textInputRef.current.blur();
-            freezeUiVisible(false);
         }
     };
 
@@ -75,24 +99,31 @@ export default function Chat({
             event.preventDefault();
             sendMessage(textInput);
             setShowEmojiPicker(false);
-            freezeUiVisible(false);
         } else if (event.key === 'Escape') {
             if (showEmojiPicker) {
                 setShowEmojiPicker(false);
                 focusTextInput();
             } else {
                 setPlayerFocused(true);
+                freezeUiVisible(false);
                 blurTextInput();
             }
         }
     };
 
-    const closeEmojiPicker = (): void => {
-        setShowEmojiPicker(false);
-        focusTextInput();
+    const handleEmojiPickerKeydown = (
+        event: React.KeyboardEvent<HTMLDivElement>
+    ): void => {
+        if (event.key === 'Escape') {
+            setShowEmojiPicker(false);
+            focusTextInput();
+        }
     };
 
     const handleEmojiPickerIconClick = (): void => {
+        if (!showEmojiPicker) {
+            freezeUiVisible(true);
+        }
         setShowEmojiPicker(!showEmojiPicker);
         setPlayerFocused(!showEmojiPicker);
         focusTextInput();
@@ -134,10 +165,10 @@ export default function Chat({
         scrollHistoryToBottom();
     }, []);
 
-    // If ui visibility changes
+    // If ui visibility or history timeout changes
     useEffect(() => {
         scrollHistoryToBottom();
-    }, [uiVisible]);
+    }, [uiVisible, chatHistoryTimeoutDone]);
 
     // If there is a new message
     useEffect(() => {
@@ -146,6 +177,9 @@ export default function Chat({
         const timeOutId = setTimeout(() => {
             setChatHistoryTimeoutDone(true);
         }, 12000);
+        setTimeout(() => {
+            freezeUiVisible(false);
+        }, 2000);
 
         return (): void => {
             clearTimeout(timeOutId);
@@ -171,6 +205,7 @@ export default function Chat({
                                     chat={chat}
                                     party={party}
                                     userId={user.id}
+                                    uiVisible={uiVisible}
                                     t={t}
                                 ></ChatHistory>
                             )}
@@ -194,11 +229,7 @@ export default function Chat({
                         {showEmojiPicker && uiVisible && (
                             <div
                                 className="ml-2 mb-1"
-                                onKeyDown={(event): void => {
-                                    if (event.key === 'Escape') {
-                                        closeEmojiPicker();
-                                    }
-                                }}
+                                onKeyDown={handleEmojiPickerKeydown}
                             >
                                 <Picker
                                     native={true}
@@ -224,15 +255,7 @@ export default function Chat({
             {uiVisible && (
                 <FontAwesomeIcon
                     className="cursor-pointer"
-                    onClick={(): void => {
-                        if (!isActive) {
-                            setTimeout(() => {
-                                scrollHistoryToBottom();
-                                focusTextInput();
-                            }, 50);
-                        }
-                        setIsActive(!isActive);
-                    }}
+                    onClick={toggleChat}
                     opacity={isActive ? 1 : 0.7}
                     icon={faComment}
                     size="lg"

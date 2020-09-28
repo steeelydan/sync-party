@@ -101,9 +101,9 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     playerStateRef.current = playerState;
 
     const initialPlayerTimeoutState = {
-        actionMessageTimeout: null,
+        actionMessageTimeoutId: null,
         actionMessageTimeoutDone: false,
-        uiTimeout: null,
+        uiTimeoutId: null,
         uiTimeoutDelay: uiTimeoutShortDelay,
         uiTimeoutTimestamp: Date.now()
     };
@@ -122,11 +122,11 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
 
     // Clear all timeouts
     const clearAllTimeouts = (): void => {
-        if (playerTimeoutStateRef.current.uiTimeout) {
-            clearTimeout(playerTimeoutStateRef.current.uiTimeout);
+        if (playerTimeoutStateRef.current.uiTimeoutId) {
+            clearTimeout(playerTimeoutStateRef.current.uiTimeoutId);
         }
-        if (playerTimeoutStateRef.current.actionMessageTimeout) {
-            clearTimeout(playerTimeoutStateRef.current.actionMessageTimeout);
+        if (playerTimeoutStateRef.current.actionMessageTimeoutId) {
+            clearTimeout(playerTimeoutStateRef.current.actionMessageTimeoutId);
         }
     };
 
@@ -590,16 +590,17 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     const handleMouseMovementOverUi = (): void => {
         if (
             Date.now() >
-            playerTimeoutState.uiTimeoutTimestamp + uiTimeoutIntervalResolution
+            playerTimeoutStateRef.current.uiTimeoutTimestamp +
+                uiTimeoutIntervalResolution
         ) {
             setUiVisible(true);
 
-            if (playerTimeoutState.uiTimeout) {
-                clearTimeout(playerTimeoutState.uiTimeout);
+            if (playerTimeoutStateRef.current.uiTimeoutId) {
+                clearTimeout(playerTimeoutStateRef.current.uiTimeoutId);
             }
 
             setPlayerTimeoutState({
-                uiTimeout: setTimeout(() => {
+                uiTimeoutId: setTimeout(() => {
                     setUiVisible(false);
                 }, playerTimeoutStateRef.current.uiTimeoutDelay),
                 uiTimeoutTimestamp: Date.now()
@@ -611,14 +612,16 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     const freezeUiVisible = (freeze: boolean): void => {
         const currentDelay = freeze ? uiTimeoutLongDelay : uiTimeoutShortDelay;
 
-        if (playerTimeoutState.uiTimeout) {
-            clearTimeout(playerTimeoutState.uiTimeout);
+        if (playerTimeoutStateRef.current.uiTimeoutId) {
+            clearTimeout(playerTimeoutStateRef.current.uiTimeoutId);
         }
 
+        const newTimeoutId = setTimeout(() => {
+            setUiVisible(false);
+        }, currentDelay);
+
         setPlayerTimeoutState({
-            uiTimeout: setTimeout(() => {
-                setUiVisible(false);
-            }, currentDelay),
+            uiTimeoutId: newTimeoutId,
             uiTimeoutDelay: currentDelay,
             uiTimeoutTimestamp: Date.now()
         });

@@ -6,6 +6,9 @@ type AppState = {
     loggedIn: boolean | null;
     user: User | null;
     uiVisible: boolean;
+    uiFocused: {
+        chat: boolean;
+    };
     playingItem: MediaItem | null;
     party: ClientParty | null;
     syncStatus: SyncStatusReceiveMember[] | null;
@@ -24,6 +27,9 @@ type GlobalStateActionProperties = {
     loggedIn?: boolean | null;
     user?: User | null;
     uiVisible?: boolean;
+    uiFocused?: {
+        chat: boolean;
+    };
     playingItem?: MediaItem | null;
     party?: ClientParty | null;
     syncStatus?: SyncStatusReceiveMember[] | null;
@@ -76,17 +82,17 @@ type PlayerStateActionProperties = {
 };
 
 type PlayerTimeoutState = {
-    actionMessageTimeout: ReturnType<typeof setTimeout> | null;
+    actionMessageTimeoutId: ReturnType<typeof setTimeout> | null;
     actionMessageTimeoutDone: boolean;
-    uiTimeout: ReturnType<typeof setTimeout> | null;
+    uiTimeoutId: ReturnType<typeof setTimeout> | null;
     uiTimeoutDelay: number;
     uiTimeoutTimestamp: number;
 };
 
 type PlayerTimeoutStateActionProperties = {
-    actionMessageTimeout?: ReturnType<typeof setTimeout> | null;
+    actionMessageTimeoutId?: ReturnType<typeof setTimeout> | null;
     actionMessageTimeoutDone?: boolean;
-    uiTimeout?: ReturnType<typeof setTimeout> | null;
+    uiTimeoutId?: ReturnType<typeof setTimeout> | null;
     uiTimeoutDelay?: number;
     uiTimeoutTimestamp?: number;
 };

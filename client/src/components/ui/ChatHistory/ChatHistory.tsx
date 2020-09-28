@@ -7,6 +7,7 @@ interface Props {
     };
     party: ClientParty;
     userId: string;
+    uiVisible: boolean;
     t: Function;
 }
 
@@ -15,11 +16,15 @@ export default function ChatHistory({
     chat,
     party,
     userId,
+    uiVisible,
     t
 }: Props): ReactElement {
     return (
         <div
-            className="mb-2 py-1 px-2 chatContainer z-50 backgroundShade rounded text-base break-words"
+            className={
+                'mb-2 py-1 px-2 chatContainer z-50 backgroundShade rounded text-base break-words' +
+                (uiVisible ? '' : ' chatHistoryHideScrollbar')
+            }
             ref={chatHistoryRef}
         >
             {chat[party.id].map((chatMessage, index) => {
