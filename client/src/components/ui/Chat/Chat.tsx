@@ -114,7 +114,7 @@ export default function Chat({
                         textInputRef.current.selectionStart
                     );
                     const textAfterCursorPosition = textInputRef.current.value.substring(
-                        textInputRef.current.selectionStart,
+                        textInputRef.current.selectionEnd,
                         textInputRef.current.value.length
                     );
 
