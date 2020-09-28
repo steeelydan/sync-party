@@ -124,6 +124,7 @@ export default function Chat({
             );
 
             setTimeout(() => {
+                textInput.selectionStart = cursorPosition + emojiLength;
                 textInput.selectionEnd = cursorPosition + emojiLength;
             }, 0.1);
         }

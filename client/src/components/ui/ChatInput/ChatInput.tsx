@@ -43,12 +43,12 @@ export default function ChatInput({
                 onChange={(event): void => {
                     freezeUiVisible(true);
                     setTextInput(event.target.value);
-                    setCursorPosition(event.target.selectionEnd);
+                    setCursorPosition(event.target.selectionStart);
                 }}
                 onSelect={(
                     event: React.ChangeEvent<HTMLTextAreaElement>
                 ): void => {
-                    setCursorPosition(event.target.selectionEnd);
+                    setCursorPosition(event.target.selectionStart);
                 }}
             ></textarea>
         </div>
