@@ -48,6 +48,7 @@ export default function ChatInput({
                 onSelect={(
                     event: React.ChangeEvent<HTMLTextAreaElement>
                 ): void => {
+                    freezeUiVisible(true);
                     setCursorPosition(event.target.selectionStart);
                 }}
             ></textarea>
