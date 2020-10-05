@@ -196,7 +196,8 @@ export default function Chat({
         >
             <div className="flex flex-row">
                 <div className="flex flex-col mt-auto">
-                    {(uiVisible || !chatHistoryTimeoutDone) &&
+                    {!(uiVisible && !isActive) &&
+                        (uiVisible || !chatHistoryTimeoutDone) &&
                         party &&
                         user &&
                         chat[party.id] && (
