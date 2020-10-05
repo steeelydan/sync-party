@@ -174,15 +174,16 @@ export default function Chat({
     useEffect(() => {
         scrollHistoryToBottom();
         setChatHistoryTimeoutDone(false);
-        const timeOutId = setTimeout(() => {
+        const historyTimeoutId = setTimeout(() => {
             setChatHistoryTimeoutDone(true);
         }, 12000);
-        setTimeout(() => {
+        const freezeTimeoutId = setTimeout(() => {
             freezeUiVisible(false);
         }, 2000);
 
         return (): void => {
-            clearTimeout(timeOutId);
+            clearTimeout(historyTimeoutId);
+            clearTimeout(freezeTimeoutId);
         };
     }, [chat, freezeUiVisible]);
 
