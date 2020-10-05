@@ -208,6 +208,7 @@ export default function Chat({
                                 chat={chat}
                                 party={party}
                                 userId={user.id}
+                                isActive={isActive}
                                 uiVisible={uiVisible}
                                 t={t}
                             ></ChatHistory>
