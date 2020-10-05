@@ -36,7 +36,7 @@ export default function Chat({
     const [isActive, setIsActive] = useState(false);
     const [textInput, setTextInput] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-    const [chatHistoryTimeoutDone, setChatHistoryTimeoutDone] = useState(false);
+    const [historyStaysVisible, setHistoryStaysVisible] = useState(false);
 
     const chatHistoryRef = useRef<HTMLDivElement | null>(null);
     const textInputRef = useRef<HTMLTextAreaElement | null>(null);
@@ -54,6 +54,8 @@ export default function Chat({
                 scrollHistoryToBottom();
                 focusTextInput();
             }, 50);
+        } else {
+            setHistoryStaysVisible(false);
         }
 
         dispatch(
@@ -168,14 +170,14 @@ export default function Chat({
     // If ui visibility or history timeout changes
     useEffect(() => {
         scrollHistoryToBottom();
-    }, [uiVisible, chatHistoryTimeoutDone]);
+    }, [uiVisible, historyStaysVisible]);
 
     // If there is a new message
     useEffect(() => {
         scrollHistoryToBottom();
-        setChatHistoryTimeoutDone(false);
+        setHistoryStaysVisible(true);
         const historyTimeoutId = setTimeout(() => {
-            setChatHistoryTimeoutDone(true);
+            setHistoryStaysVisible(false);
         }, 12000);
         const freezeTimeoutId = setTimeout(() => {
             freezeUiVisible(false);
@@ -196,8 +198,8 @@ export default function Chat({
         >
             <div className="flex flex-row">
                 <div className="flex flex-col mt-auto">
-                    {!(uiVisible && !isActive) &&
-                        (uiVisible || !chatHistoryTimeoutDone) &&
+                    {!(uiVisible && !isActive && !historyStaysVisible) &&
+                        (uiVisible || historyStaysVisible) &&
                         party &&
                         user &&
                         chat[party.id] && (
