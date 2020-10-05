@@ -1,7 +1,6 @@
 {
     "name": "sync-party-server",
-    "version": "0.6.0",
-    "description": "",
+    "version": "0.7.0",
     "main": "index.js",
     "private": true,
     "author": "steeelydan",
