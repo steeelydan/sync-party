@@ -321,6 +321,10 @@ const runApp = async () => {
                 currentSyncStatus[userSyncStatus.partyId]
             );
         });
+
+        socket.on('chatMessage', (chatMessage) => {
+            io.to(chatMessage.partyId).emit('chatMessage', chatMessage);
+        });
     });
 
     // API Endpoints

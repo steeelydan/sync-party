@@ -116,6 +116,17 @@ input[type='range']::-moz-focus-outer {
     overflow-wrap: break-word;
 }
 
+/* Chat */
+.chatContainer {
+    width: 24rem;
+    max-height: 40vh;
+    overflow: auto;
+}
+
+.chatHistoryHideScrollbar {
+    overflow: hidden;
+}
+
 /* Scroll Bars */
 
 ::-webkit-scrollbar {
@@ -144,4 +155,14 @@ input[type='range']::-moz-focus-outer {
     top: 0;
     left: 0;
     background-color: black;
+}
+
+/* Emoji mart */
+
+.emoji-mart-preview {
+    display: none;
+}
+
+.emoji-mart-emoji::before {
+    cursor: pointer;
 }

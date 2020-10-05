@@ -37,7 +37,7 @@ const envCheck = (logger: Logger) => {
         !['true', 'false'].includes(process.env.USE_SSL)
     ) {
         throw new Error(
-            `Wrong USE_SSL configuration ("${process.env.NODE_ENV}"). Must be either "true" or "false".`
+            `Wrong USE_SSL configuration ("${process.env.USE_SSL}"). Must be either "true" or "false".`
         );
     }
     if (

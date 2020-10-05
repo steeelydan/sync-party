@@ -43,6 +43,9 @@ export default function MediaMenu({
     const uiVisible = useSelector(
         (state: RootAppState) => state.globalState.uiVisible
     );
+    const uiFocused = useSelector(
+        (state: RootAppState) => state.globalState.uiFocused
+    );
 
     const dispatch = useDispatch();
     const { t } = useTranslation();
@@ -207,7 +210,11 @@ export default function MediaMenu({
                 (uiVisible || !playingItem || !playingItem.url ? '' : ' hidden')
             }
             onMouseOver={(): void => freezeUiVisible(true)}
-            onMouseLeave={(): void => freezeUiVisible(false)}
+            onMouseLeave={(): void => {
+                if (!uiFocused.chat) {
+                    freezeUiVisible(false);
+                }
+            }}
         >
             {party && party.items.length ? (
                 <div className="partyItemList">

@@ -64,6 +64,12 @@ const translations = {
                 download: 'Download',
                 copy: 'Copy URL to Clipboard'
             },
+            chat: {
+                writeSomething: 'Write something',
+                open: 'Enable chat',
+                close: 'Disable chat',
+                me: 'Me'
+            },
             dashboard: {
                 newParty: 'New Party',
                 yourParties: 'Your Parties',

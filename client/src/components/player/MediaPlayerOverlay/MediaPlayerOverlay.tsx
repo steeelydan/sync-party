@@ -25,13 +25,13 @@ export default function MediaPlayerOverlay(props: Props): JSX.Element {
     // Display updated actionMessage when updated in global state
     useEffect(() => {
         if (actionMessage && actionMessage.text) {
-            if (props.playerTimeoutState.actionMessageTimeout) {
-                clearTimeout(props.playerTimeoutState.actionMessageTimeout);
+            if (props.playerTimeoutState.actionMessageTimeoutId) {
+                clearTimeout(props.playerTimeoutState.actionMessageTimeoutId);
             }
 
             props.setPlayerTimeoutState({
                 actionMessageTimeoutDone: false,
-                actionMessageTimeout: setTimeout(() => {
+                actionMessageTimeoutId: setTimeout(() => {
                     props.setPlayerTimeoutState({
                         actionMessageTimeoutDone: true
                     });
@@ -40,8 +40,8 @@ export default function MediaPlayerOverlay(props: Props): JSX.Element {
         }
 
         return (): void => {
-            if (props.playerTimeoutState.actionMessageTimeout) {
-                clearTimeout(props.playerTimeoutState.actionMessageTimeout);
+            if (props.playerTimeoutState.actionMessageTimeoutId) {
+                clearTimeout(props.playerTimeoutState.actionMessageTimeoutId);
             }
         };
     }, [actionMessage]);
@@ -81,7 +81,7 @@ export default function MediaPlayerOverlay(props: Props): JSX.Element {
                 <div className="flex w-full h-full absolute">
                     <div
                         className={
-                            'mr-auto mt-auto ml-2 py-2 px-3 rounded backgroundShade' +
+                            'ml-2 mr-auto mb-auto mt-8 py-2 px-3 rounded backgroundShade' +
                             (uiVisible ? ' mb-12' : ' mb-2')
                         }
                     >

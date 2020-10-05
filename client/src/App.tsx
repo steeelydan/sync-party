@@ -7,7 +7,7 @@ import i18n from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
 
 import { getUpdatedUserParties, getUpdatedUserItems } from './common/requests';
-import { updateCurrentParty } from './common/helpers';
+import { formatChatMessage, updateCurrentParty } from './common/helpers';
 import translations from './translations';
 
 import Auth from './components/wrappers/Auth/Auth';
@@ -33,12 +33,14 @@ function App(): JSX.Element {
     const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
     const dispatch = useDispatch();
     const party = useSelector((state: RootAppState) => state.globalState.party);
+    const chat = useSelector((state: RootAppState) => state.globalState.chat);
 
     useEffect(() => {
         if (socket && dispatch) {
             socket.off('partyUpdate');
             socket.off('mediaItemUpdate');
             socket.off('serverTimeOffset');
+            socket.off('chatMessage');
 
             socket.on('serverTimeOffset', (serverTimeOffset: number) => {
                 dispatch(
@@ -66,8 +68,29 @@ function App(): JSX.Element {
             socket.on('mediaItemUpdate', async () => {
                 await getUpdatedUserItems(dispatch, t); // FIXME: In All Items overview: admin might not get other user's items.
             });
+
+            socket.on('chatMessage', async (chatMessage: ChatMessage) => {
+                if (party && chat) {
+                    const formattedChatMessage = {
+                        ...chatMessage,
+                        message: formatChatMessage(chatMessage.message)
+                    };
+
+                    const newChat = chat[party.id]
+                        ? chat[party.id].concat([formattedChatMessage])
+                        : [formattedChatMessage];
+
+                    dispatch(
+                        setGlobalState({
+                            chat: {
+                                [party.id]: newChat
+                            }
+                        })
+                    );
+                }
+            });
         }
-    }, [socket, dispatch, party, t]);
+    }, [socket, dispatch, party, t, chat]);
 
     useEffect(() => {
         if (loggedIn && dispatch && process.env.REACT_APP_SOCKET_ROUTE) {

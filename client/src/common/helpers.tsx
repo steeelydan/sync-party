@@ -1,6 +1,7 @@
 import { useRef, useEffect, Dispatch } from 'react';
 import { setGlobalState } from '../actions/globalActions';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import React from 'react';
 
 import {
     faMusic,
@@ -18,6 +19,9 @@ const baseState: AppState = {
     loggedIn: false,
     user: null,
     uiVisible: true,
+    uiFocused: {
+        chat: false
+    },
     playingItem: null,
     party: null,
     syncStatus: null,
@@ -26,7 +30,8 @@ const baseState: AppState = {
     userItems: null,
     actionMessage: null,
     errorMessage: null,
-    initialServerTimeOffset: 0
+    initialServerTimeOffset: 0,
+    chat: {}
 };
 
 const noPartyState: PartyPartialState = {
@@ -266,6 +271,52 @@ const reorderItems = (
     return idResult;
 };
 
+const formatChatMessage = (message: string): JSX.Element[] => {
+    let remainingText = message;
+    const textElements = [];
+
+    // Detect links
+    if (remainingText.includes('https://')) {
+        while (remainingText.includes('https://')) {
+            const linkPosition = remainingText.indexOf('https://');
+            const wordBefore = remainingText.substr(0, linkPosition);
+
+            if (wordBefore !== '') {
+                textElements.push(<>{remainingText.substr(0, linkPosition)}</>);
+            }
+
+            remainingText = remainingText.substr(linkPosition);
+            const nextSpace = remainingText.indexOf(' ');
+            let link = '';
+
+            if (nextSpace > -1) {
+                link = remainingText.substr(0, nextSpace);
+                remainingText = remainingText.substr(nextSpace);
+            } else {
+                link = remainingText.substr(0);
+                remainingText = '';
+            }
+
+            textElements.push(
+                <a
+                    className="break-all"
+                    href={link}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                >
+                    {link}
+                </a>
+            );
+        }
+
+        textElements.push(<>{remainingText}</>);
+    } else {
+        textElements.push(<>{remainingText}</>);
+    }
+
+    return textElements;
+};
+
 export {
     baseState,
     noPartyState,
@@ -277,5 +328,6 @@ export {
     updateCurrentParty,
     handleKeyCommands,
     calculateSyncDelta,
-    reorderItems
+    reorderItems,
+    formatChatMessage
 };
