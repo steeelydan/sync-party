@@ -43,7 +43,7 @@ type Props = {
 export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     // Constants
     const uiTimeoutIntervalResolution = 500;
-    const uiTimeoutShortDelay = 3000;
+    const uiTimeoutShortDelay = 5000;
     const uiTimeoutLongDelay = 30000;
     const syncStatusIntervalDelay = 1000;
     const syncStatusIntervalTolerance = 1500;

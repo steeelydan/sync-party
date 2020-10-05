@@ -193,38 +193,38 @@ export default function Chat({
                 (uiVisible ? ' mb-12' : ' mb-3')
             }
         >
-            {isActive && (
-                <div className="flex flex-row">
-                    <div className="flex flex-col mt-auto">
-                        {(uiVisible || !chatHistoryTimeoutDone) &&
-                            party &&
-                            user &&
-                            chat[party.id] && (
-                                <ChatHistory
-                                    chatHistoryRef={chatHistoryRef}
-                                    chat={chat}
-                                    party={party}
-                                    userId={user.id}
-                                    uiVisible={uiVisible}
-                                    t={t}
-                                ></ChatHistory>
-                            )}
-                        {uiVisible && (
-                            <div className="mt-auto">
-                                <ChatInput
-                                    textInputRef={textInputRef}
-                                    textInput={textInput}
-                                    setPlayerFocused={setPlayerFocused}
-                                    freezeUiVisible={freezeUiVisible}
-                                    handleInputFieldKeyDown={
-                                        handleInputFieldKeyDown
-                                    }
-                                    setTextInput={setTextInput}
-                                    t={t}
-                                ></ChatInput>
-                            </div>
+            <div className="flex flex-row">
+                <div className="flex flex-col mt-auto">
+                    {(uiVisible || !chatHistoryTimeoutDone) &&
+                        party &&
+                        user &&
+                        chat[party.id] && (
+                            <ChatHistory
+                                chatHistoryRef={chatHistoryRef}
+                                chat={chat}
+                                party={party}
+                                userId={user.id}
+                                uiVisible={uiVisible}
+                                t={t}
+                            ></ChatHistory>
                         )}
-                    </div>
+                    {isActive && uiVisible && (
+                        <div className="mt-auto">
+                            <ChatInput
+                                textInputRef={textInputRef}
+                                textInput={textInput}
+                                setPlayerFocused={setPlayerFocused}
+                                freezeUiVisible={freezeUiVisible}
+                                handleInputFieldKeyDown={
+                                    handleInputFieldKeyDown
+                                }
+                                setTextInput={setTextInput}
+                                t={t}
+                            ></ChatInput>
+                        </div>
+                    )}
+                </div>
+                {isActive && (
                     <div className="mt-auto">
                         {showEmojiPicker && uiVisible && (
                             <div
@@ -250,8 +250,8 @@ export default function Chat({
                             ></FontAwesomeIcon>
                         )}
                     </div>
-                </div>
-            )}
+                )}
+            </div>
             {uiVisible && (
                 <FontAwesomeIcon
                     className="cursor-pointer"
