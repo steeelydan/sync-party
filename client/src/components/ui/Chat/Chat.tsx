@@ -184,7 +184,7 @@ export default function Chat({
         return (): void => {
             clearTimeout(timeOutId);
         };
-    }, [chat]);
+    }, [chat, freezeUiVisible]);
 
     return (
         <div

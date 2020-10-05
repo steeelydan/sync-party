@@ -582,9 +582,12 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     // UI Event handlers
 
     // UI movement detection
-    const setUiVisible = (visible: boolean): void => {
-        dispatch(setGlobalState({ uiVisible: visible }));
-    };
+    const setUiVisible = useCallback(
+        (visible: boolean): void => {
+            dispatch(setGlobalState({ uiVisible: visible }));
+        },
+        [dispatch]
+    );
 
     // Prevent UI from hiding when mouse moves
     const handleMouseMovementOverUi = (): void => {
@@ -609,23 +612,28 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     };
 
     // Prevent UI from hiding on certain actions in subcomponents
-    const freezeUiVisible = (freeze: boolean): void => {
-        const currentDelay = freeze ? uiTimeoutLongDelay : uiTimeoutShortDelay;
+    const freezeUiVisible = useCallback(
+        (freeze: boolean): void => {
+            const currentDelay = freeze
+                ? uiTimeoutLongDelay
+                : uiTimeoutShortDelay;
 
-        if (playerTimeoutStateRef.current.uiTimeoutId) {
-            clearTimeout(playerTimeoutStateRef.current.uiTimeoutId);
-        }
+            if (playerTimeoutStateRef.current.uiTimeoutId) {
+                clearTimeout(playerTimeoutStateRef.current.uiTimeoutId);
+            }
 
-        const newTimeoutId = setTimeout(() => {
-            setUiVisible(false);
-        }, currentDelay);
+            const newTimeoutId = setTimeout(() => {
+                setUiVisible(false);
+            }, currentDelay);
 
-        setPlayerTimeoutState({
-            uiTimeoutId: newTimeoutId,
-            uiTimeoutDelay: currentDelay,
-            uiTimeoutTimestamp: Date.now()
-        });
-    };
+            setPlayerTimeoutState({
+                uiTimeoutId: newTimeoutId,
+                uiTimeoutDelay: currentDelay,
+                uiTimeoutTimestamp: Date.now()
+            });
+        },
+        [setUiVisible]
+    );
 
     return (
         <div
