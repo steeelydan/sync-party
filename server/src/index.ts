@@ -344,7 +344,8 @@ const runApp = async () => {
     // WebRTC
 
     const peerServer = ExpressPeerServer(server, {
-        debug: true
+        debug: true,
+        proxies: process.env.USE_PROXY === 'true'
     });
 
     app.use('/peerjs', isAuthenticated, peerServer);

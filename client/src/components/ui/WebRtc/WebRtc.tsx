@@ -50,7 +50,7 @@ export default function WebRtc({
         if (user && socket) {
             setWebRtcPeer(
                 new Peer(user.id, {
-                    host: 'localhost',
+                    host: process.env.REACT_APP_WEBRTC_ROUTE,
                     port: 4000,
                     path: '/peerjs',
                     debug: process.env.NODE_ENV === 'development' ? 1 : 0
