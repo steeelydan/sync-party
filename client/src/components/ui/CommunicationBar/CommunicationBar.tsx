@@ -1,6 +1,10 @@
 import React, { ReactElement } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment, faVideo } from '@fortawesome/free-solid-svg-icons';
+import {
+    faComment,
+    faPhoneAlt,
+    faVideo
+} from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -8,6 +12,8 @@ interface Props {
     webRtcIsActive: boolean;
     setChatIsActive: Function;
     setWebRtcIsActive: Function;
+    webRtcVideoIsActive: boolean;
+    setWebRtcVideoIsActive: Function;
     uiVisible: boolean;
 }
 
@@ -16,6 +22,8 @@ export default function CommunicationBar({
     webRtcIsActive,
     setChatIsActive,
     setWebRtcIsActive,
+    webRtcVideoIsActive,
+    setWebRtcVideoIsActive,
     uiVisible
 }: Props): ReactElement {
     const { t } = useTranslation();
@@ -55,7 +63,7 @@ export default function CommunicationBar({
                     <FontAwesomeIcon
                         className="m-auto"
                         opacity={webRtcIsActive ? 1 : 0.7}
-                        icon={faVideo}
+                        icon={faPhoneAlt}
                         size="1x"
                         title={
                             webRtcIsActive
@@ -64,6 +72,32 @@ export default function CommunicationBar({
                         }
                     ></FontAwesomeIcon>
                 </div>
+                {webRtcIsActive && (
+                    <div
+                        className={
+                            'ml-2 w-6 h-6 flex cursor-pointer z-50 p-1 mt-3 ' +
+                            (webRtcVideoIsActive
+                                ? 'bg-purple-700'
+                                : 'bg-gray-800')
+                        }
+                        onClick={(): void =>
+                            setWebRtcVideoIsActive(!webRtcVideoIsActive)
+                        }
+                        style={{ borderRadius: '100%' }}
+                    >
+                        <FontAwesomeIcon
+                            className="m-auto"
+                            opacity={webRtcVideoIsActive ? 1 : 0.7}
+                            icon={faVideo}
+                            size="sm"
+                            title={
+                                webRtcVideoIsActive
+                                    ? t('webRtc.close')
+                                    : t('webRtc.open')
+                            }
+                        ></FontAwesomeIcon>
+                    </div>
+                )}
             </div>
         </div>
     );

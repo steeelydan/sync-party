@@ -73,6 +73,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     const [freshlyJoined, setFreshlyJoined] = useState(true);
     const [chatIsActive, setChatIsActive] = useState(false);
     const [webRtcIsActive, setWebRtcIsActive] = useState(false);
+    const [webRtcVideoIsActive, setWebRtcVideoIsActive] = useState(false);
 
     const initialPlayerState = {
         playOrder: null,
@@ -689,6 +690,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     isActive={webRtcIsActive}
                     socket={socket}
                     partyId={party.id}
+                    webRtcVideoIsActive={webRtcVideoIsActive}
                 ></WebRtc>
             )}
             {uiVisible && (
@@ -698,6 +700,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     setChatIsActive={setChatIsActive}
                     setWebRtcIsActive={setWebRtcIsActive}
                     uiVisible={uiVisible}
+                    webRtcVideoIsActive={webRtcVideoIsActive}
+                    setWebRtcVideoIsActive={setWebRtcVideoIsActive}
                 ></CommunicationBar>
             )}
             <BottomBar

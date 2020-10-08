@@ -7,17 +7,21 @@ import React, {
 } from 'react';
 import { useSelector } from 'react-redux';
 import Peer from 'peerjs';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinusCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
     isActive: boolean;
     socket: SocketIOClient.Socket | null;
     partyId: string;
+    webRtcVideoIsActive: boolean;
 }
 
 export default function WebRtc({
     isActive,
     socket,
-    partyId
+    partyId,
+    webRtcVideoIsActive
 }: Props): ReactElement {
     const user = useSelector((state: RootAppState) => state.globalState.user);
     const memberStatus = useSelector(
@@ -38,6 +42,10 @@ export default function WebRtc({
     const [callList, setCallList] = useState<{ [userId: string]: any }>({});
     const callListRef = useRef(callList);
 
+    const [viewMode, setViewMode] = useState<'small' | 'large'>('small');
+
+    const displayOwnVideo = true;
+
     useEffect(() => {
         callListRef.current = callList;
         mediaStreamsRef.current = mediaStreams;
@@ -57,9 +65,9 @@ export default function WebRtc({
                 })
             );
 
-            const getVideoAndAudio = async (): Promise<void> => {
+            const getOurMediaStream = async (): Promise<void> => {
                 const ourStream = await navigator.mediaDevices.getUserMedia({
-                    video: true,
+                    video: false,
                     audio: {
                         autoGainControl: true
                     }
@@ -74,7 +82,7 @@ export default function WebRtc({
                 console.log('our media is ready');
             };
 
-            getVideoAndAudio();
+            getOurMediaStream();
 
             console.log('we join web rtc');
         }
@@ -119,6 +127,34 @@ export default function WebRtc({
             leaveWebRtc();
         };
     }, [leaveWebRtc]);
+
+    // Activate / deactivate video
+    useEffect(() => {
+        const getNewMediaStream = async (): Promise<void> => {
+            if (user) {
+                if (webRtcVideoIsActive) {
+                    mediaStreams[
+                        user.id
+                    ] = await navigator.mediaDevices.getUserMedia({
+                        video: true,
+                        audio: {
+                            autoGainControl: true
+                        }
+                    });
+                } else {
+                    mediaStreams[
+                        user.id
+                    ] = await navigator.mediaDevices.getUserMedia({
+                        video: false,
+                        audio: {
+                            autoGainControl: true
+                        }
+                    });
+                }
+            }
+        };
+        getNewMediaStream();
+    }, [webRtcVideoIsActive]);
 
     useEffect(() => {
         if (isActive && user && ourMediaReady) {
@@ -213,35 +249,55 @@ export default function WebRtc({
         }
     }, [isActive, socket, user, webRtcPeer, ourMediaReady, partyId]);
 
+    const displayedMediaStreams: {
+        userId: string;
+        mediaStream: MediaStream;
+    }[] = [];
+    if (user) {
+        Object.keys(mediaStreams).forEach((userId) => {
+            if (userId !== user.id || displayOwnVideo) {
+                displayedMediaStreams.push({
+                    userId: userId,
+                    mediaStream: mediaStreams[userId]
+                });
+            }
+        });
+    }
+
     return (
         <div
             className={
-                'absolute top-0 left-0 ml-3' + (uiVisible ? ' mb-20' : ' mb-10')
+                'absolute top-0 left-0 ml-2' + (uiVisible ? ' mb-20' : ' mb-10')
             }
         >
             {isActive && memberStatus && user && (
-                <div className="flex flex-row absolute top-0 left-0 mt-24">
-                    {Object.keys(mediaStreams).map((userId) => {
+                <div className="flex flex-row absolute top-0 left-0 mt-12">
+                    {displayedMediaStreams.map((mediaStream) => {
                         return (
-                            memberStatus[userId].online && (
+                            memberStatus[mediaStream.userId].online && (
                                 <div
-                                    key={userId}
-                                    className="w-64 h-64 overflow-hidden bg-transparent mr-2"
+                                    key={mediaStream.userId}
+                                    className={
+                                        'overflow-hidden bg-transparent mr-2 rounded ' +
+                                        (viewMode === 'small'
+                                            ? 'rtcVideoSizeSmall'
+                                            : 'rtcVideoSizeLarge')
+                                    }
                                 >
                                     <video
-                                        muted={userId === user.id}
+                                        muted={mediaStream.userId === user.id}
                                         className="min-w-full min-h-full overflow-hidden object-cover"
                                         ref={(video): void => {
                                             if (video && user) {
                                                 if (
                                                     video.srcObject !==
                                                     mediaStreamsRef.current[
-                                                        userId
+                                                        mediaStream.userId
                                                     ]
                                                 ) {
                                                     video.srcObject =
                                                         mediaStreamsRef.current[
-                                                            userId
+                                                            mediaStream.userId
                                                         ];
                                                 }
                                             }
@@ -254,6 +310,23 @@ export default function WebRtc({
                             )
                         );
                     })}
+                    {displayedMediaStreams.length ? (
+                        <div>
+                            <FontAwesomeIcon
+                                className="cursor-pointer"
+                                icon={
+                                    viewMode === 'small'
+                                        ? faPlusCircle
+                                        : faMinusCircle
+                                }
+                                onClick={(): void => {
+                                    setViewMode(
+                                        viewMode === 'small' ? 'large' : 'small'
+                                    );
+                                }}
+                            ></FontAwesomeIcon>
+                        </div>
+                    ) : null}
                 </div>
             )}
         </div>

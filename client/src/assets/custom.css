@@ -166,3 +166,15 @@ input[type='range']::-moz-focus-outer {
 .emoji-mart-emoji::before {
     cursor: pointer;
 }
+
+/* WebRTC */
+
+.rtcVideoSizeSmall {
+    height: 5vw;
+    width: 5vw;
+}
+
+.rtcVideoSizeLarge {
+    height: 15vw;
+    width: 15vw;
+}
