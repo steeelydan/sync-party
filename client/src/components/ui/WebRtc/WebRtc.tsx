@@ -13,12 +13,11 @@ import { faVideo } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
     socket: SocketIOClient.Socket | null;
+    partyId: string;
 }
 
-export default function WebRtc({ socket }: Props): ReactElement {
+export default function WebRtc({ socket, partyId }: Props): ReactElement {
     const user = useSelector((state: RootAppState) => state.globalState.user);
-    const party = useSelector((state: RootAppState) => state.globalState.party);
-
     const memberStatus = useSelector(
         (state: RootAppState) => state.globalState.memberStatus
     );
@@ -45,7 +44,7 @@ export default function WebRtc({ socket }: Props): ReactElement {
         mediaStreamsRef.current = mediaStreams;
     }, [mediaStreams, callList]);
 
-    // console.log('callList: ', callListRef.current);
+    console.log('callList: ', callListRef.current);
     // console.log('mediaStreams: ', mediaStreamsRef.current);
 
     const joinWebRtc = useCallback((): void => {
@@ -82,7 +81,7 @@ export default function WebRtc({ socket }: Props): ReactElement {
     }, [socket, user]);
 
     const leaveWebRtc = useCallback((): void => {
-        if (webRtcPeer && user && socket && party) {
+        if (webRtcPeer && user && socket) {
             webRtcPeer.destroy();
             if (mediaStreamsRef.current[user.id]) {
                 mediaStreamsRef.current[user.id]
@@ -98,12 +97,12 @@ export default function WebRtc({ socket }: Props): ReactElement {
             socket.off('joinWebRtc');
             socket.off('leaveWebRtc');
             socket.emit('leaveWebRtc', {
-                partyId: party.id
+                partyId: partyId
             });
             setIsActive(false);
             console.log('we leave & reset webrtc');
         }
-    }, [socket, user, webRtcPeer, party]);
+    }, [socket, user, webRtcPeer, partyId]);
 
     const toggleWebRtc = (): void => {
         if (user && socket) {
@@ -203,17 +202,17 @@ export default function WebRtc({ socket }: Props): ReactElement {
 
                 socket.emit('joinWebRtc', {
                     userId: user.id,
-                    partyId: party
+                    partyId: partyId
                 });
 
                 return (): void => {
-                    socket.off('joinWebRtc');
-                    socket.off('leaveWebRtc');
-                    webRtcPeer.off('call', handleCall);
+                    socket?.off('joinWebRtc');
+                    socket?.off('leaveWebRtc');
+                    webRtcPeer?.off('call', handleCall);
                 };
             }
         }
-    }, [isActive, socket, user, webRtcPeer, ourMediaReady, party]);
+    }, [isActive, socket, user, webRtcPeer, ourMediaReady, partyId]);
 
     return (
         <div

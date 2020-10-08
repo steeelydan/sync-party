@@ -680,7 +680,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 }
                 freezeUiVisible={freezeUiVisible}
             ></Chat>
-            <WebRtc socket={socket}></WebRtc>
+            {party && <WebRtc socket={socket} partyId={party.id}></WebRtc>}
             <BottomBar
                 playerState={playerState}
                 handlePlayPause={handlePlayPause}
