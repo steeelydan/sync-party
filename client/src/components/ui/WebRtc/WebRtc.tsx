@@ -216,19 +216,18 @@ export default function WebRtc({
     return (
         <div
             className={
-                'absolute bottom-0 left-0 ml-3' +
+                'absolute top-0 left-0 ml-3' +
                 (uiVisible ? ' mb-20' : ' mb-10')
             }
         >
             {isActive && memberStatus && user && (
-                <div className="flex flex-row absolute bottom-0 left-0 mb-48">
+                <div className="flex flex-row absolute top-0 left-0 mt-24">
                     {Object.keys(mediaStreams).map((userId) => {
                         return (
                             memberStatus[userId].online && (
                                 <div
                                     key={userId}
-                                    className="w-20 h-20 overflow-hidden bg-transparent mr-2"
-                                    style={{ borderRadius: '100%' }}
+                                    className="w-64 h-64 overflow-hidden bg-transparent mr-2"
                                 >
                                     <video
                                         muted={userId === user.id}
