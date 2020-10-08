@@ -57,10 +57,24 @@ export default function WebRtc({ socket }: Props): ReactElement {
                     debug: process.env.NODE_ENV === 'development' ? 1 : 0
                 })
             );
-            socket.emit('joinWebRtc', {
-                userId: user.id,
-                partyId: party.id
-            });
+
+            const getVideoAndAudio = async (): Promise<void> => {
+                const ourStream = await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
+                });
+
+                setMediaStreams({
+                    ...mediaStreamsRef.current,
+                    [user.id]: ourStream
+                });
+
+                setOurMediaReady(true);
+                console.log('our media is ready');
+            };
+
+            getVideoAndAudio();
+
             setIsActive(true);
             console.log('we join web rtc');
         }
@@ -106,10 +120,12 @@ export default function WebRtc({ socket }: Props): ReactElement {
     }, [leaveWebRtc]);
 
     useEffect(() => {
-        if (isActive && user) {
-            if (webRtcPeer && user && socket) {
+        if (isActive && user && ourMediaReady) {
+            if (webRtcPeer && user && socket && party) {
                 webRtcPeer.on('call', (call) => {
                     console.log('other user calls us');
+                    call.answer(mediaStreamsRef.current[user.id]);
+                    console.log('we answer user id: ', call.peer);
                     setCallList({ ...callListRef.current, [call.peer]: call });
                     if (mediaStreamsRef.current) {
                         call.on('stream', (theirStream) => {
@@ -167,7 +183,6 @@ export default function WebRtc({ socket }: Props): ReactElement {
                 socket.on('leaveWebRtc', (data: { userId: string }) => {
                     const theirId = data.userId;
                     console.log('left webrtc: ', theirId);
-                    console.log('callList', callList);
                     console.log('callListRef.current', callListRef.current);
                     console.log('call: ', callListRef.current[theirId]);
                     callListRef.current[theirId].close();
@@ -178,36 +193,14 @@ export default function WebRtc({ socket }: Props): ReactElement {
                     delete newWebRtcStreams[theirId];
                     setMediaStreams(newWebRtcStreams);
                 });
+
+                socket.emit('joinWebRtc', {
+                    userId: user.id,
+                    partyId: party.id
+                });
             }
-
-            const getVideoAndAudio = async (): Promise<void> => {
-                const ourStream = await navigator.mediaDevices.getUserMedia({
-                    video: true,
-                    audio: true
-                });
-
-                setMediaStreams({
-                    ...mediaStreamsRef.current,
-                    [user.id]: ourStream
-                });
-
-                setOurMediaReady(true);
-                console.log('our media is ready');
-            };
-
-            getVideoAndAudio();
         }
-    }, [isActive, callList, socket, user, webRtcPeer]);
-
-    useEffect(() => {
-        if (ourMediaReady && user && mediaStreamsRef.current[user.id]) {
-            Object.keys(callList).forEach((userId) => {
-                const call = callList[userId];
-                call.answer(mediaStreamsRef.current[user.id]);
-                console.log('we answer user id: ', userId);
-            });
-        }
-    }, [ourMediaReady, callList, user]);
+    }, [isActive, socket, user, party, webRtcPeer, ourMediaReady]);
 
     return (
         <div
