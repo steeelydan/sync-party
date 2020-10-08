@@ -66,9 +66,13 @@ const translations = {
             },
             chat: {
                 writeSomething: 'Write something',
-                open: 'Enable chat',
-                close: 'Disable chat',
+                open: 'Enable Chat',
+                close: 'Disable Chat',
                 me: 'Me'
+            },
+            webRtc: {
+                open: 'Enable Videochat',
+                close: 'Disable Videochat'
             },
             dashboard: {
                 newParty: 'New Party',

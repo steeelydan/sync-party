@@ -9,6 +9,7 @@ import { Sequelize } from 'sequelize';
 import morgan from 'morgan';
 
 import socketio from 'socket.io';
+const { ExpressPeerServer } = require('peer');
 import express from 'express';
 
 import helmet from 'helmet';
@@ -205,14 +206,6 @@ const runApp = async () => {
             `Web Sockets: New connection, userId: ${socketUserId}`
         );
 
-        socket.on('disconnect', () => {
-            socket.leaveAll();
-            logger.log(
-                'info',
-                `Web Sockets: User disconnected: ${socketUserId}`
-            );
-        });
-
         const joinParty = (data: { partyId: string; timestamp: number }) => {
             io.in(data.partyId).clients(
                 async (err: Error, clients: string[]) => {
@@ -325,6 +318,42 @@ const runApp = async () => {
         socket.on('chatMessage', (chatMessage) => {
             io.to(chatMessage.partyId).emit('chatMessage', chatMessage);
         });
+
+        // WebRTC
+        socket.on('joinWebRtc', (data) => {
+            io.to(data.partyId).emit('joinWebRtc', data.userId);
+        });
+
+        socket.on('leaveWebRtc', (data) => {
+            socket
+                .to(data.partyId)
+                .emit('leaveWebRtc', { userId: socketUserId });
+        });
+
+        // Disconnect
+        socket.on('disconnect', (event) => {
+            socket.leaveAll();
+
+            logger.log(
+                'info',
+                `Web Sockets: User disconnected: ${socketUserId}`
+            );
+        });
+    });
+
+    // WebRTC
+
+    const peerServer = ExpressPeerServer(server, {
+        debug: true
+    });
+
+    app.use('/peerjs', isAuthenticated, peerServer);
+
+    peerServer.on('connection', (client: any) => {
+        logger.log('info', `PeerJS: client connected: ${client.id}`);
+    });
+    peerServer.on('disconnect', (client: any) => {
+        logger.log('info', `PeerJS: client disconnected: ${client.id}`);
     });
 
     // API Endpoints

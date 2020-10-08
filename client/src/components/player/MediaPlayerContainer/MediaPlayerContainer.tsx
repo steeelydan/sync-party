@@ -21,6 +21,8 @@ import screenfull, { Screenfull } from 'screenfull';
 import ReactPlayer from 'react-player';
 import TopBar from '../../ui/TopBar/TopBar';
 import BottomBar from '../../ui/BottomBar/BottomBar';
+import Chat from '../../ui/Chat/Chat';
+import WebRtc from '../../ui/WebRtc/WebRtc';
 import MediaMenu from '../../ui/MediaMenu/MediaMenu';
 import MediaPlayerOverlay from '../MediaPlayerOverlay/MediaPlayerOverlay';
 import ActionMessageContent from '../../display/ActionMessageContent/ActionMessageContent';
@@ -34,7 +36,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
-import Chat from '../../ui/Chat/Chat';
 
 type Props = {
     socket: SocketIOClient.Socket | null;
@@ -679,6 +680,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 }
                 freezeUiVisible={freezeUiVisible}
             ></Chat>
+            <WebRtc socket={socket}></WebRtc>
             <BottomBar
                 playerState={playerState}
                 handlePlayPause={handlePlayPause}

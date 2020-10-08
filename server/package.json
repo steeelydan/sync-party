@@ -31,6 +31,7 @@
         "passport": "~0.4.1",
         "passport-local": "~1.0.0",
         "passport.socketio": "~3.7.0",
+        "peer": "^0.5.3",
         "sequelize": "~6.3.5",
         "socket.io": "~2.3.0",
         "sqlite3": "~4.1.1",
