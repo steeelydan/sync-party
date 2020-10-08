@@ -18,6 +18,7 @@ interface Props {
 export default function WebRtc({ socket }: Props): ReactElement {
     const user = useSelector((state: RootAppState) => state.globalState.user);
     const party = useSelector((state: RootAppState) => state.globalState.party);
+
     const memberStatus = useSelector(
         (state: RootAppState) => state.globalState.memberStatus
     );
@@ -48,7 +49,7 @@ export default function WebRtc({ socket }: Props): ReactElement {
     // console.log('mediaStreams: ', mediaStreamsRef.current);
 
     const joinWebRtc = useCallback((): void => {
-        if (user && socket && party) {
+        if (user && socket) {
             setWebRtcPeer(
                 new Peer(user.id, {
                     host: 'localhost',
@@ -78,10 +79,10 @@ export default function WebRtc({ socket }: Props): ReactElement {
             setIsActive(true);
             console.log('we join web rtc');
         }
-    }, [party, socket, user]);
+    }, [socket, user]);
 
     const leaveWebRtc = useCallback((): void => {
-        if (webRtcPeer && user && party && socket) {
+        if (webRtcPeer && user && socket && party) {
             webRtcPeer.destroy();
             if (mediaStreamsRef.current[user.id]) {
                 mediaStreamsRef.current[user.id]
@@ -94,16 +95,18 @@ export default function WebRtc({ socket }: Props): ReactElement {
             setCallList({});
             setWebRtcPeer(null);
             setOurMediaReady(false);
+            socket.off('joinWebRtc');
+            socket.off('leaveWebRtc');
             socket.emit('leaveWebRtc', {
                 partyId: party.id
             });
             setIsActive(false);
             console.log('we leave & reset webrtc');
         }
-    }, [party, socket, user, webRtcPeer]);
+    }, [socket, user, webRtcPeer, party]);
 
     const toggleWebRtc = (): void => {
-        if (user && party && socket) {
+        if (user && socket) {
             if (!isActive) {
                 joinWebRtc();
             } else {
@@ -121,14 +124,14 @@ export default function WebRtc({ socket }: Props): ReactElement {
 
     useEffect(() => {
         if (isActive && user && ourMediaReady) {
-            if (webRtcPeer && user && socket && party) {
-                webRtcPeer.on('call', (call) => {
+            if (webRtcPeer && user && socket) {
+                const handleCall = (call: any): void => {
                     console.log('other user calls us');
                     call.answer(mediaStreamsRef.current[user.id]);
                     console.log('we answer user id: ', call.peer);
                     setCallList({ ...callListRef.current, [call.peer]: call });
                     if (mediaStreamsRef.current) {
-                        call.on('stream', (theirStream) => {
+                        call.on('stream', (theirStream: any) => {
                             console.log(
                                 'we get their stream, after they called us at our joining'
                             );
@@ -138,7 +141,9 @@ export default function WebRtc({ socket }: Props): ReactElement {
                             });
                         });
                     }
-                });
+                };
+
+                webRtcPeer.on('call', handleCall);
 
                 socket.on('joinWebRtc', (theirId: string) => {
                     if (mediaStreamsRef.current) {
@@ -184,11 +189,13 @@ export default function WebRtc({ socket }: Props): ReactElement {
                     const theirId = data.userId;
                     console.log('left webrtc: ', theirId);
                     console.log('callListRef.current', callListRef.current);
-                    console.log('call: ', callListRef.current[theirId]);
-                    callListRef.current[theirId].close();
-                    const newCallList = { ...callListRef.current };
-                    delete newCallList[theirId];
-                    setCallList(newCallList);
+                    // FIXME: Why is the call gone at this point?
+                    if (callListRef.current[theirId]) {
+                        callListRef.current[theirId].close();
+                        const newCallList = { ...callListRef.current };
+                        delete newCallList[theirId];
+                        setCallList(newCallList);
+                    }
                     const newWebRtcStreams = { ...mediaStreamsRef.current };
                     delete newWebRtcStreams[theirId];
                     setMediaStreams(newWebRtcStreams);
@@ -196,11 +203,17 @@ export default function WebRtc({ socket }: Props): ReactElement {
 
                 socket.emit('joinWebRtc', {
                     userId: user.id,
-                    partyId: party.id
+                    partyId: party
                 });
+
+                return (): void => {
+                    socket.off('joinWebRtc');
+                    socket.off('leaveWebRtc');
+                    webRtcPeer.off('call', handleCall);
+                };
             }
         }
-    }, [isActive, socket, user, party, webRtcPeer, ourMediaReady]);
+    }, [isActive, socket, user, webRtcPeer, ourMediaReady, party]);
 
     return (
         <div
