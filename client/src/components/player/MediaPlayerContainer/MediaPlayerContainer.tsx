@@ -36,6 +36,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
+import CommunicationBar from '../../ui/CommunicationBar/CommunicationBar';
 
 type Props = {
     socket: SocketIOClient.Socket | null;
@@ -70,6 +71,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     const [reactPlayer, setReactPlayer] = useState<ReactPlayer>();
     const [joinedParty, setJoinedParty] = useState(false);
     const [freshlyJoined, setFreshlyJoined] = useState(true);
+    const [chatIsActive, setChatIsActive] = useState(false);
+    const [webRtcIsActive, setWebRtcIsActive] = useState(false);
 
     const initialPlayerState = {
         playOrder: null,
@@ -674,13 +677,29 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 </div>
             </div>
             <Chat
+                isActive={chatIsActive}
                 socket={socket}
                 setPlayerFocused={(focused: boolean): void =>
                     setPlayerState({ isFocused: focused })
                 }
                 freezeUiVisible={freezeUiVisible}
             ></Chat>
-            {party && <WebRtc socket={socket} partyId={party.id}></WebRtc>}
+            {party && (
+                <WebRtc
+                    isActive={webRtcIsActive}
+                    socket={socket}
+                    partyId={party.id}
+                ></WebRtc>
+            )}
+            {uiVisible && (
+                <CommunicationBar
+                    chatIsActive={chatIsActive}
+                    webRtcIsActive={webRtcIsActive}
+                    setChatIsActive={setChatIsActive}
+                    setWebRtcIsActive={setWebRtcIsActive}
+                    uiVisible={uiVisible}
+                ></CommunicationBar>
+            )}
             <BottomBar
                 playerState={playerState}
                 handlePlayPause={handlePlayPause}

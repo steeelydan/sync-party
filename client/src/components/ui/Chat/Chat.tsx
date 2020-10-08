@@ -4,18 +4,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Picker } from 'emoji-mart';
 import 'emoji-mart/css/emoji-mart.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment, faSmile } from '@fortawesome/free-solid-svg-icons';
+import { faSmile } from '@fortawesome/free-solid-svg-icons';
 import ChatHistory from '../ChatHistory/ChatHistory';
 import ChatInput from '../ChatInput/ChatInput';
 import { setGlobalState } from '../../../actions/globalActions';
 
 interface Props {
+    isActive: boolean;
     socket: SocketIOClient.Socket | null;
     setPlayerFocused: Function;
     freezeUiVisible: Function;
 }
 
 export default function Chat({
+    isActive,
     socket,
     setPlayerFocused,
     freezeUiVisible
@@ -33,7 +35,6 @@ export default function Chat({
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
-    const [isActive, setIsActive] = useState(false);
     const [textInput, setTextInput] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [historyStaysVisible, setHistoryStaysVisible] = useState(false);
@@ -46,28 +47,6 @@ export default function Chat({
             chatHistoryRef.current.scrollTop =
                 chatHistoryRef.current.scrollHeight;
         }
-    };
-
-    const toggleChat = (): void => {
-        if (!isActive) {
-            setTimeout(() => {
-                scrollHistoryToBottom();
-                focusTextInput();
-            }, 50);
-        } else {
-            setHistoryStaysVisible(false);
-        }
-
-        dispatch(
-            setGlobalState({
-                uiFocused: {
-                    ...uiFocused,
-                    chat: !isActive
-                }
-            })
-        );
-
-        setIsActive(!isActive);
     };
 
     const sendMessage = (message: string): void => {
@@ -167,6 +146,27 @@ export default function Chat({
         scrollHistoryToBottom();
     }, []);
 
+    // If isActive changes
+    useEffect(() => {
+        if (!isActive) {
+            setTimeout(() => {
+                scrollHistoryToBottom();
+                focusTextInput();
+            }, 50);
+        } else {
+            setHistoryStaysVisible(false);
+        }
+
+        dispatch(
+            setGlobalState({
+                uiFocused: {
+                    ...uiFocused,
+                    chat: !isActive
+                }
+            })
+        );
+    }, [isActive]);
+
     // If ui visibility or history timeout changes
     useEffect(() => {
         scrollHistoryToBottom();
@@ -192,8 +192,8 @@ export default function Chat({
     return (
         <div
             className={
-                'absolute bottom-0 left-0 ml-3 z-50' +
-                (uiVisible ? ' mb-12' : ' mb-3')
+                'absolute bottom-0 left-0 ml-3' +
+                (uiVisible ? ' mb-24' : ' mb-10')
             }
         >
             <div className="flex flex-row">
@@ -257,16 +257,6 @@ export default function Chat({
                     </div>
                 )}
             </div>
-            {uiVisible && (
-                <FontAwesomeIcon
-                    className="cursor-pointer"
-                    onClick={toggleChat}
-                    opacity={isActive ? 1 : 0.7}
-                    icon={faComment}
-                    size="lg"
-                    title={isActive ? t('chat.close') : t('chat.open')}
-                ></FontAwesomeIcon>
-            )}
         </div>
     );
 }

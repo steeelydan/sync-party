@@ -6,17 +6,19 @@ import React, {
     useState
 } from 'react';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import Peer from 'peerjs';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faVideo } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
+    isActive: boolean;
     socket: SocketIOClient.Socket | null;
     partyId: string;
 }
 
-export default function WebRtc({ socket, partyId }: Props): ReactElement {
+export default function WebRtc({
+    isActive,
+    socket,
+    partyId
+}: Props): ReactElement {
     const user = useSelector((state: RootAppState) => state.globalState.user);
     const memberStatus = useSelector(
         (state: RootAppState) => state.globalState.memberStatus
@@ -25,9 +27,6 @@ export default function WebRtc({ socket, partyId }: Props): ReactElement {
         (state: RootAppState) => state.globalState.uiVisible
     );
 
-    const { t } = useTranslation();
-
-    const [isActive, setIsActive] = useState(false);
     const [webRtcPeer, setWebRtcPeer] = useState<Peer | null>(null);
     const [ourMediaReady, setOurMediaReady] = useState(false);
 
@@ -77,7 +76,6 @@ export default function WebRtc({ socket, partyId }: Props): ReactElement {
 
             getVideoAndAudio();
 
-            setIsActive(true);
             console.log('we join web rtc');
         }
     }, [socket, user]);
@@ -101,20 +99,19 @@ export default function WebRtc({ socket, partyId }: Props): ReactElement {
             socket.emit('leaveWebRtc', {
                 partyId: partyId
             });
-            setIsActive(false);
             console.log('we leave & reset webrtc');
         }
     }, [socket, user, webRtcPeer, partyId]);
 
-    const toggleWebRtc = (): void => {
+    useEffect((): void => {
         if (user && socket) {
-            if (!isActive) {
+            if (isActive) {
                 joinWebRtc();
             } else {
                 leaveWebRtc();
             }
         }
-    };
+    }, [isActive]);
 
     // Disconnect webrtc if component unmounts -> user leaves party
     useEffect(() => {
@@ -219,12 +216,12 @@ export default function WebRtc({ socket, partyId }: Props): ReactElement {
     return (
         <div
             className={
-                'absolute bottom-0 left-0 ml-10 z-50' +
-                (uiVisible ? ' mb-12' : ' mb-3')
+                'absolute bottom-0 left-0 ml-3' +
+                (uiVisible ? ' mb-20' : ' mb-10')
             }
         >
             {isActive && memberStatus && user && (
-                <div className="flex flex-row">
+                <div className="flex flex-row absolute bottom-0 left-0 mb-48">
                     {Object.keys(mediaStreams).map((userId) => {
                         return (
                             memberStatus[userId].online && (
@@ -260,16 +257,6 @@ export default function WebRtc({ socket, partyId }: Props): ReactElement {
                         );
                     })}
                 </div>
-            )}
-            {uiVisible && (
-                <FontAwesomeIcon
-                    className="cursor-pointer mt-3"
-                    onClick={toggleWebRtc}
-                    opacity={isActive ? 1 : 0.7}
-                    icon={faVideo}
-                    size="lg"
-                    title={isActive ? t('webRtc.close') : t('webRtc.open')}
-                ></FontAwesomeIcon>
             )}
         </div>
     );
