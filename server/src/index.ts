@@ -345,6 +345,7 @@ const runApp = async () => {
 
     const peerServer = ExpressPeerServer(server, {
         debug: true,
+        port: process.env.PORT,
         proxies: process.env.USE_PROXY === 'true'
     });
 

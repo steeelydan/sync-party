@@ -51,7 +51,7 @@ export default function WebRtc({
             setWebRtcPeer(
                 new Peer(user.id, {
                     host: process.env.REACT_APP_WEBRTC_ROUTE,
-                    port: 4000,
+                    port: parseInt(process.env.REACT_APP_WEBRTC_PORT || '4000'),
                     path: '/peerjs',
                     debug: process.env.NODE_ENV === 'development' ? 1 : 0
                 })
@@ -216,8 +216,7 @@ export default function WebRtc({
     return (
         <div
             className={
-                'absolute top-0 left-0 ml-3' +
-                (uiVisible ? ' mb-20' : ' mb-10')
+                'absolute top-0 left-0 ml-3' + (uiVisible ? ' mb-20' : ' mb-10')
             }
         >
             {isActive && memberStatus && user && (
