@@ -61,7 +61,9 @@ export default function WebRtc({ socket, partyId }: Props): ReactElement {
             const getVideoAndAudio = async (): Promise<void> => {
                 const ourStream = await navigator.mediaDevices.getUserMedia({
                     video: true,
-                    audio: true
+                    audio: {
+                        autoGainControl: true
+                    }
                 });
 
                 setMediaStreams({
