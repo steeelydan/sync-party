@@ -44,7 +44,7 @@ export default function WebRtc({ socket, partyId }: Props): ReactElement {
         mediaStreamsRef.current = mediaStreams;
     }, [mediaStreams, callList]);
 
-    console.log('callList: ', callListRef.current);
+    // console.log('callList: ', callListRef.current);
     // console.log('mediaStreams: ', mediaStreamsRef.current);
 
     const joinWebRtc = useCallback((): void => {
@@ -221,7 +221,7 @@ export default function WebRtc({ socket, partyId }: Props): ReactElement {
                 (uiVisible ? ' mb-12' : ' mb-3')
             }
         >
-            {isActive && memberStatus && (
+            {isActive && memberStatus && user && (
                 <div className="flex flex-row">
                     {Object.keys(mediaStreams).map((userId) => {
                         return (
@@ -232,7 +232,7 @@ export default function WebRtc({ socket, partyId }: Props): ReactElement {
                                     style={{ borderRadius: '100%' }}
                                 >
                                     <video
-                                        muted
+                                        muted={userId === user.id}
                                         className="min-w-full min-h-full overflow-hidden object-cover"
                                         ref={(video): void => {
                                             if (video && user) {
