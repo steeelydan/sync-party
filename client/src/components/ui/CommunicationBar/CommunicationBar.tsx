@@ -80,9 +80,9 @@ export default function CommunicationBar({
                                 ? 'bg-purple-700'
                                 : 'bg-gray-800')
                         }
-                        onClick={(): void =>
-                            setWebRtcVideoIsActive(!webRtcVideoIsActive)
-                        }
+                        onClick={(): void => {
+                            setWebRtcVideoIsActive(!webRtcVideoIsActive);
+                        }}
                         style={{ borderRadius: '100%' }}
                     >
                         <FontAwesomeIcon

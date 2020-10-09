@@ -7,12 +7,7 @@ import React, {
 } from 'react';
 import { useSelector } from 'react-redux';
 import Peer from 'peerjs';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faMicrophone,
-    faMinusCircle,
-    faPlusCircle
-} from '@fortawesome/free-solid-svg-icons';
+import { Rnd } from 'react-rnd';
 
 interface Props {
     isActive: boolean;
@@ -26,7 +21,7 @@ export default function WebRtc({
     socket,
     partyId,
     webRtcVideoIsActive
-}: Props): ReactElement {
+}: Props): ReactElement | null {
     const user = useSelector((state: RootAppState) => state.globalState.user);
     const memberStatus = useSelector(
         (state: RootAppState) => state.globalState.memberStatus
@@ -47,10 +42,6 @@ export default function WebRtc({
         [userId: string]: Peer.MediaConnection;
     }>({});
     const callListRef = useRef(callList);
-
-    const [viewMode, setViewMode] = useState<'small' | 'large'>('small');
-
-    const displayOwnVideo = true;
 
     useEffect(() => {
         callListRef.current = callList;
@@ -269,14 +260,14 @@ export default function WebRtc({
             if (user && isActive) {
                 let withVideo: boolean;
 
-                if (webRtcPeer) {
-                    leaveWebRtc();
-                }
-
                 if (webRtcVideoIsActive) {
                     withVideo = true;
                 } else {
                     withVideo = false;
+                }
+
+                if (webRtcPeer) {
+                    leaveWebRtc();
                 }
 
                 timeout = setTimeout(() => {
@@ -297,120 +288,235 @@ export default function WebRtc({
         mediaStream: MediaStream;
     }[] = [];
 
+    let hasVideo = false;
+    let othersWithVideo = 0;
+
     if (user) {
         Object.keys(mediaStreams).forEach((userId) => {
             console.log(mediaStreams[userId].getAudioTracks());
-            if (userId !== user.id || displayOwnVideo) {
-                displayedMediaStreams.push({
-                    userId: userId,
-                    mediaStream: mediaStreams[userId]
-                });
+            if (mediaStreams[userId].getVideoTracks().length) {
+                hasVideo = true;
+                if (userId !== user.id) {
+                    othersWithVideo++;
+                }
             }
+            displayedMediaStreams.push({
+                userId: userId,
+                mediaStream: mediaStreams[userId]
+            });
         });
     }
 
-    return (
-        <div
-            className={
-                'absolute top-0 left-0 ml-2' + (uiVisible ? ' mb-20' : ' mb-10')
-            }
-        >
-            {isActive && memberStatus && user && (
-                <div className="flex flex-row absolute top-0 left-0 mt-12">
-                    {displayedMediaStreams.map((mediaStream) => {
-                        return (
-                            memberStatus[mediaStream.userId].online &&
-                            (mediaStream.mediaStream.getVideoTracks().length ? (
-                                <div
-                                    key={mediaStream.userId}
-                                    className={
-                                        'overflow-hidden bg-transparent mr-2 rounded ' +
-                                        (viewMode === 'small'
-                                            ? 'rtcVideoSizeSmall'
-                                            : 'rtcVideoSizeLarge')
-                                    }
-                                >
-                                    <video
-                                        muted={mediaStream.userId === user.id}
-                                        className="min-w-full min-h-full overflow-hidden object-cover"
-                                        ref={(video): void => {
-                                            if (video && user) {
-                                                if (
-                                                    video.srcObject !==
-                                                    mediaStreamsRef.current[
-                                                        mediaStream.userId
-                                                    ]
-                                                ) {
-                                                    video.srcObject =
-                                                        mediaStreamsRef.current[
-                                                            mediaStream.userId
-                                                        ];
+    if (hasVideo) {
+        console.log(othersWithVideo);
+
+        return (
+            <div
+                className={
+                    'absolute top-0 left-0 ml-2' +
+                    (uiVisible ? ' mb-20' : ' mb-10')
+                }
+            >
+                {isActive && memberStatus && user && (
+                    <div className="mt-12 absolute top-0 left-0">
+                        <Rnd
+                            default={{
+                                x: 0,
+                                y: 0,
+                                width: '50vh',
+                                height: 'auto'
+                            }}
+                            resizeHandleStyles={{
+                                // right: {
+                                //     display: 'block'
+                                // },
+                                bottomRight: { display: 'none' },
+                                bottom: { display: 'none' },
+                                bottomLeft: { display: 'none' },
+                                left: { display: 'none' },
+                                topLeft: { display: 'none' },
+                                top: { display: 'none' },
+                                topRight: { display: 'none' }
+                            }}
+                            className="bg-transparent-600 z-40"
+                        >
+                            <div className="flex flex-row">
+                                {displayedMediaStreams.map((mediaStream) => {
+                                    const isOwnVideo =
+                                        mediaStream.userId === user.id;
+
+                                    if (
+                                        memberStatus[mediaStream.userId]
+                                            .online &&
+                                        mediaStream.mediaStream.getVideoTracks()
+                                            .length &&
+                                        !isOwnVideo
+                                    ) {
+                                        return (
+                                            <div
+                                                key={mediaStream.userId}
+                                                className={
+                                                    'overflow-hidden bg-transparent mr-2 rounded'
                                                 }
-                                            }
-                                        }}
-                                        onLoadedMetadata={(event): void => {
-                                            event.currentTarget.play();
-                                        }}
-                                    ></video>
-                                </div>
-                            ) : (
-                                <div
-                                    key={mediaStream.userId}
-                                    className={
-                                        'flex overflow-hidden bg-black mr-2 rounded ' +
-                                        (viewMode === 'small'
-                                            ? 'rtcVideoSizeSmall'
-                                            : 'rtcVideoSizeLarge')
+                                                style={{
+                                                    height: isOwnVideo
+                                                        ? '100px'
+                                                        : '100%',
+                                                    width: isOwnVideo
+                                                        ? '100px'
+                                                        : '100%'
+                                                }}
+                                            >
+                                                <video
+                                                    muted={isOwnVideo}
+                                                    className="min-w-full min-h-full overflow-hidden object-cover"
+                                                    ref={(video): void => {
+                                                        if (video && user) {
+                                                            if (
+                                                                video.srcObject !==
+                                                                mediaStreamsRef
+                                                                    .current[
+                                                                    mediaStream
+                                                                        .userId
+                                                                ]
+                                                            ) {
+                                                                video.srcObject =
+                                                                    mediaStreamsRef.current[
+                                                                        mediaStream.userId
+                                                                    ];
+                                                            }
+                                                        }
+                                                    }}
+                                                    onLoadedMetadata={(
+                                                        event
+                                                    ): void => {
+                                                        event.currentTarget.play();
+                                                    }}
+                                                ></video>
+                                            </div>
+                                        );
+                                    } else {
+                                        return null;
                                     }
-                                >
-                                    <audio
-                                        muted={mediaStream.userId === user.id}
-                                        ref={(audio): void => {
-                                            if (audio && user) {
-                                                if (
-                                                    audio.srcObject !==
-                                                    mediaStreamsRef.current[
-                                                        mediaStream.userId
-                                                    ]
-                                                ) {
-                                                    audio.srcObject =
-                                                        mediaStreamsRef.current[
-                                                            mediaStream.userId
-                                                        ];
+                                })}
+                            </div>
+                        </Rnd>
+                    </div>
+                )}
+                {user && (
+                    <div
+                        className="absolute top-0 left-0"
+                        style={{ marginTop: '45vh' }}
+                    >
+                        <Rnd
+                            default={{
+                                x: 0,
+                                y: 0,
+                                width: '80',
+                                height: 'auto'
+                            }}
+                            resizeHandleStyles={{
+                                // right: {
+                                //     display: 'block'
+                                // },
+                                bottomRight: { display: 'none' },
+                                bottom: { display: 'none' },
+                                bottomLeft: { display: 'none' },
+                                left: { display: 'none' },
+                                topLeft: { display: 'none' },
+                                top: { display: 'none' },
+                                topRight: { display: 'none' }
+                            }}
+                            className="bg-transparent-600"
+                        >
+                            <div className="flex flex-row">
+                                {displayedMediaStreams.map((mediaStream) => {
+                                    const isOwnVideo =
+                                        mediaStream.userId === user.id;
+
+                                    if (isOwnVideo) {
+                                        return (
+                                            <div
+                                                key={mediaStream.userId}
+                                                className={
+                                                    'overflow-hidden bg-transparent mr-2 rounded'
                                                 }
-                                            }
-                                        }}
-                                        onLoadedMetadata={(event): void => {
-                                            event.currentTarget.play();
-                                        }}
-                                    ></audio>
-                                    <FontAwesomeIcon
-                                        className="m-auto"
-                                        icon={faMicrophone}
-                                    ></FontAwesomeIcon>
-                                </div>
-                            ))
-                        );
-                    })}
-                    {displayedMediaStreams.length ? (
-                        <div>
-                            <FontAwesomeIcon
-                                className="cursor-pointer"
-                                icon={
-                                    viewMode === 'small'
-                                        ? faPlusCircle
-                                        : faMinusCircle
+                                                style={{
+                                                    height: '100%',
+                                                    width: '100%',
+                                                    minWidth: '30px'
+                                                }}
+                                            >
+                                                <video
+                                                    muted={isOwnVideo}
+                                                    className="min-w-full min-h-full overflow-hidden object-cover"
+                                                    ref={(video): void => {
+                                                        if (video && user) {
+                                                            if (
+                                                                video.srcObject !==
+                                                                mediaStreamsRef
+                                                                    .current[
+                                                                    mediaStream
+                                                                        .userId
+                                                                ]
+                                                            ) {
+                                                                video.srcObject =
+                                                                    mediaStreamsRef.current[
+                                                                        mediaStream.userId
+                                                                    ];
+                                                            }
+                                                        }
+                                                    }}
+                                                    onLoadedMetadata={(
+                                                        event
+                                                    ): void => {
+                                                        event.currentTarget.play();
+                                                    }}
+                                                ></video>
+                                            </div>
+                                        );
+                                    } else {
+                                        return null;
+                                    }
+                                })}
+                            </div>
+                        </Rnd>
+                    </div>
+                )}
+            </div>
+        );
+    } else if (user) {
+        return (
+            <>
+                {displayedMediaStreams.map((mediaStream) => {
+                    return (
+                        <audio
+                            key={mediaStream.userId}
+                            muted={mediaStream.userId === user.id}
+                            ref={(audio): void => {
+                                if (audio && user) {
+                                    if (
+                                        audio.srcObject !==
+                                        mediaStreamsRef.current[
+                                            mediaStream.userId
+                                        ]
+                                    ) {
+                                        audio.srcObject =
+                                            mediaStreamsRef.current[
+                                                mediaStream.userId
+                                            ];
+                                    }
                                 }
-                                onClick={(): void => {
-                                    setViewMode(
-                                        viewMode === 'small' ? 'large' : 'small'
-                                    );
-                                }}
-                            ></FontAwesomeIcon>
-                        </div>
-                    ) : null}
-                </div>
-            )}
-        </div>
-    );
+                            }}
+                            onLoadedMetadata={(event): void => {
+                                event.currentTarget.play();
+                            }}
+                        ></audio>
+                    );
+                })}
+            </>
+        );
+    } else {
+        return null;
+    }
 }
