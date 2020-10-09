@@ -8,7 +8,11 @@ import React, {
 import { useSelector } from 'react-redux';
 import Peer from 'peerjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinusCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+    faMicrophone,
+    faMinusCircle,
+    faPlusCircle
+} from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
     isActive: boolean;
@@ -39,7 +43,9 @@ export default function WebRtc({
     }>({});
     const mediaStreamsRef = useRef(mediaStreams);
 
-    const [callList, setCallList] = useState<{ [userId: string]: any }>({});
+    const [callList, setCallList] = useState<{
+        [userId: string]: any;
+    }>({});
     const callListRef = useRef(callList);
 
     const [viewMode, setViewMode] = useState<'small' | 'large'>('small');
@@ -128,57 +134,78 @@ export default function WebRtc({
         };
     }, [leaveWebRtc]);
 
-    // Activate / deactivate video
-    useEffect(() => {
-        const getNewMediaStream = async (): Promise<void> => {
-            if (user && isActive) {
-                if (webRtcVideoIsActive) {
-                    mediaStreams[
-                        user.id
-                    ] = await navigator.mediaDevices.getUserMedia({
-                        video: true,
-                        audio: {
-                            autoGainControl: true
-                        }
+    const handleCall = (call: any): void => {
+        if (user) {
+            console.log('other user calls us');
+            call.answer(mediaStreamsRef.current[user.id]);
+            console.log('we answer user id: ', call.peer);
+            setCallList({
+                ...callListRef.current,
+                [call.peer]: call
+            });
+            if (mediaStreamsRef.current) {
+                call.on('stream', (theirStream: MediaStream) => {
+                    console.log(
+                        'we get their stream, after they called us at our joining'
+                    );
+                    console.log(
+                        'video tracks from user: ' + call.peer,
+                        theirStream.getVideoTracks()
+                    );
+                    setMediaStreams({
+                        ...mediaStreamsRef.current,
+                        [call.peer]: theirStream
                     });
-                } else {
-                    mediaStreams[
-                        user.id
-                    ] = await navigator.mediaDevices.getUserMedia({
-                        video: false,
-                        audio: {
-                            autoGainControl: true
-                        }
-                    });
-                }
+                });
             }
+        }
+    };
+
+    const callUser = (theirId: string, stream: MediaStream): void => {
+        if (webRtcPeer && user) {
+            const call = webRtcPeer.call(theirId, stream);
+            console.log('call: ', call);
+            console.log('mediaStreamsRef.current: ', stream);
+            console.log('theirId:', theirId);
+            console.log('we call other user, because they joined');
+            setCallList({
+                ...callListRef.current,
+                [theirId]: call
+            });
+            console.log(mediaStreamsRef.current);
+            call.on('stream', (theirStream) => {
+                console.log('we get theirStream: ', theirStream);
+                setMediaStreams({
+                    ...mediaStreamsRef.current,
+                    [theirId]: theirStream
+                });
+            });
+            // call.on('close', () => {});
+        }
+    };
+
+    const hangUpOnUser = (theirId: string): void => {
+        if (callListRef.current[theirId]) {
+            callListRef.current[theirId].close();
+            const newCallList = {
+                ...callListRef.current
+            };
+            delete newCallList[theirId];
+            setCallList(newCallList);
+        }
+        const newWebRtcStreams = {
+            ...mediaStreamsRef.current
         };
-        getNewMediaStream();
-    }, [webRtcVideoIsActive]);
+        delete newWebRtcStreams[theirId];
+        setMediaStreams(newWebRtcStreams);
+    };
 
     useEffect(() => {
         if (isActive && user && ourMediaReady) {
             if (webRtcPeer && user && socket) {
-                const handleCall = (call: any): void => {
-                    console.log('other user calls us');
-                    call.answer(mediaStreamsRef.current[user.id]);
-                    console.log('we answer user id: ', call.peer);
-                    setCallList({ ...callListRef.current, [call.peer]: call });
-                    if (mediaStreamsRef.current) {
-                        call.on('stream', (theirStream: any) => {
-                            console.log(
-                                'we get their stream, after they called us at our joining'
-                            );
-                            setMediaStreams({
-                                ...mediaStreamsRef.current,
-                                [call.peer]: theirStream
-                            });
-                        });
-                    }
-                };
-
                 webRtcPeer.on('call', handleCall);
 
+                // Other user joins
                 socket.on('joinWebRtc', (theirId: string) => {
                     if (mediaStreamsRef.current) {
                         if (theirId !== user.id) {
@@ -186,53 +213,18 @@ export default function WebRtc({
                                 'SOCKET: other user joined webrtc: ',
                                 theirId
                             );
-                            const call = webRtcPeer.call(
-                                theirId,
-                                mediaStreamsRef.current[user.id]
-                            );
-                            console.log('call: ', call);
-                            console.log(
-                                'mediaStreamsRef.current: ',
-                                mediaStreamsRef.current[user.id]
-                            );
-                            console.log('theirId:', theirId);
-                            console.log(
-                                'we call other user, because they joined'
-                            );
-                            setCallList({
-                                ...callListRef.current,
-                                [theirId]: call
-                            });
-                            console.log(mediaStreamsRef.current);
-                            call.on('stream', (theirStream) => {
-                                console.log(
-                                    'we get theirStream: ',
-                                    theirStream
-                                );
-                                setMediaStreams({
-                                    ...mediaStreamsRef.current,
-                                    [theirId]: theirStream
-                                });
-                            });
-                            // call.on('close', () => {});
+                            callUser(theirId, mediaStreamsRef.current[user.id]);
                         }
                     }
                 });
 
+                // Other user leaves
                 socket.on('leaveWebRtc', (data: { userId: string }) => {
                     const theirId = data.userId;
                     console.log('left webrtc: ', theirId);
                     console.log('callListRef.current', callListRef.current);
                     // FIXME: Why is the call gone at this point?
-                    if (callListRef.current[theirId]) {
-                        callListRef.current[theirId].close();
-                        const newCallList = { ...callListRef.current };
-                        delete newCallList[theirId];
-                        setCallList(newCallList);
-                    }
-                    const newWebRtcStreams = { ...mediaStreamsRef.current };
-                    delete newWebRtcStreams[theirId];
-                    setMediaStreams(newWebRtcStreams);
+                    hangUpOnUser(theirId);
                 });
 
                 socket.emit('joinWebRtc', {
@@ -249,10 +241,59 @@ export default function WebRtc({
         }
     }, [isActive, socket, user, webRtcPeer, ourMediaReady, partyId]);
 
+    // Activate / deactivate video
+    useEffect(() => {
+        const getNewMediaStream = async (): Promise<void> => {
+            if (user && isActive) {
+                if (webRtcVideoIsActive) {
+                    const newStream = await navigator.mediaDevices.getUserMedia(
+                        {
+                            video: true,
+                            audio: {
+                                autoGainControl: true
+                            }
+                        }
+                    );
+
+                    setMediaStreams({
+                        ...mediaStreams,
+                        [user.id]: newStream
+                    });
+
+                    Object.keys(callList).forEach((userId) => {
+                        callList[userId].close();
+                        callUser(userId, newStream);
+                    });
+                } else {
+                    const newStream = await navigator.mediaDevices.getUserMedia(
+                        {
+                            video: false,
+                            audio: {
+                                autoGainControl: true
+                            }
+                        }
+                    );
+
+                    setMediaStreams({
+                        ...mediaStreams,
+                        [user.id]: newStream
+                    });
+
+                    Object.keys(callList).forEach((userId) => {
+                        callList[userId].close();
+                        callUser(userId, newStream);
+                    });
+                }
+            }
+        };
+        getNewMediaStream();
+    }, [webRtcVideoIsActive]);
+
     const displayedMediaStreams: {
         userId: string;
         mediaStream: MediaStream;
     }[] = [];
+
     if (user) {
         Object.keys(mediaStreams).forEach((userId) => {
             if (userId !== user.id || displayOwnVideo) {
@@ -274,7 +315,8 @@ export default function WebRtc({
                 <div className="flex flex-row absolute top-0 left-0 mt-12">
                     {displayedMediaStreams.map((mediaStream) => {
                         return (
-                            memberStatus[mediaStream.userId].online && (
+                            memberStatus[mediaStream.userId].online &&
+                            (mediaStream.mediaStream.getVideoTracks().length ? (
                                 <div
                                     key={mediaStream.userId}
                                     className={
@@ -307,7 +349,22 @@ export default function WebRtc({
                                         }}
                                     ></video>
                                 </div>
-                            )
+                            ) : (
+                                <div
+                                    key={mediaStream.userId}
+                                    className={
+                                        'flex overflow-hidden bg-black mr-2 rounded ' +
+                                        (viewMode === 'small'
+                                            ? 'rtcVideoSizeSmall'
+                                            : 'rtcVideoSizeLarge')
+                                    }
+                                >
+                                    <FontAwesomeIcon
+                                        className="m-auto"
+                                        icon={faMicrophone}
+                                    ></FontAwesomeIcon>
+                                </div>
+                            ))
                         );
                     })}
                     {displayedMediaStreams.length ? (
