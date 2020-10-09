@@ -131,7 +131,7 @@ export default function WebRtc({
     // Activate / deactivate video
     useEffect(() => {
         const getNewMediaStream = async (): Promise<void> => {
-            if (user) {
+            if (user && isActive) {
                 if (webRtcVideoIsActive) {
                     mediaStreams[
                         user.id
