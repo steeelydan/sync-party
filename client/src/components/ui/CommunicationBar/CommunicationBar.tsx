@@ -43,13 +43,13 @@ export default function CommunicationBar({
                     }
                     onClick={(): void => toggleChat()}
                     style={{ borderRadius: '100%' }}
+                    title={chatIsActive ? t('chat.close') : t('chat.open')}
                 >
                     <FontAwesomeIcon
                         className="m-auto"
                         opacity={chatIsActive ? 1 : 0.7}
                         icon={faComment}
                         size="1x"
-                        title={chatIsActive ? t('chat.close') : t('chat.open')}
                     ></FontAwesomeIcon>
                 </div>
                 {!webRtcVideoIsActive && (
@@ -62,17 +62,17 @@ export default function CommunicationBar({
                         }
                         onClick={(): void => toggleWebRtcAudio()}
                         style={{ borderRadius: '100%' }}
+                        title={
+                            webRtcAudioIsActive
+                                ? t('webRtc.audioClose')
+                                : t('webRtc.audioOpen')
+                        }
                     >
                         <FontAwesomeIcon
                             className="m-auto"
                             opacity={webRtcAudioIsActive ? 1 : 0.7}
                             icon={faPhoneAlt}
                             size="1x"
-                            title={
-                                webRtcAudioIsActive
-                                    ? t('webRtc.close')
-                                    : t('webRtc.open')
-                            }
                         ></FontAwesomeIcon>
                     </div>
                 )}
@@ -88,17 +88,17 @@ export default function CommunicationBar({
                             toggleWebRtcVideo();
                         }}
                         style={{ borderRadius: '100%' }}
+                        title={
+                            webRtcVideoIsActive
+                                ? t('webRtc.videoClose')
+                                : t('webRtc.videoOpen')
+                        }
                     >
                         <FontAwesomeIcon
                             className="m-auto"
                             opacity={webRtcVideoIsActive ? 1 : 0.7}
                             icon={faVideo}
                             size="1x"
-                            title={
-                                webRtcVideoIsActive
-                                    ? t('webRtc.close')
-                                    : t('webRtc.open')
-                            }
                         ></FontAwesomeIcon>
                     </div>
                 )}

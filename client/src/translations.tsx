@@ -71,8 +71,10 @@ const translations = {
                 me: 'Me'
             },
             webRtc: {
-                open: 'Enable Videochat',
-                close: 'Disable Videochat'
+                audioOpen: 'Enable Audio Call',
+                audioClose: 'Disable Audio Call',
+                videoOpen: 'Enable Video Call',
+                videoClose: 'Disable Video Call'
             },
             dashboard: {
                 newParty: 'New Party',
