@@ -672,14 +672,16 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     ></ReactPlayer>
                 </div>
             </div>
-            <CommunicationContainer
-                socket={socket}
-                party={party}
-                user={user}
-                setPlayerState={setPlayerState}
-                uiVisible={uiVisible}
-                freezeUiVisible={freezeUiVisible}
-            ></CommunicationContainer>
+            {party && user && (
+                <CommunicationContainer
+                    socket={socket}
+                    partyId={party.id}
+                    ourUserId={user.id}
+                    setPlayerState={setPlayerState}
+                    uiVisible={uiVisible}
+                    freezeUiVisible={freezeUiVisible}
+                ></CommunicationContainer>
+            )}
             <BottomBar
                 playerState={playerState}
                 handlePlayPause={handlePlayPause}
