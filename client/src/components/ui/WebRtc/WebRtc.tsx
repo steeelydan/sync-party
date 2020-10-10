@@ -45,10 +45,7 @@ export default function WebRtc({
 
     if (user) {
         Object.keys(mediaStreams).forEach((userId) => {
-            if (
-                mediaStreams[userId].getVideoTracks().length &&
-                userId !== user.id
-            ) {
+            if (mediaStreams[userId].getVideoTracks().length) {
                 hasVideo = true;
             }
             displayedMediaStreams.push({

@@ -32,7 +32,6 @@ export default function CommunicationContainer({
     const [webRtcVideoIsActive, setWebRtcVideoIsActive] = useState(false);
 
     const [webRtcPeer, setWebRtcPeer] = useState<Peer | null>(null);
-    const webRtcPeerRef = useRef(webRtcPeer);
     const [ourMediaReady, setOurMediaReady] = useState(false);
 
     const [mediaStreams, setMediaStreams] = useState<{
@@ -49,8 +48,7 @@ export default function CommunicationContainer({
     useEffect(() => {
         callListRef.current = callList;
         mediaStreamsRef.current = mediaStreams;
-        webRtcPeerRef.current = webRtcPeer;
-    }, [mediaStreams, callList, webRtcPeer]);
+    }, [mediaStreams, callList]);
 
     const getOurMediaStream = async (withVideo: boolean): Promise<void> => {
         if (user) {
@@ -66,8 +64,10 @@ export default function CommunicationContainer({
                 [user.id]: ourStream
             });
 
-            setOurMediaReady(true);
-            console.log('our media is ready');
+            setTimeout(() => {
+                setOurMediaReady(true);
+                console.log('our media is ready');
+            }, 1000);
         }
     };
 
@@ -78,7 +78,7 @@ export default function CommunicationContainer({
                     host: process.env.REACT_APP_WEBRTC_ROUTE,
                     port: parseInt(process.env.REACT_APP_WEBRTC_PORT || '4000'),
                     path: '/peerjs',
-                    debug: process.env.NODE_ENV === 'development' ? 1 : 0
+                    debug: process.env.NODE_ENV === 'development' ? 2 : 0
                 })
             );
 
@@ -89,8 +89,7 @@ export default function CommunicationContainer({
     };
 
     const leaveWebRtc = (): void => {
-        if (webRtcPeerRef.current && socket && party) {
-            webRtcPeerRef.current.destroy();
+        if (webRtcPeer && socket && party) {
             if (user && mediaStreamsRef.current[user.id]) {
                 mediaStreamsRef.current[user.id]
                     .getTracks()
@@ -98,6 +97,10 @@ export default function CommunicationContainer({
                         track.stop();
                     });
             }
+            // Object.keys(callListRef.current).forEach((userId) => {
+            //     hangUpOnUser(userId);
+            // });
+            webRtcPeer.destroy();
             setMediaStreams({});
             setCallList({});
             setWebRtcPeer(null);
@@ -129,11 +132,16 @@ export default function CommunicationContainer({
                 if (mediaStreamsRef.current) {
                     call.on('stream', (theirStream: MediaStream) => {
                         console.log(
-                            'we get their stream, after they called us at our joining'
+                            'we get their stream, after they called us at our joining: ' +
+                                call.peer
                         );
                         console.log(
-                            'video tracks from user: ' + call.peer,
+                            'their video tracks: ',
                             theirStream.getVideoTracks()
+                        );
+                        console.log(
+                            'their audio tracks: ',
+                            theirStream.getAudioTracks()
                         );
                         setMediaStreams({
                             ...mediaStreamsRef.current,
@@ -192,9 +200,11 @@ export default function CommunicationContainer({
             ...mediaStreamsRef.current
         };
         delete newWebRtcStreams[theirId];
+        console.log('delete hung up users stream: ', newWebRtcStreams);
         setMediaStreams(newWebRtcStreams);
     }, []);
 
+    // Handle RTC
     useEffect((): void => {
         console.log('We are in handleRtc()');
         console.log(webRtcPeer);
@@ -217,7 +227,6 @@ export default function CommunicationContainer({
                 const theirId = data.userId;
                 console.log('left webrtc: ', theirId);
                 console.log('callListRef.current', callListRef.current);
-                // FIXME: Why is the call gone at this point?
                 hangUpOnUser(theirId);
             });
             socket.emit('joinWebRtc', {
