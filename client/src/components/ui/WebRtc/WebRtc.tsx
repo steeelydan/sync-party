@@ -25,17 +25,6 @@ export default function WebRtc({
         (state: RootAppState) => state.globalState.uiVisible
     );
 
-    console.log(
-        Object.keys(mediaStreamsRef.current).map((userId) => {
-            const stream = mediaStreamsRef.current[userId];
-            return {
-                userId: userId,
-                video: stream.getVideoTracks(),
-                audio: stream.getAudioTracks()
-            };
-        })
-    );
-
     const displayedMediaStreams: {
         userId: string;
         mediaStream: MediaStream;
