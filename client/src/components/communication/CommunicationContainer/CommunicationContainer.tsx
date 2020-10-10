@@ -113,8 +113,35 @@ export default function CommunicationContainer({
         }
     };
 
+    const renegotiate = async (call: Peer.MediaConnection): Promise<void> => {
+        console.log('RENEGOTIATION');
+
+        if (user) {
+            const peerConnection = call.peerConnection;
+
+            peerConnection.createOffer().then((offer: any) => {
+                console.log(offer);
+                peerConnection.setLocalDescription(offer).then(() => {
+                    const data = {
+                        userId: user.id,
+                        localDescription: peerConnection.localDescription
+                    };
+                    console.log(
+                        'renegotiate emitted from ' +
+                            user.id +
+                            'to' +
+                            call.peer +
+                            ': ',
+                        data
+                    );
+                    socket?.emit('renegotiate', data);
+                });
+            });
+        }
+    };
+
     const handleCall = useCallback(
-        (call: any): void => {
+        (call: Peer.MediaConnection): void => {
             if (user) {
                 console.log('other user calls us');
                 call.answer(mediaStreamsRef.current[user.id]);
@@ -124,6 +151,14 @@ export default function CommunicationContainer({
                     'our video tracks: ',
                     mediaStreamsRef.current[user.id].getVideoTracks()
                 );
+
+                const peerConnection = call.peerConnection;
+
+                console.log('peerC', peerConnection);
+
+                call.peerConnection.onnegotiationneeded = (event) =>
+                    renegotiate(call);
+
                 setCallList({
                     ...callListRef.current,
                     [call.peer]: call
@@ -161,10 +196,16 @@ export default function CommunicationContainer({
                 console.log('mediaStreamsRef.current: ', stream);
                 console.log('theirId:', theirId);
                 console.log('we call other user, because they joined');
+
+                call.peerConnection.onnegotiationneeded = (event) => {
+                    renegotiate(call);
+                };
+
                 setCallList({
                     ...callListRef.current,
                     [theirId]: call
                 });
+
                 call.on('stream', (theirStream) => {
                     console.log('we get theirStream: ', theirStream);
                     console.log(
@@ -229,53 +270,53 @@ export default function CommunicationContainer({
                 hangUpOnUser(theirId);
             });
 
-            // socket.on(
-            //     'renegotiate',
-            //     (data: {
-            //         userId: string;
-            //         localDescription: RTCSessionDescriptionInit;
-            //     }) => {
-            //         console.log('renegotiate incoming', data);
-            //         const call = callListRef.current[data.userId];
-            //         const peerConnection = call.peerConnection;
-            //         peerConnection
-            //             .setRemoteDescription(data.localDescription)
-            //             .then(() => {
-            //                 peerConnection.createAnswer().then((answer) => {
-            //                     peerConnection
-            //                         .setLocalDescription(answer)
-            //                         .then(() => {
-            //                             const answerData = {
-            //                                 userId: user.id,
-            //                                 localDescription:
-            //                                     peerConnection.localDescription
-            //                             };
-            //                             console.log(
-            //                                 'renegotiateAnswer emitted: ',
-            //                                 answerData
-            //                             );
-            //                             socket.emit(
-            //                                 'renegotiateAnswer',
-            //                                 answerData
-            //                             );
-            //                         });
-            //                 });
-            //             });
-            //     }
-            // );
+            socket.on(
+                'renegotiate',
+                (data: {
+                    userId: string;
+                    localDescription: RTCSessionDescriptionInit;
+                }) => {
+                    console.log('renegotiate incoming', data);
+                    const call = callListRef.current[data.userId];
+                    const peerConnection = call.peerConnection;
+                    peerConnection
+                        .setRemoteDescription(data.localDescription)
+                        .then(() => {
+                            peerConnection.createAnswer().then((answer) => {
+                                peerConnection
+                                    .setLocalDescription(answer)
+                                    .then(() => {
+                                        const answerData = {
+                                            userId: user.id,
+                                            localDescription:
+                                                peerConnection.localDescription
+                                        };
+                                        console.log(
+                                            'renegotiateAnswer emitted: ',
+                                            answerData
+                                        );
+                                        socket.emit(
+                                            'renegotiateAnswer',
+                                            answerData
+                                        );
+                                    });
+                            });
+                        });
+                }
+            );
 
-            // socket.on(
-            //     'renegotiateAnswer',
-            //     (data: {
-            //         userId: string;
-            //         localDescription: RTCSessionDescriptionInit;
-            //     }) => {
-            //         console.log('renegotiateAnswer incoming: ', data);
-            //         const call = callListRef.current[data.userId];
-            //         const peerConnection = call.peerConnection;
-            //         peerConnection.setRemoteDescription(data.localDescription);
-            //     }
-            // );
+            socket.on(
+                'renegotiateAnswer',
+                (data: {
+                    userId: string;
+                    localDescription: RTCSessionDescriptionInit;
+                }) => {
+                    console.log('renegotiateAnswer incoming: ', data);
+                    const call = callListRef.current[data.userId];
+                    const peerConnection = call.peerConnection;
+                    peerConnection.setRemoteDescription(data.localDescription);
+                }
+            );
 
             socket.emit('joinWebRtc', {
                 userId: user.id,
@@ -295,51 +336,59 @@ export default function CommunicationContainer({
 
     const activateVideo = async (active: boolean) => {
         if (webRtcIsActive && user) {
-            leaveWebRtc();
+            // leaveWebRtc();
 
-            const timeout = setTimeout(() => {
-                joinWebRtc(active);
-            }, 1000);
+            // const timeout = setTimeout(() => {
+            //     joinWebRtc(active);
+            // }, 1000);
 
-            return (): void => {
-                clearTimeout(timeout);
-            };
+            if (active) {
+                const videoStream = await navigator.mediaDevices.getUserMedia({
+                    video: true
+                });
+                const oldStream = mediaStreamsRef.current[user.id];
+                oldStream.addTrack(videoStream.getVideoTracks()[0]);
+                setMediaStreams({
+                    ...mediaStreamsRef.current,
+                    [user.id]: oldStream
+                });
+                Object.keys(callList).forEach((userId) => {
+                    const call = callList[userId];
+                    call.peerConnection.addTrack(
+                        videoStream.getVideoTracks()[0]
+                    );
+                });
 
-            // if (active) {
-            //     const videoStream = await navigator.mediaDevices.getUserMedia({
-            //         video: true
-            //     });
-            //     mediaStreams[user.id].addTrack(videoStream.getVideoTracks()[0]);
-            //     Object.keys(callList).forEach((id) => {
-            //         const call = callList[id];
-            //         const peerConnection = call.peerConnection;
-            //         console.log(peerConnection);
-            //         peerConnection.createOffer().then((offer) => {
-            //             console.log(offer);
-            //             peerConnection.setLocalDescription(offer).then(() => {
-            //                 const data = {
-            //                     userId: user.id,
-            //                     localDescription:
-            //                         peerConnection.localDescription
-            //                 };
-            //                 console.log(
-            //                     'renegotiate emitted from ' +
-            //                         user.id +
-            //                         'to' +
-            //                         call.peer +
-            //                         ': ',
-            //                     data
-            //                 );
-            //                 socket?.emit('renegotiate', data);
-            //             });
-            //         });
-            //     });
-            // } else {
-            //     mediaStreams[user.id].getVideoTracks()[0].stop();
-            //     mediaStreams[user.id].removeTrack(
-            //         mediaStreams[user.id].getVideoTracks()[0]
-            //     );
-            // }
+                // Object.keys(callList).forEach((id) => {
+                //     const call = callList[id];
+                //     const peerConnection = call.peerConnection;
+                //     console.log(peerConnection);
+                //     peerConnection.createOffer().then((offer) => {
+                //         console.log(offer);
+                //         peerConnection.setLocalDescription(offer).then(() => {
+                //             const data = {
+                //                 userId: user.id,
+                //                 localDescription:
+                //                     peerConnection.localDescription
+                //             };
+                //             console.log(
+                //                 'renegotiate emitted from ' +
+                //                     user.id +
+                //                     'to' +
+                //                     call.peer +
+                //                     ': ',
+                //                 data
+                //             );
+                //             socket?.emit('renegotiate', data);
+                //         });
+                //     });
+                // });
+            } else {
+                mediaStreams[user.id].getVideoTracks()[0].stop();
+                mediaStreams[user.id].removeTrack(
+                    mediaStreams[user.id].getVideoTracks()[0]
+                );
+            }
         }
     };
 
