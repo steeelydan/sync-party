@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Rnd } from 'react-rnd';
 
 interface Props {
-    isActive: boolean;
+    videoIsActive: boolean;
     mediaStreams: {
         [userId: string]: MediaStream;
     };
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function WebRtc({
-    isActive,
+    videoIsActive,
     mediaStreams,
     mediaStreamsRef
 }: Props): ReactElement | null {
@@ -48,6 +48,7 @@ export default function WebRtc({
             if (mediaStreams[userId].getVideoTracks().length) {
                 hasVideo = true;
             }
+
             displayedMediaStreams.push({
                 userId: userId,
                 mediaStream: mediaStreams[userId]
@@ -63,7 +64,7 @@ export default function WebRtc({
                     (uiVisible ? ' mb-20' : ' mb-10')
                 }
             >
-                {isActive && memberStatus && user && (
+                {videoIsActive && memberStatus && user && (
                     <div className="mt-12 absolute top-0 left-0">
                         <Rnd
                             default={{
@@ -73,9 +74,6 @@ export default function WebRtc({
                                 height: 'auto'
                             }}
                             resizeHandleStyles={{
-                                // right: {
-                                //     display: 'block'
-                                // },
                                 bottomRight: { display: 'none' },
                                 bottom: { display: 'none' },
                                 bottomLeft: { display: 'none' },
@@ -162,9 +160,6 @@ export default function WebRtc({
                                 height: 'auto'
                             }}
                             resizeHandleStyles={{
-                                // right: {
-                                //     display: 'block'
-                                // },
                                 bottomRight: { display: 'none' },
                                 bottom: { display: 'none' },
                                 bottomLeft: { display: 'none' },
