@@ -73,14 +73,13 @@ export default function CommunicationContainer({
 
     const joinWebRtc = (withVideo: boolean): void => {
         if (user && socket) {
-            setWebRtcPeer(
-                new Peer(user.id, {
-                    host: process.env.REACT_APP_WEBRTC_ROUTE,
-                    port: parseInt(process.env.REACT_APP_WEBRTC_PORT || '4000'),
-                    path: '/peerjs',
-                    debug: process.env.NODE_ENV === 'development' ? 2 : 0
-                })
-            );
+            const peer = new Peer(user.id, {
+                host: process.env.REACT_APP_WEBRTC_ROUTE,
+                port: parseInt(process.env.REACT_APP_WEBRTC_PORT || '4000'),
+                path: '/peerjs',
+                debug: process.env.NODE_ENV === 'development' ? 2 : 0
+            });
+            setWebRtcPeer(peer);
 
             getOurMediaStream(withVideo);
 
@@ -229,6 +228,55 @@ export default function CommunicationContainer({
                 console.log('callListRef.current', callListRef.current);
                 hangUpOnUser(theirId);
             });
+
+            // socket.on(
+            //     'renegotiate',
+            //     (data: {
+            //         userId: string;
+            //         localDescription: RTCSessionDescriptionInit;
+            //     }) => {
+            //         console.log('renegotiate incoming', data);
+            //         const call = callListRef.current[data.userId];
+            //         const peerConnection = call.peerConnection;
+            //         peerConnection
+            //             .setRemoteDescription(data.localDescription)
+            //             .then(() => {
+            //                 peerConnection.createAnswer().then((answer) => {
+            //                     peerConnection
+            //                         .setLocalDescription(answer)
+            //                         .then(() => {
+            //                             const answerData = {
+            //                                 userId: user.id,
+            //                                 localDescription:
+            //                                     peerConnection.localDescription
+            //                             };
+            //                             console.log(
+            //                                 'renegotiateAnswer emitted: ',
+            //                                 answerData
+            //                             );
+            //                             socket.emit(
+            //                                 'renegotiateAnswer',
+            //                                 answerData
+            //                             );
+            //                         });
+            //                 });
+            //             });
+            //     }
+            // );
+
+            // socket.on(
+            //     'renegotiateAnswer',
+            //     (data: {
+            //         userId: string;
+            //         localDescription: RTCSessionDescriptionInit;
+            //     }) => {
+            //         console.log('renegotiateAnswer incoming: ', data);
+            //         const call = callListRef.current[data.userId];
+            //         const peerConnection = call.peerConnection;
+            //         peerConnection.setRemoteDescription(data.localDescription);
+            //     }
+            // );
+
             socket.emit('joinWebRtc', {
                 userId: user.id,
                 partyId: party.id
@@ -245,8 +293,8 @@ export default function CommunicationContainer({
         user
     ]);
 
-    const activateVideo = (active: boolean) => {
-        if (webRtcIsActive) {
+    const activateVideo = async (active: boolean) => {
+        if (webRtcIsActive && user) {
             leaveWebRtc();
 
             const timeout = setTimeout(() => {
@@ -256,6 +304,42 @@ export default function CommunicationContainer({
             return (): void => {
                 clearTimeout(timeout);
             };
+
+            // if (active) {
+            //     const videoStream = await navigator.mediaDevices.getUserMedia({
+            //         video: true
+            //     });
+            //     mediaStreams[user.id].addTrack(videoStream.getVideoTracks()[0]);
+            //     Object.keys(callList).forEach((id) => {
+            //         const call = callList[id];
+            //         const peerConnection = call.peerConnection;
+            //         console.log(peerConnection);
+            //         peerConnection.createOffer().then((offer) => {
+            //             console.log(offer);
+            //             peerConnection.setLocalDescription(offer).then(() => {
+            //                 const data = {
+            //                     userId: user.id,
+            //                     localDescription:
+            //                         peerConnection.localDescription
+            //                 };
+            //                 console.log(
+            //                     'renegotiate emitted from ' +
+            //                         user.id +
+            //                         'to' +
+            //                         call.peer +
+            //                         ': ',
+            //                     data
+            //                 );
+            //                 socket?.emit('renegotiate', data);
+            //             });
+            //         });
+            //     });
+            // } else {
+            //     mediaStreams[user.id].getVideoTracks()[0].stop();
+            //     mediaStreams[user.id].removeTrack(
+            //         mediaStreams[user.id].getVideoTracks()[0]
+            //     );
+            // }
         }
     };
 

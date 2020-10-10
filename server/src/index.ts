@@ -325,9 +325,15 @@ const runApp = async () => {
         });
 
         socket.on('leaveWebRtc', (data) => {
-            socket
-                .to(data.partyId)
-                .emit('leaveWebRtc', { userId: socketUserId });
+            io.to(data.partyId).emit('leaveWebRtc', { userId: socketUserId });
+        });
+
+        socket.on('renegotiate', (data) => {
+            socket.broadcast.emit('renegotiate', data);
+        });
+
+        socket.on('renegotiateAnswer', (data) => {
+            socket.broadcast.emit('renegotiateAnswer', data);
         });
 
         // Disconnect
