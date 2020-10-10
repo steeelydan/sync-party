@@ -8,22 +8,22 @@ import {
 import { useTranslation } from 'react-i18next';
 
 interface Props {
+    toggleChat: Function;
+    toggleWebRtc: Function;
+    toggleWebRtcVideo: Function;
     chatIsActive: boolean;
     webRtcIsActive: boolean;
-    setChatIsActive: Function;
-    setWebRtcIsActive: Function;
     webRtcVideoIsActive: boolean;
-    setWebRtcVideoIsActive: Function;
     uiVisible: boolean;
 }
 
 export default function CommunicationBar({
+    toggleChat,
+    toggleWebRtc,
+    toggleWebRtcVideo,
     chatIsActive,
     webRtcIsActive,
-    setChatIsActive,
-    setWebRtcIsActive,
     webRtcVideoIsActive,
-    setWebRtcVideoIsActive,
     uiVisible
 }: Props): ReactElement {
     const { t } = useTranslation();
@@ -41,7 +41,7 @@ export default function CommunicationBar({
                         'w-8 h-8 flex cursor-pointer z-50 p-1 mt-2 ' +
                         (chatIsActive ? 'bg-purple-700' : 'bg-gray-800')
                     }
-                    onClick={(): void => setChatIsActive(!chatIsActive)}
+                    onClick={(): void => toggleChat()}
                     style={{ borderRadius: '100%' }}
                 >
                     <FontAwesomeIcon
@@ -57,7 +57,7 @@ export default function CommunicationBar({
                         'ml-2 w-8 h-8 flex cursor-pointer z-50 p-1 mt-2 ' +
                         (webRtcIsActive ? 'bg-purple-700' : 'bg-gray-800')
                     }
-                    onClick={(): void => setWebRtcIsActive(!webRtcIsActive)}
+                    onClick={(): void => toggleWebRtc()}
                     style={{ borderRadius: '100%' }}
                 >
                     <FontAwesomeIcon
@@ -81,7 +81,7 @@ export default function CommunicationBar({
                                 : 'bg-gray-800')
                         }
                         onClick={(): void => {
-                            setWebRtcVideoIsActive(!webRtcVideoIsActive);
+                            toggleWebRtcVideo();
                         }}
                         style={{ borderRadius: '100%' }}
                     >

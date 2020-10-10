@@ -21,8 +21,6 @@ import screenfull, { Screenfull } from 'screenfull';
 import ReactPlayer from 'react-player';
 import TopBar from '../../ui/TopBar/TopBar';
 import BottomBar from '../../ui/BottomBar/BottomBar';
-import Chat from '../../ui/Chat/Chat';
-import WebRtc from '../../ui/WebRtc/WebRtc';
 import MediaMenu from '../../ui/MediaMenu/MediaMenu';
 import MediaPlayerOverlay from '../MediaPlayerOverlay/MediaPlayerOverlay';
 import ActionMessageContent from '../../display/ActionMessageContent/ActionMessageContent';
@@ -36,7 +34,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
-import CommunicationBar from '../../ui/CommunicationBar/CommunicationBar';
+import CommunicationContainer from '../../communication/CommunicationContainer/CommunicationContainer';
 
 type Props = {
     socket: SocketIOClient.Socket | null;
@@ -71,9 +69,6 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     const [reactPlayer, setReactPlayer] = useState<ReactPlayer>();
     const [joinedParty, setJoinedParty] = useState(false);
     const [freshlyJoined, setFreshlyJoined] = useState(true);
-    const [chatIsActive, setChatIsActive] = useState(false);
-    const [webRtcIsActive, setWebRtcIsActive] = useState(false);
-    const [webRtcVideoIsActive, setWebRtcVideoIsActive] = useState(false);
 
     const initialPlayerState = {
         playOrder: null,
@@ -677,33 +672,14 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     ></ReactPlayer>
                 </div>
             </div>
-            <Chat
-                isActive={chatIsActive}
+            <CommunicationContainer
                 socket={socket}
-                setPlayerFocused={(focused: boolean): void =>
-                    setPlayerState({ isFocused: focused })
-                }
+                party={party}
+                user={user}
+                setPlayerState={setPlayerState}
+                uiVisible={uiVisible}
                 freezeUiVisible={freezeUiVisible}
-            ></Chat>
-            {party && (
-                <WebRtc
-                    isActive={webRtcIsActive}
-                    socket={socket}
-                    partyId={party.id}
-                    webRtcVideoIsActive={webRtcVideoIsActive}
-                ></WebRtc>
-            )}
-            {uiVisible && (
-                <CommunicationBar
-                    chatIsActive={chatIsActive}
-                    webRtcIsActive={webRtcIsActive}
-                    setChatIsActive={setChatIsActive}
-                    setWebRtcIsActive={setWebRtcIsActive}
-                    uiVisible={uiVisible}
-                    webRtcVideoIsActive={webRtcVideoIsActive}
-                    setWebRtcVideoIsActive={setWebRtcVideoIsActive}
-                ></CommunicationBar>
-            )}
+            ></CommunicationContainer>
             <BottomBar
                 playerState={playerState}
                 handlePlayPause={handlePlayPause}
