@@ -1,14 +1,8 @@
 import React, { ReactElement, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Rnd } from 'react-rnd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faArrowsAltH,
-    faArrowsAltV,
-    faUserAlt,
-    faUserAltSlash
-} from '@fortawesome/free-solid-svg-icons';
+import { rndHandleStyles } from '../../../common/helpers';
+import WebRtcVideoOverlayMenu from '../../communication/WebRtcVideoOverlayMenu/WebRtcVideoOverlayMenu';
 
 interface Props {
     videoIsActive: boolean;
@@ -45,8 +39,6 @@ export default function WebRtc({
     const uiVisible = useSelector(
         (state: RootAppState) => state.globalState.uiVisible
     );
-
-    const { t } = useTranslation();
 
     const [displayOverlayMenu, setDisplayOverlayMenu] = useState(false);
     const [displayOwnVideo, setDisplayOwnVideo] = useState(true);
@@ -94,15 +86,7 @@ export default function WebRtc({
                                 width: '50vh',
                                 height: 'auto'
                             }}
-                            resizeHandleStyles={{
-                                bottomRight: { display: 'none' },
-                                bottom: { display: 'none' },
-                                bottomLeft: { display: 'none' },
-                                left: { display: 'none' },
-                                topLeft: { display: 'none' },
-                                top: { display: 'none' },
-                                topRight: { display: 'none' }
-                            }}
+                            resizeHandleStyles={rndHandleStyles}
                             className="bg-transparent-600 z-40"
                         >
                             <div
@@ -119,64 +103,14 @@ export default function WebRtc({
                                     setDisplayOverlayMenu(false)
                                 }
                             >
-                                <div
-                                    className={
-                                        'absolute top-0 left-0 m-1 flex flex-row rounded px-2 py-1 bg-black opacity-75 eqa' +
-                                        (displayOverlayMenu ? '' : ' hidden')
-                                    }
-                                    style={{ zIndex: 1000 }}
-                                >
-                                    <div
-                                        className={
-                                            'cursor-pointer z-50 w-6 flex' +
-                                            (otherVideosAmount > 1
-                                                ? ' mr-2'
-                                                : '')
-                                        }
-                                        title={t(
-                                            displayOwnVideo
-                                                ? 'webRtc.toggleUserVideoOff'
-                                                : 'webRtc.toggleUserVideoOn'
-                                        )}
-                                        onClick={(): void =>
-                                            setDisplayOwnVideo(!displayOwnVideo)
-                                        }
-                                    >
-                                        <FontAwesomeIcon
-                                            className="mx-auto my-1"
-                                            size="sm"
-                                            icon={
-                                                displayOwnVideo
-                                                    ? faUserAltSlash
-                                                    : faUserAlt
-                                            }
-                                        ></FontAwesomeIcon>
-                                    </div>
-                                    {otherVideosAmount > 1 && (
-                                        <div
-                                            className="cursor-pointer z-50 w-6 flex"
-                                            title={t(
-                                                displayVertically
-                                                    ? 'webRtc.displayHorizontally'
-                                                    : 'webRtc.displayVertically'
-                                            )}
-                                            onClick={(): void =>
-                                                setDisplayVertically(
-                                                    !displayVertically
-                                                )
-                                            }
-                                        >
-                                            <FontAwesomeIcon
-                                                className="mx-auto my-1"
-                                                icon={
-                                                    displayVertically
-                                                        ? faArrowsAltH
-                                                        : faArrowsAltV
-                                                }
-                                            ></FontAwesomeIcon>
-                                        </div>
-                                    )}
-                                </div>
+                                <WebRtcVideoOverlayMenu
+                                    displayVertically={displayVertically}
+                                    setDisplayVertically={setDisplayVertically}
+                                    isActive={displayOverlayMenu}
+                                    displayOwnVideo={displayOwnVideo}
+                                    setDisplayOwnVideo={setDisplayOwnVideo}
+                                    otherVideosAmount={otherVideosAmount}
+                                />
                                 {displayedMediaStreams.map((mediaStream) => {
                                     const isOwnVideo =
                                         mediaStream.webRtcId === ourWebRtcId;
@@ -259,15 +193,7 @@ export default function WebRtc({
                                 width: '80',
                                 height: 'auto'
                             }}
-                            resizeHandleStyles={{
-                                bottomRight: { display: 'none' },
-                                bottom: { display: 'none' },
-                                bottomLeft: { display: 'none' },
-                                left: { display: 'none' },
-                                topLeft: { display: 'none' },
-                                top: { display: 'none' },
-                                topRight: { display: 'none' }
-                            }}
+                            resizeHandleStyles={rndHandleStyles}
                             className="bg-transparent-600"
                         >
                             <div className="flex flex-row">

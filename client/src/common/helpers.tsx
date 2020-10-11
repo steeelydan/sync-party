@@ -320,6 +320,16 @@ const formatChatMessage = (message: string): JSX.Element[] => {
     return textElements;
 };
 
+const rndHandleStyles = {
+    bottomRight: { display: 'none' },
+    bottom: { display: 'none' },
+    bottomLeft: { display: 'none' },
+    left: { display: 'none' },
+    topLeft: { display: 'none' },
+    top: { display: 'none' },
+    topRight: { display: 'none' }
+};
+
 export {
     baseState,
     noPartyState,
@@ -332,5 +342,6 @@ export {
     handleKeyCommands,
     calculateSyncDelta,
     reorderItems,
-    formatChatMessage
+    formatChatMessage,
+    rndHandleStyles
 };
