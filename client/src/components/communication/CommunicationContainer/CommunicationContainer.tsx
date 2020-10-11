@@ -56,6 +56,19 @@ export default function CommunicationContainer({
         mediaStreamsRef.current = mediaStreams;
     }, [mediaStreams, callList]);
 
+    const createWebRtcPeer = () => {
+        if (ourUserId) {
+            const peer = new Peer(ourUserId, {
+                host: process.env.REACT_APP_WEBRTC_ROUTE,
+                port: parseInt(process.env.REACT_APP_WEBRTC_PORT || '4000'),
+                path: '/peerjs',
+                debug: process.env.NODE_ENV === 'development' ? 2 : 0
+            });
+
+            setWebRtcPeer(peer);
+        }
+    };
+
     const getOurMediaStream = async (withVideo: boolean): Promise<void> => {
         if (ourUserId) {
             let ourStream;
@@ -86,8 +99,6 @@ export default function CommunicationContainer({
                     setWebRtcAudioIsActive(false);
                 }
 
-                leaveWebRtc();
-
                 return;
             }
 
@@ -96,22 +107,14 @@ export default function CommunicationContainer({
                 [ourUserId]: ourStream
             });
 
-            setTimeout(() => {
-                setOurMediaReady(true);
-            }, 1000);
+            createWebRtcPeer();
+
+            setOurMediaReady(true);
         }
     };
 
-    const joinWebRtc = (withVideo: boolean): void => {
+    const joinWebRtc = async (withVideo: boolean): Promise<void> => {
         if (ourUserId && socket) {
-            const peer = new Peer(ourUserId, {
-                host: process.env.REACT_APP_WEBRTC_ROUTE,
-                port: parseInt(process.env.REACT_APP_WEBRTC_PORT || '4000'),
-                path: '/peerjs',
-                debug: process.env.NODE_ENV === 'development' ? 2 : 0
-            });
-
-            setWebRtcPeer(peer);
             getOurMediaStream(withVideo);
         }
     };
