@@ -6,6 +6,9 @@ import React, {
     useRef,
     useState
 } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { setGlobalState } from '../../../actions/globalActions';
 import Chat from '../../ui/Chat/Chat';
 import CommunicationBar from '../../ui/CommunicationBar/CommunicationBar';
 import WebRtc from '../../ui/WebRtc/WebRtc';
@@ -27,6 +30,9 @@ export default function CommunicationContainer({
     uiVisible,
     freezeUiVisible
 }: Props): ReactElement {
+    const dispatch = useDispatch();
+    const { t } = useTranslation();
+
     const [webRtcPeer, setWebRtcPeer] = useState<Peer | null>(null);
     const [chatIsActive, setChatIsActive] = useState(false);
     const [webRtcAudioIsActive, setWebRtcAudioIsActive] = useState(false);
@@ -52,12 +58,38 @@ export default function CommunicationContainer({
 
     const getOurMediaStream = async (withVideo: boolean): Promise<void> => {
         if (ourUserId) {
-            const ourStream = await navigator.mediaDevices.getUserMedia({
-                video: withVideo,
-                audio: {
-                    autoGainControl: true
+            let ourStream;
+
+            try {
+                ourStream = await navigator.mediaDevices.getUserMedia({
+                    video: withVideo,
+                    audio: {
+                        autoGainControl: true
+                    }
+                });
+            } catch (error) {
+                dispatch(
+                    setGlobalState({
+                        errorMessage: t(
+                            withVideo
+                                ? 'webRtc.missingPermissionsVideo'
+                                : 'webRtc.missingPermissionsAudio'
+                        )
+                    })
+                );
+
+                setMediaPermissionPending(false);
+
+                if (withVideo) {
+                    setWebRtcVideoIsActive(false);
+                } else {
+                    setWebRtcAudioIsActive(false);
                 }
-            });
+
+                leaveWebRtc();
+
+                return;
+            }
 
             setMediaStreams({
                 ...mediaStreamsRef.current,

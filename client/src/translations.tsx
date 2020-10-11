@@ -74,7 +74,10 @@ const translations = {
                 audioOpen: 'Enable Audio Call',
                 audioClose: 'Disable Audio Call',
                 videoOpen: 'Enable Video Call',
-                videoClose: 'Disable Video Call'
+                videoClose: 'Disable Video Call',
+                missingPermissionsVideo:
+                    'Camera and microphone access are necessary',
+                missingPermissionsAudio: 'Microphone access is necessary'
             },
             dashboard: {
                 newParty: 'New Party',
