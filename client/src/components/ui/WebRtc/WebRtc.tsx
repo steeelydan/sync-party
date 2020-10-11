@@ -116,9 +116,9 @@ export default function WebRtc({
                                 >
                                     <div
                                         className={
-                                            'cursor-pointer z-50' +
+                                            'cursor-pointer z-50 w-6 flex' +
                                             (otherVideosAmount > 1
-                                                ? ' mr-3'
+                                                ? ' mr-2'
                                                 : '')
                                         }
                                         title={t(
@@ -131,6 +131,8 @@ export default function WebRtc({
                                         }
                                     >
                                         <FontAwesomeIcon
+                                            className="mx-auto my-1"
+                                            size="sm"
                                             icon={
                                                 displayOwnVideo
                                                     ? faUserAltSlash
@@ -140,7 +142,7 @@ export default function WebRtc({
                                     </div>
                                     {otherVideosAmount > 1 && (
                                         <div
-                                            className="cursor-pointer z-50"
+                                            className="cursor-pointer z-50 w-6 flex"
                                             title={t(
                                                 displayVertically
                                                     ? 'webRtc.displayHorizontally'
@@ -153,6 +155,7 @@ export default function WebRtc({
                                             }
                                         >
                                             <FontAwesomeIcon
+                                                className="mx-auto my-1"
                                                 icon={
                                                     displayVertically
                                                         ? faArrowsAltH
@@ -177,7 +180,10 @@ export default function WebRtc({
                                             <div
                                                 key={mediaStream.userId}
                                                 className={
-                                                    'overflow-hidden bg-transparent mr-2 rounded'
+                                                    'overflow-hidden bg-transparent rounded ' +
+                                                    (displayVertically
+                                                        ? 'mb-2'
+                                                        : 'mr-2')
                                                 }
                                                 style={{
                                                     height: isOwnVideo
