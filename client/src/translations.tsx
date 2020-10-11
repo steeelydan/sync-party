@@ -71,10 +71,14 @@ const translations = {
                 me: 'Me'
             },
             webRtc: {
-                audioOpen: 'Enable Audio Call',
-                audioClose: 'Disable Audio Call',
-                videoOpen: 'Enable Video Call',
-                videoClose: 'Disable Video Call',
+                audioOpen: 'Join audio call',
+                audioClose: 'Quit audio call',
+                videoOpen: 'Join video call',
+                videoClose: 'Quit video call',
+                muteAudio: 'Mute my audio',
+                unmuteAudio: 'Unmute my audio',
+                muteVideo: 'Deactivate my video',
+                unmuteVideo: 'Activate my video',
                 missingPermissionsVideo:
                     'Camera and microphone access are necessary',
                 missingPermissionsAudio: 'Microphone access is necessary',
