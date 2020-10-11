@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faComment,
+    faMicrophone,
     faPhoneAlt,
     faVideo
 } from '@fortawesome/free-solid-svg-icons';
@@ -15,6 +16,10 @@ interface Props {
     webRtcAudioIsActive: boolean;
     webRtcVideoIsActive: boolean;
     uiVisible: boolean;
+    audioIsMuted: boolean;
+    videoIsMuted: boolean;
+    toggleAudioIsMuted: Function;
+    toggleVideoIsMuted: Function;
 }
 
 export default function CommunicationBar({
@@ -24,7 +29,11 @@ export default function CommunicationBar({
     chatIsActive,
     webRtcAudioIsActive,
     webRtcVideoIsActive,
-    uiVisible
+    uiVisible,
+    audioIsMuted,
+    videoIsMuted,
+    toggleAudioIsMuted,
+    toggleVideoIsMuted
 }: Props): ReactElement {
     const { t } = useTranslation();
 
@@ -99,6 +108,60 @@ export default function CommunicationBar({
                             opacity={webRtcVideoIsActive ? 1 : 0.7}
                             icon={faVideo}
                             size="1x"
+                        ></FontAwesomeIcon>
+                    </div>
+                )}
+                {webRtcVideoIsActive && (
+                    <div
+                        className={
+                            'ml-2 w-6 h-6 flex cursor-pointer z-50 p-1 mt-3 ' +
+                            (!videoIsMuted ? 'bg-gray-400' : 'bg-gray-800')
+                        }
+                        onClick={(): void => toggleVideoIsMuted()}
+                        style={{ borderRadius: '100%' }}
+                        title={
+                            webRtcAudioIsActive
+                                ? t('webRtc.audioClose')
+                                : t('webRtc.audioOpen')
+                        }
+                    >
+                        <FontAwesomeIcon
+                            className={
+                                'm-auto' +
+                                (videoIsMuted
+                                    ? ' text-gray-200'
+                                    : ' text-gray-800')
+                            }
+                            opacity={!videoIsMuted ? 1 : 0.7}
+                            icon={faVideo}
+                            size="xs"
+                        ></FontAwesomeIcon>
+                    </div>
+                )}
+                {(webRtcAudioIsActive || webRtcVideoIsActive) && (
+                    <div
+                        className={
+                            'ml-2 w-6 h-6 flex cursor-pointer z-50 p-1 mt-3 ' +
+                            (!audioIsMuted ? 'bg-gray-400' : 'bg-gray-800')
+                        }
+                        onClick={(): void => toggleAudioIsMuted()}
+                        style={{ borderRadius: '100%' }}
+                        title={
+                            webRtcAudioIsActive
+                                ? t('webRtc.audioClose')
+                                : t('webRtc.audioOpen')
+                        }
+                    >
+                        <FontAwesomeIcon
+                            className={
+                                'm-auto' +
+                                (audioIsMuted
+                                    ? ' text-gray-200'
+                                    : ' text-gray-800')
+                            }
+                            opacity={!audioIsMuted ? 1 : 0.7}
+                            icon={faMicrophone}
+                            size="xs"
                         ></FontAwesomeIcon>
                     </div>
                 )}

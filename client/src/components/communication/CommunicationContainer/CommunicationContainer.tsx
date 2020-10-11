@@ -45,6 +45,8 @@ export default function CommunicationContainer({
     const [webRtcVideoIsActive, setWebRtcVideoIsActive] = useState(false);
     const [mediaPermissionPending, setMediaPermissionPending] = useState(false);
     const [ourMediaReady, setOurMediaReady] = useState(false);
+    const [audioIsMuted, setAudioIsMuted] = useState(false);
+    const [videoIsMuted, setVideoIsMuted] = useState(false);
 
     const [mediaStreams, setMediaStreams] = useState<{
         [userId: string]: MediaStream;
@@ -153,6 +155,8 @@ export default function CommunicationContainer({
             setCallList({});
             setWebRtcPeer(null);
             setOurMediaReady(false);
+            setAudioIsMuted(false);
+            setVideoIsMuted(false);
             socket.off('joinWebRtc');
             socket.off('leaveWebRtc');
             socket.emit('leaveWebRtc', {
@@ -316,6 +320,24 @@ export default function CommunicationContainer({
         }
     };
 
+    const toggleAudioIsMuted = (): void => {
+        if (ourUserId && !mediaPermissionPending) {
+            const newStreams = { ...mediaStreams };
+            newStreams[ourUserId].getAudioTracks()[0].enabled = audioIsMuted;
+            setMediaStreams(newStreams);
+            setAudioIsMuted(!audioIsMuted);
+        }
+    };
+
+    const toggleVideoIsMuted = (): void => {
+        if (ourUserId && !mediaPermissionPending) {
+            const newStreams = { ...mediaStreams };
+            newStreams[ourUserId].getVideoTracks()[0].enabled = videoIsMuted;
+            setMediaStreams(newStreams);
+            setVideoIsMuted(!videoIsMuted);
+        }
+    };
+
     return (
         <>
             <Chat
@@ -341,8 +363,12 @@ export default function CommunicationContainer({
                     toggleWebRtcVideo={toggleWebRtcVideo}
                     chatIsActive={chatIsActive}
                     webRtcAudioIsActive={webRtcAudioIsActive}
-                    uiVisible={uiVisible}
                     webRtcVideoIsActive={webRtcVideoIsActive}
+                    uiVisible={uiVisible}
+                    audioIsMuted={audioIsMuted}
+                    videoIsMuted={videoIsMuted}
+                    toggleAudioIsMuted={toggleAudioIsMuted}
+                    toggleVideoIsMuted={toggleVideoIsMuted}
                 ></CommunicationBar>
             )}
         </>
