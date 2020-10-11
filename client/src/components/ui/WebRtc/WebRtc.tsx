@@ -111,70 +111,71 @@ export default function WebRtc({
                                     setDisplayOwnVideo={setDisplayOwnVideo}
                                     otherVideosAmount={otherVideosAmount}
                                 />
-                                {displayedMediaStreams.map((mediaStream) => {
-                                    const isOwnVideo =
-                                        mediaStream.webRtcId === ourWebRtcId;
+                                {displayedMediaStreams.map(
+                                    (displayedMediaStream) => {
+                                        const isOwnVideo =
+                                            displayedMediaStream.webRtcId ===
+                                            ourWebRtcId;
 
-                                    if (
-                                        memberStatus[
-                                            userIdWebRtcIdMap[
-                                                mediaStream.webRtcId
-                                            ]
-                                        ].online &&
-                                        mediaStream.mediaStream.getVideoTracks()
-                                            .length &&
-                                        !isOwnVideo
-                                    ) {
-                                        return (
-                                            <div
-                                                key={mediaStream.webRtcId}
-                                                className={
-                                                    'overflow-hidden bg-transparent rounded ' +
-                                                    (displayVertically
-                                                        ? 'mb-2'
-                                                        : 'mr-2')
-                                                }
-                                                style={{
-                                                    height: isOwnVideo
-                                                        ? '100px'
-                                                        : '100%',
-                                                    width: isOwnVideo
-                                                        ? '100px'
-                                                        : '100%'
-                                                }}
-                                            >
-                                                <video
-                                                    muted={isOwnVideo}
-                                                    className="min-w-full min-h-full overflow-hidden object-cover"
-                                                    ref={(video): void => {
-                                                        if (video) {
-                                                            if (
-                                                                video.srcObject !==
-                                                                mediaStreamsRef
-                                                                    .current[
-                                                                    mediaStream
-                                                                        .webRtcId
-                                                                ]
-                                                            ) {
-                                                                video.srcObject =
-                                                                    mediaStreamsRef.current[
-                                                                        mediaStream.webRtcId
-                                                                    ];
+                                        if (
+                                            memberStatus[
+                                                userIdWebRtcIdMap[
+                                                    displayedMediaStream
+                                                        .webRtcId
+                                                ]
+                                            ].online &&
+                                            displayedMediaStream.mediaStream.getVideoTracks()
+                                                .length &&
+                                            !isOwnVideo
+                                        ) {
+                                            return (
+                                                <div
+                                                    key={
+                                                        displayedMediaStream.webRtcId
+                                                    }
+                                                    className={
+                                                        'overflow-hidden bg-transparent rounded ' +
+                                                        (displayVertically
+                                                            ? 'mb-2'
+                                                            : 'mr-2')
+                                                    }
+                                                    style={{
+                                                        height: '100%',
+                                                        width: '100%'
+                                                    }}
+                                                >
+                                                    <video
+                                                        className="min-w-full min-h-full overflow-hidden object-cover"
+                                                        ref={(video): void => {
+                                                            if (video) {
+                                                                if (
+                                                                    video.srcObject !==
+                                                                    mediaStreamsRef
+                                                                        .current[
+                                                                        displayedMediaStream
+                                                                            .webRtcId
+                                                                    ]
+                                                                ) {
+                                                                    video.srcObject =
+                                                                        mediaStreamsRef.current[
+                                                                            displayedMediaStream.webRtcId
+                                                                        ];
+                                                                }
                                                             }
-                                                        }
-                                                    }}
-                                                    onLoadedMetadata={(
-                                                        event
-                                                    ): void => {
-                                                        event.currentTarget.play();
-                                                    }}
-                                                ></video>
-                                            </div>
-                                        );
-                                    } else {
-                                        return null;
+                                                        }}
+                                                        onLoadedMetadata={(
+                                                            event
+                                                        ): void => {
+                                                            event.currentTarget.play();
+                                                        }}
+                                                    ></video>
+                                                </div>
+                                            );
+                                        } else {
+                                            return null;
+                                        }
                                     }
-                                })}
+                                )}
                             </div>
                         </Rnd>
                     </div>
@@ -215,7 +216,7 @@ export default function WebRtc({
                                                 }}
                                             >
                                                 <video
-                                                    muted={isOwnVideo}
+                                                    muted={true}
                                                     className="min-w-full min-h-full overflow-hidden object-cover"
                                                     ref={(video): void => {
                                                         if (video) {
