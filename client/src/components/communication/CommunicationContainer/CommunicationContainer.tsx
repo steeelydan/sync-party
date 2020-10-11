@@ -180,6 +180,62 @@ export default function CommunicationContainer({
         };
     }, []);
 
+    const hangUpOnUser = useCallback((theirWebRtcId: string): void => {
+        if (callListRef.current[theirWebRtcId]) {
+            callListRef.current[theirWebRtcId].close();
+            const newCallList = {
+                ...callListRef.current
+            };
+            delete newCallList[theirWebRtcId];
+            setCallList(newCallList);
+        }
+
+        const newWebRtcStreams = {
+            ...mediaStreamsRef.current
+        };
+        delete newWebRtcStreams[theirWebRtcId];
+
+        setMediaStreams(newWebRtcStreams);
+    }, []);
+
+    const callUser = useCallback(
+        (theirWebRtcId: string, ourStream: MediaStream): void => {
+            if (webRtcPeer) {
+                const call = webRtcPeer.call(theirWebRtcId, ourStream);
+
+                setCallList({
+                    ...callListRef.current,
+                    [theirWebRtcId]: call
+                });
+
+                call.on('stream', (theirStream) => {
+                    setMediaStreams({
+                        ...mediaStreamsRef.current,
+                        [theirWebRtcId]: theirStream
+                    });
+                });
+
+                call.on('close', () => {
+                    hangUpOnUser(theirWebRtcId);
+                });
+
+                call.peerConnection.oniceconnectionstatechange = (): void => {
+                    if (
+                        call.peerConnection.iceConnectionState ===
+                        'disconnected'
+                    ) {
+                        hangUpOnUser(theirWebRtcId);
+                    }
+                };
+
+                call.on('error', () => {
+                    hangUpOnUser(theirWebRtcId);
+                });
+            }
+        },
+        [webRtcPeer, hangUpOnUser]
+    );
+
     const handleCall = useCallback(
         (call: Peer.MediaConnection): void => {
             if (ourWebRtcId) {
@@ -218,64 +274,8 @@ export default function CommunicationContainer({
                 }
             }
         },
-        [ourWebRtcId]
+        [ourWebRtcId, hangUpOnUser]
     );
-
-    const callUser = useCallback(
-        (theirWebRtcId: string, ourStream: MediaStream): void => {
-            if (webRtcPeer) {
-                const call = webRtcPeer.call(theirWebRtcId, ourStream);
-
-                setCallList({
-                    ...callListRef.current,
-                    [theirWebRtcId]: call
-                });
-
-                call.on('stream', (theirStream) => {
-                    setMediaStreams({
-                        ...mediaStreamsRef.current,
-                        [theirWebRtcId]: theirStream
-                    });
-                });
-
-                call.on('close', () => {
-                    hangUpOnUser(theirWebRtcId);
-                });
-
-                call.peerConnection.oniceconnectionstatechange = (): void => {
-                    if (
-                        call.peerConnection.iceConnectionState ===
-                        'disconnected'
-                    ) {
-                        hangUpOnUser(theirWebRtcId);
-                    }
-                };
-
-                call.on('error', () => {
-                    hangUpOnUser(theirWebRtcId);
-                });
-            }
-        },
-        [webRtcPeer]
-    );
-
-    const hangUpOnUser = useCallback((theirWebRtcId: string): void => {
-        if (callListRef.current[theirWebRtcId]) {
-            callListRef.current[theirWebRtcId].close();
-            const newCallList = {
-                ...callListRef.current
-            };
-            delete newCallList[theirWebRtcId];
-            setCallList(newCallList);
-        }
-
-        const newWebRtcStreams = {
-            ...mediaStreamsRef.current
-        };
-        delete newWebRtcStreams[theirWebRtcId];
-
-        setMediaStreams(newWebRtcStreams);
-    }, []);
 
     // Handle RTC
     useEffect((): void => {
