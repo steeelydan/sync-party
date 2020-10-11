@@ -38,6 +38,8 @@ export default function CommunicationContainer({
     const { t } = useTranslation();
 
     const [webRtcPeer, setWebRtcPeer] = useState<Peer | null>(null);
+    const webRtcPeerRef = useRef(webRtcPeer);
+    webRtcPeerRef.current = webRtcPeer;
     const [chatIsActive, setChatIsActive] = useState(false);
     const [webRtcAudioIsActive, setWebRtcAudioIsActive] = useState(false);
     const [webRtcVideoIsActive, setWebRtcVideoIsActive] = useState(false);
@@ -138,7 +140,7 @@ export default function CommunicationContainer({
     };
 
     const leaveWebRtc = (): void => {
-        if (webRtcPeer && socket && partyId) {
+        if (webRtcPeerRef.current && socket && partyId) {
             if (ourUserId && mediaStreamsRef.current[ourUserId]) {
                 mediaStreamsRef.current[ourUserId]
                     .getTracks()
@@ -146,7 +148,7 @@ export default function CommunicationContainer({
                         track.stop();
                     });
             }
-            webRtcPeer.destroy();
+            webRtcPeerRef.current.destroy();
             setMediaStreams({});
             setCallList({});
             setWebRtcPeer(null);
@@ -165,6 +167,13 @@ export default function CommunicationContainer({
             );
         }
     };
+
+    // Leave WebRTC when component unmounts
+    useEffect(() => {
+        return (): void => {
+            leaveWebRtc();
+        };
+    }, []);
 
     const handleCall = useCallback(
         (call: Peer.MediaConnection): void => {
@@ -258,7 +267,9 @@ export default function CommunicationContainer({
 
             dispatch(
                 setGlobalState({
-                    webRtc: { mode: webRtcAudioIsActive ? 'audio' : 'video' }
+                    webRtc: {
+                        mode: webRtcAudioIsActive ? 'audio' : 'video'
+                    }
                 })
             );
         }
