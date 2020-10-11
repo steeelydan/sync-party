@@ -209,7 +209,7 @@ export default function CommunicationContainer({
 
                     call.peerConnection.oniceconnectionstatechange = (): void => {
                         if (
-                            call.peerConnection.iceConnectionState ==
+                            call.peerConnection.iceConnectionState ===
                             'disconnected'
                         ) {
                             hangUpOnUser(theirWebRtcId);
@@ -244,7 +244,8 @@ export default function CommunicationContainer({
 
                 call.peerConnection.oniceconnectionstatechange = (): void => {
                     if (
-                        call.peerConnection.iceConnectionState == 'disconnected'
+                        call.peerConnection.iceConnectionState ===
+                        'disconnected'
                     ) {
                         hangUpOnUser(theirWebRtcId);
                     }
