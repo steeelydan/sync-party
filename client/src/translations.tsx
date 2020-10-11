@@ -77,7 +77,11 @@ const translations = {
                 videoClose: 'Disable Video Call',
                 missingPermissionsVideo:
                     'Camera and microphone access are necessary',
-                missingPermissionsAudio: 'Microphone access is necessary'
+                missingPermissionsAudio: 'Microphone access is necessary',
+                toggleUserVideoOn: 'Display own video',
+                toggleUserVideoOff: 'Hide own video',
+                displayVertically: 'Arrange videos vertically',
+                displayHorizontally: 'Arrange video horizontally'
             },
             dashboard: {
                 newParty: 'New Party',

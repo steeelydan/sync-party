@@ -1,6 +1,14 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Rnd } from 'react-rnd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faArrowsAltH,
+    faArrowsAltV,
+    faUserAlt,
+    faUserAltSlash
+} from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
     videoIsActive: boolean;
@@ -26,17 +34,28 @@ export default function WebRtc({
         (state: RootAppState) => state.globalState.uiVisible
     );
 
+    const { t } = useTranslation();
+
+    const [displayOverlayMenu, setDisplayOverlayMenu] = useState(false);
+    const [displayOwnVideo, setDisplayOwnVideo] = useState(true);
+    const [displayVertically, setDisplayVertically] = useState(false);
+
     const displayedMediaStreams: {
         userId: string;
         mediaStream: MediaStream;
     }[] = [];
 
     let hasVideo = false;
+    let otherVideosAmount = 0;
 
     if (ourUserId) {
         Object.keys(mediaStreams).forEach((userId) => {
             if (mediaStreams[userId].getVideoTracks().length) {
                 hasVideo = true;
+            }
+
+            if (userId !== ourUserId) {
+                otherVideosAmount++;
             }
 
             displayedMediaStreams.push({
@@ -74,7 +93,75 @@ export default function WebRtc({
                             }}
                             className="bg-transparent-600 z-40"
                         >
-                            <div className="flex flex-row">
+                            <div
+                                className={
+                                    'flex' +
+                                    (displayVertically
+                                        ? ' flex-col'
+                                        : ' flex-row')
+                                }
+                                onMouseOver={(): void =>
+                                    setDisplayOverlayMenu(true)
+                                }
+                                onMouseLeave={(): void =>
+                                    setDisplayOverlayMenu(false)
+                                }
+                            >
+                                <div
+                                    className={
+                                        'absolute top-0 left-0 flex flex-row rounded px-2 py-1 bg-black opacity-75 eqa' +
+                                        (displayOverlayMenu ? '' : ' hidden')
+                                    }
+                                    style={{ zIndex: 1000 }}
+                                >
+                                    <div
+                                        className={
+                                            'cursor-pointer z-50' +
+                                            (otherVideosAmount > 1
+                                                ? ' mr-3'
+                                                : '')
+                                        }
+                                        title={t(
+                                            displayOwnVideo
+                                                ? 'webRtc.toggleUserVideoOff'
+                                                : 'webRtc.toggleUserVideoOn'
+                                        )}
+                                        onClick={(): void =>
+                                            setDisplayOwnVideo(!displayOwnVideo)
+                                        }
+                                    >
+                                        <FontAwesomeIcon
+                                            icon={
+                                                displayOwnVideo
+                                                    ? faUserAltSlash
+                                                    : faUserAlt
+                                            }
+                                        ></FontAwesomeIcon>
+                                    </div>
+                                    {otherVideosAmount > 1 && (
+                                        <div
+                                            className="cursor-pointer z-50"
+                                            title={t(
+                                                displayVertically
+                                                    ? 'webRtc.displayHorizontally'
+                                                    : 'webRtc.displayVertically'
+                                            )}
+                                            onClick={(): void =>
+                                                setDisplayVertically(
+                                                    !displayVertically
+                                                )
+                                            }
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={
+                                                    displayVertically
+                                                        ? faArrowsAltH
+                                                        : faArrowsAltV
+                                                }
+                                            ></FontAwesomeIcon>
+                                        </div>
+                                    )}
+                                </div>
                                 {displayedMediaStreams.map((mediaStream) => {
                                     const isOwnVideo =
                                         mediaStream.userId === ourUserId;
@@ -137,10 +224,12 @@ export default function WebRtc({
                         </Rnd>
                     </div>
                 )}
-                {ourUserId && (
+                {ourUserId && displayOwnVideo && (
                     <div
                         className="absolute top-0 left-0"
-                        style={{ marginTop: '45vh' }}
+                        style={{
+                            marginTop: displayVertically ? '80vh' : '45vh'
+                        }}
                     >
                         <Rnd
                             default={{

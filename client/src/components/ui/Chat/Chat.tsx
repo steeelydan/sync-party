@@ -197,7 +197,7 @@ export default function Chat({
             }
         >
             <div className="flex flex-row">
-                <div className="flex flex-col mt-auto">
+                <div className="flex flex-col mt-auto z-50">
                     {!(uiVisible && !isActive && !historyStaysVisible) &&
                         (uiVisible || historyStaysVisible) &&
                         party &&
