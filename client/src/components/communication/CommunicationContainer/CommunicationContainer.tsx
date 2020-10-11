@@ -31,6 +31,7 @@ export default function CommunicationContainer({
     const [chatIsActive, setChatIsActive] = useState(false);
     const [webRtcAudioIsActive, setWebRtcAudioIsActive] = useState(false);
     const [webRtcVideoIsActive, setWebRtcVideoIsActive] = useState(false);
+    const [mediaPermissionPending, setMediaPermissionPending] = useState(false);
     const [ourMediaReady, setOurMediaReady] = useState(false);
 
     const [mediaStreams, setMediaStreams] = useState<{
@@ -192,6 +193,8 @@ export default function CommunicationContainer({
                 userId: ourUserId,
                 partyId: partyId
             });
+
+            setMediaPermissionPending(false);
         }
     }, [
         webRtcPeer,
@@ -209,23 +212,29 @@ export default function CommunicationContainer({
     };
 
     const toggleWebRtcAudio = (): void => {
-        if (!webRtcAudioIsActive) {
-            joinWebRtc(false);
-        } else {
-            leaveWebRtc();
-        }
+        if (!mediaPermissionPending) {
+            if (!webRtcAudioIsActive) {
+                setMediaPermissionPending(true);
+                joinWebRtc(false);
+            } else {
+                leaveWebRtc();
+            }
 
-        setWebRtcAudioIsActive(!webRtcAudioIsActive);
+            setWebRtcAudioIsActive(!webRtcAudioIsActive);
+        }
     };
 
     const toggleWebRtcVideo = (): void => {
-        if (!webRtcVideoIsActive) {
-            joinWebRtc(true);
-        } else {
-            leaveWebRtc();
-        }
+        if (!mediaPermissionPending) {
+            if (!webRtcVideoIsActive) {
+                setMediaPermissionPending(true);
+                joinWebRtc(true);
+            } else {
+                leaveWebRtc();
+            }
 
-        setWebRtcVideoIsActive(!webRtcVideoIsActive);
+            setWebRtcVideoIsActive(!webRtcVideoIsActive);
+        }
     };
 
     return (
@@ -244,6 +253,7 @@ export default function CommunicationContainer({
                 videoIsActive={webRtcVideoIsActive}
                 mediaStreams={mediaStreams}
                 mediaStreamsRef={mediaStreamsRef}
+                ourUserId={ourUserId}
             ></WebRtc>
             {uiVisible && (
                 <CommunicationBar
