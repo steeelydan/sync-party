@@ -29,6 +29,11 @@ export default function Avatars(): JSX.Element | null {
                                     ? memberStatus[member.id].online
                                     : false
                             }
+                            webRtc={
+                                memberStatus[member.id]
+                                    ? memberStatus[member.id].webRtc
+                                    : null
+                            }
                             user={user}
                             size={10}
                         ></Avatar>

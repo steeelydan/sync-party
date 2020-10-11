@@ -31,7 +31,10 @@ const baseState: AppState = {
     actionMessage: null,
     errorMessage: null,
     initialServerTimeOffset: 0,
-    chat: {}
+    chat: {},
+    webRtc: {
+        mode: 'none'
+    }
 };
 
 const noPartyState: PartyPartialState = {

@@ -1,3 +1,5 @@
+import { faMicrophone, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +9,7 @@ type Props = {
     user: User;
     showTitle?: boolean;
     online?: boolean;
+    webRtc?: WebRtcState | null;
     fontSize?: string;
 };
 
@@ -16,6 +19,7 @@ export default function Avatar({
     user,
     showTitle,
     online,
+    webRtc,
     fontSize
 }: Props): JSX.Element {
     const { t } = useTranslation();
@@ -52,6 +56,17 @@ export default function Avatar({
                                 : 'border-red-600 bg-red-600')
                         }
                     ></div>
+                    {webRtc && webRtc.mode !== 'none' && (
+                        <div className="absolute text-xs h-2 w-2 mt-2 ml-5 top-0">
+                            <FontAwesomeIcon
+                                icon={
+                                    webRtc.mode === 'audio'
+                                        ? faMicrophone
+                                        : faVideo
+                                }
+                            />
+                        </div>
+                    )}
                 </div>
             )}
             <span className="z-50">

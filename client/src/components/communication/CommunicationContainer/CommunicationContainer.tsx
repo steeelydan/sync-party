@@ -138,6 +138,13 @@ export default function CommunicationContainer({
             socket.emit('leaveWebRtc', {
                 partyId: partyId
             });
+            dispatch(
+                setGlobalState({
+                    webRtc: {
+                        mode: 'none'
+                    }
+                })
+            );
         }
     };
 
@@ -230,6 +237,12 @@ export default function CommunicationContainer({
             });
 
             setMediaPermissionPending(false);
+
+            dispatch(
+                setGlobalState({
+                    webRtc: { mode: webRtcAudioIsActive ? 'audio' : 'video' }
+                })
+            );
         }
     }, [
         webRtcPeer,
@@ -239,7 +252,9 @@ export default function CommunicationContainer({
         hangUpOnUser,
         partyId,
         socket,
-        ourUserId
+        ourUserId,
+        dispatch,
+        webRtcAudioIsActive
     ]);
 
     const toggleChat = (): void => {

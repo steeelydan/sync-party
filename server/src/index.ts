@@ -106,7 +106,7 @@ const runApp = async () => {
     // DEFAULT VALUES
 
     const currentSyncStatus: {
-        [partyId: string]: { [userId: string]: object };
+        [partyId: string]: { [userId: string]: object }; // FIXME type
     } = {};
     const currentPlayWishes: {
         [partyId: string]: object;
@@ -305,7 +305,8 @@ const runApp = async () => {
                 isPlaying: userSyncStatus.isPlaying,
                 timestamp: userSyncStatus.timestamp,
                 position: userSyncStatus.position,
-                serverTimeOffset: Date.now() - userSyncStatus.timestamp
+                serverTimeOffset: Date.now() - userSyncStatus.timestamp,
+                webRtc: userSyncStatus.webRtc
             };
 
             // Only emitted to party members

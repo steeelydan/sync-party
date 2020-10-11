@@ -64,6 +64,9 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     const initialServerTimeOffset = useSelector(
         (state: RootAppState) => state.globalState.initialServerTimeOffset
     );
+    const webRtcGlobalState = useSelector(
+        (state: RootAppState) => state.globalState.webRtc
+    );
 
     // Local states & their refs
     const [reactPlayer, setReactPlayer] = useState<ReactPlayer>();
@@ -329,7 +332,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     // 1. Set online status of each member
                     memberStatusStateNew[memberId] = {
                         online: false,
-                        serverTimeOffset: syncStatus[memberId].serverTimeOffset
+                        serverTimeOffset: syncStatus[memberId].serverTimeOffset,
+                        webRtc: syncStatus[memberId].webRtc
                     };
 
                     if (
@@ -439,7 +443,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 position: reactPlayer
                     ? reactPlayer.getCurrentTime() / reactPlayer.getDuration()
                     : 0,
-                isPlaying: playerStateRef.current.isPlaying
+                isPlaying: playerStateRef.current.isPlaying,
+                webRtc: webRtcGlobalState
             };
 
             socket.emit('syncStatus', syncStatus);
