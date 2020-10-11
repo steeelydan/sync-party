@@ -37,12 +37,13 @@ const newPartyValidator = Joi.object({
     members: Joi.array().has(Joi.string().uuid()),
     items: Joi.array().required(),
     metadata: Joi.object().required(),
-    settings: Joi.object().required()
+    settings: Joi.object().keys({
+        webRtcToken: Joi.string().required()
+    }).required()
 });
 
 const partyValidator = newPartyValidator.keys({
     id: Joi.string().uuid().required(),
-    settings: Joi.object({}).required(),
     createdAt: Joi.date(),
     updatedAt: Joi.date()
 });

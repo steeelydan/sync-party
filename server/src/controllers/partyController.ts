@@ -1,6 +1,7 @@
 import { newPartyValidator, partyValidator } from '../common/validation';
 import { Logger } from 'winston';
 import { Request, Response } from 'express';
+import { v4 as uuid } from 'uuid';
 
 /**
  * @api {post} /api/party Create New Party (Admin only)
@@ -31,7 +32,9 @@ const createParty = async (
                 members: [requestUser.id],
                 items: [],
                 metadata: {},
-                settings: {}
+                settings: {
+                    webRtcToken: uuid()
+                }
             };
 
             if (newPartyValidator.validate(newParty).error) {
@@ -93,7 +96,7 @@ const editParty = async (
     req: Request,
     res: Response,
     models: Models,
-    logger: Logger
+    logger: Logger,
 ) => {
     const deleteParty = req.body.deleteParty;
 
@@ -120,6 +123,7 @@ const editParty = async (
         } else {
             dbParty.status = requestParty.status;
             dbParty.members = requestParty.members;
+            dbParty.settings = { ...dbParty.settings, webRtcToken: uuid() };
             dbParty.save();
         }
 

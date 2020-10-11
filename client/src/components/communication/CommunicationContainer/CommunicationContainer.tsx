@@ -9,6 +9,8 @@ import React, {
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
+import Axios from 'axios';
+import { axiosConfig } from '../../../common/helpers';
 import Chat from '../../ui/Chat/Chat';
 import CommunicationBar from '../../ui/CommunicationBar/CommunicationBar';
 import WebRtc from '../../ui/WebRtc/WebRtc';
@@ -16,6 +18,7 @@ import WebRtc from '../../ui/WebRtc/WebRtc';
 interface Props {
     socket: SocketIOClient.Socket | null;
     partyId: string | null;
+    webRtcToken: string | null;
     ourUserId: string | null;
     setPlayerState: Function;
     uiVisible: boolean;
@@ -25,6 +28,7 @@ interface Props {
 export default function CommunicationContainer({
     socket,
     partyId,
+    webRtcToken,
     ourUserId,
     setPlayerState,
     uiVisible,
@@ -56,13 +60,27 @@ export default function CommunicationContainer({
         mediaStreamsRef.current = mediaStreams;
     }, [mediaStreams, callList]);
 
-    const createWebRtcPeer = () => {
+    const createWebRtcPeer = async (): Promise<void> => {
         if (ourUserId) {
+            const response = await Axios.post(
+                process.env.REACT_APP_API_ROUTE + 'webRtcServerKey',
+                {
+                    partyId: partyId,
+                    userId: ourUserId,
+                    webRtcToken: webRtcToken
+                },
+                axiosConfig()
+            );
+
+            const webRtcServerKey = response.data.webRtcServerKey;
+
             const peer = new Peer(ourUserId, {
                 host: process.env.REACT_APP_WEBRTC_ROUTE,
                 port: parseInt(process.env.REACT_APP_WEBRTC_PORT || '4000'),
                 path: '/peerjs',
-                debug: process.env.NODE_ENV === 'development' ? 2 : 0
+                key: webRtcServerKey,
+                debug: process.env.NODE_ENV === 'development' ? 2 : 0,
+                secure: process.env.NODE_ENV === 'production'
             });
 
             setWebRtcPeer(peer);

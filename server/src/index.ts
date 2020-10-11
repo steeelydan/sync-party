@@ -21,6 +21,8 @@ const SequelizeStore = require('connect-session-sequelize')(
 import compression from 'compression';
 import passportSocketIo from 'passport.socketio';
 import cookieParser from 'cookie-parser';
+import { v4 as uuid } from 'uuid';
+
 import configurePassport from './middleware/passport';
 import configureSession from './middleware/session';
 import rateLimiters from './middleware/rateLimiters';
@@ -43,6 +45,7 @@ const runApp = async () => {
     // Config
     dotenv.config();
     const port = process.env.PORT || 4000;
+    const webRtcServerKey = uuid();
 
     // Init app
     const app = express();
@@ -344,17 +347,49 @@ const runApp = async () => {
 
     const peerServer = ExpressPeerServer(server, {
         debug: true,
-        port: process.env.PORT,
-        proxies: process.env.USE_PROXY === 'true'
+        proxies: process.env.USE_PROXY === 'true',
+        key: webRtcServerKey
     });
 
     app.use('/peerjs', isAuthenticated, peerServer);
 
-    peerServer.on('connection', (client: any) => {
-        logger.log('info', `PeerJS: client connected: ${client.id}`);
+    peerServer.on('connection', async (client: any) => {
+        const userId = client.id;
+
+        const user = await models.User.findOne({ where: { id: userId } });
+        if (!user) {
+            client.socket.close();
+            logger.log('error', `PeerJS: Client denied: ${client.id}`);
+
+            return;
+        }
+
+        logger.log(
+            'info',
+            `PeerJS: client connected: ${client.id} (${user.username})`
+        );
     });
-    peerServer.on('disconnect', (client: any) => {
-        logger.log('info', `PeerJS: client disconnected: ${client.id}`);
+
+    peerServer.on('disconnect', async (client: any) => {
+        const userId = client.id;
+
+        const user = await models.User.findOne({
+            where: { id: userId }
+        });
+
+        if (!user) {
+            logger.log(
+                'error',
+                `PeerJS: Client without corresponding user disconnected: ${client.id}`
+            );
+
+            return;
+        }
+
+        logger.log(
+            'info',
+            `PeerJS: client disconnected: ${client.id} (${user.username})`
+        );
     });
 
     // API Endpoints
@@ -376,6 +411,23 @@ const runApp = async () => {
 
     app.post('/api/logout', isAuthenticated, async (req, res) => {
         await authController.logout(req, res, logger);
+    });
+
+    // WebRTC Key
+    app.post('/api/webRtcServerKey', isAuthenticated, async (req, res) => {
+        const partyId = req.body.partyId;
+        const userId = req.body.userId;
+        const webRtcToken = req.body.webRtcToken;
+        const party = await models.Party.findOne({ where: { id: partyId } });
+
+        if (
+            party.settings.webRtcToken !== webRtcToken ||
+            !party.members.includes(userId)
+        ) {
+            return res.status(401);
+        }
+
+        res.json({ webRtcServerKey });
     });
 
     // MediaItems

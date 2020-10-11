@@ -131,6 +131,9 @@ type ClientParty = {
             [mediaItemId: string]: boolean;
         };
     };
+    settings: {
+        webRtcToken: string;
+    };
 };
 
 type ClientPartyMember = {
