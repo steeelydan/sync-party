@@ -196,6 +196,23 @@ export default function CommunicationContainer({
                             [call.peer]: theirStream
                         });
                     });
+
+                    call.on('close', () => {
+                        hangUpOnUser(call.peer);
+                    });
+
+                    call.on('error', () => {
+                        hangUpOnUser(call.peer);
+                    });
+
+                    call.peerConnection.oniceconnectionstatechange = (): void => {
+                        if (
+                            call.peerConnection.iceConnectionState ==
+                            'disconnected'
+                        ) {
+                            hangUpOnUser(call.peer);
+                        }
+                    };
                 }
             }
         },
@@ -217,6 +234,22 @@ export default function CommunicationContainer({
                         ...mediaStreamsRef.current,
                         [theirId]: theirStream
                     });
+                });
+
+                call.on('close', () => {
+                    hangUpOnUser(call.peer);
+                });
+
+                call.peerConnection.oniceconnectionstatechange = (): void => {
+                    if (
+                        call.peerConnection.iceConnectionState == 'disconnected'
+                    ) {
+                        hangUpOnUser(call.peer);
+                    }
+                };
+
+                call.on('error', () => {
+                    hangUpOnUser(call.peer);
                 });
             }
         },

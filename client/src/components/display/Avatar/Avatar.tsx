@@ -56,7 +56,7 @@ export default function Avatar({
                                 : 'border-red-600 bg-red-600')
                         }
                     ></div>
-                    {webRtc && webRtc.mode !== 'none' && (
+                    {online && webRtc && webRtc.mode !== 'none' && (
                         <div className="absolute text-xs h-2 w-2 mt-2 ml-5 top-0">
                             <FontAwesomeIcon
                                 icon={
