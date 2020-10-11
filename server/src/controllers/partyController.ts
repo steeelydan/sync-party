@@ -1,7 +1,7 @@
 import { newPartyValidator, partyValidator } from '../common/validation';
 import { Logger } from 'winston';
 import { Request, Response } from 'express';
-import { v4 as uuid } from 'uuid';
+import helpers from '../common/helpers';
 
 /**
  * @api {post} /api/party Create New Party (Admin only)
@@ -33,7 +33,7 @@ const createParty = async (
                 items: [],
                 metadata: {},
                 settings: {
-                    webRtcToken: uuid()
+                    webRtcIds: helpers.createWebRtcIds([requestUser.id])
                 }
             };
 
@@ -96,11 +96,24 @@ const editParty = async (
     req: Request,
     res: Response,
     models: Models,
-    logger: Logger,
+    logger: Logger
 ) => {
     const deleteParty = req.body.deleteParty;
 
     const requestParty = req.body.party;
+
+    const dbParty = await models.Party.findOne({
+        where: { id: requestParty.id }
+    });
+
+    // Recreate webRtcIds if party status changes
+    if (dbParty.status !== requestParty.status) {
+        requestParty.settings = {
+            ...requestParty.settings,
+            webRtcIds: helpers.createWebRtcIds(requestParty.members)
+        };
+        delete requestParty.settings.webRtcToken;
+    }
 
     if (partyValidator.validate(requestParty).error) {
         logger.log(
@@ -113,17 +126,13 @@ const editParty = async (
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
-    const dbParty = await models.Party.findOne({
-        where: { id: requestParty.id }
-    });
-
     try {
         if (deleteParty) {
             dbParty.destroy();
         } else {
             dbParty.status = requestParty.status;
             dbParty.members = requestParty.members;
-            dbParty.settings = { ...dbParty.settings, webRtcToken: uuid() };
+            dbParty.settings = requestParty.settings;
             dbParty.save();
         }
 

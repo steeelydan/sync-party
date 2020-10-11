@@ -18,8 +18,8 @@ import WebRtc from '../../ui/WebRtc/WebRtc';
 interface Props {
     socket: SocketIOClient.Socket | null;
     partyId: string | null;
-    webRtcToken: string | null;
-    ourUserId: string | null;
+    webRtcIds: WebRtcIds;
+    ourUserId: string;
     setPlayerState: Function;
     uiVisible: boolean;
     freezeUiVisible: Function;
@@ -28,7 +28,7 @@ interface Props {
 export default function CommunicationContainer({
     socket,
     partyId,
-    webRtcToken,
+    webRtcIds,
     ourUserId,
     setPlayerState,
     uiVisible,
@@ -36,6 +36,8 @@ export default function CommunicationContainer({
 }: Props): ReactElement {
     const dispatch = useDispatch();
     const { t } = useTranslation();
+
+    const ourWebRtcId = webRtcIds[ourUserId];
 
     const [webRtcPeer, setWebRtcPeer] = useState<Peer | null>(null);
     const webRtcPeerRef = useRef(webRtcPeer);
@@ -65,20 +67,20 @@ export default function CommunicationContainer({
     }, [mediaStreams, callList]);
 
     const createWebRtcPeer = async (): Promise<void> => {
-        if (ourUserId) {
+        if (ourWebRtcId) {
             const response = await Axios.post(
                 process.env.REACT_APP_API_ROUTE + 'webRtcServerKey',
                 {
                     partyId: partyId,
                     userId: ourUserId,
-                    webRtcToken: webRtcToken
+                    webRtcId: ourWebRtcId
                 },
                 axiosConfig()
             );
 
             const webRtcServerKey = response.data.webRtcServerKey;
 
-            const peer = new Peer(ourUserId, {
+            const peer = new Peer(ourWebRtcId, {
                 host: process.env.REACT_APP_WEBRTC_ROUTE,
                 port: parseInt(process.env.REACT_APP_WEBRTC_PORT || '4000'),
                 path: '/peerjs',
@@ -92,7 +94,7 @@ export default function CommunicationContainer({
     };
 
     const getOurMediaStream = async (withVideo: boolean): Promise<void> => {
-        if (ourUserId) {
+        if (ourWebRtcId) {
             let ourStream;
 
             try {
@@ -126,7 +128,7 @@ export default function CommunicationContainer({
 
             setMediaStreams({
                 ...mediaStreamsRef.current,
-                [ourUserId]: ourStream
+                [ourWebRtcId]: ourStream
             });
 
             createWebRtcPeer();
@@ -136,15 +138,13 @@ export default function CommunicationContainer({
     };
 
     const joinWebRtc = async (withVideo: boolean): Promise<void> => {
-        if (ourUserId && socket) {
-            getOurMediaStream(withVideo);
-        }
+        getOurMediaStream(withVideo);
     };
 
     const leaveWebRtc = (): void => {
         if (webRtcPeerRef.current && socket && partyId) {
-            if (ourUserId && mediaStreamsRef.current[ourUserId]) {
-                mediaStreamsRef.current[ourUserId]
+            if (ourWebRtcId && mediaStreamsRef.current[ourWebRtcId]) {
+                mediaStreamsRef.current[ourWebRtcId]
                     .getTracks()
                     .forEach(function (track) {
                         track.stop();
@@ -160,6 +160,7 @@ export default function CommunicationContainer({
             socket.off('joinWebRtc');
             socket.off('leaveWebRtc');
             socket.emit('leaveWebRtc', {
+                webRtcId: ourWebRtcId,
                 partyId: partyId
             });
             dispatch(
@@ -181,28 +182,29 @@ export default function CommunicationContainer({
 
     const handleCall = useCallback(
         (call: Peer.MediaConnection): void => {
-            if (ourUserId) {
-                call.answer(mediaStreamsRef.current[ourUserId]);
+            if (ourWebRtcId) {
+                call.answer(mediaStreamsRef.current[ourWebRtcId]);
+                const theirWebRtcId = call.peer;
 
                 setCallList({
                     ...callListRef.current,
-                    [call.peer]: call
+                    [theirWebRtcId]: call
                 });
 
                 if (mediaStreamsRef.current) {
                     call.on('stream', (theirStream: MediaStream) => {
                         setMediaStreams({
                             ...mediaStreamsRef.current,
-                            [call.peer]: theirStream
+                            [theirWebRtcId]: theirStream
                         });
                     });
 
                     call.on('close', () => {
-                        hangUpOnUser(call.peer);
+                        hangUpOnUser(theirWebRtcId);
                     });
 
                     call.on('error', () => {
-                        hangUpOnUser(call.peer);
+                        hangUpOnUser(theirWebRtcId);
                     });
 
                     call.peerConnection.oniceconnectionstatechange = (): void => {
@@ -210,93 +212,96 @@ export default function CommunicationContainer({
                             call.peerConnection.iceConnectionState ==
                             'disconnected'
                         ) {
-                            hangUpOnUser(call.peer);
+                            hangUpOnUser(theirWebRtcId);
                         }
                     };
                 }
             }
         },
-        [ourUserId]
+        [ourWebRtcId]
     );
 
     const callUser = useCallback(
-        (theirId: string, stream: MediaStream): void => {
-            if (webRtcPeer && ourUserId) {
-                const call = webRtcPeer.call(theirId, stream);
+        (theirWebRtcId: string, ourStream: MediaStream): void => {
+            if (webRtcPeer) {
+                const call = webRtcPeer.call(theirWebRtcId, ourStream);
 
                 setCallList({
                     ...callListRef.current,
-                    [theirId]: call
+                    [theirWebRtcId]: call
                 });
 
                 call.on('stream', (theirStream) => {
                     setMediaStreams({
                         ...mediaStreamsRef.current,
-                        [theirId]: theirStream
+                        [theirWebRtcId]: theirStream
                     });
                 });
 
                 call.on('close', () => {
-                    hangUpOnUser(call.peer);
+                    hangUpOnUser(theirWebRtcId);
                 });
 
                 call.peerConnection.oniceconnectionstatechange = (): void => {
                     if (
                         call.peerConnection.iceConnectionState == 'disconnected'
                     ) {
-                        hangUpOnUser(call.peer);
+                        hangUpOnUser(theirWebRtcId);
                     }
                 };
 
                 call.on('error', () => {
-                    hangUpOnUser(call.peer);
+                    hangUpOnUser(theirWebRtcId);
                 });
             }
         },
-        [ourUserId, webRtcPeer]
+        [webRtcPeer]
     );
 
-    const hangUpOnUser = useCallback((theirId: string): void => {
-        if (callListRef.current[theirId]) {
-            callListRef.current[theirId].close();
+    const hangUpOnUser = useCallback((theirWebRtcId: string): void => {
+        if (callListRef.current[theirWebRtcId]) {
+            callListRef.current[theirWebRtcId].close();
             const newCallList = {
                 ...callListRef.current
             };
-            delete newCallList[theirId];
+            delete newCallList[theirWebRtcId];
             setCallList(newCallList);
         }
 
         const newWebRtcStreams = {
             ...mediaStreamsRef.current
         };
-        delete newWebRtcStreams[theirId];
+        delete newWebRtcStreams[theirWebRtcId];
 
         setMediaStreams(newWebRtcStreams);
     }, []);
 
     // Handle RTC
     useEffect((): void => {
-        if (webRtcPeer && ourMediaReady && ourUserId && partyId && socket) {
+        if (webRtcPeer && ourMediaReady && ourWebRtcId && partyId && socket) {
             webRtcPeer.on('call', handleCall);
 
             // Other user joins
-            socket.on('joinWebRtc', (theirId: string) => {
+            socket.on('joinWebRtc', (theirWebRtcId: string) => {
                 if (mediaStreamsRef.current) {
-                    if (theirId !== ourUserId) {
-                        callUser(theirId, mediaStreamsRef.current[ourUserId]);
+                    if (theirWebRtcId !== ourWebRtcId) {
+                        callUser(
+                            theirWebRtcId,
+                            mediaStreamsRef.current[ourWebRtcId]
+                        );
                     }
                 }
             });
 
             // Other user leaves
-            socket.on('leaveWebRtc', (data: { userId: string }) => {
-                const theirId = data.userId;
+            socket.on('leaveWebRtc', (data: { webRtcId: string }) => {
+                const theirWebRtcId = data.webRtcId;
 
-                hangUpOnUser(theirId);
+                hangUpOnUser(theirWebRtcId);
             });
 
             socket.emit('joinWebRtc', {
-                userId: ourUserId,
+                webRtcId: ourWebRtcId,
                 partyId: partyId
             });
 
@@ -318,7 +323,7 @@ export default function CommunicationContainer({
         hangUpOnUser,
         partyId,
         socket,
-        ourUserId,
+        ourWebRtcId,
         dispatch,
         webRtcAudioIsActive
     ]);
@@ -354,18 +359,18 @@ export default function CommunicationContainer({
     };
 
     const toggleAudioIsMuted = (): void => {
-        if (ourUserId && !mediaPermissionPending) {
+        if (ourWebRtcId && !mediaPermissionPending) {
             const newStreams = { ...mediaStreams };
-            newStreams[ourUserId].getAudioTracks()[0].enabled = audioIsMuted;
+            newStreams[ourWebRtcId].getAudioTracks()[0].enabled = audioIsMuted;
             setMediaStreams(newStreams);
             setAudioIsMuted(!audioIsMuted);
         }
     };
 
     const toggleVideoIsMuted = (): void => {
-        if (ourUserId && !mediaPermissionPending) {
+        if (ourWebRtcId && !mediaPermissionPending) {
             const newStreams = { ...mediaStreams };
-            newStreams[ourUserId].getVideoTracks()[0].enabled = videoIsMuted;
+            newStreams[ourWebRtcId].getVideoTracks()[0].enabled = videoIsMuted;
             setMediaStreams(newStreams);
             setVideoIsMuted(!videoIsMuted);
         }
@@ -388,6 +393,7 @@ export default function CommunicationContainer({
                 mediaStreams={mediaStreams}
                 mediaStreamsRef={mediaStreamsRef}
                 ourUserId={ourUserId}
+                webRtcIds={webRtcIds}
             ></WebRtc>
             {uiVisible && (
                 <CommunicationBar

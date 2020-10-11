@@ -13,20 +13,32 @@ import {
 interface Props {
     videoIsActive: boolean;
     mediaStreams: {
-        [userId: string]: MediaStream;
+        [webRtcId: string]: MediaStream;
     };
     mediaStreamsRef: React.MutableRefObject<{
-        [userId: string]: MediaStream;
+        [webRtcId: string]: MediaStream;
     }>;
-    ourUserId: string | null;
+    ourUserId: string;
+    webRtcIds: WebRtcIds;
 }
 
 export default function WebRtc({
     videoIsActive,
     mediaStreams,
     mediaStreamsRef,
-    ourUserId
+    ourUserId,
+    webRtcIds
 }: Props): ReactElement | null {
+    const ourWebRtcId = webRtcIds[ourUserId];
+
+    const userIdWebRtcIdMap: {
+        [webRtcId: string]: string;
+    } = {};
+    Object.keys(webRtcIds).forEach((userId) => {
+        const webRtcId = webRtcIds[userId];
+        userIdWebRtcIdMap[webRtcId] = userId;
+    });
+
     const memberStatus = useSelector(
         (state: RootAppState) => state.globalState.memberStatus
     );
@@ -41,26 +53,26 @@ export default function WebRtc({
     const [displayVertically, setDisplayVertically] = useState(false);
 
     const displayedMediaStreams: {
-        userId: string;
+        webRtcId: string;
         mediaStream: MediaStream;
     }[] = [];
 
     let hasVideo = false;
     let otherVideosAmount = 0;
 
-    if (ourUserId) {
-        Object.keys(mediaStreams).forEach((userId) => {
-            if (mediaStreams[userId].getVideoTracks().length) {
+    if (ourWebRtcId) {
+        Object.keys(mediaStreams).forEach((webRtcId) => {
+            if (mediaStreams[webRtcId].getVideoTracks().length) {
                 hasVideo = true;
             }
 
-            if (userId !== ourUserId) {
+            if (webRtcId !== ourWebRtcId) {
                 otherVideosAmount++;
             }
 
             displayedMediaStreams.push({
-                userId: userId,
-                mediaStream: mediaStreams[userId]
+                webRtcId: webRtcId,
+                mediaStream: mediaStreams[webRtcId]
             });
         });
     }
@@ -73,7 +85,7 @@ export default function WebRtc({
                     (uiVisible ? ' mb-20' : ' mb-10')
                 }
             >
-                {videoIsActive && memberStatus && ourUserId && (
+                {videoIsActive && memberStatus && ourWebRtcId && (
                     <div className="mt-12 absolute top-0 left-0">
                         <Rnd
                             default={{
@@ -167,18 +179,21 @@ export default function WebRtc({
                                 </div>
                                 {displayedMediaStreams.map((mediaStream) => {
                                     const isOwnVideo =
-                                        mediaStream.userId === ourUserId;
+                                        mediaStream.webRtcId === ourWebRtcId;
 
                                     if (
-                                        memberStatus[mediaStream.userId]
-                                            .online &&
+                                        memberStatus[
+                                            userIdWebRtcIdMap[
+                                                mediaStream.webRtcId
+                                            ]
+                                        ].online &&
                                         mediaStream.mediaStream.getVideoTracks()
                                             .length &&
                                         !isOwnVideo
                                     ) {
                                         return (
                                             <div
-                                                key={mediaStream.userId}
+                                                key={mediaStream.webRtcId}
                                                 className={
                                                     'overflow-hidden bg-transparent rounded ' +
                                                     (displayVertically
@@ -204,12 +219,12 @@ export default function WebRtc({
                                                                 mediaStreamsRef
                                                                     .current[
                                                                     mediaStream
-                                                                        .userId
+                                                                        .webRtcId
                                                                 ]
                                                             ) {
                                                                 video.srcObject =
                                                                     mediaStreamsRef.current[
-                                                                        mediaStream.userId
+                                                                        mediaStream.webRtcId
                                                                     ];
                                                             }
                                                         }
@@ -230,7 +245,7 @@ export default function WebRtc({
                         </Rnd>
                     </div>
                 )}
-                {ourUserId && displayOwnVideo && (
+                {ourWebRtcId && displayOwnVideo && (
                     <div
                         className="absolute top-0 left-0"
                         style={{
@@ -258,12 +273,12 @@ export default function WebRtc({
                             <div className="flex flex-row">
                                 {displayedMediaStreams.map((mediaStream) => {
                                     const isOwnVideo =
-                                        mediaStream.userId === ourUserId;
+                                        mediaStream.webRtcId === ourWebRtcId;
 
                                     if (isOwnVideo) {
                                         return (
                                             <div
-                                                key={mediaStream.userId}
+                                                key={mediaStream.webRtcId}
                                                 className={
                                                     'overflow-hidden bg-transparent mr-2 rounded'
                                                 }
@@ -283,12 +298,12 @@ export default function WebRtc({
                                                                 mediaStreamsRef
                                                                     .current[
                                                                     mediaStream
-                                                                        .userId
+                                                                        .webRtcId
                                                                 ]
                                                             ) {
                                                                 video.srcObject =
                                                                     mediaStreamsRef.current[
-                                                                        mediaStream.userId
+                                                                        mediaStream.webRtcId
                                                                     ];
                                                             }
                                                         }
@@ -311,25 +326,25 @@ export default function WebRtc({
                 )}
             </div>
         );
-    } else if (ourUserId) {
+    } else if (ourWebRtcId) {
         return (
             <>
                 {displayedMediaStreams.map((mediaStream) => {
                     return (
                         <audio
-                            key={mediaStream.userId}
-                            muted={mediaStream.userId === ourUserId}
+                            key={mediaStream.webRtcId}
+                            muted={mediaStream.webRtcId === ourWebRtcId}
                             ref={(audio): void => {
                                 if (audio) {
                                     if (
                                         audio.srcObject !==
                                         mediaStreamsRef.current[
-                                            mediaStream.userId
+                                            mediaStream.webRtcId
                                         ]
                                     ) {
                                         audio.srcObject =
                                             mediaStreamsRef.current[
-                                                mediaStream.userId
+                                                mediaStream.webRtcId
                                             ];
                                     }
                                 }

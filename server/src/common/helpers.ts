@@ -1,5 +1,6 @@
 import path from 'path';
 import winston, { Logger } from 'winston';
+import { v4 as uuid } from 'uuid';
 
 const envCheck = (logger: Logger) => {
     if (!process.env.NODE_ENV) {
@@ -94,8 +95,18 @@ const createLogger = () => {
     return logger;
 };
 
+const createWebRtcIds = (userIds: string[]) => {
+    const webRtcIds: { [userId: string]: string } = {};
+    userIds.forEach((userId) => {
+        webRtcIds[userId] = uuid();
+    });
+
+    return webRtcIds;
+};
+
 export default {
     envCheck,
     getFilePathFromId,
-    createLogger
+    createLogger,
+    createWebRtcIds
 };

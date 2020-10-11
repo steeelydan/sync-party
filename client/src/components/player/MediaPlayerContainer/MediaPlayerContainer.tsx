@@ -682,7 +682,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 <CommunicationContainer
                     socket={socket}
                     partyId={party.id}
-                    webRtcToken={party.settings.webRtcToken}
+                    webRtcIds={party.settings.webRtcIds}
                     ourUserId={user.id}
                     setPlayerState={setPlayerState}
                     uiVisible={uiVisible}

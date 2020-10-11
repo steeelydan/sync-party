@@ -132,7 +132,7 @@ type ClientParty = {
         };
     };
     settings: {
-        webRtcToken: string;
+        webRtcIds: WebRtcIds;
     };
 };
 
@@ -156,6 +156,10 @@ type NewMediaItem = {
     name: string;
     owner: string | null;
     url: string;
+};
+
+type WebRtcIds = {
+    [userId: string]: string;
 };
 
 type SyncStatusIncoming = {

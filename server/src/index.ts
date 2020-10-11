@@ -325,11 +325,13 @@ const runApp = async () => {
 
         // WebRTC
         socket.on('joinWebRtc', (data) => {
-            io.to(data.partyId).emit('joinWebRtc', data.userId);
+            io.to(data.partyId).emit('joinWebRtc', data.webRtcId);
         });
 
         socket.on('leaveWebRtc', (data) => {
-            io.to(data.partyId).emit('leaveWebRtc', { userId: socketUserId });
+            io.to(data.partyId).emit('leaveWebRtc', {
+                webRtcId: data.webRtcId
+            });
         });
 
         // Disconnect
@@ -354,19 +356,48 @@ const runApp = async () => {
     app.use('/peerjs', isAuthenticated, peerServer);
 
     peerServer.on('connection', async (client: any) => {
-        const userId = client.id;
+        const requestWebRtcId = client.id;
+        const allParties = await models.Party.findAll();
+        let isInActiveParty = false;
+        let userId = '';
 
-        const user = await models.User.findOne({ where: { id: userId } });
-        if (!user) {
+        for (const party of allParties) {
+            const partyWebRtcIds = party.settings.webRtcIds;
+
+            if (partyWebRtcIds) {
+                for (const partyUserId of Object.keys(partyWebRtcIds)) {
+                    const partyUserWebRtcId = partyWebRtcIds[partyUserId];
+
+                    if (
+                        partyUserWebRtcId === requestWebRtcId ||
+                        party.status === 'active'
+                    ) {
+                        isInActiveParty = true;
+                        userId = partyUserId;
+                        break;
+                    }
+                }
+            }
+
+            if (isInActiveParty) {
+                break;
+            }
+        }
+
+        const user = await models.User.findOne({
+            where: { id: userId }
+        });
+
+        if (!isInActiveParty || !user) {
             client.socket.close();
-            logger.log('error', `PeerJS: Client denied: ${client.id}`);
+            logger.log('error', `PeerJS: Client denied: ${requestWebRtcId}`);
 
             return;
         }
 
         logger.log(
             'info',
-            `PeerJS: client connected: ${client.id} (${user.username})`
+            `PeerJS: client connected: ${requestWebRtcId} (userId: ${user.id}, username: ${user.username})`
         );
     });
 
@@ -417,12 +448,17 @@ const runApp = async () => {
     app.post('/api/webRtcServerKey', isAuthenticated, async (req, res) => {
         const partyId = req.body.partyId;
         const userId = req.body.userId;
-        const webRtcToken = req.body.webRtcToken;
+        const webRtcId = req.body.webRtcId;
         const party = await models.Party.findOne({ where: { id: partyId } });
+        const user = await models.User.findOne({
+            where: { id: userId }
+        });
 
         if (
-            party.settings.webRtcToken !== webRtcToken ||
-            !party.members.includes(userId)
+            !party ||
+            party.settings.webRtcIds[userId] !== webRtcId ||
+            !party.members.includes(userId) ||
+            !user
         ) {
             return res.status(401);
         }
