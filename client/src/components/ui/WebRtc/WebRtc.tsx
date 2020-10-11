@@ -109,7 +109,7 @@ export default function WebRtc({
                             >
                                 <div
                                     className={
-                                        'absolute top-0 left-0 flex flex-row rounded px-2 py-1 bg-black opacity-75 eqa' +
+                                        'absolute top-0 left-0 m-1 flex flex-row rounded px-2 py-1 bg-black opacity-75 eqa' +
                                         (displayOverlayMenu ? '' : ' hidden')
                                     }
                                     style={{ zIndex: 1000 }}
