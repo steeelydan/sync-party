@@ -431,13 +431,14 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
 
     // Socket 3/3: Emit syncStatus in intervals
     useInterval(() => {
-        if (reactPlayer && socket && user && party) {
+        if (socket && user && party) {
             const syncStatus: SyncStatusOutgoing = {
                 partyId: party.id,
                 userId: user.id,
                 timestamp: Date.now(),
-                position:
-                    reactPlayer.getCurrentTime() / reactPlayer.getDuration(),
+                position: reactPlayer
+                    ? reactPlayer.getCurrentTime() / reactPlayer.getDuration()
+                    : 0,
                 isPlaying: playerStateRef.current.isPlaying
             };
 
