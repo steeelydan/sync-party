@@ -666,6 +666,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                         config={{ youtube: { playerVars: { disablekb: 1 } } }}
                         url={playerState.sourceUrl}
                         playing={playerState.isPlaying}
+                        playsinline={true}
                         volume={playerState.volume}
                         progressInterval={100}
                         onBufferEnd={handleBufferEnd}
