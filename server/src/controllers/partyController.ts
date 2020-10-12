@@ -2,6 +2,7 @@ import { newPartyValidator, partyValidator } from '../common/validation';
 import { Logger } from 'winston';
 import { Request, Response } from 'express';
 import helpers from '../common/helpers';
+import { v4 as uuid } from 'uuid';
 
 /**
  * @api {post} /api/party Create New Party (Admin only)
@@ -112,7 +113,34 @@ const editParty = async (
             ...requestParty.settings,
             webRtcIds: helpers.createWebRtcIds(requestParty.members)
         };
-        delete requestParty.settings.webRtcToken;
+    }
+
+    if (dbParty.members.length !== requestParty.members.length) {
+        if (!requestParty.settings.webRtcIds) {
+            // Legacy: create webRtcIds if there are none
+            requestParty.settings.webRtcIds = helpers.createWebRtcIds(
+                requestParty.members
+            );
+        }
+
+        // Generate a webRtcId if there is new member
+        requestParty.members.forEach((member: string) => {
+            if (!dbParty.members.includes(member)) {
+                requestParty.settings.webRtcIds = {
+                    ...requestParty.settings.webRtcIds,
+                    [member]: uuid()
+                };
+            }
+        });
+
+        // Delete webRtcId if member is removed
+        dbParty.members.forEach((member: string) => {
+            if (!requestParty.members.includes(member)) {
+                const newWebRtcIds = { ...requestParty.settings.webRtcIds };
+                delete newWebRtcIds[member];
+                requestParty.settings.webRtcIds = newWebRtcIds;
+            }
+        });
     }
 
     if (partyValidator.validate(requestParty).error) {
