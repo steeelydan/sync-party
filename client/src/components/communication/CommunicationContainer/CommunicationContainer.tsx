@@ -47,6 +47,7 @@ export default function CommunicationContainer({
     const [webRtcVideoIsActive, setWebRtcVideoIsActive] = useState(false);
     const [mediaPermissionPending, setMediaPermissionPending] = useState(false);
     const [ourMediaReady, setOurMediaReady] = useState(false);
+    const [showVideos, setShowVideos] = useState(true);
     const [audioIsMuted, setAudioIsMuted] = useState(false);
     const [videoIsMuted, setVideoIsMuted] = useState(false);
 
@@ -395,6 +396,7 @@ export default function CommunicationContainer({
                 mediaStreamsRef={mediaStreamsRef}
                 ourUserId={ourUserId}
                 webRtcIds={webRtcIds}
+                showVideos={showVideos}
             ></WebRtc>
             {uiVisible && (
                 <CommunicationBar
@@ -405,6 +407,8 @@ export default function CommunicationContainer({
                     webRtcAudioIsActive={webRtcAudioIsActive}
                     webRtcVideoIsActive={webRtcVideoIsActive}
                     uiVisible={uiVisible}
+                    showVideos={showVideos}
+                    setShowVideos={setShowVideos}
                     audioIsMuted={audioIsMuted}
                     videoIsMuted={videoIsMuted}
                     toggleAudioIsMuted={toggleAudioIsMuted}

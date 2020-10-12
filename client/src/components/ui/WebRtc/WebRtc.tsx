@@ -14,6 +14,7 @@ interface Props {
     }>;
     ourUserId: string;
     webRtcIds: WebRtcIds;
+    showVideos: boolean;
 }
 
 export default function WebRtc({
@@ -21,7 +22,8 @@ export default function WebRtc({
     mediaStreams,
     mediaStreamsRef,
     ourUserId,
-    webRtcIds
+    webRtcIds,
+    showVideos
 }: Props): ReactElement | null {
     const ourWebRtcId = webRtcIds[ourUserId];
 
@@ -74,7 +76,8 @@ export default function WebRtc({
             <div
                 className={
                     'absolute top-0 left-0 ml-2' +
-                    (uiVisible ? ' mb-20' : ' mb-10')
+                    (uiVisible ? ' mb-20' : ' mb-10') +
+                    (!showVideos ? ' invisible' : '')
                 }
             >
                 {videoIsActive && memberStatus && ourWebRtcId && (

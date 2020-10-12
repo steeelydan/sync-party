@@ -82,6 +82,8 @@ const translations = {
                 missingPermissionsVideo:
                     'Camera and microphone access are necessary',
                 missingPermissionsAudio: 'Microphone access is necessary',
+                showVideos: 'Show videos',
+                hideVideos: 'Hide videos',
                 toggleUserVideoOn: 'Display own video',
                 toggleUserVideoOff: 'Hide own video',
                 displayVertically: 'Arrange videos vertically',

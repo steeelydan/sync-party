@@ -9,6 +9,7 @@ interface Props {
     titleText: string;
     size: 'large' | 'small';
     className?: string;
+    margins?: string;
 }
 
 export default function BarButton({
@@ -17,19 +18,25 @@ export default function BarButton({
     icon,
     titleText,
     size,
-    className
+    className,
+    margins
 }: Props): ReactElement {
     return (
         <div
             className={
-                (size === 'large' ? 'w-8 h-8 mt-2' : 'w-6 h-6 mt-3') +
-                ' flex cursor-pointer z-50 p-1 mr-2 ' +
+                (size === 'large' ? 'w-8 h-8' : 'w-6 h-6') +
+                ' flex cursor-pointer z-50 p-1 ' +
                 (isActive
                     ? size === 'large'
                         ? 'bg-purple-700'
                         : 'bg-gray-400'
                     : 'bg-gray-800') +
-                (className ? ' ' + className : '')
+                (className ? ' ' + className : '') +
+                (margins
+                    ? ' ' + margins
+                    : size === 'large'
+                    ? ' mt-2 mr-2'
+                    : ' mt-3 mr-2')
             }
             onClick={(): void => clickHandler()}
             style={{ borderRadius: '100%' }}

@@ -1,9 +1,13 @@
 import React, { ReactElement } from 'react';
 import {
     faComment,
+    faEye,
+    faEyeSlash,
     faMicrophone,
+    faMicrophoneSlash,
     faPhoneAlt,
-    faVideo
+    faVideo,
+    faVideoSlash
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import BarButton from '../../input/BarButton/BarButton';
@@ -16,6 +20,8 @@ interface Props {
     webRtcAudioIsActive: boolean;
     webRtcVideoIsActive: boolean;
     uiVisible: boolean;
+    showVideos: boolean;
+    setShowVideos: Function;
     audioIsMuted: boolean;
     videoIsMuted: boolean;
     toggleAudioIsMuted: Function;
@@ -30,6 +36,8 @@ export default function CommunicationBar({
     webRtcAudioIsActive,
     webRtcVideoIsActive,
     uiVisible,
+    showVideos,
+    setShowVideos,
     audioIsMuted,
     videoIsMuted,
     toggleAudioIsMuted,
@@ -87,7 +95,7 @@ export default function CommunicationBar({
                                 ? t('webRtc.unmuteVideo')
                                 : t('webRtc.muteVideo')
                         }
-                        icon={faVideo}
+                        icon={videoIsMuted ? faVideoSlash : faVideo}
                         size="small"
                     />
                 )}
@@ -100,7 +108,20 @@ export default function CommunicationBar({
                                 ? t('webRtc.unmuteAudio')
                                 : t('webRtc.muteAudio')
                         }
-                        icon={faMicrophone}
+                        icon={audioIsMuted ? faMicrophoneSlash : faMicrophone}
+                        size="small"
+                    />
+                )}
+                {webRtcVideoIsActive && (
+                    <BarButton
+                        isActive={showVideos}
+                        clickHandler={(): void => setShowVideos(!showVideos)}
+                        titleText={
+                            showVideos
+                                ? t('webRtc.hideVideos')
+                                : t('webRtc.showVideos')
+                        }
+                        icon={showVideos ? faEye : faEyeSlash}
                         size="small"
                     />
                 )}
