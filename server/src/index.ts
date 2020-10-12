@@ -401,25 +401,10 @@ const runApp = async () => {
         );
     });
 
-    peerServer.on('disconnect', async (client: any) => {
-        const userId = client.id;
-
-        const user = await models.User.findOne({
-            where: { id: userId }
-        });
-
-        if (!user) {
-            logger.log(
-                'error',
-                `PeerJS: Client without corresponding user disconnected: ${client.id}`
-            );
-
-            return;
-        }
-
+    peerServer.on('disconnect', (client: any) => {
         logger.log(
             'info',
-            `PeerJS: client disconnected: ${client.id} (${user.username})`
+            `PeerJS: client disconnected: ${client.id}`
         );
     });
 
