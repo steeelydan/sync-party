@@ -94,7 +94,12 @@ function App(): JSX.Element {
 
     useEffect(() => {
         if (loggedIn && dispatch && process.env.REACT_APP_SOCKET_ROUTE) {
-            setSocket(socketIOClient(process.env.REACT_APP_SOCKET_ROUTE));
+            setSocket(
+                socketIOClient(process.env.REACT_APP_SOCKET_ROUTE, {
+                    transports: ['websocket'],
+                    secure: process.env.NODE_ENV === 'production'
+                })
+            );
 
             const getUserData = async (): Promise<void> => {
                 try {

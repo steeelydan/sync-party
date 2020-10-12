@@ -44,7 +44,7 @@ import createModels from './database/createModels';
 const runApp = async () => {
     // Config
     dotenv.config();
-    const port = process.env.PORT || 4000;
+    const port = parseInt(process.env.PORT, 10) || 4000;
     const webRtcServerKey = uuid();
 
     // Init app
@@ -188,7 +188,7 @@ const runApp = async () => {
 
     // WEBSOCKETS
 
-    const io = socketio(server, { cookie: false });
+    const io = socketio(server, { cookie: false, transports: ['websocket'] });
 
     // Apply session middleware to socket
     io.use(
@@ -197,7 +197,6 @@ const runApp = async () => {
             secret: process.env.SESSION_SECRET,
             store: sessionStore,
             passport
-            // cookieParser
         })
     );
 
@@ -402,10 +401,7 @@ const runApp = async () => {
     });
 
     peerServer.on('disconnect', (client: any) => {
-        logger.log(
-            'info',
-            `PeerJS: client disconnected: ${client.id}`
-        );
+        logger.log('info', `PeerJS: client disconnected: ${client.id}`);
     });
 
     // API Endpoints
@@ -549,8 +545,10 @@ const runApp = async () => {
         });
     }
 
-    // Start server
+    // Start Websockets server
+    io.listen(parseInt(process.env.WEBSOCKETS_PORT, 10) || 5000);
 
+    // Start server
     server.listen(port, () => {
         logger.log('info', `App listening on port ${port}`);
     });
