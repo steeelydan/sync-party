@@ -102,7 +102,8 @@ export default function CommunicationContainer({
                 ourStream = await navigator.mediaDevices.getUserMedia({
                     video: withVideo,
                     audio: {
-                        autoGainControl: true
+                        autoGainControl: true,
+                        channelCount: 1
                     }
                 });
             } catch (error) {
