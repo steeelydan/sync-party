@@ -1,4 +1,10 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
+import React, {
+    ReactElement,
+    useCallback,
+    useEffect,
+    useRef,
+    useState
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Picker } from 'emoji-mart';
@@ -62,12 +68,12 @@ export default function Chat({
         }
     };
 
-    const focusTextInput = (): void => {
+    const focusTextInput = useCallback((): void => {
         if (textInputRef.current) {
             textInputRef.current.focus();
             freezeUiVisible(true);
         }
-    };
+    }, [freezeUiVisible]);
 
     const blurTextInput = (): void => {
         if (textInputRef.current) {
@@ -148,24 +154,26 @@ export default function Chat({
 
     // If isActive changes
     useEffect(() => {
-        if (!isActive) {
-            setTimeout(() => {
-                scrollHistoryToBottom();
-                focusTextInput();
-            }, 50);
-        } else {
-            setHistoryStaysVisible(false);
-        }
+        if (isActive !== uiFocused.chat) {
+            if (isActive) {
+                setTimeout(() => {
+                    scrollHistoryToBottom();
+                    focusTextInput();
+                }, 50);
+            } else {
+                setHistoryStaysVisible(false);
+            }
 
-        dispatch(
-            setGlobalState({
-                uiFocused: {
-                    ...uiFocused,
-                    chat: !isActive
-                }
-            })
-        );
-    }, [isActive]);
+            dispatch(
+                setGlobalState({
+                    uiFocused: {
+                        ...uiFocused,
+                        chat: isActive
+                    }
+                })
+            );
+        }
+    }, [isActive, dispatch, focusTextInput, uiFocused]);
 
     // If ui visibility or history timeout changes
     useEffect(() => {
