@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 import { useTranslation } from 'react-i18next';
@@ -46,6 +46,8 @@ export default function MediaMenu({
     const uiFocused = useSelector(
         (state: RootAppState) => state.globalState.uiFocused
     );
+
+    const partyItemListRef = useRef<HTMLDivElement | null>(null);
 
     const dispatch = useDispatch();
     const { t } = useTranslation();
@@ -217,7 +219,7 @@ export default function MediaMenu({
             }}
         >
             {party && party.items.length ? (
-                <div className="partyItemList">
+                <div className="partyItemList" ref={partyItemListRef}>
                     <DragDropContext onDragEnd={onDragEnd}>
                         <Droppable droppableId="droppable">
                             {(provided: DroppableProvided): JSX.Element => (
@@ -282,6 +284,9 @@ export default function MediaMenu({
                                                         }}
                                                         setPlayerFocused={
                                                             setPlayerFocused
+                                                        }
+                                                        partyItemListRef={
+                                                            partyItemListRef
                                                         }
                                                     ></ItemListed>
                                                 </MediaMenuDraggable>
