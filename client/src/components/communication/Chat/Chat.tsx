@@ -144,7 +144,7 @@ export default function Chat({
     // At mounting
     useEffect(() => {
         scrollHistoryToBottom();
-    }, []);
+    }, [isActive]);
 
     // If isActive changes
     useEffect(() => {
