@@ -11,9 +11,9 @@ import { useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 import Axios from 'axios';
 import { axiosConfig } from '../../../common/helpers';
-import Chat from '../../ui/Chat/Chat';
-import CommunicationBar from '../../ui/CommunicationBar/CommunicationBar';
-import WebRtc from '../../ui/WebRtc/WebRtc';
+import Chat from '../Chat/Chat';
+import CommunicationBar from '../CommunicationBar/CommunicationBar';
+import WebRtc from '../WebRtc/WebRtc';
 
 interface Props {
     socket: SocketIOClient.Socket | null;

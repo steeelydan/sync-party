@@ -2,7 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Rnd } from 'react-rnd';
 import { rndHandleStyles } from '../../../common/helpers';
-import WebRtcVideoOverlayMenu from '../../communication/WebRtcVideoOverlayMenu/WebRtcVideoOverlayMenu';
+import WebRtcVideoOverlayMenu from '../WebRtcVideoOverlayMenu/WebRtcVideoOverlayMenu';
 
 interface Props {
     videoIsActive: boolean;
