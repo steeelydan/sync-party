@@ -1,6 +1,9 @@
 /* Global */
 
 body {
+    font-family: 'Open Sans', 'Twemoji Mozilla', 'Helvetica Neue', 'Segoe UI', 'Arial',
+        sans-serif;
+    line-height: 1.25rem;
     color: white;
     -webkit-user-select: none;
     -ms-user-select: none;
