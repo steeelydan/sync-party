@@ -334,6 +334,8 @@ export {
     baseState,
     noPartyState,
     axiosConfig,
+    audioExtensions,
+    videoExtensions,
     testMediaType,
     getIconFromFileType,
     getSite,

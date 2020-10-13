@@ -1,7 +1,10 @@
 import React, { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { setGlobalState } from '../../../actions/globalActions';
 import InputText from '../../input/InputText/InputText';
 import Button from '../../input/Button/Button';
+import { audioExtensions, videoExtensions } from '../../../common/helpers';
 
 interface Props {
     file: File | null;
@@ -23,6 +26,7 @@ export default function AddMediaTabFile({
     setPlayerFocused
 }: Props): ReactElement {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
 
     return (
         <form>
@@ -43,12 +47,28 @@ export default function AddMediaTabFile({
                                 event: React.ChangeEvent<HTMLInputElement>
                             ): void => {
                                 if (event.target.files) {
-                                    setFile(event.target.files[0]);
-                                    setMediaItem({
-                                        ...mediaItem,
-                                        name: event.target.files[0].name,
-                                        url: event.target.files[0].name
-                                    });
+                                    const file = event.target.files[0];
+                                    if (
+                                        audioExtensions.test(file.name) ||
+                                        videoExtensions.test(file.name)
+                                    ) {
+                                        setFile(file);
+                                        setMediaItem({
+                                            ...mediaItem,
+                                            name: file.name,
+                                            url: file.name
+                                        });
+                                    } else {
+                                        dispatch(
+                                            setGlobalState({
+                                                errorMessage: t(
+                                                    'mediaMenu.invalidFileType'
+                                                )
+                                            })
+                                        );
+
+                                        event.target.value = '';
+                                    }
                                 }
                             }}
                             type="file"

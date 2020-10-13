@@ -62,7 +62,8 @@ const translations = {
                 uploadLabel: 'Upload',
                 clearLabel: 'Clear',
                 download: 'Download',
-                copy: 'Copy URL to Clipboard'
+                copy: 'Copy URL to Clipboard',
+                invalidFileType: 'This file type is not supported.'
             },
             chat: {
                 writeSomething: 'Write something',
