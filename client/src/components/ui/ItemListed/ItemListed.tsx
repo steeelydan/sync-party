@@ -66,7 +66,7 @@ export default function ItemListed({
                 list.scrollTop = item.offsetTop - list.offsetHeight / 2;
             }
         }
-    }, [isCurrentlyPlayingItem]);
+    }, [isCurrentlyPlayingItem, partyItemListRef]);
 
     React.useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
