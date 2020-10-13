@@ -228,10 +228,6 @@ export default function CommunicationContainer({
                         hangUpOnUser(theirWebRtcId);
                     }
                 };
-
-                call.on('error', () => {
-                    hangUpOnUser(theirWebRtcId);
-                });
             }
         },
         [webRtcPeer, hangUpOnUser]
@@ -257,10 +253,6 @@ export default function CommunicationContainer({
                     });
 
                     call.on('close', () => {
-                        hangUpOnUser(theirWebRtcId);
-                    });
-
-                    call.on('error', () => {
                         hangUpOnUser(theirWebRtcId);
                     });
 
