@@ -56,9 +56,15 @@ export default function ItemListed({
             itemListedRef.current &&
             isCurrentlyPlayingItem
         ) {
-            partyItemListRef.current.scrollTop =
-                itemListedRef.current.offsetTop -
-                partyItemListRef.current.offsetHeight / 2;
+            const list = partyItemListRef.current;
+            const item = itemListedRef.current;
+
+            if (
+                item.offsetTop < list.scrollTop ||
+                item.offsetTop > list.scrollTop + list.offsetHeight
+            ) {
+                list.scrollTop = item.offsetTop - list.offsetHeight / 2;
+            }
         }
     }, [isCurrentlyPlayingItem]);
 
