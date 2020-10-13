@@ -19,7 +19,7 @@ export default function Alert({
     return (
         <div
             className={
-                'flex items-center font-bold px-4 py-3 border rounded z-50 backgroundShade' +
+                'flex max-w-md items-center font-bold px-2 py-2 border rounded z-50 backgroundShade' +
                 (className ? ' ' + className : '') +
                 (mode === 'error'
                     ? ' border-red-600 text-red-600'
@@ -28,7 +28,7 @@ export default function Alert({
             role="alert"
         >
             <svg
-                className="fill-current w-4 h-4 mr-2"
+                className="fill-current w-4 h-4 mr-2 self-start mt-1"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
             >
@@ -37,7 +37,7 @@ export default function Alert({
             <p>{text}</p>
             {onCloseButton && (
                 <ButtonIcon
-                    className="p-1 ml-auto"
+                    className="p-1 ml-auto self-start"
                     color={
                         mode === 'error' ? ' text-red-600' : ' text-yellow-400'
                     }

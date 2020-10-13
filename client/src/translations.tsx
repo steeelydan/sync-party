@@ -80,8 +80,10 @@ const translations = {
                 muteVideo: 'Deactivate my video',
                 unmuteVideo: 'Activate my video',
                 missingPermissionsVideo:
-                    'Camera and microphone access are necessary',
-                missingPermissionsAudio: 'Microphone access is necessary',
+                    'Camera and microphone permissions are necessary',
+                missingPermissionsAudio: 'Microphone permission is necessary',
+                abortError:
+                    'Error accessing your camera and/or microphone. Might they already be in use?',
                 showVideos: 'Show videos',
                 hideVideos: 'Hide videos',
                 toggleUserVideoOn: 'Display own video',

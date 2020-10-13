@@ -106,13 +106,23 @@ export default function CommunicationContainer({
                     }
                 });
             } catch (error) {
+                let message;
+
+                if (error.name === 'AbortError') {
+                    message = t('webRtc.abortError');
+                } else if (error.name === 'NotAllowedError') {
+                    message = t(
+                        withVideo
+                            ? 'webRtc.missingPermissionsVideo'
+                            : 'webRtc.missingPermissionsAudio'
+                    );
+                } else {
+                    message = error.name + ': ' + error.message;
+                }
+
                 dispatch(
                     setGlobalState({
-                        errorMessage: t(
-                            withVideo
-                                ? 'webRtc.missingPermissionsVideo'
-                                : 'webRtc.missingPermissionsAudio'
-                        )
+                        errorMessage: message
                     })
                 );
 
