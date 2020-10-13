@@ -231,14 +231,14 @@ export default function CommunicationContainer({
                     hangUpOnUser(theirWebRtcId);
                 });
 
-                call.peerConnection.oniceconnectionstatechange = (): void => {
-                    if (
-                        call.peerConnection.iceConnectionState ===
-                        'disconnected'
-                    ) {
-                        hangUpOnUser(theirWebRtcId);
-                    }
-                };
+                // call.peerConnection.oniceconnectionstatechange = (): void => {
+                //     if (
+                //         call.peerConnection.iceConnectionState ===
+                //         'disconnected'
+                //     ) {
+                //         hangUpOnUser(theirWebRtcId);
+                //     }
+                // };
             }
         },
         [webRtcPeer, hangUpOnUser]
