@@ -152,7 +152,7 @@ export default function CommunicationContainer({
         getOurMediaStream(withVideo);
     };
 
-    const leaveWebRtc = (): void => {
+    const leaveWebRtc = useCallback((): void => {
         if (webRtcPeerRef.current && socket && partyId) {
             if (ourWebRtcId && mediaStreamsRef.current[ourWebRtcId]) {
                 mediaStreamsRef.current[ourWebRtcId]
@@ -182,14 +182,14 @@ export default function CommunicationContainer({
                 })
             );
         }
-    };
+    }, [dispatch, ourWebRtcId, partyId, socket]);
 
     // Leave WebRTC when component unmounts
     useEffect(() => {
         return (): void => {
             leaveWebRtc();
         };
-    }, []);
+    }, [leaveWebRtc]);
 
     const hangUpOnUser = useCallback((theirWebRtcId: string): void => {
         if (callListRef.current[theirWebRtcId]) {
