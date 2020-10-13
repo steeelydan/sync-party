@@ -60,19 +60,6 @@ export default function CommunicationBar({
                     titleText={chatIsActive ? t('chat.close') : t('chat.open')}
                     size="large"
                 />
-                {!webRtcVideoIsActive && (
-                    <BarButton
-                        isActive={webRtcAudioIsActive}
-                        clickHandler={toggleWebRtcAudio}
-                        icon={faPhoneAlt}
-                        titleText={
-                            webRtcAudioIsActive
-                                ? t('webRtc.audioClose')
-                                : t('webRtc.audioOpen')
-                        }
-                        size="large"
-                    />
-                )}
                 {!webRtcAudioIsActive && (
                     <BarButton
                         isActive={webRtcVideoIsActive}
@@ -82,6 +69,19 @@ export default function CommunicationBar({
                             webRtcVideoIsActive
                                 ? t('webRtc.videoClose')
                                 : t('webRtc.videoOpen')
+                        }
+                        size="large"
+                    />
+                )}
+                {!webRtcVideoIsActive && (
+                    <BarButton
+                        isActive={webRtcAudioIsActive}
+                        clickHandler={toggleWebRtcAudio}
+                        icon={faPhoneAlt}
+                        titleText={
+                            webRtcAudioIsActive
+                                ? t('webRtc.audioClose')
+                                : t('webRtc.audioOpen')
                         }
                         size="large"
                     />
