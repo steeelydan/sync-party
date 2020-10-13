@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 import { useTranslation } from 'react-i18next';
@@ -46,6 +46,8 @@ export default function MediaMenu({
     const uiFocused = useSelector(
         (state: RootAppState) => state.globalState.uiFocused
     );
+
+    const partyItemListRef = useRef<HTMLDivElement | null>(null);
 
     const dispatch = useDispatch();
     const { t } = useTranslation();
@@ -206,7 +208,7 @@ export default function MediaMenu({
     return (
         <div
             className={
-                'mediaMenu fixed top-0 right-0 flex flex-col mt-16 p-2 border border-gray-500 rounded m-2 shadow-md backgroundShade' +
+                'mediaMenu fixed top-0 right-0 flex flex-col mt-16 p-2 border border-gray-500 rounded m-2 shadow-md backgroundShade z-50' +
                 (uiVisible || !playingItem || !playingItem.url ? '' : ' hidden')
             }
             onMouseOver={(): void => freezeUiVisible(true)}
@@ -217,7 +219,7 @@ export default function MediaMenu({
             }}
         >
             {party && party.items.length ? (
-                <div className="partyItemList">
+                <div className="partyItemList" ref={partyItemListRef}>
                     <DragDropContext onDragEnd={onDragEnd}>
                         <Droppable droppableId="droppable">
                             {(provided: DroppableProvided): JSX.Element => (
@@ -282,6 +284,9 @@ export default function MediaMenu({
                                                         }}
                                                         setPlayerFocused={
                                                             setPlayerFocused
+                                                        }
+                                                        partyItemListRef={
+                                                            partyItemListRef
                                                         }
                                                     ></ItemListed>
                                                 </MediaMenuDraggable>

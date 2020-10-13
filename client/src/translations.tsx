@@ -62,13 +62,35 @@ const translations = {
                 uploadLabel: 'Upload',
                 clearLabel: 'Clear',
                 download: 'Download',
-                copy: 'Copy URL to Clipboard'
+                copy: 'Copy URL to Clipboard',
+                invalidFileType: 'This file type is not supported.'
             },
             chat: {
                 writeSomething: 'Write something',
-                open: 'Enable chat',
-                close: 'Disable chat',
+                open: 'Enable Chat',
+                close: 'Disable Chat',
                 me: 'Me'
+            },
+            webRtc: {
+                audioOpen: 'Join audio call',
+                audioClose: 'Quit audio call',
+                videoOpen: 'Join video call',
+                videoClose: 'Quit video call',
+                muteAudio: 'Mute my audio',
+                unmuteAudio: 'Unmute my audio',
+                muteVideo: 'Deactivate my video',
+                unmuteVideo: 'Activate my video',
+                missingPermissionsVideo:
+                    'Camera and microphone permissions are necessary',
+                missingPermissionsAudio: 'Microphone permission is necessary',
+                abortError:
+                    'Error accessing your camera and/or microphone. Might they already be in use?',
+                showVideos: 'Show videos',
+                hideVideos: 'Hide videos',
+                toggleUserVideoOn: 'Display own video',
+                toggleUserVideoOff: 'Hide own video',
+                displayVertically: 'Arrange videos vertically',
+                displayHorizontally: 'Arrange video horizontally'
             },
             dashboard: {
                 newParty: 'New Party',

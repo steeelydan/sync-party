@@ -31,7 +31,10 @@ const baseState: AppState = {
     actionMessage: null,
     errorMessage: null,
     initialServerTimeOffset: 0,
-    chat: {}
+    chat: {},
+    webRtc: {
+        mode: 'none'
+    }
 };
 
 const noPartyState: PartyPartialState = {
@@ -317,10 +320,22 @@ const formatChatMessage = (message: string): JSX.Element[] => {
     return textElements;
 };
 
+const rndHandleStyles = {
+    bottomRight: { display: 'none' },
+    bottom: { display: 'none' },
+    bottomLeft: { display: 'none' },
+    left: { display: 'none' },
+    topLeft: { display: 'none' },
+    top: { display: 'none' },
+    topRight: { display: 'none' }
+};
+
 export {
     baseState,
     noPartyState,
     axiosConfig,
+    audioExtensions,
+    videoExtensions,
     testMediaType,
     getIconFromFileType,
     getSite,
@@ -329,5 +344,6 @@ export {
     handleKeyCommands,
     calculateSyncDelta,
     reorderItems,
-    formatChatMessage
+    formatChatMessage,
+    rndHandleStyles
 };

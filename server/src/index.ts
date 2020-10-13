@@ -9,6 +9,7 @@ import { Sequelize } from 'sequelize';
 import morgan from 'morgan';
 
 import socketio from 'socket.io';
+const { ExpressPeerServer } = require('peer');
 import express from 'express';
 
 import helmet from 'helmet';
@@ -20,6 +21,8 @@ const SequelizeStore = require('connect-session-sequelize')(
 import compression from 'compression';
 import passportSocketIo from 'passport.socketio';
 import cookieParser from 'cookie-parser';
+import { v4 as uuid } from 'uuid';
+
 import configurePassport from './middleware/passport';
 import configureSession from './middleware/session';
 import rateLimiters from './middleware/rateLimiters';
@@ -41,7 +44,8 @@ import createModels from './database/createModels';
 const runApp = async () => {
     // Config
     dotenv.config();
-    const port = process.env.PORT || 4000;
+    const port = parseInt(process.env.PORT, 10) || 4000;
+    const webRtcServerKey = uuid();
 
     // Init app
     const app = express();
@@ -105,7 +109,7 @@ const runApp = async () => {
     // DEFAULT VALUES
 
     const currentSyncStatus: {
-        [partyId: string]: { [userId: string]: object };
+        [partyId: string]: { [userId: string]: object }; // FIXME type
     } = {};
     const currentPlayWishes: {
         [partyId: string]: object;
@@ -184,7 +188,7 @@ const runApp = async () => {
 
     // WEBSOCKETS
 
-    const io = socketio(server, { cookie: false });
+    const io = socketio(server, { cookie: false, transports: ['websocket'] });
 
     // Apply session middleware to socket
     io.use(
@@ -193,7 +197,6 @@ const runApp = async () => {
             secret: process.env.SESSION_SECRET,
             store: sessionStore,
             passport
-            // cookieParser
         })
     );
 
@@ -204,14 +207,6 @@ const runApp = async () => {
             'info',
             `Web Sockets: New connection, userId: ${socketUserId}`
         );
-
-        socket.on('disconnect', () => {
-            socket.leaveAll();
-            logger.log(
-                'info',
-                `Web Sockets: User disconnected: ${socketUserId}`
-            );
-        });
 
         const joinParty = (data: { partyId: string; timestamp: number }) => {
             io.in(data.partyId).clients(
@@ -312,7 +307,8 @@ const runApp = async () => {
                 isPlaying: userSyncStatus.isPlaying,
                 timestamp: userSyncStatus.timestamp,
                 position: userSyncStatus.position,
-                serverTimeOffset: Date.now() - userSyncStatus.timestamp
+                serverTimeOffset: Date.now() - userSyncStatus.timestamp,
+                webRtc: userSyncStatus.webRtc
             };
 
             // Only emitted to party members
@@ -325,6 +321,87 @@ const runApp = async () => {
         socket.on('chatMessage', (chatMessage) => {
             io.to(chatMessage.partyId).emit('chatMessage', chatMessage);
         });
+
+        // WebRTC
+        socket.on('joinWebRtc', (data) => {
+            io.to(data.partyId).emit('joinWebRtc', data.webRtcId);
+        });
+
+        socket.on('leaveWebRtc', (data) => {
+            io.to(data.partyId).emit('leaveWebRtc', {
+                webRtcId: data.webRtcId
+            });
+        });
+
+        // Disconnect
+        socket.on('disconnect', (event) => {
+            socket.leaveAll();
+
+            logger.log(
+                'info',
+                `Web Sockets: User disconnected: ${socketUserId}`
+            );
+        });
+    });
+
+    // WebRTC
+
+    const peerServer = ExpressPeerServer(server, {
+        debug: true,
+        proxies: process.env.USE_PROXY === 'true',
+        key: webRtcServerKey
+    });
+
+    app.use('/peerjs', isAuthenticated, peerServer);
+
+    peerServer.on('connection', async (client: any) => {
+        const requestWebRtcId = client.id;
+        const allParties = await models.Party.findAll();
+        let isInActiveParty = false;
+        let userId = '';
+
+        for (const party of allParties) {
+            const partyWebRtcIds = party.settings.webRtcIds;
+
+            if (partyWebRtcIds) {
+                for (const partyUserId of Object.keys(partyWebRtcIds)) {
+                    const partyUserWebRtcId = partyWebRtcIds[partyUserId];
+
+                    if (
+                        partyUserWebRtcId === requestWebRtcId ||
+                        party.status === 'active'
+                    ) {
+                        isInActiveParty = true;
+                        userId = partyUserId;
+                        break;
+                    }
+                }
+            }
+
+            if (isInActiveParty) {
+                break;
+            }
+        }
+
+        const user = await models.User.findOne({
+            where: { id: userId }
+        });
+
+        if (!isInActiveParty || !user) {
+            client.socket.close();
+            logger.log('error', `PeerJS: Client denied: ${requestWebRtcId}`);
+
+            return;
+        }
+
+        logger.log(
+            'info',
+            `PeerJS: client connected: ${requestWebRtcId} (userId: ${user.id}, username: ${user.username})`
+        );
+    });
+
+    peerServer.on('disconnect', (client: any) => {
+        logger.log('info', `PeerJS: client disconnected: ${client.id}`);
     });
 
     // API Endpoints
@@ -346,6 +423,28 @@ const runApp = async () => {
 
     app.post('/api/logout', isAuthenticated, async (req, res) => {
         await authController.logout(req, res, logger);
+    });
+
+    // WebRTC Key
+    app.post('/api/webRtcServerKey', isAuthenticated, async (req, res) => {
+        const partyId = req.body.partyId;
+        const userId = req.body.userId;
+        const webRtcId = req.body.webRtcId;
+        const party = await models.Party.findOne({ where: { id: partyId } });
+        const user = await models.User.findOne({
+            where: { id: userId }
+        });
+
+        if (
+            !party ||
+            party.settings.webRtcIds[userId] !== webRtcId ||
+            !party.members.includes(userId) ||
+            !user
+        ) {
+            return res.status(401);
+        }
+
+        res.json({ webRtcServerKey });
     });
 
     // MediaItems
@@ -446,8 +545,10 @@ const runApp = async () => {
         });
     }
 
-    // Start server
+    // Start Websockets server
+    io.listen(parseInt(process.env.WEBSOCKETS_PORT, 10) || 5000);
 
+    // Start server
     server.listen(port, () => {
         logger.log('info', `App listening on port ${port}`);
     });

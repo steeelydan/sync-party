@@ -21,6 +21,7 @@ type AppState = {
     chat: {
         [party: string]: FormattedChatMessage[];
     };
+    webRtc: WebRtcState;
 };
 
 type GlobalStateActionProperties = {
@@ -42,6 +43,7 @@ type GlobalStateActionProperties = {
     chat?: {
         [party: string]: FormattedChatMessage[];
     };
+    webRtc?: WebRtcState;
 };
 
 type AppAction = {
@@ -129,6 +131,9 @@ type ClientParty = {
             [mediaItemId: string]: boolean;
         };
     };
+    settings: {
+        webRtcIds: WebRtcIds;
+    };
 };
 
 type ClientPartyMember = {
@@ -153,6 +158,10 @@ type NewMediaItem = {
     url: string;
 };
 
+type WebRtcIds = {
+    [userId: string]: string;
+};
+
 type SyncStatusIncoming = {
     [userId: string]: SyncStatusPartyMember;
 };
@@ -163,6 +172,7 @@ type SyncStatusOutgoing = {
     timestamp: number;
     position: number;
     isPlaying: boolean;
+    webRtc: WebRtcState;
 };
 
 type SyncStatusPartyMember = {
@@ -171,6 +181,7 @@ type SyncStatusPartyMember = {
     timestamp: number;
     isPlaying: boolean;
     serverTimeOffset: number;
+    webRtc: WebRtcState;
 };
 
 type SyncStatusReceiveMember = {
@@ -180,8 +191,14 @@ type SyncStatusReceiveMember = {
 };
 
 type MemberStatus = {
-    [userId: string]: { online: boolean; serverTimeOffset: number };
+    [userId: string]: {
+        online: boolean;
+        serverTimeOffset: number;
+        webRtc: WebRtcState;
+    };
 };
+
+type WebRtcState = { mode: 'none' | 'audio' | 'video' };
 
 type ActionMessage = {
     text: string | JSX.Element;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -23,6 +23,7 @@ type Props = {
     nameEditingAllowed: boolean;
     handleItemClick: Function;
     onRemoveButtonClick?: Function;
+    partyItemListRef?: React.RefObject<HTMLDivElement>;
 };
 
 export default function ItemListed({
@@ -34,15 +35,38 @@ export default function ItemListed({
     isPlaying,
     nameEditingAllowed,
     handleItemClick,
-    onRemoveButtonClick
+    onRemoveButtonClick,
+    partyItemListRef
 }: Props): JSX.Element {
     const [editMode, setEditMode] = useState(false);
     const [probablyEditedItem, setProbablyEditedItem] = useState(item);
     const [hovering, setHovering] = useState(false);
 
+    const itemListedRef = useRef<HTMLDivElement | null>(null);
+
     const party = useSelector((state: RootAppState) => state.globalState.party);
 
     const { t } = useTranslation();
+
+    // Scroll item into view if it gets activated
+    React.useEffect(() => {
+        if (
+            partyItemListRef &&
+            partyItemListRef.current &&
+            itemListedRef.current &&
+            isCurrentlyPlayingItem
+        ) {
+            const list = partyItemListRef.current;
+            const item = itemListedRef.current;
+
+            if (
+                item.offsetTop < list.scrollTop ||
+                item.offsetTop > list.scrollTop + list.offsetHeight
+            ) {
+                list.scrollTop = item.offsetTop - list.offsetHeight / 2;
+            }
+        }
+    }, [isCurrentlyPlayingItem, partyItemListRef]);
 
     React.useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
@@ -81,6 +105,7 @@ export default function ItemListed({
         <div
             className="p-1 hover:bg-purple-900 cursor-pointer"
             key={item.id}
+            ref={itemListedRef}
             title={
                 nameEditingAllowed
                     ? t('mediaMenu.mediaItemClickAddTitle')

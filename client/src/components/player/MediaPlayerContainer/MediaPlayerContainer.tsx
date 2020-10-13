@@ -34,7 +34,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
-import Chat from '../../ui/Chat/Chat';
+import CommunicationContainer from '../../communication/CommunicationContainer/CommunicationContainer';
 
 type Props = {
     socket: SocketIOClient.Socket | null;
@@ -63,6 +63,9 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     );
     const initialServerTimeOffset = useSelector(
         (state: RootAppState) => state.globalState.initialServerTimeOffset
+    );
+    const webRtcGlobalState = useSelector(
+        (state: RootAppState) => state.globalState.webRtc
     );
 
     // Local states & their refs
@@ -329,7 +332,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     // 1. Set online status of each member
                     memberStatusStateNew[memberId] = {
                         online: false,
-                        serverTimeOffset: syncStatus[memberId].serverTimeOffset
+                        serverTimeOffset: syncStatus[memberId].serverTimeOffset,
+                        webRtc: syncStatus[memberId].webRtc
                     };
 
                     if (
@@ -431,14 +435,16 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
 
     // Socket 3/3: Emit syncStatus in intervals
     useInterval(() => {
-        if (reactPlayer && socket && user && party) {
+        if (socket && user && party) {
             const syncStatus: SyncStatusOutgoing = {
                 partyId: party.id,
                 userId: user.id,
                 timestamp: Date.now(),
-                position:
-                    reactPlayer.getCurrentTime() / reactPlayer.getDuration(),
-                isPlaying: playerStateRef.current.isPlaying
+                position: reactPlayer
+                    ? reactPlayer.getCurrentTime() / reactPlayer.getDuration()
+                    : 0,
+                isPlaying: playerStateRef.current.isPlaying,
+                webRtc: webRtcGlobalState
             };
 
             socket.emit('syncStatus', syncStatus);
@@ -660,6 +666,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                         config={{ youtube: { playerVars: { disablekb: 1 } } }}
                         url={playerState.sourceUrl}
                         playing={playerState.isPlaying}
+                        playsinline={true}
                         volume={playerState.volume}
                         progressInterval={100}
                         onBufferEnd={handleBufferEnd}
@@ -672,13 +679,17 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     ></ReactPlayer>
                 </div>
             </div>
-            <Chat
-                socket={socket}
-                setPlayerFocused={(focused: boolean): void =>
-                    setPlayerState({ isFocused: focused })
-                }
-                freezeUiVisible={freezeUiVisible}
-            ></Chat>
+            {party && user && (
+                <CommunicationContainer
+                    socket={socket}
+                    partyId={party.id}
+                    webRtcIds={party.settings.webRtcIds}
+                    ourUserId={user.id}
+                    setPlayerState={setPlayerState}
+                    uiVisible={uiVisible}
+                    freezeUiVisible={freezeUiVisible}
+                ></CommunicationContainer>
+            )}
             <BottomBar
                 playerState={playerState}
                 handlePlayPause={handlePlayPause}

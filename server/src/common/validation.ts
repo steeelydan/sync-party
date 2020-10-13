@@ -37,12 +37,17 @@ const newPartyValidator = Joi.object({
     members: Joi.array().has(Joi.string().uuid()),
     items: Joi.array().required(),
     metadata: Joi.object().required(),
-    settings: Joi.object().required()
+    settings: Joi.object()
+        .keys({
+            webRtcIds: Joi.object().pattern(/^/, [Joi.string(), Joi.string()])
+                .required(),
+            webRtcToken: Joi.string() // TBI: Deprecated, can be removed when all parties are migrated
+        })
+        .required()
 });
 
 const partyValidator = newPartyValidator.keys({
     id: Joi.string().uuid().required(),
-    settings: Joi.object({}).required(),
     createdAt: Joi.date(),
     updatedAt: Joi.date()
 });
