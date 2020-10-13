@@ -227,9 +227,9 @@ export default function CommunicationContainer({
                     });
                 });
 
-                call.on('close', () => {
-                    hangUpOnUser(theirWebRtcId);
-                });
+                // call.on('close', () => {
+                //     hangUpOnUser(theirWebRtcId);
+                // });
 
                 // call.peerConnection.oniceconnectionstatechange = (): void => {
                 //     if (
@@ -263,9 +263,9 @@ export default function CommunicationContainer({
                         });
                     });
 
-                    call.on('close', () => {
-                        hangUpOnUser(theirWebRtcId);
-                    });
+                    // call.on('close', () => {
+                    //     hangUpOnUser(theirWebRtcId);
+                    // });
 
                     // call.peerConnection.oniceconnectionstatechange = (): void => {
                     //     if (
