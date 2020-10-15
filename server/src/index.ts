@@ -481,7 +481,7 @@ const runApp = async () => {
     app.post('/api/linkMetadata', isAuthenticated, async (req, res) => {
         const url = req.body.url;
 
-        if (url.includes('youtube.com')) {
+        if (url.indexOf('https://www.youtube.com') === 0) {
             const result = { videoTitle: '', channelTitle: '' };
 
             try {
@@ -498,6 +498,8 @@ const runApp = async () => {
             }
 
             res.json(result);
+        } else {
+            res.status(404);
         }
     });
 

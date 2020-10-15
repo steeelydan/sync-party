@@ -57,6 +57,10 @@ export default function AddMedia({
     const [lastCreatedItem, setLastCreatedItem] = useState<NewMediaItem>();
     const [uploadError, setUploadError] = useState(false);
     const [fetchingLinkMetadata, setFetchingLinkMetadata] = useState(false);
+    const [linkMetadata, setLinkMetadata] = useState<{
+        videoTitle: string;
+        channelTitle: string;
+    } | null>(null);
 
     const dispatch = useDispatch();
 
@@ -255,18 +259,27 @@ export default function AddMedia({
         if (url.includes('youtube.com')) {
             setFetchingLinkMetadata(true);
 
-            const response = await Axios.post(
-                process.env.REACT_APP_API_ROUTE + 'linkMetadata',
-                { url: url },
-                { ...axiosConfig(), timeout: 3000 }
-            );
+            try {
+                const response = await Axios.post(
+                    process.env.REACT_APP_API_ROUTE + 'linkMetadata',
+                    { url: url },
+                    { ...axiosConfig(), timeout: 3000 }
+                );
 
-            setMediaItem({
-                ...webMediaItem,
-                name: response.data.videoTitle
-            });
+                setLinkMetadata({
+                    videoTitle: response.data.videoTitle,
+                    channelTitle: response.data.channelTitle
+                });
 
-            setFetchingLinkMetadata(false);
+                setMediaItem({
+                    ...webMediaItem,
+                    name: response.data.videoTitle
+                });
+
+                setFetchingLinkMetadata(false);
+            } catch (error) {
+                //
+            }
 
             return;
         }
@@ -340,6 +353,7 @@ export default function AddMedia({
                                         setPlayerFocused={(
                                             focused: boolean
                                         ): void => setPlayerFocused(focused)}
+                                        linkMetadata={linkMetadata}
                                         fetchingLinkMetadata={
                                             fetchingLinkMetadata
                                         }
