@@ -56,6 +56,7 @@ export default function AddMedia({
     const [addedSuccessfully, setAddedSuccessfully] = useState(false);
     const [lastCreatedItem, setLastCreatedItem] = useState<NewMediaItem>();
     const [uploadError, setUploadError] = useState(false);
+    const [fetchingLinkMetadata, setFetchingLinkMetadata] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -240,14 +241,37 @@ export default function AddMedia({
         }
     };
 
-    const handleLinkInput = (
+    const handleLinkInput = async (
         event: React.ChangeEvent<HTMLInputElement>
-    ): void => {
-        setMediaItem({
+    ): Promise<void> => {
+        const url = event.target.value;
+
+        const webMediaItem: NewMediaItem = {
             ...mediaItem,
-            url: event.target.value,
+            url: url,
             type: 'web'
-        });
+        };
+
+        if (url.includes('youtube.com')) {
+            setFetchingLinkMetadata(true);
+
+            const response = await Axios.post(
+                process.env.REACT_APP_API_ROUTE + 'linkMetadata',
+                { url: url },
+                { ...axiosConfig(), timeout: 3000 }
+            );
+
+            setMediaItem({
+                ...webMediaItem,
+                name: response.data.videoTitle
+            });
+
+            setFetchingLinkMetadata(false);
+
+            return;
+        }
+
+        setMediaItem(webMediaItem);
     };
 
     const toggleCollapseAddMediaMenu = (): void => {
@@ -316,6 +340,9 @@ export default function AddMedia({
                                         setPlayerFocused={(
                                             focused: boolean
                                         ): void => setPlayerFocused(focused)}
+                                        fetchingLinkMetadata={
+                                            fetchingLinkMetadata
+                                        }
                                     ></AddMediaTabWeb>
                                 )}
                                 {activeTab === 'file' && (

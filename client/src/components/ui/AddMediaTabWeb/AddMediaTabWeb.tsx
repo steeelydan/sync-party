@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
+import Spinner from '../../display/Spinner/Spinner';
 import Button from '../../input/Button/Button';
 import InputText from '../../input/InputText/InputText';
 
@@ -9,6 +10,7 @@ interface Props {
     addWebItem: Function;
     handleLinkInput: Function;
     setPlayerFocused: Function;
+    fetchingLinkMetadata: boolean;
 }
 
 export default function AddMediaTabWeb({
@@ -16,7 +18,8 @@ export default function AddMediaTabWeb({
     setMediaItem,
     addWebItem,
     handleLinkInput,
-    setPlayerFocused
+    setPlayerFocused,
+    fetchingLinkMetadata
 }: Props): ReactElement {
     const { t } = useTranslation();
 
@@ -33,7 +36,7 @@ export default function AddMediaTabWeb({
                 onBlur={(): void => setPlayerFocused(true)}
                 placeholder={t('mediaMenu.addWebUrl')}
             ></InputText>
-            {mediaItem.url !== '' && (
+            {mediaItem.url !== '' && !fetchingLinkMetadata && (
                 <>
                     <div className="mb-3">
                         <InputText
@@ -62,6 +65,7 @@ export default function AddMediaTabWeb({
                     ></Button>
                 </>
             )}
+            {fetchingLinkMetadata && <Spinner size="1x"></Spinner>}
         </form>
     );
 }

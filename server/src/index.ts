@@ -11,6 +11,8 @@ import morgan from 'morgan';
 import socketio from 'socket.io';
 const { ExpressPeerServer } = require('peer');
 import express from 'express';
+import got from 'got';
+import cheerio from 'cheerio';
 
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
@@ -473,6 +475,30 @@ const runApp = async () => {
 
     app.delete('/api/mediaItem/:id', isAuthenticated, async (req, res) => {
         await mediaItemController.deleteMediaItem(req, res, models, logger);
+    });
+
+    // Link Metadata
+    app.post('/api/linkMetadata', isAuthenticated, async (req, res) => {
+        const url = req.body.url;
+
+        if (url.includes('youtube.com')) {
+            const result = { videoTitle: '', channelTitle: '' };
+
+            try {
+                const response = await got(url, { timeout: 3000 });
+                const $ = cheerio.load(response.body);
+                result.videoTitle = $("meta[property='og:title']").attr(
+                    'content'
+                );
+                result.channelTitle = $("*[itemprop = 'author']")
+                    .find('link:nth-child(2)')
+                    .attr('content');
+            } catch (error) {
+                res.status(404);
+            }
+
+            res.json(result);
+        }
     });
 
     // UserItems
