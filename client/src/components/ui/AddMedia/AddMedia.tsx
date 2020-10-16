@@ -56,6 +56,11 @@ export default function AddMedia({
     const [addedSuccessfully, setAddedSuccessfully] = useState(false);
     const [lastCreatedItem, setLastCreatedItem] = useState<NewMediaItem>();
     const [uploadError, setUploadError] = useState(false);
+    const [fetchingLinkMetadata, setFetchingLinkMetadata] = useState(false);
+    const [linkMetadata, setLinkMetadata] = useState<{
+        videoTitle: string;
+        channelTitle: string;
+    } | null>(null);
 
     const dispatch = useDispatch();
 
@@ -240,14 +245,45 @@ export default function AddMedia({
         }
     };
 
-    const handleLinkInput = (
+    const handleLinkInput = async (
         event: React.ChangeEvent<HTMLInputElement>
-    ): void => {
-        setMediaItem({
+    ): Promise<void> => {
+        const url = event.target.value;
+
+        const webMediaItem: NewMediaItem = {
             ...mediaItem,
-            url: event.target.value,
+            url: url,
             type: 'web'
-        });
+        };
+
+        setMediaItem(webMediaItem);
+
+        if (url.includes('https://www.youtube.com')) {
+            setFetchingLinkMetadata(true);
+
+            try {
+                const response = await Axios.post(
+                    process.env.REACT_APP_API_ROUTE + 'linkMetadata',
+                    { url: url },
+                    { ...axiosConfig(), timeout: 3000 }
+                );
+
+                setLinkMetadata({
+                    videoTitle: response.data.videoTitle,
+                    channelTitle: response.data.channelTitle
+                });
+
+                setMediaItem({
+                    ...webMediaItem,
+                    name: response.data.videoTitle
+                });
+
+                setFetchingLinkMetadata(false);
+            } catch (error) {
+                setMediaItem({ ...webMediaItem, name: '' });
+                setFetchingLinkMetadata(false);
+            }
+        }
     };
 
     const toggleCollapseAddMediaMenu = (): void => {
@@ -316,6 +352,10 @@ export default function AddMedia({
                                         setPlayerFocused={(
                                             focused: boolean
                                         ): void => setPlayerFocused(focused)}
+                                        linkMetadata={linkMetadata}
+                                        fetchingLinkMetadata={
+                                            fetchingLinkMetadata
+                                        }
                                     ></AddMediaTabWeb>
                                 )}
                                 {activeTab === 'file' && (

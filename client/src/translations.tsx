@@ -63,7 +63,9 @@ const translations = {
                 clearLabel: 'Clear',
                 download: 'Download',
                 copy: 'Copy URL to Clipboard',
-                invalidFileType: 'This file type is not supported.'
+                invalidFileType: 'This file type is not supported.',
+                addChannelTitle: 'Add channel title',
+                removeChannelTitle: 'Remove channel title'
             },
             chat: {
                 writeSomething: 'Write something',

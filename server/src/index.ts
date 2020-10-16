@@ -37,6 +37,7 @@ import partyItemController from './controllers/partyItemController';
 import partyMetadataController from './controllers/partyMetadataController';
 import userPartyController from './controllers/userPartyController';
 import userItemController from './controllers/userItemController';
+import externalDataController from './controllers/externalDataController';
 
 import helpers from './common/helpers';
 import createModels from './database/createModels';
@@ -536,6 +537,12 @@ const runApp = async () => {
             models,
             logger
         );
+    });
+
+    // Data from external websites
+
+    app.post('/api/linkMetadata', isAuthenticated, async (req, res) => {
+        await externalDataController.getLinkMetadata(req, res, logger);
     });
 
     // Route everything not caught by above routes to index.html

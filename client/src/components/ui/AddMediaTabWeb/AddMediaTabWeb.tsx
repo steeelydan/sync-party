@@ -1,5 +1,6 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Spinner from '../../display/Spinner/Spinner';
 import Button from '../../input/Button/Button';
 import InputText from '../../input/InputText/InputText';
 
@@ -9,6 +10,11 @@ interface Props {
     addWebItem: Function;
     handleLinkInput: Function;
     setPlayerFocused: Function;
+    linkMetadata: {
+        videoTitle: string;
+        channelTitle: string;
+    } | null;
+    fetchingLinkMetadata: boolean;
 }
 
 export default function AddMediaTabWeb({
@@ -16,9 +22,13 @@ export default function AddMediaTabWeb({
     setMediaItem,
     addWebItem,
     handleLinkInput,
-    setPlayerFocused
+    setPlayerFocused,
+    linkMetadata,
+    fetchingLinkMetadata
 }: Props): ReactElement {
     const { t } = useTranslation();
+
+    const [nameWithChannelTitle, setNameWithChannelTitle] = useState(false);
 
     return (
         <form>
@@ -33,9 +43,40 @@ export default function AddMediaTabWeb({
                 onBlur={(): void => setPlayerFocused(true)}
                 placeholder={t('mediaMenu.addWebUrl')}
             ></InputText>
-            {mediaItem.url !== '' && (
+            {mediaItem.url !== '' && !fetchingLinkMetadata && (
                 <>
                     <div className="mb-3">
+                        {linkMetadata && linkMetadata.channelTitle && (
+                            <div
+                                className="cursor-pointer underline text-sm mb-1 text-purple-400"
+                                onClick={(): void => {
+                                    if (!nameWithChannelTitle) {
+                                        setNameWithChannelTitle(true);
+                                        setMediaItem({
+                                            ...mediaItem,
+                                            name:
+                                                linkMetadata.channelTitle +
+                                                ' - ' +
+                                                mediaItem.name
+                                        });
+                                    } else {
+                                        setNameWithChannelTitle(false);
+                                        setMediaItem({
+                                            ...mediaItem,
+                                            name: mediaItem.name.replace(
+                                                linkMetadata.channelTitle +
+                                                    ' - ',
+                                                ''
+                                            )
+                                        });
+                                    }
+                                }}
+                            >
+                                {nameWithChannelTitle
+                                    ? t('mediaMenu.removeChannelTitle')
+                                    : t('mediaMenu.addChannelTitle')}
+                            </div>
+                        )}
                         <InputText
                             labelWidth="w-20"
                             value={mediaItem.name}
@@ -62,6 +103,7 @@ export default function AddMediaTabWeb({
                     ></Button>
                 </>
             )}
+            {fetchingLinkMetadata && <Spinner size="1x"></Spinner>}
         </form>
     );
 }
