@@ -11,8 +11,6 @@ import morgan from 'morgan';
 import socketio from 'socket.io';
 const { ExpressPeerServer } = require('peer');
 import express from 'express';
-import got from 'got';
-import cheerio from 'cheerio';
 
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
@@ -39,6 +37,7 @@ import partyItemController from './controllers/partyItemController';
 import partyMetadataController from './controllers/partyMetadataController';
 import userPartyController from './controllers/userPartyController';
 import userItemController from './controllers/userItemController';
+import externalDataController from './controllers/externalDataController';
 
 import helpers from './common/helpers';
 import createModels from './database/createModels';
@@ -477,51 +476,6 @@ const runApp = async () => {
         await mediaItemController.deleteMediaItem(req, res, models, logger);
     });
 
-    // Link Metadata
-    app.post('/api/linkMetadata', isAuthenticated, async (req, res) => {
-        let url;
-
-        try {
-            url = new URL(req.body.url);
-        } catch (error) {
-            return res.status(404);
-        }
-
-        const origin = url.origin;
-        const pathname = url.pathname;
-        const videoId = url.searchParams.get('v');
-        const videoIdRegex = /[a-zA-Z0-9\-_]/;
-
-        if (
-            origin === 'https://www.youtube.com' &&
-            pathname === '/watch' &&
-            videoIdRegex.test(videoId) &&
-            videoId.length < 20
-        ) {
-            const result = { videoTitle: '', channelTitle: '' };
-
-            try {
-                const response = await got(
-                    `https://www.youtube.com/watch?v=${videoId}`,
-                    { timeout: 3000 }
-                );
-                const $ = cheerio.load(response.body);
-                result.videoTitle = $("meta[property='og:title']").attr(
-                    'content'
-                );
-                result.channelTitle = $("*[itemprop = 'author']")
-                    .find('link:nth-child(2)')
-                    .attr('content');
-            } catch (error) {
-                return res.status(404);
-            }
-
-            res.json(result);
-        } else {
-            return res.status(404);
-        }
-    });
-
     // UserItems
 
     app.get('/api/userItems', isAuthenticated, async (req, res) => {
@@ -583,6 +537,12 @@ const runApp = async () => {
             models,
             logger
         );
+    });
+
+    // Data from external websites
+
+    app.post('/api/linkMetadata', isAuthenticated, async (req, res) => {
+        await externalDataController.getLinkMetadata(req, res, logger);
     });
 
     // Route everything not caught by above routes to index.html

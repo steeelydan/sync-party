@@ -73,8 +73,8 @@ export default function AddMediaTabWeb({
                                 }}
                             >
                                 {nameWithChannelTitle
-                                    ? 'Remove channel title'
-                                    : 'Add channel title'}
+                                    ? t('mediaMenu.removeChannelTitle')
+                                    : t('mediaMenu.addChannelTitle')}
                             </div>
                         )}
                         <InputText
