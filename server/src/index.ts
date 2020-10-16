@@ -547,7 +547,7 @@ const runApp = async () => {
 
     // Route everything not caught by above routes to index.html
     if (process.env.NODE_ENV === 'production') {
-        app.get('*', (req, res) => {
+        app.get('*', rateLimiters.indexRateLimiter, (req, res) => {
             res.sendFile(path.join(__dirname, '../client-build', 'index.html'));
         });
     }
