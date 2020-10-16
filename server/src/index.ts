@@ -479,13 +479,32 @@ const runApp = async () => {
 
     // Link Metadata
     app.post('/api/linkMetadata', isAuthenticated, async (req, res) => {
-        const url = req.body.url;
+        let url;
 
-        if (url.indexOf('https://www.youtube.com') === 0) {
+        try {
+            url = new URL(req.body.url);
+        } catch (error) {
+            return res.status(404);
+        }
+
+        const origin = url.origin;
+        const pathname = url.pathname;
+        const videoId = url.searchParams.get('v');
+        const videoIdRegex = /[a-zA-Z0-9\-_]/;
+
+        if (
+            origin === 'https://www.youtube.com' &&
+            pathname === '/watch' &&
+            videoIdRegex.test(videoId) &&
+            videoId.length < 20
+        ) {
             const result = { videoTitle: '', channelTitle: '' };
 
             try {
-                const response = await got(url, { timeout: 3000 });
+                const response = await got(
+                    `https://www.youtube.com/watch?v=${videoId}`,
+                    { timeout: 3000 }
+                );
                 const $ = cheerio.load(response.body);
                 result.videoTitle = $("meta[property='og:title']").attr(
                     'content'
@@ -494,12 +513,12 @@ const runApp = async () => {
                     .find('link:nth-child(2)')
                     .attr('content');
             } catch (error) {
-                res.status(404);
+                return res.status(404);
             }
 
             res.json(result);
         } else {
-            res.status(404);
+            return res.status(404);
         }
     });
 

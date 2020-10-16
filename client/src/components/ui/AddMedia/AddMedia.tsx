@@ -256,7 +256,9 @@ export default function AddMedia({
             type: 'web'
         };
 
-        if (url.includes('youtube.com')) {
+        setMediaItem(webMediaItem);
+
+        if (url.includes('https://www.youtube.com')) {
             setFetchingLinkMetadata(true);
 
             try {
@@ -278,13 +280,10 @@ export default function AddMedia({
 
                 setFetchingLinkMetadata(false);
             } catch (error) {
-                //
+                setMediaItem({ ...webMediaItem, name: '' });
+                setFetchingLinkMetadata(false);
             }
-
-            return;
         }
-
-        setMediaItem(webMediaItem);
     };
 
     const toggleCollapseAddMediaMenu = (): void => {
