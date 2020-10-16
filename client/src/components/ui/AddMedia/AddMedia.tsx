@@ -258,7 +258,7 @@ export default function AddMedia({
 
         setMediaItem(webMediaItem);
 
-        if (url.includes('https://www.youtube.com')) {
+        if (url.indexOf('https://www.youtube.com') === 0) {
             setFetchingLinkMetadata(true);
 
             try {
