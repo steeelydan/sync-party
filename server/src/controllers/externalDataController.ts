@@ -23,9 +23,9 @@ const getLinkMetadata = async (req: Request, res: Response, logger: Logger) => {
         videoIdRegex.test(videoId) &&
         videoId.length < 20
     ) {
+        const requestUrl = `https://www.youtube.com/watch?v=${videoId}`;
         const result = { videoTitle: '', channelTitle: '' };
 
-        const requestUrl = `https://www.youtube.com/watch?v=${videoId}`;
         logger.log(
             'info',
             `External request: User ${req.user.id} requested link metadata from ${requestUrl}`
@@ -33,6 +33,7 @@ const getLinkMetadata = async (req: Request, res: Response, logger: Logger) => {
 
         try {
             const response = await got(requestUrl, { timeout: 3000 });
+
             const $ = cheerio.load(response.body);
             result.videoTitle = $("meta[property='og:title']").attr('content');
             result.channelTitle = $("*[itemprop = 'author']")
