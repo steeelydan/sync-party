@@ -87,6 +87,8 @@ const translations = {
                 missingPermissionsVideo:
                     'Camera and microphone permissions are necessary',
                 missingPermissionsAudio: 'Microphone permission is necessary',
+                noCamera: 'No camera found',
+                noMicrophone: 'No microphone found',
                 abortError:
                     'Error accessing your camera and/or microphone. Might they already be in use?',
                 showVideos: 'Show videos',

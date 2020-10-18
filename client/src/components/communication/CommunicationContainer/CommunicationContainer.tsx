@@ -117,6 +117,10 @@ export default function CommunicationContainer({
                             ? 'webRtc.missingPermissionsVideo'
                             : 'webRtc.missingPermissionsAudio'
                     );
+                } else if (error.name === 'NotFoundError') {
+                    message = t(
+                        withVideo ? 'webRtc.noCamera' : 'webRtc.noMicrophone'
+                    );
                 } else {
                     message = error.name + ': ' + error.message;
                 }
