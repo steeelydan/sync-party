@@ -334,6 +334,10 @@ export default function CommunicationContainer({
     ]);
 
     const toggleChat = (): void => {
+        if (chatIsActive) {
+            freezeUiVisible(false);
+        }
+
         setChatIsActive(!chatIsActive);
     };
 
