@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ItemListed from '../ItemListed/ItemListed';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,20 +23,22 @@ export default function AddMediaTabUser({
         userItemsNotInParty
     );
 
-    const filterItems = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        const searchTerm = event.target.value.toLowerCase();
-        setItemsFilter(searchTerm);
+    // (Re-)Filter items if items filter term or user items change
+    useEffect(() => {
+        const normalizedSearchTerm = itemsFilter.toLowerCase();
 
-        if (searchTerm !== '') {
+        setItemsFilter(normalizedSearchTerm);
+
+        if (normalizedSearchTerm !== '') {
             setFilteredItems(
                 userItemsNotInParty.filter((item) =>
-                    item.name.toLowerCase().includes(searchTerm)
+                    item.name.toLowerCase().includes(normalizedSearchTerm)
                 )
             );
         } else {
             setFilteredItems(userItemsNotInParty);
         }
-    };
+    }, [userItemsNotInParty, itemsFilter]);
 
     return (
         <div>
@@ -44,7 +46,7 @@ export default function AddMediaTabUser({
                 className="text-white bg-white p-1 text-sm w-full rounded mb-2 bg-opacity-25 outline-none"
                 value={itemsFilter}
                 placeholder={t('mediaMenu.filter')}
-                onChange={filterItems}
+                onChange={(event): void => setItemsFilter(event.target.value)}
                 onFocus={(): void => setPlayerFocused(false)}
                 onBlur={(): void => setPlayerFocused(true)}
             ></input>
