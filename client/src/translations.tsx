@@ -65,7 +65,9 @@ const translations = {
                 copy: 'Copy URL to Clipboard',
                 invalidFileType: 'This file type is not supported.',
                 addChannelTitle: 'Add channel title',
-                removeChannelTitle: 'Remove channel title'
+                removeChannelTitle: 'Remove channel title',
+                filter: 'Search',
+                noFilterResults: 'No results.'
             },
             chat: {
                 writeSomething: 'Write something',

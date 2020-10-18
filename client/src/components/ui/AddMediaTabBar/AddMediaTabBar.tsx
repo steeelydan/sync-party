@@ -24,7 +24,7 @@ export default function AddMediaTabBar({
     const { t } = useTranslation();
 
     return (
-        <div className="flex flex-row mb-2 justify-between">
+        <div className="flex flex-row mb-1 justify-between">
             <ul className="flex">
                 <li className="mr-3">
                     <button
