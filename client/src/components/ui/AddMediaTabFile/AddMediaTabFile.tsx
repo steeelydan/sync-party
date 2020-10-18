@@ -80,6 +80,7 @@ export default function AddMediaTabFile({
                 <>
                     <InputText
                         value={mediaItem.name}
+                        containerClassName="mb-3"
                         placeholder={t('mediaMenu.addNameDescription')}
                         onFocus={(): void => setPlayerFocused(false)}
                         onBlur={(): void => setPlayerFocused(true)}

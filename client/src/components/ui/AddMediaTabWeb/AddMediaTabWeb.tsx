@@ -42,6 +42,7 @@ export default function AddMediaTabWeb({
                 onFocus={(): void => setPlayerFocused(false)}
                 onBlur={(): void => setPlayerFocused(true)}
                 placeholder={t('mediaMenu.addWebUrl')}
+                containerClassName={mediaItem.url ? 'mb-3' : ''}
             ></InputText>
             {mediaItem.url !== '' && !fetchingLinkMetadata && (
                 <>

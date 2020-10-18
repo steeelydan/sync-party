@@ -158,7 +158,7 @@ export default function ScreenDashboard(props: Props): JSX.Element | null {
                     <div className="m-auto max-w-lg">
                         {user.role === 'admin' && (
                             <form>
-                                <div className="flex flex-row">
+                                <div className="flex flex-row mb-5">
                                     <div>
                                         <InputText
                                             containerClassName="w-full"

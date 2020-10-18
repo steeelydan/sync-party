@@ -39,7 +39,7 @@ export default function InputText({
     return (
         <div
             className={
-                'md:flex md:items-center my-auto mb-3' +
+                'md:flex md:items-center my-auto' +
                 (containerClassName ? ' ' + containerClassName : '')
             }
         >
