@@ -315,9 +315,7 @@ export default function AddMedia({
 
     return (
         <div
-            className={
-                'mb-3 mt-2' + (collapsed ? '' : ' flex flex-col flex-shrink')
-            }
+            className={'mt-2' + (collapsed ? '' : ' flex flex-col flex-shrink')}
         >
             {!collapsed && (
                 <>
