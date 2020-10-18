@@ -1,8 +1,8 @@
 /* Global */
 
 body {
-    font-family: 'Open Sans', 'Twemoji Mozilla', 'Helvetica Neue', 'Segoe UI', 'Arial',
-        sans-serif;
+    font-family: 'Open Sans', 'Twemoji Mozilla', 'Helvetica Neue', 'Segoe UI',
+        'Arial', sans-serif;
     line-height: 1.25rem;
     color: white;
     background-color: black;
@@ -29,6 +29,10 @@ body {
 
 .backgroundShade {
     background-color: rgba(0, 0, 0, 0.8);
+}
+
+.backgroundOpacityLow {
+    background-color: rgba(255, 255, 255, 0.13);
 }
 
 /* Player Progress Slider */

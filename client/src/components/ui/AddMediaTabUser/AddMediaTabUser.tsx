@@ -43,7 +43,7 @@ export default function AddMediaTabUser({
     return (
         <div>
             <input
-                className="text-white bg-white p-1 text-sm w-full rounded mb-2 bg-opacity-25 outline-none"
+                className="text-white p-1 text-sm w-full rounded mb-2 outline-none backgroundOpacityLow"
                 value={itemsFilter}
                 placeholder={t('mediaMenu.filter')}
                 onChange={(event): void => setItemsFilter(event.target.value)}
