@@ -120,7 +120,7 @@ export default function ScreenDashboard(props: Props): JSX.Element | null {
 
     return (
         <>
-            <div className="flex flex-col w-screen h-screen">
+            <div className="flex flex-col">
                 {user && (
                     <div className="w-full flex flex-row justify-end">
                         <div className="mx-2 mt-1 mb-3">

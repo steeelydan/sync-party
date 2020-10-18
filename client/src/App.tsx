@@ -116,7 +116,7 @@ function App(): JSX.Element {
     }, [loggedIn, dispatch, t]);
 
     return (
-        <div className="w-screen h-screen flex flex-col text-gray-300 bg-black">
+        <div className="flex flex-col text-gray-300 bg-black">
             <Auth>
                 <Router>
                     <Switch>

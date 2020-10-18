@@ -5,6 +5,7 @@ body {
         sans-serif;
     line-height: 1.25rem;
     color: white;
+    background-color: black;
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
