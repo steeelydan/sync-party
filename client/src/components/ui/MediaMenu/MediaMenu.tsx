@@ -51,6 +51,8 @@ export default function MediaMenu({
     const hoverTimestampRef = useRef(hoverTimestamp);
     hoverTimestampRef.current = hoverTimestamp;
 
+    const [addMediaIsActive, setAddMediaIsActive] = useState(false);
+
     const partyItemListRef = useRef<HTMLDivElement | null>(null);
 
     const dispatch = useDispatch();
@@ -224,7 +226,7 @@ export default function MediaMenu({
                 }
             }}
             onMouseLeave={(): void => {
-                if (!uiFocused.chat) {
+                if (!uiFocused.chat && !addMediaIsActive) {
                     freezeUiVisible(false);
                     setHoverTimestamp(0);
                 }
@@ -314,6 +316,8 @@ export default function MediaMenu({
                 <div className="mb-2">There&#39;s nothing.</div>
             )}
             <AddMedia
+                isActive={addMediaIsActive}
+                setAddMediaIsActive={setAddMediaIsActive}
                 handleItemEditSave={handleItemEditSave}
                 setPlayerFocused={(focused: boolean): void =>
                     setPlayerFocused(focused)

@@ -21,12 +21,16 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import AddMediaTabFile from '../AddMediaTabFile/AddMediaTabFile';
 
 type Props = {
+    isActive: boolean;
+    setAddMediaIsActive: Function;
     socket: SocketIOClient.Socket | null;
     setPlayerFocused: Function;
     handleItemEditSave: Function;
 };
 
 export default function AddMedia({
+    isActive,
+    setAddMediaIsActive,
     socket,
     setPlayerFocused,
     handleItemEditSave
@@ -46,7 +50,6 @@ export default function AddMedia({
         url: ''
     };
 
-    const [collapsed, setCollapsed] = useState(true);
     const [activeTab, setActiveTab] = useState<'user' | 'web' | 'file'>('file');
     const [file, setFile] = useState<File | null>(null);
     const [mediaItem, setMediaItem] = useState(mediaItemDefault);
@@ -287,10 +290,10 @@ export default function AddMedia({
     };
 
     const toggleCollapseAddMediaMenu = (): void => {
-        if (!collapsed) {
+        if (isActive) {
             setActiveTab('file');
         }
-        setCollapsed(!collapsed);
+        setAddMediaIsActive(!isActive);
         setUploadError(false);
         resetUploadForm();
     };
@@ -315,9 +318,9 @@ export default function AddMedia({
 
     return (
         <div
-            className={'mt-2' + (collapsed ? '' : ' flex flex-col flex-shrink')}
+            className={'mt-2' + (!isActive ? '' : ' flex flex-col flex-shrink')}
         >
-            {!collapsed && (
+            {isActive && (
                 <>
                     <AddMediaTabBar
                         activeTab={activeTab}
@@ -394,7 +397,7 @@ export default function AddMedia({
                 </>
             )}
 
-            {collapsed && (
+            {!isActive && (
                 <>
                     <Button
                         padding="p-1"
