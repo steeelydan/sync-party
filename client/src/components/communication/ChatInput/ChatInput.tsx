@@ -1,4 +1,4 @@
-import React, { ReactElement, Ref } from 'react';
+import React, { ReactElement, Ref, useState } from 'react';
 
 interface Props {
     textInput: string;
@@ -19,6 +19,21 @@ export default function ChatInput({
     textInputRef,
     t
 }: Props): ReactElement {
+    const [freezeUiTimestamp, setFreezeUiTimestamp] = useState(0);
+
+    const intervallicFreezeUiVisible = (freeze: boolean): void => {
+        if (freeze) {
+            const now = Date.now();
+
+            if (freezeUiTimestamp + 2000 < now) {
+                freezeUiVisible(true);
+                setFreezeUiTimestamp(now);
+            }
+        } else {
+            freezeUiVisible(false);
+        }
+    };
+
     return (
         <div className="h-auto mb-2 py-1 px-2 chatContainer backgroundShade text-sm rounded border border-purple-400">
             <textarea
@@ -27,22 +42,25 @@ export default function ChatInput({
                 value={textInput}
                 onFocus={(): void => {
                     setPlayerFocused(false);
-                    freezeUiVisible(true);
+                    intervallicFreezeUiVisible(true);
                 }}
                 onBlur={(): void => {
                     setPlayerFocused(true);
                 }}
                 onKeyDown={(event): boolean => {
                     handleInputFieldKeyDown(event);
+                    if (event.key === 'ENTER') {
+                        setFreezeUiTimestamp(0);
+                    }
                     return false;
                 }}
                 placeholder={t('chat.writeSomething')}
                 onChange={(event): void => {
-                    freezeUiVisible(true);
+                    intervallicFreezeUiVisible(true);
                     setTextInput(event.target.value);
                 }}
                 onSelect={(): void => {
-                    freezeUiVisible(true);
+                    intervallicFreezeUiVisible(true);
                 }}
             ></textarea>
         </div>

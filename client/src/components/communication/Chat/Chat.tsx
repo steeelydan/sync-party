@@ -85,6 +85,7 @@ export default function Chat({
         if (event.key === 'Enter') {
             event.preventDefault();
             sendMessage(textInput);
+            freezeUiVisible(false);
             setShowEmojiPicker(false);
         } else if (event.key === 'Escape') {
             if (showEmojiPicker) {
@@ -187,13 +188,9 @@ export default function Chat({
         const historyTimeoutId = setTimeout(() => {
             setHistoryStaysVisible(false);
         }, 12000);
-        const freezeTimeoutId = setTimeout(() => {
-            freezeUiVisible(false);
-        }, 2000);
 
         return (): void => {
             clearTimeout(historyTimeoutId);
-            clearTimeout(freezeTimeoutId);
         };
     }, [chat, freezeUiVisible]);
 
