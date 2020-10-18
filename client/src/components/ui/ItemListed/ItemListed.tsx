@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -68,38 +68,53 @@ export default function ItemListed({
         }
     }, [isCurrentlyPlayingItem, partyItemListRef]);
 
+    const activateEditMode = useCallback(
+        (activate: boolean): void => {
+            if (activate) {
+                setEditMode(true);
+                setPlayerFocused(false);
+            } else {
+                setEditMode(false);
+                setPlayerFocused(true);
+            }
+        },
+        [setPlayerFocused]
+    );
+
+    const handleKeyDown = useCallback(
+        (event: KeyboardEvent): void => {
+            if (editMode) {
+                if (event.code === 'Escape') {
+                    event.preventDefault();
+                    activateEditMode(false);
+                    setProbablyEditedItem(item);
+                }
+                if (event.code === 'Enter') {
+                    event.preventDefault();
+                    handleItemSave(probablyEditedItem);
+                    activateEditMode(false);
+                }
+            }
+        },
+        [activateEditMode, editMode, handleItemSave, item, probablyEditedItem]
+    );
+
+    // Add key listeners if editMode is active
     React.useEffect(() => {
-        document.addEventListener('keydown', handleKeyDown);
+        if (itemListedRef.current) {
+            const itemRef = itemListedRef.current;
 
-        return (): void => {
-            document.removeEventListener('keydown', handleKeyDown);
-        };
-    });
-
-    const handleKeyDown = (event: KeyboardEvent): void => {
-        if (editMode) {
-            if (event.code === 'Escape') {
-                event.preventDefault();
-                activateEditMode(false);
-                setProbablyEditedItem(item);
+            if (editMode) {
+                itemRef.addEventListener('keydown', handleKeyDown);
+            } else {
+                itemRef.removeEventListener('keydown', handleKeyDown);
             }
-            if (event.code === 'Enter') {
-                event.preventDefault();
-                handleItemSave(probablyEditedItem);
-                activateEditMode(false);
-            }
-        }
-    };
 
-    const activateEditMode = (activate: boolean): void => {
-        if (activate) {
-            setEditMode(true);
-            setPlayerFocused(false);
-        } else {
-            setEditMode(false);
-            setPlayerFocused(true);
+            return (): void => {
+                itemRef.removeEventListener('keydown', handleKeyDown);
+            };
         }
-    };
+    }, [editMode, handleKeyDown]);
 
     return (
         <div

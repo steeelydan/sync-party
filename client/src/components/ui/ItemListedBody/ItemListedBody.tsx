@@ -30,7 +30,8 @@ export default function ItemListedBody({
                 <span className="breakLongWords">{item.name}</span>
             ) : (
                 <input
-                    className="bg-gray-200 text-gray-800 w-full"
+                    autoFocus
+                    className="bg-gray-200 text-gray-800 w-full p-1"
                     value={probablyEditedItem.name}
                     onChange={(event): void => {
                         setProbablyEditedItem({
