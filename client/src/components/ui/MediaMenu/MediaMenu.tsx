@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 import { useTranslation } from 'react-i18next';
@@ -46,6 +46,10 @@ export default function MediaMenu({
     const uiFocused = useSelector(
         (state: RootAppState) => state.globalState.uiFocused
     );
+
+    const [hoverTimestamp, setHoverTimestamp] = useState(0);
+    const hoverTimestampRef = useRef(hoverTimestamp);
+    hoverTimestampRef.current = hoverTimestamp;
 
     const partyItemListRef = useRef<HTMLDivElement | null>(null);
 
@@ -211,10 +215,18 @@ export default function MediaMenu({
                 'mediaMenu fixed top-0 right-0 flex flex-col mt-16 p-2 border border-gray-500 rounded m-2 shadow-md backgroundShade z-50' +
                 (uiVisible || !playingItem || !playingItem.url ? '' : ' hidden')
             }
-            onMouseOver={(): void => freezeUiVisible(true)}
+            onMouseOver={(): void => {
+                const now = Date.now();
+
+                if (hoverTimestampRef.current + 10000 < now) {
+                    freezeUiVisible(true);
+                    setHoverTimestamp(now);
+                }
+            }}
             onMouseLeave={(): void => {
                 if (!uiFocused.chat) {
                     freezeUiVisible(false);
+                    setHoverTimestamp(0);
                 }
             }}
         >
