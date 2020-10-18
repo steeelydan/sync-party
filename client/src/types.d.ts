@@ -10,6 +10,7 @@ type AppState = {
         chat: boolean;
     };
     playingItem: MediaItem | null;
+    position: number;
     party: ClientParty | null;
     syncStatus: SyncStatusReceiveMember[] | null;
     memberStatus: MemberStatus | null;
@@ -32,6 +33,7 @@ type GlobalStateActionProperties = {
         chat: boolean;
     };
     playingItem?: MediaItem | null;
+    position?: number;
     party?: ClientParty | null;
     syncStatus?: SyncStatusReceiveMember[] | null;
     memberStatus?: MemberStatus | null;
@@ -60,7 +62,6 @@ type PlayerState = {
     isSyncing: boolean;
     isBuffering: boolean;
     playlistIndex: number;
-    position: number;
     playingItem: MediaItem | null;
     duration: number;
     sourceUrl: string;
@@ -76,7 +77,6 @@ type PlayerStateActionProperties = {
     isSyncing?: boolean;
     isBuffering?: boolean;
     playlistIndex?: number;
-    position?: number;
     playingItem?: MediaItem | null;
     duration?: number;
     sourceUrl?: string;

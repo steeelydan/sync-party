@@ -14,6 +14,7 @@ import {
     faTwitch
 } from '@fortawesome/free-brands-svg-icons';
 import { faFile } from '@fortawesome/free-regular-svg-icons';
+import ReactPlayer from 'react-player';
 
 const baseState: AppState = {
     loggedIn: false,
@@ -23,6 +24,7 @@ const baseState: AppState = {
         chat: false
     },
     playingItem: null,
+    position: 0,
     party: null,
     syncStatus: null,
     memberStatus: null,
@@ -144,6 +146,7 @@ const updateCurrentParty = (
 };
 
 const handleKeyCommands = (
+    reactPlayer: ReactPlayer,
     event: KeyboardEvent,
     handlePlayPause: Function,
     handleFullScreen: Function,
@@ -190,7 +193,9 @@ const handleKeyCommands = (
             event.preventDefault();
             if (playerState.playingItem) {
                 const newPosition =
-                    (playerState.position * playerState.duration -
+                    ((reactPlayer.getCurrentTime() /
+                        reactPlayer.getDuration()) *
+                        playerState.duration -
                         seekStepSize) /
                     playerState.duration;
                 // seek(newPosition);
@@ -211,7 +216,9 @@ const handleKeyCommands = (
             event.preventDefault();
             if (playerState.playingItem) {
                 const newPosition =
-                    (playerState.position * playerState.duration +
+                    ((reactPlayer.getCurrentTime() /
+                        reactPlayer.getDuration()) *
+                        playerState.duration +
                         seekStepSize) /
                     playerState.duration;
                 setPlayerState({

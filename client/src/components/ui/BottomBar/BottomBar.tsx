@@ -41,6 +41,9 @@ export default function BottomBar({
     const uiVisible = useSelector(
         (state: RootAppState) => state.globalState.uiVisible
     );
+    const position = useSelector(
+        (state: RootAppState) => state.globalState.position
+    );
 
     return (
         <div className="flex flex-col">
@@ -80,7 +83,7 @@ export default function BottomBar({
                 {playingItem && (
                     <RangeSlider
                         ariaLabel="Seek bar"
-                        value={playerState.position}
+                        value={position}
                         onMouseDown={handleSeekMouseDown}
                         onChange={handleSeekChange}
                         onMouseUp={handleSeekMouseUp}
@@ -99,7 +102,7 @@ export default function BottomBar({
                                 ? ''
                                 : ' invisible'
                         }
-                        seconds={playerState.duration * playerState.position}
+                        seconds={playerState.duration * position}
                     ></Duration>
                 </div>
                 <RangeSlider

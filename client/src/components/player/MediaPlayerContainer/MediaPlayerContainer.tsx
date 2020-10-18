@@ -82,7 +82,6 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         isSyncing: false,
         isBuffering: false,
         playlistIndex: 0,
-        position: 0,
         playingItem: useSelector(
             (state: RootAppState) => state.globalState.playingItem
         ),
@@ -136,8 +135,9 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     // Player functions
 
     const handleKeyboardInput = (event: KeyboardEvent): void => {
-        if (playerState.isFocused) {
+        if (playerState.isFocused && reactPlayer) {
             handleKeyCommands(
+                reactPlayer,
                 event,
                 handlePlayPause,
                 handleFullScreen,
@@ -165,7 +165,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         noIssuer?: boolean,
         direction?: 'left' | 'right'
     ): void => {
-        if (socket && party && user) {
+        if (socket && party && user && reactPlayer) {
             const playWish: PlayWish = {
                 partyId: party.id,
                 issuer: noIssuer ? 'system' : user.id,
@@ -175,7 +175,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 position:
                     newPosition !== undefined
                         ? newPosition
-                        : playerStateRef.current.position,
+                        : reactPlayer.getCurrentTime() /
+                          reactPlayer.getDuration(),
                 timestamp: Date.now()
             };
 
@@ -459,9 +460,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
 
     const handleProgress = (reactPlayerState: ReactPlayerState): void => {
         if (!playerState.isSeeking) {
-            setPlayerState({
-                position: reactPlayerState.played
-            });
+            dispatch(setGlobalState({ position: reactPlayerState.played }));
         }
     };
 
@@ -498,9 +497,11 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     const handleSeekChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ): void => {
-        setPlayerState({
-            position: parseFloat(event.target.value)
-        });
+        if (reactPlayer) {
+            dispatch(
+                setGlobalState({ position: parseFloat(event.target.value) })
+            );
+        }
     };
 
     const handleSeekMouseUp = (
