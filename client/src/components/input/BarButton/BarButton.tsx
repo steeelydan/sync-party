@@ -48,8 +48,8 @@ export default function BarButton({
                     (isActive
                         ? size === 'small'
                             ? 'text-gray-800'
-                            : 'text-gray-200'
-                        : 'text-gray-200')
+                            : 'text-gray-100'
+                        : 'text-gray-100')
                 }
                 opacity={isActive ? 1 : 0.7}
                 icon={icon}
