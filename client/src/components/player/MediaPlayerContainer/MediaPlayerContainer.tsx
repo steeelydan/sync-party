@@ -233,8 +233,12 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     }, []);
 
     useEffect(() => {
-        // eslint-disable-next-line
-        if (windowHeight === screen.height) {
+        if (
+            // eslint-disable-next-line
+            windowHeight > screen.height - 5 &&
+            // eslint-disable-next-line
+            windowHeight < screen.height + 5
+        ) {
             setPlayerState({ isFullScreen: true });
         } else {
             setPlayerState({ isFullScreen: false });
