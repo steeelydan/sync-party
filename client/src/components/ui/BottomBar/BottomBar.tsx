@@ -1,12 +1,18 @@
 import React, { MouseEventHandler, ChangeEventHandler } from 'react';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import RangeSlider from '../../input/RangeSlider/RangeSlider';
 import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
 import Duration from '../../display/Duration/Duration';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPause, faPlay, faExpand } from '@fortawesome/free-solid-svg-icons';
+import {
+    faPause,
+    faPlay,
+    faExpand,
+    faCompress
+} from '@fortawesome/free-solid-svg-icons';
 import SyncStatus from '../SyncStatus/SyncStatus';
 
 type Props = {
@@ -28,6 +34,8 @@ export default function BottomBar({
     handleVolumeChange,
     handleFullScreen
 }: Props): JSX.Element {
+    const { t } = useTranslation();
+
     const party = useSelector((state: RootAppState) => state.globalState.party);
     const playingItem = useSelector(
         (state: RootAppState) => state.globalState.playingItem
@@ -114,12 +122,20 @@ export default function BottomBar({
                 ></RangeSlider>
                 <div className="mr-2 my-auto">
                     <ButtonIcon
-                        onClick={handleFullScreen}
-                        title="Fullscreen"
+                        onClick={(
+                            event: React.MouseEvent<HTMLInputElement>
+                        ): void => {
+                            handleFullScreen(event);
+                        }}
+                        title={t('common.fullscreen')}
                         icon={
                             <FontAwesomeIcon
                                 className="text-gray-200 hover:text-purple-500"
-                                icon={faExpand}
+                                icon={
+                                    playerState.isFullScreen
+                                        ? faCompress
+                                        : faExpand
+                                }
                                 size="lg"
                             ></FontAwesomeIcon>
                         }

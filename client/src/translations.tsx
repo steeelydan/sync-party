@@ -26,7 +26,8 @@ const translations = {
                 add: 'Add',
                 approx: 'approx.',
                 minLeft: 'min. left',
-                party: 'Party'
+                party: 'Party',
+                fullscreen: 'Toggle fullscreen'
             },
             player: {
                 backToDashboardTitle: 'Back to Dashboard',

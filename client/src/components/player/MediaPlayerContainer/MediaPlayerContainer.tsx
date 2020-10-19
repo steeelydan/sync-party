@@ -72,6 +72,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     const [reactPlayer, setReactPlayer] = useState<ReactPlayer>();
     const [joinedParty, setJoinedParty] = useState(false);
     const [freshlyJoined, setFreshlyJoined] = useState(true);
+    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
     const initialPlayerState = {
         playOrder: null,
@@ -214,6 +215,31 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
             document.removeEventListener('keydown', handleKeyboardInput);
         };
     });
+
+    // Attach Fullscreen detector to window
+
+    const handleResize = (): void => {
+        setWindowHeight(window.innerHeight);
+    };
+
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);
+        window.addEventListener('fullscreenchange', handleResize);
+
+        return (): void => {
+            window.removeEventListener('resize', handleResize);
+            window.removeEventListener('fullscreenchange', handleResize);
+        };
+    }, []);
+
+    useEffect(() => {
+        // eslint-disable-next-line
+        if (windowHeight === screen.height) {
+            setPlayerState({ isFullScreen: true });
+        } else {
+            setPlayerState({ isFullScreen: false });
+        }
+    }, [windowHeight]);
 
     // Update playlist index if playingItem in global state changes
     useEffect(() => {
@@ -518,8 +544,12 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         }
     };
 
-    const handleFullScreen = (): void => {
-        (screenfull as Screenfull).toggle();
+    const handleFullScreen = async (): Promise<void> => {
+        if (!playerState.isFullScreen) {
+            await (screenfull as Screenfull).request();
+        } else {
+            await (screenfull as Screenfull).exit();
+        }
     };
 
     const handleReady = (reactPlayer: ReactPlayer): void => {
