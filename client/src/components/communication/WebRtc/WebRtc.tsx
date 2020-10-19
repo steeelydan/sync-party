@@ -187,7 +187,8 @@ export default function WebRtc({
                     <div
                         className="absolute top-0 left-0"
                         style={{
-                            marginTop: displayVertically ? '80vh' : '45vh'
+                            marginTop: displayVertically ? '80vh' : '45vh',
+                            zIndex: 41
                         }}
                     >
                         <Rnd
