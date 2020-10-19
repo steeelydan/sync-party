@@ -165,7 +165,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         noIssuer?: boolean,
         direction?: 'left' | 'right'
     ): void => {
-        if (socket && party && user && reactPlayer) {
+        if (socket && party && user) {
             const playWish: PlayWish = {
                 partyId: party.id,
                 issuer: noIssuer ? 'system' : user.id,
@@ -175,8 +175,10 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 position:
                     newPosition !== undefined
                         ? newPosition
-                        : reactPlayer.getCurrentTime() /
-                          reactPlayer.getDuration(),
+                        : reactPlayer
+                        ? reactPlayer.getCurrentTime() /
+                          reactPlayer.getDuration()
+                        : 0,
                 timestamp: Date.now()
             };
 
