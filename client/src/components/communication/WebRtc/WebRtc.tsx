@@ -171,6 +171,12 @@ export default function WebRtc({
                                                         ): void => {
                                                             event.currentTarget.play();
                                                         }}
+                                                        style={{
+                                                            WebkitTransform:
+                                                                'scaleX(-1)',
+                                                            transform:
+                                                                'scaleX(-1)'
+                                                        }}
                                                     ></video>
                                                 </div>
                                             );
