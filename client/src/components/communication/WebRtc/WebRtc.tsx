@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Rnd } from 'react-rnd';
 import { rndHandleStyles } from '../../../common/helpers';
 import WebRtcVideoOverlayMenu from '../WebRtcVideoOverlayMenu/WebRtcVideoOverlayMenu';
@@ -45,7 +45,9 @@ export default function WebRtc({
     const [displayOverlayMenu, setDisplayOverlayMenu] = useState(false);
     const [displayOwnVideo, setDisplayOwnVideo] = useState(true);
     const [displayVertically, setDisplayVertically] = useState(false);
-    const [webRtcIsFullscreen, setWebRtcIsFullscreen] = useState(false);
+    const webRtcIsFullscreen = useSelector(
+        (state: RootAppState) => state.globalState.webRtc.isFullscreen || false
+    );
 
     const displayedMediaStreams: {
         webRtcId: string;
@@ -88,8 +90,6 @@ export default function WebRtc({
                 isActive={displayOverlayMenu}
                 displayOwnVideo={displayOwnVideo}
                 setDisplayOwnVideo={setDisplayOwnVideo}
-                webRtcIsFullscreen={webRtcIsFullscreen}
-                setWebRtcIsFullscreen={setWebRtcIsFullscreen}
                 otherVideosAmount={otherVideosAmount}
             />
             {displayedMediaStreams.map((displayedMediaStream) => {

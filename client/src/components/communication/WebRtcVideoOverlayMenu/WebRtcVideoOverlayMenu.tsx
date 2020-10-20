@@ -7,6 +7,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import React, { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { setGlobalState } from '../../../actions/globalActions';
 import BarButton from '../../input/BarButton/BarButton';
 
 interface Props {
@@ -15,8 +17,6 @@ interface Props {
     setDisplayVertically: Function;
     displayOwnVideo: boolean;
     setDisplayOwnVideo: Function;
-    webRtcIsFullscreen: boolean;
-    setWebRtcIsFullscreen: Function;
     otherVideosAmount: number;
 }
 
@@ -26,18 +26,25 @@ export default function WebRtcVideoOverlayMenu({
     setDisplayVertically,
     displayOwnVideo,
     setDisplayOwnVideo,
-    webRtcIsFullscreen,
-    setWebRtcIsFullscreen,
     otherVideosAmount
 }: Props): ReactElement {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const webRtcState = useSelector(
+        (state: RootAppState) => state.globalState.webRtc
+    );
+    const uiVisible = useSelector(
+        (state: RootAppState) => state.globalState.uiVisible
+    );
 
     return (
         <div
             className={
                 'absolute top-0 left-0 flex flex-row rounded p-1 bg-black opacity-75' +
-                (isActive ? '' : ' hidden') +
-                (webRtcIsFullscreen ? ' ml-1 mt-8' : ' m-1')
+                (uiVisible && (isActive || webRtcState.isFullscreen)
+                    ? ''
+                    : ' hidden') +
+                (webRtcState.isFullscreen ? ' ml-1 mt-8' : ' m-1')
             }
             style={{ zIndex: 1000 }}
         >
@@ -55,14 +62,19 @@ export default function WebRtcVideoOverlayMenu({
             />
             <BarButton
                 size="small"
-                isActive={webRtcIsFullscreen}
-                clickHandler={(): void =>
-                    setWebRtcIsFullscreen(!webRtcIsFullscreen)
-                }
-                icon={webRtcIsFullscreen ? faCompress : faExpand}
-                titleText={t(
-                    webRtcIsFullscreen ? 'Disable WebRTC Fullscreen' : 'Enable'
-                )}
+                isActive={webRtcState.isFullscreen || false}
+                clickHandler={(): void => {
+                    dispatch(
+                        setGlobalState({
+                            webRtc: {
+                                ...webRtcState,
+                                isFullscreen: !webRtcState.isFullscreen
+                            }
+                        })
+                    );
+                }}
+                icon={webRtcState.isFullscreen ? faCompress : faExpand}
+                titleText={t('webRtc.fullscreen')}
                 margins={'mt-0' + (otherVideosAmount > 1 ? ' mr-2' : '')}
             />
             {otherVideosAmount > 1 && (

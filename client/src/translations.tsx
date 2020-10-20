@@ -97,7 +97,8 @@ const translations = {
                 toggleUserVideoOn: 'Display own video',
                 toggleUserVideoOff: 'Hide own video',
                 displayVertically: 'Arrange videos vertically',
-                displayHorizontally: 'Arrange video horizontally'
+                displayHorizontally: 'Arrange video horizontally',
+                fullscreen: 'Toggle videochat fullscreen'
             },
             dashboard: {
                 newParty: 'New Party',

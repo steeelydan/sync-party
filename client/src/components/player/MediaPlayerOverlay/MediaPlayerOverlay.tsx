@@ -19,6 +19,9 @@ export default function MediaPlayerOverlay(props: Props): JSX.Element {
     const uiVisible = useSelector(
         (state: RootAppState) => state.globalState.uiVisible
     );
+    const webRtcGlobalState = useSelector(
+        (state: RootAppState) => state.globalState.webRtc
+    );
 
     const { t } = useTranslation();
 
@@ -54,7 +57,7 @@ export default function MediaPlayerOverlay(props: Props): JSX.Element {
 
     return (
         <>
-            {displayItemTitle && (
+            {displayItemTitle && !webRtcGlobalState.isFullscreen && (
                 <div className="flex w-full h-full absolute">
                     <div className="m-auto p-auto">
                         {props.playerState.playingItem ? (

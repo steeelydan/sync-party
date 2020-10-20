@@ -688,7 +688,10 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
             <TopBar socket={socket}></TopBar>
             <div
                 onMouseDown={handlePlayPause}
-                className={'flex w-full h-full reactPlayer'}
+                className={
+                    'flex w-full h-full reactPlayer bg-transparent' +
+                    (webRtcGlobalState.isFullscreen ? ' z-40' : '')
+                }
             >
                 <MediaPlayerOverlay
                     playerState={playerState}

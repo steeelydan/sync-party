@@ -198,7 +198,10 @@ type MemberStatus = {
     };
 };
 
-type WebRtcState = { mode: 'none' | 'audio' | 'video' };
+type WebRtcState = {
+    mode?: 'none' | 'audio' | 'video';
+    isFullscreen?: boolean;
+};
 
 type ActionMessage = {
     text: string | JSX.Element;

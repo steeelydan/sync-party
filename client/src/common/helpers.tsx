@@ -35,7 +35,8 @@ const baseState: AppState = {
     initialServerTimeOffset: 0,
     chat: {},
     webRtc: {
-        mode: 'none'
+        mode: 'none',
+        isFullscreen: false
     }
 };
 
