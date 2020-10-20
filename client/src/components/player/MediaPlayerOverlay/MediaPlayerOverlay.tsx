@@ -72,7 +72,7 @@ export default function MediaPlayerOverlay(props: Props): JSX.Element {
                 actionMessage.text &&
                 !props.playerTimeoutState.actionMessageTimeoutDone && (
                     <div className="flex w-full h-full absolute">
-                        <div className="mt-12 mx-auto mb-auto py-2 px-3 rounded backgroundShade">
+                        <div className="mt-12 mx-auto mb-auto py-2 px-3 rounded backgroundShade z-50">
                             {actionMessage.text}
                         </div>
                     </div>
