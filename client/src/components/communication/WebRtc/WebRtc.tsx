@@ -79,7 +79,9 @@ export default function WebRtc({
             className={
                 'flex' +
                 (displayVertically ? ' flex-col' : ' flex-row') +
-                (webRtcIsFullscreen ? ' my-auto relative w-full h-full' : '')
+                (webRtcIsFullscreen
+                    ? ' my-auto relative w-full h-full z-40'
+                    : '')
             }
             onMouseOver={(): void => setDisplayOverlayMenu(true)}
             onMouseLeave={(): void => setDisplayOverlayMenu(false)}
