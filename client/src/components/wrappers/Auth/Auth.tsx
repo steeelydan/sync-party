@@ -56,7 +56,9 @@ export default function Auth(props: Props): JSX.Element {
     return loggedIn === true ? (
         props.children
     ) : loggedIn === false ? (
-        <ScreenLogin></ScreenLogin>
+        <div className="absolute top-0 left-0 w-full h-full flex">
+            <ScreenLogin></ScreenLogin>
+        </div>
     ) : (
         <div className="absolute top-0 left-0 w-full h-full flex">
             <Spinner></Spinner>
