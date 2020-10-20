@@ -15,6 +15,7 @@ interface Props {
     ourUserId: string;
     webRtcIds: WebRtcIds;
     showVideos: boolean;
+    handlePlayPause: Function;
 }
 
 export default function WebRtc({
@@ -23,7 +24,8 @@ export default function WebRtc({
     mediaStreamsRef,
     ourUserId,
     webRtcIds,
-    showVideos
+    showVideos,
+    handlePlayPause
 }: Props): ReactElement | null {
     const ourWebRtcId = webRtcIds[ourUserId];
 
@@ -85,6 +87,11 @@ export default function WebRtc({
             }
             onMouseOver={(): void => setDisplayOverlayMenu(true)}
             onMouseLeave={(): void => setDisplayOverlayMenu(false)}
+            onMouseDown={(): void => {
+                if (webRtcIsFullscreen) {
+                    handlePlayPause();
+                }
+            }}
         >
             <WebRtcVideoOverlayMenu
                 displayVertically={displayVertically}

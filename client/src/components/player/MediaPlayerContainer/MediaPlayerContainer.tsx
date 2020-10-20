@@ -703,7 +703,9 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 ></MediaPlayerOverlay>
                 <div className="flex w-full h-full pointer-events-none">
                     <ReactPlayer
-                        config={{ youtube: { playerVars: { disablekb: 1 } } }}
+                        config={{
+                            youtube: { playerVars: { disablekb: 1 } }
+                        }}
                         url={playerState.sourceUrl}
                         playing={playerState.isPlaying}
                         playsinline={true}
@@ -728,6 +730,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     setPlayerState={setPlayerState}
                     uiVisible={uiVisible}
                     freezeUiVisible={freezeUiVisible}
+                    handlePlayPause={handlePlayPause}
                 ></CommunicationContainer>
             )}
             <BottomBar
