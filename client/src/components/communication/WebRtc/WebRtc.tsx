@@ -78,13 +78,7 @@ export default function WebRtc({
 
     const otherVideos = (
         <div
-            className={
-                'flex' +
-                (displayVertically ? ' flex-col' : ' flex-row') +
-                (webRtcIsFullscreen
-                    ? ' my-auto relative w-full h-full z-40'
-                    : '')
-            }
+            className={webRtcIsFullscreen ? ' w-full h-full' : ''}
             onMouseOver={(): void => setDisplayOverlayMenu(true)}
             onMouseLeave={(): void => setDisplayOverlayMenu(false)}
         >
@@ -96,65 +90,82 @@ export default function WebRtc({
                 setDisplayOwnVideo={setDisplayOwnVideo}
                 otherVideosAmount={otherVideosAmount}
             />
-            {displayedMediaStreams.map((displayedMediaStream) => {
-                const isOwnVideo =
-                    displayedMediaStream.webRtcId === ourWebRtcId;
-
-                if (
-                    memberStatus &&
-                    memberStatus[
-                        userIdWebRtcIdMap[displayedMediaStream.webRtcId]
-                    ].online &&
-                    displayedMediaStream.mediaStream.getVideoTracks().length &&
-                    !isOwnVideo
-                ) {
-                    return (
-                        <div
-                            key={displayedMediaStream.webRtcId}
-                            className={
-                                'overflow-hidden bg-transparent rounded flex ' +
-                                (webRtcIsFullscreen
-                                    ? ''
-                                    : displayVertically
-                                    ? 'mb-2'
-                                    : 'mr-2')
-                            }
-                            style={{
-                                height: '100%',
-                                width: '100%'
-                            }}
-                        >
-                            <video
-                                className="flex-1"
-                                ref={(video): void => {
-                                    if (video) {
-                                        if (
-                                            video.srcObject !==
-                                            mediaStreamsRef.current[
-                                                displayedMediaStream.webRtcId
-                                            ]
-                                        ) {
-                                            video.srcObject =
-                                                mediaStreamsRef.current[
-                                                    displayedMediaStream.webRtcId
-                                                ];
-                                        }
-                                    }
-                                }}
-                                onLoadedMetadata={(event): void => {
-                                    event.currentTarget.play();
-                                }}
-                                style={{
-                                    WebkitTransform: 'scaleX(-1)',
-                                    transform: 'scaleX(-1)'
-                                }}
-                            ></video>
-                        </div>
-                    );
-                } else {
-                    return null;
+            <div
+                className={
+                    'flex' +
+                    (displayVertically ? ' flex-col' : ' flex-row') +
+                    (webRtcIsFullscreen
+                        ? ' my-auto relative w-full h-full z-40'
+                        : '')
                 }
-            })}
+                onMouseDown={(): void => {
+                    if (webRtcIsFullscreen) {
+                        handlePlayPause();
+                    }
+                }}
+            >
+                {displayedMediaStreams.map((displayedMediaStream) => {
+                    const isOwnVideo =
+                        displayedMediaStream.webRtcId === ourWebRtcId;
+
+                    if (
+                        memberStatus &&
+                        memberStatus[
+                            userIdWebRtcIdMap[displayedMediaStream.webRtcId]
+                        ].online &&
+                        displayedMediaStream.mediaStream.getVideoTracks()
+                            .length &&
+                        !isOwnVideo
+                    ) {
+                        return (
+                            <div
+                                key={displayedMediaStream.webRtcId}
+                                className={
+                                    'overflow-hidden bg-transparent rounded flex ' +
+                                    (webRtcIsFullscreen
+                                        ? ''
+                                        : displayVertically
+                                        ? 'mb-2'
+                                        : 'mr-2')
+                                }
+                                style={{
+                                    height: '100%',
+                                    width: '100%'
+                                }}
+                            >
+                                <video
+                                    className="flex-1"
+                                    ref={(video): void => {
+                                        if (video) {
+                                            if (
+                                                video.srcObject !==
+                                                mediaStreamsRef.current[
+                                                    displayedMediaStream
+                                                        .webRtcId
+                                                ]
+                                            ) {
+                                                video.srcObject =
+                                                    mediaStreamsRef.current[
+                                                        displayedMediaStream.webRtcId
+                                                    ];
+                                            }
+                                        }
+                                    }}
+                                    onLoadedMetadata={(event): void => {
+                                        event.currentTarget.play();
+                                    }}
+                                    style={{
+                                        WebkitTransform: 'scaleX(-1)',
+                                        transform: 'scaleX(-1)'
+                                    }}
+                                ></video>
+                            </div>
+                        );
+                    } else {
+                        return null;
+                    }
+                })}
+            </div>
         </div>
     );
 
@@ -225,14 +236,7 @@ export default function WebRtc({
                 {videoIsActive &&
                     ourWebRtcId &&
                     (webRtcIsFullscreen ? (
-                        <div
-                            className="flex flex-col h-full"
-                            onMouseDown={(): void => {
-                                if (webRtcIsFullscreen) {
-                                    handlePlayPause();
-                                }
-                            }}
-                        >
+                        <div className="flex flex-col h-full">
                             {otherVideos}
                         </div>
                     ) : (
