@@ -87,11 +87,6 @@ export default function WebRtc({
             }
             onMouseOver={(): void => setDisplayOverlayMenu(true)}
             onMouseLeave={(): void => setDisplayOverlayMenu(false)}
-            onMouseDown={(): void => {
-                if (webRtcIsFullscreen) {
-                    handlePlayPause();
-                }
-            }}
         >
             <WebRtcVideoOverlayMenu
                 displayVertically={displayVertically}
@@ -230,7 +225,14 @@ export default function WebRtc({
                 {videoIsActive &&
                     ourWebRtcId &&
                     (webRtcIsFullscreen ? (
-                        <div className="flex flex-col h-full">
+                        <div
+                            className="flex flex-col h-full"
+                            onMouseDown={(): void => {
+                                if (webRtcIsFullscreen) {
+                                    handlePlayPause();
+                                }
+                            }}
+                        >
                             {otherVideos}
                         </div>
                     ) : (
