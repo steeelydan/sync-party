@@ -45,6 +45,9 @@ export default function ItemListed({
     const itemListedRef = useRef<HTMLDivElement | null>(null);
 
     const party = useSelector((state: RootAppState) => state.globalState.party);
+    const uiVisible = useSelector(
+        (state: RootAppState) => state.globalState.uiVisible
+    );
 
     const { t } = useTranslation();
 
@@ -66,7 +69,7 @@ export default function ItemListed({
                 list.scrollTop = item.offsetTop - list.offsetHeight / 2;
             }
         }
-    }, [isCurrentlyPlayingItem, partyItemListRef]);
+    }, [isCurrentlyPlayingItem, partyItemListRef, uiVisible]);
 
     const activateEditMode = useCallback(
         (activate: boolean): void => {
