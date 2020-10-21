@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Rnd } from 'react-rnd';
 import { rndHandleStyles } from '../../../common/helpers';
 import WebRtcVideoOverlayMenu from '../WebRtcVideoOverlayMenu/WebRtcVideoOverlayMenu';
