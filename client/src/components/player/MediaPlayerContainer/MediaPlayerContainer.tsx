@@ -187,10 +187,13 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 lastPosition: lastPositionItemId
                     ? {
                           itemId: lastPositionItemId,
-                          position: reactPlayer
-                              ? reactPlayer.getCurrentTime() /
-                                reactPlayer.getDuration()
-                              : 0
+                          position:
+                              reactPlayer &&
+                              reactPlayer.getDuration() > 300 &&
+                              !noIssuer
+                                  ? reactPlayer.getCurrentTime() /
+                                    reactPlayer.getDuration()
+                                  : 0
                       }
                     : null,
                 requestLastPosition: requestLastPosition,

@@ -42,44 +42,47 @@ export default function AlertContainer({
                     </div>
                 </div>
             )}
-            {hasLastPosition && (
-                <div className="flex w-full h-full absolute bg-transparent">
-                    <div className="mt-32 mx-auto mb-auto py-2 px-3 rounded backgroundShade">
-                        <div className="mb-3">
-                            {t('alerts.continueFromLastPosition')}
-                        </div>
-                        <div className="flex flex-row justify-center">
-                            <Button
-                                className="mr-3"
-                                onClick={(): void => {
-                                    if (
-                                        playerState.playingItem &&
-                                        playerState.playOrder &&
-                                        playerState.playOrder.lastPosition
-                                    )
-                                        emitPlayWish(
-                                            playerState.playingItem,
-                                            playerState.isPlaying,
-                                            null,
-                                            false,
+            {hasLastPosition &&
+                playerState.playOrder &&
+                playerState.playOrder.lastPosition &&
+                playerState.playOrder.lastPosition.position > 0 && (
+                    <div className="flex w-full h-full absolute bg-transparent">
+                        <div className="mt-32 mx-auto mb-auto py-2 px-3 rounded backgroundShade">
+                            <div className="mb-3">
+                                {t('alerts.continueFromLastPosition')}
+                            </div>
+                            <div className="flex flex-row justify-center">
+                                <Button
+                                    className="mr-3"
+                                    onClick={(): void => {
+                                        if (
+                                            playerState.playingItem &&
+                                            playerState.playOrder &&
                                             playerState.playOrder.lastPosition
-                                                .position
-                                        );
+                                        )
+                                            emitPlayWish(
+                                                playerState.playingItem,
+                                                playerState.isPlaying,
+                                                null,
+                                                false,
+                                                playerState.playOrder
+                                                    .lastPosition.position
+                                            );
 
-                                    setHasLastPosition(false);
-                                }}
-                                text={t('alerts.yes')}
-                            />
-                            <Button
-                                onClick={(): void => {
-                                    setHasLastPosition(false);
-                                }}
-                                text={t('alerts.no')}
-                            />
+                                        setHasLastPosition(false);
+                                    }}
+                                    text={t('alerts.yes')}
+                                />
+                                <Button
+                                    onClick={(): void => {
+                                        setHasLastPosition(false);
+                                    }}
+                                    text={t('alerts.no')}
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
         </>
     );
 }
