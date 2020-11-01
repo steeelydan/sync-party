@@ -3,6 +3,7 @@ import https from 'https';
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
+import { CronJob } from 'cron';
 
 import { Sequelize } from 'sequelize';
 
@@ -109,6 +110,12 @@ const runApp = async () => {
 
     // DEFAULT VALUES
 
+    const persistentValues = fs.existsSync('./persistence.json')
+        ? JSON.parse(fs.readFileSync('./persistence.json', 'utf-8'))
+        : {
+              lastPositions: {}
+          };
+
     const currentSyncStatus: {
         [partyId: string]: { [userId: string]: SyncStatus };
     } = {};
@@ -117,7 +124,21 @@ const runApp = async () => {
     } = {};
     const lastPositions: {
         [partyId: string]: { [itemId: string]: number };
-    } = {};
+    } = persistentValues.lastPositions;
+
+    new CronJob(
+        '*/15 * * * *',
+        () => {
+            fs.writeFileSync(
+                path.join('./persistence.json'),
+                JSON.stringify({
+                    lastPositions
+                })
+            );
+        },
+        null,
+        true
+    ).start();
 
     // MIDDLEWARE
 
