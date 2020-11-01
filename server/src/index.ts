@@ -122,7 +122,7 @@ const runApp = async () => {
     } = {};
     const currentPlayWishes: {
         [partyId: string]: PlayWish;
-    } = persistentValues.lastPositions;
+    } = persistentValues.currentPlayWishes;
     const lastPositions: {
         [partyId: string]: { [itemId: string]: number };
     } = persistentValues.lastPositions;
