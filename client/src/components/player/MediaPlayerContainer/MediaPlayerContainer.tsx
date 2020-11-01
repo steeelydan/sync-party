@@ -286,7 +286,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
 
             socket.off('playOrder');
             socket.on('playOrder', (playOrder: PlayOrder) => {
-                setPlayerState({ playOrder: playOrder, isSyncing: true });
+                setPlayerState({ playOrder: playOrder });
                 setHasLastPosition(false);
 
                 const playOrderItem = party.items.find((item: MediaItem) => {
@@ -359,7 +359,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
 
                     setPlayerState({
                         playingItem: playOrderItem,
-                        sourceUrl: newSourceUrl
+                        sourceUrl: newSourceUrl,
+                        isSyncing: true
                     });
 
                     dispatch(
@@ -441,11 +442,11 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     useEffect(() => {
         if (
             reactPlayer &&
+            reactPlayer.getInternalPlayer() &&
             playerState.duration &&
             playerState.playOrder &&
             playerState.isSyncing &&
-            playerState.playingItem &&
-            user
+            playerState.playingItem
         ) {
             let offset = 0;
 
