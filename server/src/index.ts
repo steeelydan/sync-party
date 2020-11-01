@@ -113,6 +113,7 @@ const runApp = async () => {
     const persistentValues = fs.existsSync('./persistence.json')
         ? JSON.parse(fs.readFileSync('./persistence.json', 'utf-8'))
         : {
+              currentPlayWishes: {},
               lastPositions: {}
           };
 
@@ -121,7 +122,7 @@ const runApp = async () => {
     } = {};
     const currentPlayWishes: {
         [partyId: string]: PlayWish;
-    } = {};
+    } = persistentValues.lastPositions;
     const lastPositions: {
         [partyId: string]: { [itemId: string]: number };
     } = persistentValues.lastPositions;
@@ -132,6 +133,7 @@ const runApp = async () => {
             fs.writeFileSync(
                 path.join('./persistence.json'),
                 JSON.stringify({
+                    currentPlayWishes,
                     lastPositions
                 })
             );
