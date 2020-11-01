@@ -137,7 +137,7 @@ const runApp = async () => {
             );
         },
         null,
-        true
+        false
     ).start();
 
     // MIDDLEWARE
