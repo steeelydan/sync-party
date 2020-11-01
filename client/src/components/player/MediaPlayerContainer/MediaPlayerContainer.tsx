@@ -24,6 +24,8 @@ import BottomBar from '../../ui/BottomBar/BottomBar';
 import MediaMenu from '../../ui/MediaMenu/MediaMenu';
 import MediaPlayerOverlay from '../MediaPlayerOverlay/MediaPlayerOverlay';
 import ActionMessageContent from '../../display/ActionMessageContent/ActionMessageContent';
+import CommunicationContainer from '../../communication/CommunicationContainer/CommunicationContainer';
+import AlertContainer from '../../ui/AlertContainer/AlertContainer';
 
 import {
     faPlay,
@@ -34,7 +36,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
-import CommunicationContainer from '../../communication/CommunicationContainer/CommunicationContainer';
 
 type Props = {
     socket: SocketIOClient.Socket | null;
@@ -73,6 +74,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     const [joinedParty, setJoinedParty] = useState(false);
     const [freshlyJoined, setFreshlyJoined] = useState(true);
     const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+    const [hasLastPosition, setHasLastPosition] = useState(false);
 
     const initialPlayerState = {
         playOrder: null,
@@ -162,6 +164,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     const emitPlayWish = (
         mediaItem: MediaItem,
         isPlaying: boolean,
+        lastPositionItemId: string | null,
+        requestLastPosition: boolean,
         newPosition?: number,
         noIssuer?: boolean,
         direction?: 'left' | 'right'
@@ -180,6 +184,16 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                         ? reactPlayer.getCurrentTime() /
                           reactPlayer.getDuration()
                         : 0,
+                lastPosition: lastPositionItemId
+                    ? {
+                          itemId: lastPositionItemId,
+                          position: reactPlayer
+                              ? reactPlayer.getCurrentTime() /
+                                reactPlayer.getDuration()
+                              : 0
+                      }
+                    : null,
+                requestLastPosition: requestLastPosition,
                 timestamp: Date.now()
             };
 
@@ -270,6 +284,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
             socket.off('playOrder');
             socket.on('playOrder', (playOrder: PlayOrder) => {
                 setPlayerState({ playOrder: playOrder, isSyncing: true });
+                setHasLastPosition(false);
 
                 const playOrderItem = party.items.find((item: MediaItem) => {
                     return item.id === playOrder.mediaItemId;
@@ -426,7 +441,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
             playerState.duration &&
             playerState.playOrder &&
             playerState.isSyncing &&
-            playerState.playingItem
+            playerState.playingItem &&
+            user
         ) {
             let offset = 0;
 
@@ -440,6 +456,16 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 }
 
                 setFreshlyJoined(false);
+            }
+
+            if (
+                playerState.playOrder.lastPosition &&
+                user &&
+                playerState.playOrder.issuer === user.id
+            ) {
+                setHasLastPosition(true);
+            } else {
+                setHasLastPosition(false);
             }
 
             reactPlayer.seekTo(playerState.playOrder.position + offset);
@@ -463,6 +489,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         playerState,
         initialServerTimeOffset,
         freshlyJoined,
+        user,
         dispatch
     ]);
 
@@ -510,12 +537,16 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 emitPlayWish(
                     playerState.playingItem,
                     false,
+                    playerState.playingItem.id,
+                    false,
                     getCurrentPosition()
                 );
             } else {
                 emitPlayWish(
                     playerState.playingItem,
                     true,
+                    null,
+                    false,
                     getCurrentPosition()
                 );
             }
@@ -543,6 +574,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
             emitPlayWish(
                 playerState.playingItem,
                 playerState.isPlaying,
+                null,
+                false,
                 parseFloat((event.target as HTMLInputElement).value)
             );
         }
@@ -571,11 +604,20 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 emitPlayWish(
                     party.items[playerState.playlistIndex + 1],
                     playerState.isPlaying,
+                    playerState.playingItem ? playerState.playingItem.id : null,
+                    false,
                     0,
                     true
                 );
             } else {
-                emitPlayWish(party.items[0], false, 0, true);
+                emitPlayWish(
+                    party.items[0],
+                    false,
+                    playerState.playingItem ? playerState.playingItem.id : null,
+                    false,
+                    0,
+                    true
+                );
 
                 setPlayerState({
                     isPlaying: false
@@ -742,6 +784,12 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 handleVolumeChange={handleVolumeChange}
                 handleFullScreen={handleFullScreen}
             ></BottomBar>
+            <AlertContainer
+                playerState={playerState}
+                emitPlayWish={emitPlayWish}
+                hasLastPosition={hasLastPosition}
+                setHasLastPosition={setHasLastPosition}
+            ></AlertContainer>
             <MediaMenu
                 socket={socket}
                 playerState={playerState}

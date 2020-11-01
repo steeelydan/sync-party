@@ -99,6 +99,8 @@ export default function MediaMenu({
                                     : currentIndex - 1
                             ],
                             playerState.isPlaying,
+                            null,
+                            false,
                             0
                         );
                     }
@@ -166,7 +168,13 @@ export default function MediaMenu({
                 return mediaItem.id === chosenItem.id;
             })[0];
 
-            emitPlayWish(newSource, true, 0);
+            emitPlayWish(
+                newSource,
+                true,
+                playerState.playingItem ? playerState.playingItem.id : null,
+                true,
+                0
+            );
         }
     };
 

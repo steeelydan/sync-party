@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useSelector, useDispatch } from 'react-redux';
-import { setGlobalState } from '../../../actions/globalActions';
+import { useSelector } from 'react-redux';
 
 import Avatars from '../../display/Avatars/Avatars';
 import TitleDisplay from '../TitleDisplay/TitleDisplay';
 import EditParty from '../EditParty/EditParty';
 import AdminActionOverlay from '../AdminActionOverlay/AdminActionOverlay';
-import Alert from '../../display/Alert/Alert';
 
 import { faTh } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,16 +24,8 @@ export default function TopBar({ socket }: Props): JSX.Element {
     const uiVisible = useSelector(
         (state: RootAppState) => state.globalState.uiVisible
     );
-    const errorMessage = useSelector(
-        (state: RootAppState) => state.globalState.errorMessage
-    );
 
-    const dispatch = useDispatch();
     const { t } = useTranslation();
-
-    const closeErrorMessage = (): void => {
-        dispatch(setGlobalState({ errorMessage: '' }));
-    };
 
     if (party && redirect !== '') {
         if (redirect === 'home' && socket) {
@@ -99,17 +89,6 @@ export default function TopBar({ socket }: Props): JSX.Element {
                         socket={socket}
                     ></EditParty>
                 </AdminActionOverlay>
-            )}
-            {errorMessage && (
-                <div className="flex w-full h-full absolute z-50">
-                    <div className="mt-32 mx-auto mb-auto">
-                        <Alert
-                            mode="error"
-                            text={errorMessage}
-                            onCloseButton={closeErrorMessage}
-                        ></Alert>
-                    </div>
-                </div>
             )}
         </div>
     );

@@ -110,10 +110,13 @@ const runApp = async () => {
     // DEFAULT VALUES
 
     const currentSyncStatus: {
-        [partyId: string]: { [userId: string]: object }; // FIXME type
+        [partyId: string]: { [userId: string]: SyncStatus };
     } = {};
     const currentPlayWishes: {
-        [partyId: string]: object;
+        [partyId: string]: PlayWish;
+    } = {};
+    const lastPositions: {
+        [partyId: string]: { [itemId: string]: number };
     } = {};
 
     // MIDDLEWARE
@@ -280,6 +283,37 @@ const runApp = async () => {
                 timestamp:
                     playWish.timestamp + (Date.now() - playWish.timestamp)
             };
+
+            // Save position of previous item, if delivered
+            if (playWish.lastPosition) {
+                if (!lastPositions[playWish.partyId]) {
+                    lastPositions[playWish.partyId] = {};
+                }
+
+                lastPositions[playWish.partyId][playWish.lastPosition.itemId] =
+                    playWish.lastPosition.position;
+            }
+
+            // Attach last position of the requested item
+            if (
+                playWishWithNormalizedTimestamp.requestLastPosition &&
+                lastPositions[playWish.partyId] &&
+                lastPositions[playWish.partyId][
+                    playWishWithNormalizedTimestamp.mediaItemId
+                ]
+            ) {
+                playWishWithNormalizedTimestamp.lastPosition = {
+                    itemId: playWishWithNormalizedTimestamp.mediaItemId,
+                    position:
+                        lastPositions[playWishWithNormalizedTimestamp.partyId][
+                            playWishWithNormalizedTimestamp.mediaItemId
+                        ]
+                };
+            } else {
+                if (playWishWithNormalizedTimestamp.lastPosition) {
+                    delete playWishWithNormalizedTimestamp.lastPosition;
+                }
+            }
 
             currentPlayWishes[
                 playWish.partyId

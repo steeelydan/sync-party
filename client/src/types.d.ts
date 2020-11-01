@@ -214,6 +214,8 @@ type PlayWish = {
     type: 'web' | 'file';
     isPlaying: boolean;
     position: number;
+    lastPosition: LastPosition | null;
+    requestLastPosition: boolean;
     timestamp: number;
     direction?: 'left' | 'right';
 };
@@ -224,9 +226,15 @@ type PlayOrder = {
     mediaItemId: string;
     type: 'web' | 'file';
     isPlaying: boolean;
+    lastPosition?: LastPosition;
     position: number;
     timestamp: number;
     direction?: 'left' | 'right';
+};
+
+type LastPosition = {
+    itemId: string;
+    position: number;
 };
 
 interface ChatMessage {

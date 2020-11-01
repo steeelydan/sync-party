@@ -73,6 +73,32 @@ type MediaItem = {
 };
 
 type PlayWish = {
-    timestamp: number;
+    issuer: string;
     partyId: string;
+    mediaItemId: string;
+    type: 'web' | 'file';
+    isPlaying: boolean;
+    position: number;
+    lastPosition: LastPosition | null;
+    requestLastPosition: boolean;
+    timestamp: number;
+    direction?: 'left' | 'right';
+};
+
+type LastPosition = {
+    itemId: string;
+    position: number;
+};
+
+type SyncStatus = {
+    position: number;
+    timestamp: number;
+    isPlaying: boolean;
+    serverTimeOffset: number;
+    webRtc: WebRtcState;
+};
+
+type WebRtcState = {
+    mode?: 'none' | 'audio' | 'video';
+    isFullscreen?: boolean;
 };

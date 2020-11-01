@@ -206,6 +206,8 @@ const handleKeyCommands = (
                 emitPlayWish(
                     playerState.playingItem,
                     playerState.isPlaying,
+                    playerState.playingItem.id,
+                    false,
                     newPosition,
                     false,
                     'left'
@@ -228,6 +230,8 @@ const handleKeyCommands = (
                 emitPlayWish(
                     playerState.playingItem,
                     playerState.isPlaying,
+                    playerState.playingItem.id,
+                    false,
                     newPosition,
                     false,
                     'right'

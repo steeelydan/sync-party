@@ -156,6 +156,11 @@ const translations = {
                 metadataUpdateError: 'Error updating metadata',
                 joinInactivePartyError: 'You cannot join an inactive party.'
             },
+            alerts: {
+                yes: 'Yes',
+                no: 'No',
+                continueFromLastPosition: 'Continue from last position?'
+            },
             apiResponseMessages: {
                 // Not used in client atm
                 noSessionOrUser: 'No session or no user',
