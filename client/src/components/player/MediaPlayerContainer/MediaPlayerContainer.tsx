@@ -462,11 +462,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 setFreshlyJoined(false);
             }
 
-            if (
-                playerState.playOrder.lastPosition &&
-                user &&
-                playerState.playOrder.issuer === user.id
-            ) {
+            if (playerState.playOrder.lastPosition) {
                 setHasLastPosition(true);
             } else {
                 setHasLastPosition(false);
@@ -493,7 +489,6 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         playerState,
         initialServerTimeOffset,
         freshlyJoined,
-        user,
         dispatch
     ]);
 
@@ -609,7 +604,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     party.items[playerState.playlistIndex + 1],
                     playerState.isPlaying,
                     playerState.playingItem ? playerState.playingItem.id : null,
-                    false,
+                    true,
                     0,
                     true
                 );
@@ -618,7 +613,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     party.items[0],
                     false,
                     playerState.playingItem ? playerState.playingItem.id : null,
-                    false,
+                    true,
                     0,
                     true
                 );
