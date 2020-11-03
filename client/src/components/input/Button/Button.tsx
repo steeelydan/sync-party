@@ -25,7 +25,7 @@ export default function Button({
         <button
             title={title}
             className={
-                'bg-transparent font-semibold border rounded outline-none' +
+                'bg-transparent font-semibold border rounded noOutline' +
                 (disabled
                     ? ' text-gray-500'
                     : color
