@@ -29,7 +29,7 @@ export default function AddMediaTabBar({
                 <li className="mr-3">
                     <button
                         className={
-                            'inline-block border rounded py-1 px-3 mb-2' +
+                            'inline-block border rounded py-1 px-3 mb-2 outline-none' +
                             (activeTab === 'user' ? ' text-black bg-white' : '')
                         }
                         onClick={(): void => changeTab('user')}
@@ -48,7 +48,7 @@ export default function AddMediaTabBar({
                 <li className="mr-3">
                     <button
                         className={
-                            'inline-block border rounded py-1 px-3 mb-2' +
+                            'inline-block border rounded py-1 px-3 mb-2 outline-none' +
                             (activeTab === 'web' ? ' text-black bg-white' : '')
                         }
                         onClick={(): void => changeTab('web')}
@@ -67,7 +67,7 @@ export default function AddMediaTabBar({
                 <li className="mr-3">
                     <button
                         className={
-                            'inline-block border rounded py-1 px-3 mb-2' +
+                            'inline-block border rounded py-1 px-3 mb-2 outline-none' +
                             (activeTab === 'file' ? ' text-black bg-white' : '')
                         }
                         onClick={(): void => changeTab('file')}
