@@ -154,10 +154,6 @@ export default function WebRtc({
                                     onLoadedMetadata={(event): void => {
                                         event.currentTarget.play();
                                     }}
-                                    style={{
-                                        WebkitTransform: 'scaleX(-1)',
-                                        transform: 'scaleX(-1)'
-                                    }}
                                 ></video>
                             </div>
                         );
