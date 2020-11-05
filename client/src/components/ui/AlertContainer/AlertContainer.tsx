@@ -47,7 +47,7 @@ export default function AlertContainer({
                 playerState.playOrder.lastPosition &&
                 playerState.playOrder.lastPosition.position > 0 && (
                     <div className="flex w-full h-full absolute bg-transparent">
-                        <div className="mt-32 mx-auto mb-auto py-2 px-3 rounded backgroundShade">
+                        <div className="mt-32 mx-auto mb-auto py-2 px-3 rounded backgroundShade z-50">
                             <div className="mb-3">
                                 {t('alerts.continueFromLastPosition')}
                             </div>

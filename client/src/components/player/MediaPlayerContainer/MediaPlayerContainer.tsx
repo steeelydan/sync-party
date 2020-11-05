@@ -726,7 +726,6 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
             }}
             className={'bg-transparent' + (uiVisible ? '' : ' noCursor')}
         >
-            <TopBar socket={socket}></TopBar>
             <div
                 onMouseDown={handlePlayPause}
                 className={
@@ -774,21 +773,6 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     handlePlayPause={handlePlayPause}
                 ></CommunicationContainer>
             )}
-            <BottomBar
-                playerState={playerState}
-                handlePlayPause={handlePlayPause}
-                handleSeekMouseDown={handleSeekMouseDown}
-                handleSeekChange={handleSeekChange}
-                handleSeekMouseUp={handleSeekMouseUp}
-                handleVolumeChange={handleVolumeChange}
-                handleFullScreen={handleFullScreen}
-            ></BottomBar>
-            <AlertContainer
-                playerState={playerState}
-                emitPlayWish={emitPlayWish}
-                hasLastPosition={hasLastPosition}
-                setHasLastPosition={setHasLastPosition}
-            ></AlertContainer>
             <MediaMenu
                 socket={socket}
                 playerState={playerState}
@@ -799,6 +783,22 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 }
                 freezeUiVisible={freezeUiVisible}
             ></MediaMenu>
+            <BottomBar
+                playerState={playerState}
+                handlePlayPause={handlePlayPause}
+                handleSeekMouseDown={handleSeekMouseDown}
+                handleSeekChange={handleSeekChange}
+                handleSeekMouseUp={handleSeekMouseUp}
+                handleVolumeChange={handleVolumeChange}
+                handleFullScreen={handleFullScreen}
+            ></BottomBar>
+            <TopBar socket={socket}></TopBar>
+            <AlertContainer
+                playerState={playerState}
+                emitPlayWish={emitPlayWish}
+                hasLastPosition={hasLastPosition}
+                setHasLastPosition={setHasLastPosition}
+            ></AlertContainer>
         </div>
     );
 }
