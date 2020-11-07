@@ -93,6 +93,7 @@ const getIconFromFileType = (url: string): IconProp => {
 const getSite = (url: string): string => {
     let site = '';
 
+    // FIXME needs to be more precise
     if (url.includes('youtube.') || url.includes('youtu.be')) {
         site = 'youtube';
     } else if (url.includes('facebook.')) {

@@ -251,7 +251,15 @@ export default function AddMedia({
     const handleLinkInput = async (
         event: React.ChangeEvent<HTMLInputElement>
     ): Promise<void> => {
-        const url = event.target.value;
+        let url = event.target.value;
+
+        // YT: Remove list-related URL params
+        if (
+            url.indexOf('https://www.youtube.com') === 0 &&
+            url.indexOf('&list=') > -1
+        ) {
+            url = url.slice(0, url.indexOf('&list='));
+        }
 
         const webMediaItem: NewMediaItem = {
             ...mediaItem,
