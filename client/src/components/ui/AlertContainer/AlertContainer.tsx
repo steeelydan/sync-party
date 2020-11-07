@@ -43,6 +43,7 @@ export default function AlertContainer({
                 </div>
             )}
             {hasLastPosition &&
+                !(playerState.isSyncing || playerState.isBuffering) &&
                 playerState.playOrder &&
                 playerState.playOrder.lastPosition &&
                 playerState.playOrder.lastPosition.position > 0 && (
