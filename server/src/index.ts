@@ -308,7 +308,7 @@ const runApp = async () => {
             };
 
             // Save position of previous item, if delivered
-            if (playWish.lastPosition) {
+            if (playWish.lastPosition && playWish.lastPosition.position > 0) {
                 if (!lastPositions[playWish.partyId]) {
                     lastPositions[playWish.partyId] = {};
                 }
