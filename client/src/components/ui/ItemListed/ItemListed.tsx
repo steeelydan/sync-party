@@ -137,7 +137,7 @@ export default function ItemListed({
             }}
         >
             <div className="flex flex-row justify-between">
-                <div className="flex">
+                <div className="flex flex-grow">
                     <ItemListedIcon
                         item={item}
                         editMode={editMode}
