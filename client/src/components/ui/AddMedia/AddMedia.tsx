@@ -74,10 +74,7 @@ export default function AddMedia({
         if (userItems && party)
             if (
                 userItems.filter(
-                    (userItem: MediaItem) =>
-                        !party.items.find(
-                            (item: MediaItem) => item.id === userItem.id
-                        )
+                    (userItem: MediaItem) => !partyItemsSet.has(userItem.id)
                 ).length
             ) {
                 setActiveTab('user');
