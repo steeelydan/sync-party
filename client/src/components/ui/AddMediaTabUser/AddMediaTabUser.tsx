@@ -4,6 +4,8 @@ import ItemListed from '../ItemListed/ItemListed';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSadCry } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
+import { VariableSizeList as List } from 'react-window';
+import ItemListed2 from '../ItemListed2/ItemListed2';
 
 interface Props {
     partyItemsSet: Set<string>;
@@ -22,10 +24,16 @@ export default function AddMediaTabUser({
         (state: RootAppState) => state.globalState.userItems
     );
 
+    const sortItems = (items: MediaItem[]): MediaItem[] => {
+        return items.sort((a: MediaItem, b: MediaItem) => {
+            return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        });
+    };
+
     const { t } = useTranslation();
     const [itemsFilter, setItemsFilter] = useState<string | null>(null);
     const [filteredItems, setFilteredItems] = useState<MediaItem[]>(
-        userItems || []
+        userItems && userItems.length ? sortItems(userItems) : []
     );
 
     // (Re-)Filter items if items filter term or user items change
@@ -37,12 +45,16 @@ export default function AddMediaTabUser({
 
             if (normalizedSearchTerm !== '') {
                 setFilteredItems(
-                    userItems.filter((item) =>
-                        item.name.toLowerCase().includes(normalizedSearchTerm)
+                    sortItems(
+                        userItems.filter((item) =>
+                            item.name
+                                .toLowerCase()
+                                .includes(normalizedSearchTerm)
+                        )
                     )
                 );
             } else {
-                setFilteredItems(userItems);
+                setFilteredItems(sortItems(userItems));
             }
         }
     }, [userItems, itemsFilter]);
@@ -59,37 +71,22 @@ export default function AddMediaTabUser({
             ></input>
             {filteredItems.length ? (
                 <div className="userItemList">
-                    {filteredItems
-                        .sort((a: MediaItem, b: MediaItem) => {
-                            return a.name.toLowerCase() < b.name.toLowerCase()
-                                ? -1
-                                : 1;
-                        })
-                        .map((source: MediaItem) => {
-                            if (!partyItemsSet.has(source.id)) {
-                                return (
-                                    <ItemListed
-                                        key={source.id}
-                                        item={source}
-                                        handleItemClick={(): Promise<void> =>
-                                            addUserItem(source)
-                                        }
-                                        handleItemSave={(
-                                            item: MediaItem
-                                        ): void => {
-                                            setPlayerFocused(true);
-                                            handleItemEditSave(item);
-                                        }}
-                                        setPlayerFocused={(
-                                            focused: boolean
-                                        ): void => setPlayerFocused(focused)}
-                                        nameEditingAllowed={true}
-                                    ></ItemListed>
-                                );
-                            } else {
-                                return null;
-                            }
-                        })}
+                    <List
+                        itemCount={filteredItems.length}
+                        itemSize={(): number => 50}
+                        height={500}
+                        width={300}
+                    >
+                        {({ index }): JSX.Element => (
+                            <ItemListed2
+                                index={index}
+                                items={filteredItems}
+                                addUserItem={addUserItem}
+                                setPlayerFocused={setPlayerFocused}
+                                handleItemEditSave={handleItemEditSave}
+                            />
+                        )}
+                    </List>
                 </div>
             ) : itemsFilter === '' ? (
                 <div className="flex flex-row">

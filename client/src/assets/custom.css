@@ -105,7 +105,7 @@ input[type='range']::-moz-focus-outer {
 
 .userItemList {
     max-height: 25vh;
-    overflow: auto;
+    /* overflow: auto; */
 }
 
 .fileupload {
