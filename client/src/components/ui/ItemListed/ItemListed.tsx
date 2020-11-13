@@ -168,7 +168,7 @@ export default function ItemListed({
                     {!editMode && nameEditingAllowed ? (
                         <ButtonIcon
                             className={!hovering ? 'hidden' : ''}
-                            color="text-gray-300 hover:text-gray-200"
+                            color="text-gray-300 hover:text-white"
                             onClick={(): void => activateEditMode(!editMode)}
                             title={t('mediaMenu.editButtonTitle')}
                             icon={
@@ -190,7 +190,8 @@ export default function ItemListed({
                                             itemId={probablyEditedItem.id}
                                         ></ItemListedDownloadLink>
                                     )}
-                                {probablyEditedItem.type !== 'file' &&
+                                {!editMode &&
+                                    probablyEditedItem.type !== 'file' &&
                                     party && (
                                         <ItemListedClipboardButton
                                             itemUrl={probablyEditedItem.url}
@@ -206,7 +207,7 @@ export default function ItemListed({
                                             onRemoveButtonClick(item);
                                             setEditMode(false);
                                         }}
-                                        color="text-gray-200 hover:text-gray-100"
+                                        color="text-gray-300 hover:text-white"
                                         icon={
                                             <FontAwesomeIcon
                                                 icon={faTimes}

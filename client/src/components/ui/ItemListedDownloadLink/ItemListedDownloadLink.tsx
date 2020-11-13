@@ -18,9 +18,11 @@ export default function ItemListedDownloadLink({
 
     return (
         <a
-            className={!hovering ? 'hidden' : 'mr-2 my-auto'}
+            className={
+                'text-gray-300 hover:text-white' +
+                (!hovering ? ' hidden' : ' mr-2 my-auto')
+            }
             title={t('mediaMenu.download')}
-            color="text-gray-300 hover:text-gray-200"
             href={
                 process.env.REACT_APP_API_ROUTE +
                 'file/' +
