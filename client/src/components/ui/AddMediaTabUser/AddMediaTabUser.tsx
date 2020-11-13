@@ -6,17 +6,18 @@ import { faSadCry } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 
 interface Props {
+    partyItemsSet: Set<string>;
     addUserItem: Function;
     setPlayerFocused: Function;
     handleItemEditSave: Function;
 }
 
 export default function AddMediaTabUser({
+    partyItemsSet,
     addUserItem,
     setPlayerFocused,
     handleItemEditSave
 }: Props): ReactElement {
-    const party = useSelector((state: RootAppState) => state.globalState.party);
     const userItems = useSelector(
         (state: RootAppState) => state.globalState.userItems
     );
@@ -56,7 +57,7 @@ export default function AddMediaTabUser({
                 onFocus={(): void => setPlayerFocused(false)}
                 onBlur={(): void => setPlayerFocused(true)}
             ></input>
-            {filteredItems.length && party ? (
+            {filteredItems.length ? (
                 <div className="userItemList">
                     {filteredItems
                         .sort((a: MediaItem, b: MediaItem) => {
@@ -65,12 +66,7 @@ export default function AddMediaTabUser({
                                 : 1;
                         })
                         .map((source: MediaItem) => {
-                            if (
-                                !party.items.find(
-                                    (partyItem: MediaItem) =>
-                                        partyItem.id === source.id
-                                )
-                            ) {
+                            if (!partyItemsSet.has(source.id)) {
                                 return (
                                     <ItemListed
                                         key={source.id}

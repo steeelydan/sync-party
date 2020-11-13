@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 import { useTranslation } from 'react-i18next';
@@ -53,10 +53,25 @@ export default function MediaMenu({
 
     const [addMediaIsActive, setAddMediaIsActive] = useState(false);
 
+    const [partyItemsSet, setPartyItemsMap] = useState<Set<string>>(new Set());
+
     const partyItemListRef = useRef<HTMLDivElement | null>(null);
 
     const dispatch = useDispatch();
     const { t } = useTranslation();
+
+    // Collect items in active party in a set for faster checks
+    useEffect(() => {
+        if (party) {
+            const itemsMap = new Set<string>();
+
+            party.items.forEach((item) => {
+                itemsMap.add(item.id);
+            });
+
+            setPartyItemsMap(itemsMap);
+        }
+    }, [party]);
 
     const handleRemoveItemFromParty = async (
         item: MediaItem
@@ -325,6 +340,7 @@ export default function MediaMenu({
             )}
             <AddMedia
                 isActive={addMediaIsActive}
+                partyItemsSet={partyItemsSet}
                 setAddMediaIsActive={setAddMediaIsActive}
                 handleItemEditSave={handleItemEditSave}
                 setPlayerFocused={(focused: boolean): void =>

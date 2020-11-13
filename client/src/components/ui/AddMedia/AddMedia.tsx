@@ -22,6 +22,7 @@ import AddMediaTabFile from '../AddMediaTabFile/AddMediaTabFile';
 
 type Props = {
     isActive: boolean;
+    partyItemsSet: Set<string>;
     setAddMediaIsActive: Function;
     socket: SocketIOClient.Socket | null;
     setPlayerFocused: Function;
@@ -30,6 +31,7 @@ type Props = {
 
 export default function AddMedia({
     isActive,
+    partyItemsSet,
     setAddMediaIsActive,
     socket,
     setPlayerFocused,
@@ -341,6 +343,7 @@ export default function AddMedia({
                             <>
                                 {activeTab === 'user' && (
                                     <AddMediaTabUser
+                                        partyItemsSet={partyItemsSet}
                                         addUserItem={addUserItem}
                                         setPlayerFocused={(
                                             focused: boolean
