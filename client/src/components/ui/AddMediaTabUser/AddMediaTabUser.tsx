@@ -1,10 +1,14 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ItemListed from '../ItemListed/ItemListed';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSadCry } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
-import { VariableSizeList as List } from 'react-window';
+import {
+    List,
+    AutoSizer,
+    CellMeasurer,
+    CellMeasurerCache
+} from 'react-virtualized';
 import ItemListed2 from '../ItemListed2/ItemListed2';
 
 interface Props {
@@ -35,6 +39,12 @@ export default function AddMediaTabUser({
     const [filteredItems, setFilteredItems] = useState<MediaItem[]>(
         userItems && userItems.length ? sortItems(userItems) : []
     );
+    const [listCache, setListCache] = useState(
+        new CellMeasurerCache({
+            fixedWidth: true,
+            defaultHeight: 50
+        })
+    ); // FIXME
 
     // (Re-)Filter items if items filter term or user items change
     useEffect(() => {
@@ -59,6 +69,8 @@ export default function AddMediaTabUser({
         }
     }, [userItems, itemsFilter]);
 
+    console.log(listCache);
+
     return (
         <div>
             <input
@@ -70,23 +82,48 @@ export default function AddMediaTabUser({
                 onBlur={(): void => setPlayerFocused(true)}
             ></input>
             {filteredItems.length ? (
-                <div className="userItemList">
-                    <List
-                        itemCount={filteredItems.length}
-                        itemSize={(): number => 50}
-                        height={500}
-                        width={300}
-                    >
-                        {({ index }): JSX.Element => (
-                            <ItemListed2
-                                index={index}
-                                items={filteredItems}
-                                addUserItem={addUserItem}
-                                setPlayerFocused={setPlayerFocused}
-                                handleItemEditSave={handleItemEditSave}
-                            />
-                        )}
-                    </List>
+                <div className="">
+                    <AutoSizer>
+                        {({ width, height }): React.ReactElement => {
+                            return (
+                                <List
+                                    width={width}
+                                    height={height}
+                                    deferredMeasurementCache={listCache}
+                                    rowHeight={listCache.rowHeight}
+                                    rowRenderer={({
+                                        index,
+                                        key,
+                                        style,
+                                        parent
+                                    }): JSX.Element => (
+                                        <CellMeasurer
+                                            key={key}
+                                            cache={listCache}
+                                            parent={parent}
+                                            columnIndex={0}
+                                            rowIndex={index}
+                                        >
+                                            <ItemListed2
+                                                style={style}
+                                                index={index}
+                                                items={filteredItems}
+                                                addUserItem={addUserItem}
+                                                setPlayerFocused={
+                                                    setPlayerFocused
+                                                }
+                                                handleItemEditSave={
+                                                    handleItemEditSave
+                                                }
+                                            />
+                                        </CellMeasurer>
+                                    )}
+                                    rowCount={filteredItems.length}
+                                    overscanRowCount={3}
+                                />
+                            );
+                        }}
+                    </AutoSizer>
                 </div>
             ) : itemsFilter === '' ? (
                 <div className="flex flex-row">
