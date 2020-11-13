@@ -341,14 +341,6 @@ export default function AddMedia({
                             <>
                                 {activeTab === 'user' && (
                                     <AddMediaTabUser
-                                        userItemsNotInParty={userItems.filter(
-                                            (userItem: MediaItem) =>
-                                                !party.items.find(
-                                                    (partyItem: MediaItem) =>
-                                                        partyItem.id ===
-                                                        userItem.id
-                                                )
-                                        )}
                                         addUserItem={addUserItem}
                                         setPlayerFocused={(
                                             focused: boolean
