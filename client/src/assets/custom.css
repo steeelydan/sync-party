@@ -54,6 +54,7 @@ body {
     height: 22px;
     background: #9f7aea;
     cursor: pointer;
+    border: none;
 }
 
 .slider::-moz-range-thumb {
@@ -61,7 +62,7 @@ body {
     height: 22px;
     background: #9f7aea;
     cursor: pointer;
-    border-radius: 0;
+    border: none;
 }
 
 .slider-alt::-webkit-slider-thumb {
