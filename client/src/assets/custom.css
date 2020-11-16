@@ -62,6 +62,7 @@ body {
     height: 22px;
     background: #9f7aea;
     cursor: pointer;
+    border-radius: 0;
     border: none;
 }
 
