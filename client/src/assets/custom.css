@@ -104,8 +104,8 @@ input[type='range']::-moz-focus-outer {
 }
 
 .userItemList {
-    max-height: 25vh;
-    /* overflow: auto; */
+    max-height: 27vh;
+    height: 1000px;
 }
 
 .fileupload {
