@@ -80,14 +80,22 @@ If you spot a bug or want to contribute feel free to create an issue.
     }
 
     location /socket.io/ {
-        proxy_pass http://localhost:3000/socket.io/;
+        proxy_pass http://localhost:4000/socket.io/;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "Upgrade";
         proxy_set_header Host $host;
     }
 
-    client_max_body_size 50M;
+    location /peerjs/ {
+        proxy_pass http://localhost:3000/peerjs/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+    }
+
+    client_max_body_size 2048M;
     proxy_connect_timeout 600;
     proxy_send_timeout 600;
     proxy_read_timeout 600;
