@@ -56,10 +56,10 @@ If you spot a bug or want to contribute feel free to create an issue.
 -   You can run the following commands with a preceding space, preventing the passwords from being written into your bash history.
 -   In `/server/build`: Create an admin user:
     -   Choose an excellent & unique password!
-    -   In `/server/build/admin-cli`: `[SPACE] node run admin.js create-user <USERNAME> <PASSWORD> admin`
+    -   In `/server/build/admin-cli`: `[SPACE] node admin.js create-user <USERNAME> <PASSWORD> admin`
 -   In `/server`: Create other users:
     -   Choose a good & unique password! Users can upload arbitrary files to your server.
-    -   In `/server/build/admin-cli`: `[SPACE] node run admin.js create-user <USERNAME> <PASSWORD>`
+    -   In `/server/build/admin-cli`: `[SPACE] node admin.js create-user <USERNAME> <PASSWORD>`
 
 ## Production
 
