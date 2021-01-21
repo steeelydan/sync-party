@@ -36,7 +36,7 @@
         "passport.socketio": "~3.7.0",
         "peer": "~0.5.3",
         "sequelize": "~6.3.5",
-        "socket.io": "~2.3.0",
+        "socket.io": "~2.4.0",
         "sqlite3": "~5.0.0",
         "uuid": "~7.0.3",
         "winston": "~3.2.1"
