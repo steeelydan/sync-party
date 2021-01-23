@@ -10,9 +10,9 @@
         "doc": "apidoc -i src/ -o doc/",
         "build": "tsc",
         "start": "npm run setup && npm run doc && tsc-watch --project . --outDir ./build --onSuccess \"nodemon ./build/index.js\"",
-        "start-production": "sudo pm2 start ./build/index.js",
-        "stop": "sudo pm2 stop all && sudo pm2 delete all",
-        "deploy": "npm ci && npm run setup && npm run build && npm run start-production && sudo pm2 log"
+        "start-production": "pm2 start ./build/index.js",
+        "stop": "pm2 stop all && pm2 delete all",
+        "deploy": "npm ci && npm run setup && npm run build && npm run start-production && pm2 log"
     },
     "dependencies": {
         "@hapi/joi": "~17.1.1",
