@@ -9,7 +9,8 @@ import { Sequelize } from 'sequelize';
 
 import morgan from 'morgan';
 
-import socketio from 'socket.io';
+const socketio = require('socket.io');
+import { Socket } from 'socket.io';
 const { ExpressPeerServer } = require('peer');
 import express from 'express';
 
@@ -215,9 +216,14 @@ const runApp = async () => {
 
     // WEBSOCKETS
 
-    const io = socketio(server, { cookie: false, transports: ['websocket'] });
-
-    io.origins([process.env.URL]);
+    const io = socketio(server, {
+        transports: ['websocket'],
+        cors: {
+            origin: ['http://localhost:3000'],
+            methods: ['GET', 'POST'],
+            credentials: true
+        }
+    });
 
     // Apply session middleware to socket
     io.use(
@@ -230,7 +236,8 @@ const runApp = async () => {
     );
 
     // Socket listeners
-    io.on('connection', (socket) => {
+    io.on('connection', (socket: Socket) => {
+        // @ts-ignore
         const socketUserId = socket.request.user.id;
         logger.log(
             'info',
@@ -238,7 +245,7 @@ const runApp = async () => {
         );
 
         const joinParty = (data: { partyId: string; timestamp: number }) => {
-            io.in(data.partyId).clients(
+            io.in(data.partyId).allSockets(
                 async (err: Error, clients: string[]) => {
                     if (!clients.includes(socketUserId)) {
                         try {
@@ -395,8 +402,6 @@ const runApp = async () => {
 
         // Disconnect
         socket.on('disconnect', (event) => {
-            socket.leaveAll();
-
             logger.log(
                 'info',
                 `Web Sockets: User disconnected: ${socketUserId}`

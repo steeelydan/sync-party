@@ -286,6 +286,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
 
             socket.off('playOrder');
             socket.on('playOrder', (playOrder: PlayOrder) => {
+                console.log(playOrder);
                 setPlayerState({ playOrder: playOrder });
                 setHasLastPosition(false);
 

@@ -50,7 +50,7 @@
         "react-scripts": "~3.4.3",
         "redux": "~4.0.5",
         "screenfull": "~5.0.2",
-        "socket.io-client": "~2.3.0",
+        "socket.io-client": "~3.1.0",
         "typeface-open-sans": "^1.1.13",
         "uuid": "~8.1.0"
     },
@@ -66,7 +66,7 @@
         "@types/react-dom": "~16.9.8",
         "@types/react-redux": "~7.1.9",
         "@types/react-router-dom": "~5.1.5",
-        "@types/socket.io-client": "~1.4.33",
+        "@types/socket.io-client": "~1.4.35",
         "@types/uuid": "~8.0.0",
         "@typescript-eslint/eslint-plugin": "~2.34.0",
         "@typescript-eslint/parser": "~2.34.0",
