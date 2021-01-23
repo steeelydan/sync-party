@@ -217,8 +217,6 @@ const runApp = async () => {
 
     const io = socketio(server, { cookie: false, transports: ['websocket'] });
 
-    io.origins([process.env.URL]);
-
     // Apply session middleware to socket
     io.use(
         passportSocketIo.authorize({
