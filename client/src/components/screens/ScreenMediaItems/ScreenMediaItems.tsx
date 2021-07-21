@@ -157,7 +157,7 @@ export default function ScreenMediaItems({
     ): Promise<void> => {
         const attribute = (event.target as HTMLTableRowElement).id;
 
-        if (!sorted[attribute]) {
+        if (!sorted[attribute] && allMediaItems) {
             setSortedMediaItems(
                 [...allMediaItems].sort(
                     (a: IndexableMediaItem, b: IndexableMediaItem) => {
