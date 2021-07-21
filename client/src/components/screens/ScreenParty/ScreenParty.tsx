@@ -3,9 +3,10 @@ import { useParams, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCurrentParty } from '../../../common/helpers';
 import MediaPlayerContainer from '../../player/MediaPlayerContainer/MediaPlayerContainer';
+import { Socket } from 'socket.io-client';
 
 type Props = {
-    socket: SocketIOClient.Socket | null;
+    socket: Socket | null;
 };
 
 export default function ScreenParty({ socket }: Props): JSX.Element {

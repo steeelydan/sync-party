@@ -20,9 +20,10 @@ import PartyTile from '../../ui/PartyTile/PartyTile';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHdd } from '@fortawesome/free-solid-svg-icons';
+import { Socket } from 'socket.io-client';
 
 type Props = {
-    socket: SocketIOClient.Socket | null;
+    socket: Socket | null;
 };
 
 export default function ScreenDashboard(props: Props): JSX.Element | null {

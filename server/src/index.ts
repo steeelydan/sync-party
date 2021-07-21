@@ -9,7 +9,7 @@ import { Sequelize } from 'sequelize';
 
 import morgan from 'morgan';
 
-import socketio from 'socket.io';
+const socketio = require('socket.io');
 const { ExpressPeerServer } = require('peer');
 import express from 'express';
 
@@ -215,7 +215,7 @@ const runApp = async () => {
 
     // WEBSOCKETS
 
-    const io = socketio(server, { cookie: false, transports: ['websocket'] });
+    const io = socketio(server, { transports: ['websocket'] });
 
     // Apply session middleware to socket
     io.use(
@@ -228,70 +228,62 @@ const runApp = async () => {
     );
 
     // Socket listeners
-    io.on('connection', (socket) => {
+    io.on('connection', (socket: any) => {
         const socketUserId = socket.request.user.id;
         logger.log(
             'info',
             `Web Sockets: New connection, userId: ${socketUserId}`
         );
 
-        const joinParty = (data: { partyId: string; timestamp: number }) => {
-            io.in(data.partyId).clients(
-                async (err: Error, clients: string[]) => {
-                    if (!clients.includes(socketUserId)) {
-                        try {
-                            const party = await models.Party.findOne({
-                                where: {
-                                    id: data.partyId
-                                }
-                            });
+        const joinParty = async (data: {
+            partyId: string;
+            timestamp: number;
+        }) => {
+            const members: Set<string> = await io.in(data.partyId).allSockets();
 
-                            if (
-                                !party ||
-                                !party.members.includes(socketUserId)
-                            ) {
-                                return Promise.reject(
-                                    new Error('User not member in party')
-                                );
-                            }
-                        } catch (error) {
-                            logger.log('error', error);
+            if (!members.has(socketUserId)) {
+                try {
+                    const party = await models.Party.findOne({
+                        where: {
+                            id: data.partyId
                         }
+                    });
 
-                        socket.join(data.partyId);
-
-                        socket.emit(
-                            'serverTimeOffset',
-                            Date.now() - data.timestamp
-                        );
-
-                        logger.log(
-                            'info',
-                            `Web Sockets: User ${socketUserId} joined party ${data.partyId}`
-                        );
-
-                        if (currentPlayWishes[data.partyId]) {
-                            socket.emit(
-                                'playOrder',
-                                currentPlayWishes[data.partyId]
-                            );
-                        }
-
-                        return Promise.resolve();
-                    } else {
+                    if (!party || !party.members.includes(socketUserId)) {
                         return Promise.reject(
-                            new Error('User already joined the party')
+                            new Error('User not member in party')
                         );
                     }
+                } catch (error) {
+                    logger.log('error', error);
                 }
-            );
+
+                socket.join(data.partyId);
+
+                socket.emit('serverTimeOffset', Date.now() - data.timestamp);
+
+                logger.log(
+                    'info',
+                    `Web Sockets: User ${socketUserId} joined party ${data.partyId}`
+                );
+
+                if (currentPlayWishes[data.partyId]) {
+                    socket.emit('playOrder', currentPlayWishes[data.partyId]);
+                }
+
+                return Promise.resolve();
+            } else {
+                return Promise.reject(
+                    new Error('User already joined the party')
+                );
+            }
         };
 
-        socket.on('joinParty', (data) => {
-            joinParty(data);
+        socket.on('joinParty', async (data: any) => {
+            await joinParty(data);
         });
 
-        socket.on('leaveParty', (data) => {
+        socket.on('leaveParty', (data: any) => {
             socket.leave(data.partyId);
 
             logger.log(
@@ -348,17 +340,17 @@ const runApp = async () => {
             );
         });
 
-        socket.on('partyUpdate', (partyUpdateData) => {
+        socket.on('partyUpdate', (partyUpdateData: any) => {
             // Update emitted to all connected users, in order to make sure dashboard is updated etc.
             io.emit('partyUpdate', partyUpdateData);
         });
 
-        socket.on('mediaItemUpdate', (empty) => {
+        socket.on('mediaItemUpdate', (empty: any) => {
             // Update emitted to all connected users, in order to make sure dashboard is updated etc.
             io.emit('mediaItemUpdate', empty);
         });
 
-        socket.on('syncStatus', (userSyncStatus) => {
+        socket.on('syncStatus', (userSyncStatus: any) => {
             currentSyncStatus[userSyncStatus.partyId] =
                 currentSyncStatus[userSyncStatus.partyId] || {};
             currentSyncStatus[userSyncStatus.partyId][userSyncStatus.userId] = {
@@ -376,23 +368,23 @@ const runApp = async () => {
             );
         });
 
-        socket.on('chatMessage', (chatMessage) => {
+        socket.on('chatMessage', (chatMessage: any) => {
             io.to(chatMessage.partyId).emit('chatMessage', chatMessage);
         });
 
         // WebRTC
-        socket.on('joinWebRtc', (data) => {
+        socket.on('joinWebRtc', (data: any) => {
             io.to(data.partyId).emit('joinWebRtc', data.webRtcId);
         });
 
-        socket.on('leaveWebRtc', (data) => {
+        socket.on('leaveWebRtc', (data: any) => {
             io.to(data.partyId).emit('leaveWebRtc', {
                 webRtcId: data.webRtcId
             });
         });
 
         // Disconnect
-        socket.on('disconnect', (event) => {
+        socket.on('disconnect', (event: any) => {
             socket.leaveAll();
 
             logger.log(

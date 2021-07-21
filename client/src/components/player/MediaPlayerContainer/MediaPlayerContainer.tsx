@@ -36,9 +36,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { useTranslation } from 'react-i18next';
+import { Socket } from 'socket.io-client';
 
 type Props = {
-    socket: SocketIOClient.Socket | null;
+    socket: Socket | null;
 };
 
 export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
@@ -181,20 +182,20 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     newPosition !== undefined
                         ? newPosition
                         : reactPlayer
-                        ? reactPlayer.getCurrentTime() /
-                          reactPlayer.getDuration()
-                        : 0,
+                            ? reactPlayer.getCurrentTime() /
+                            reactPlayer.getDuration()
+                            : 0,
                 lastPosition: lastPositionItemId
                     ? {
-                          itemId: lastPositionItemId,
-                          position:
-                              reactPlayer &&
-                              reactPlayer.getDuration() > 300 &&
-                              !noIssuer
-                                  ? reactPlayer.getCurrentTime() /
-                                    reactPlayer.getDuration()
-                                  : 0
-                      }
+                        itemId: lastPositionItemId,
+                        position:
+                            reactPlayer &&
+                                reactPlayer.getDuration() > 300 &&
+                                !noIssuer
+                                ? reactPlayer.getCurrentTime() /
+                                reactPlayer.getDuration()
+                                : 0
+                    }
                     : null,
                 requestLastPosition: requestLastPosition,
                 timestamp: Date.now()
@@ -313,7 +314,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                         !playerStateRef.current.playingItem ||
                         (playerStateRef.current.playingItem &&
                             playOrder.mediaItemId !==
-                                playerStateRef.current.playingItem.id)
+                            playerStateRef.current.playingItem.id)
                     ) {
                         actionMessageIcon = faExchangeAlt; // Media item change
                     } else if (
@@ -392,10 +393,10 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                         syncStatus[user.id] &&
                         syncStatus[memberId] &&
                         syncStatus[memberId].timestamp +
-                            syncStatus[memberId].serverTimeOffset >
-                            Date.now() +
-                                syncStatus[user.id].serverTimeOffset -
-                                syncStatusIntervalTolerance
+                        syncStatus[memberId].serverTimeOffset >
+                        Date.now() +
+                        syncStatus[user.id].serverTimeOffset -
+                        syncStatusIntervalTolerance
                     ) {
                         memberStatusStateNew[memberId].online = true;
                     }
@@ -678,7 +679,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         if (
             Date.now() >
             playerTimeoutStateRef.current.uiTimeoutTimestamp +
-                uiTimeoutIntervalResolution
+            uiTimeoutIntervalResolution
         ) {
             setUiVisible(true);
 

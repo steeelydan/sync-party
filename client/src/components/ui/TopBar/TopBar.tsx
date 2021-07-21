@@ -10,9 +10,10 @@ import AdminActionOverlay from '../AdminActionOverlay/AdminActionOverlay';
 
 import { faTh } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Socket } from 'socket.io-client';
 
 type Props = {
-    socket: SocketIOClient.Socket | null;
+    socket: Socket | null;
 };
 
 export default function TopBar({ socket }: Props): JSX.Element {

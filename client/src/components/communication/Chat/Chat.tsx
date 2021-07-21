@@ -14,10 +14,11 @@ import { faSmile } from '@fortawesome/free-solid-svg-icons';
 import ChatHistory from '../ChatHistory/ChatHistory';
 import ChatInput from '../ChatInput/ChatInput';
 import { setGlobalState } from '../../../actions/globalActions';
+import { Socket } from 'socket.io-client';
 
 interface Props {
     isActive: boolean;
-    socket: SocketIOClient.Socket | null;
+    socket: Socket | null;
     setPlayerFocused: Function;
     freezeUiVisible: Function;
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from './actions/globalActions';
-import socketIOClient from 'socket.io-client';
+import socketIOClient, { Socket } from 'socket.io-client';
 import i18n from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
 
@@ -30,7 +30,7 @@ function App(): JSX.Element {
 
     const { t } = useTranslation();
 
-    const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
+    const [socket, setSocket] = useState<Socket | null>(null);
     const dispatch = useDispatch();
     const party = useSelector((state: RootAppState) => state.globalState.party);
     const chat = useSelector((state: RootAppState) => state.globalState.chat);

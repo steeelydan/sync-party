@@ -14,9 +14,10 @@ import Heading from '../../display/Heading/Heading';
 import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Socket } from 'socket.io-client';
 
 type Props = {
-    socket: SocketIOClient.Socket | null;
+    socket: Socket | null;
 };
 
 type IndexableMediaItem = {

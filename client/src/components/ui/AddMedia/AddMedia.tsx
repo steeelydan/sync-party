@@ -19,12 +19,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import AddMediaTabFile from '../AddMediaTabFile/AddMediaTabFile';
+import { Socket } from 'socket.io-client';
 
 type Props = {
     isActive: boolean;
     partyItemsSet: Set<string>;
     setAddMediaIsActive: Function;
-    socket: SocketIOClient.Socket | null;
+    socket: Socket | null;
     setPlayerFocused: Function;
     handleItemEditSave: Function;
 };

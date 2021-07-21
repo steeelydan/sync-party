@@ -14,9 +14,10 @@ import { axiosConfig } from '../../../common/helpers';
 import Chat from '../Chat/Chat';
 import CommunicationBar from '../CommunicationBar/CommunicationBar';
 import WebRtc from '../WebRtc/WebRtc';
+import { Socket } from 'socket.io-client';
 
 interface Props {
-    socket: SocketIOClient.Socket | null;
+    socket: Socket | null;
     partyId: string | null;
     webRtcIds: WebRtcIds;
     ourUserId: string;

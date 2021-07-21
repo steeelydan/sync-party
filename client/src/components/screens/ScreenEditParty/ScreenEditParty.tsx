@@ -7,9 +7,10 @@ import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
 import EditParty from '../../ui/EditParty/EditParty';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Socket } from 'socket.io-client';
 
 type Props = {
-    socket: SocketIOClient.Socket | null;
+    socket: Socket | null;
 };
 
 export default function ScreenEditParty(props: Props): JSX.Element | null {

@@ -8,11 +8,12 @@ import { axiosConfig } from '../../../common/helpers';
 
 import Heading from '../../display/Heading/Heading';
 import ButtonLink from '../../input/ButtonLink/ButtonLink';
+import { Socket } from 'socket.io-client';
 
 interface Props {
     party: ClientParty;
     user: User;
-    socket: SocketIOClient.Socket | null;
+    socket: Socket | null;
 }
 
 export default function EditParty({

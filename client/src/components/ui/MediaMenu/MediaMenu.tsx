@@ -16,9 +16,10 @@ import {
 import ItemListed from '../ItemListed/ItemListed';
 import AddMedia from '../AddMedia/AddMedia';
 import MediaMenuDraggable from '../MediaMenuDraggable/MediaMenuDraggable';
+import { Socket } from 'socket.io-client';
 
 type Props = {
-    socket: SocketIOClient.Socket | null;
+    socket: Socket | null;
     setPlayerFocused: Function;
     emitPlayWish: Function;
     freezeUiVisible: Function;
@@ -109,9 +110,9 @@ export default function MediaMenu({
                     ) {
                         emitPlayWish(
                             party.items[
-                                currentIndex < party.items.length - 1
-                                    ? currentIndex + 1
-                                    : currentIndex - 1
+                            currentIndex < party.items.length - 1
+                                ? currentIndex + 1
+                                : currentIndex - 1
                             ],
                             playerState.isPlaying,
                             null,
@@ -271,14 +272,14 @@ export default function MediaMenu({
                                         ) => {
                                             const isCurrentlyPlayingItem =
                                                 playingItem &&
-                                                playingItem.id === mediaItem.id
+                                                    playingItem.id === mediaItem.id
                                                     ? true
                                                     : false;
                                             const alreadyPlayed =
                                                 party.metadata.played &&
-                                                party.metadata.played[
+                                                    party.metadata.played[
                                                     mediaItem.id
-                                                ]
+                                                    ]
                                                     ? true
                                                     : false;
 
