@@ -48,7 +48,7 @@ const uploadFile = multer({
  * @apiError noFileAccess User is not member of party or file was not found or party is not active.
  */
 const getFile = async (req: Request, res: Response, models: Models) => {
-    const userId = req.user.id;
+    const userId = req.user?.id;
     const mediaItemId = req.params.id;
     const requestPartyId = req.query.party;
     const download = req.query.download;
@@ -60,7 +60,9 @@ const getFile = async (req: Request, res: Response, models: Models) => {
 
         if (
             !requestParty ||
-            (requestParty.status !== 'active' && req.user.role !== 'admin') ||
+            (req.user &&
+                requestParty.status !== 'active' &&
+                req.user.role !== 'admin') ||
             !requestParty.members.includes(userId)
         ) {
             return res
@@ -85,7 +87,7 @@ const getFile = async (req: Request, res: Response, models: Models) => {
                     fileNameWithoutUuid
                 );
             } else {
-                res.sendFile(helpers.getFilePathFromId(dbMediaItem.url));
+                return res.sendFile(helpers.getFilePathFromId(dbMediaItem.url));
             }
         } else {
             return res
@@ -126,62 +128,66 @@ const upload = (
             return res.status(500).json(err);
         }
 
-        const newMediaItem = {
-            id: req.newFileId, // Implicitly set by multer
-            type: 'file',
-            owner: req.body.owner,
-            name: req.body.name,
-            url: req.file.filename,
-            settings: {}
-        };
+        if (req.file) {
+            const newMediaItem = {
+                id: req.newFileId, // Implicitly set by multer
+                type: 'file',
+                owner: req.body.owner,
+                name: req.body.name,
+                url: req.file.filename,
+                settings: {}
+            };
 
-        if (multerFileValidator.validate(req.file).error) {
-            logger.log(
-                'info',
-                `Validation error while creating multer output req.file: ${JSON.stringify(
-                    multerFileValidator.validate(req.file).error
-                )}`
-            );
+            if (multerFileValidator.validate(req.file).error) {
+                logger.log(
+                    'info',
+                    `Validation error while creating multer output req.file: ${JSON.stringify(
+                        multerFileValidator.validate(req.file).error
+                    )}`
+                );
 
-            return res
-                .status(400)
-                .json({ success: false, msg: 'validationError' });
-        }
-
-        if (newFileMediaItemValidator.validate(newMediaItem).error) {
-            logger.log(
-                'info',
-                `Validation error while creating mediaItem: ${JSON.stringify(
-                    newFileMediaItemValidator.validate(newMediaItem).error
-                )}`
-            );
-
-            return res
-                .status(400)
-                .json({ success: false, msg: 'validationError' });
-        }
-
-        const insertNewItem = async () => {
-            const insertSuccessful = await insertNewMediaItem(
-                req,
-                newMediaItem,
-                models,
-                logger
-            );
-
-            if (insertSuccessful) {
-                return res.status(200).json({
-                    success: true,
-                    msg: 'uploadSuccessful'
-                });
-            } else {
                 return res
                     .status(400)
-                    .json({ success: false, msg: 'fileUploadError' });
+                    .json({ success: false, msg: 'validationError' });
             }
-        };
 
-        return insertNewItem();
+            if (newFileMediaItemValidator.validate(newMediaItem).error) {
+                logger.log(
+                    'info',
+                    `Validation error while creating mediaItem: ${JSON.stringify(
+                        newFileMediaItemValidator.validate(newMediaItem).error
+                    )}`
+                );
+
+                return res
+                    .status(400)
+                    .json({ success: false, msg: 'validationError' });
+            }
+
+            const insertNewItem = async () => {
+                const insertSuccessful = await insertNewMediaItem(
+                    req,
+                    newMediaItem,
+                    models,
+                    logger
+                );
+
+                if (insertSuccessful) {
+                    return res.status(200).json({
+                        success: true,
+                        msg: 'uploadSuccessful'
+                    });
+                } else {
+                    return res
+                        .status(400)
+                        .json({ success: false, msg: 'fileUploadError' });
+                }
+            };
+
+            return insertNewItem();
+        } else {
+            return null;
+        }
     });
 };
 

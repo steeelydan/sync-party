@@ -5,7 +5,7 @@ import {
     mediaItemValidator,
     newMediaItemValidator
 } from '../common/validation';
-import { Request, Response } from 'express';
+import { request, Request, Response } from 'express';
 import { Logger } from 'winston';
 
 /**
@@ -107,6 +107,8 @@ const editMediaItem = async (
     const id = req.params.id;
     const editedMediaItem = req.body;
 
+    const requestUser = req.user;
+
     if (mediaItemValidator.validate(editedMediaItem).error) {
         logger.log(
             'info',
@@ -118,13 +120,17 @@ const editMediaItem = async (
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
+    if (!requestUser) {
+        return res
+            .status(400)
+            .json({ success: false, msg: 'authenticationError' }); // FIXME Is this the way we do it?
+    }
+
     const dbMediaItem = await models.MediaItem.findOne({
         where: {
             id
         }
     });
-
-    const requestUser = req.user;
 
     if (dbMediaItem.owner === requestUser.id || requestUser.role === 'admin') {
         dbMediaItem.name = editedMediaItem.name;
@@ -156,6 +162,12 @@ const deleteMediaItem = async (
     logger: Logger
 ) => {
     const requestUser = req.user;
+
+    if (!requestUser) {
+        return res
+            .status(400)
+            .json({ success: false, msg: 'authenticationError' }); // FIXME Is this the way we do it?
+    }
 
     const mediaItemId = req.params.id;
     try {

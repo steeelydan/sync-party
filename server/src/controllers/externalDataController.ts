@@ -18,6 +18,8 @@ const getLinkMetadata = async (req: Request, res: Response, logger: Logger) => {
     const videoIdRegex = /[a-zA-Z0-9\-_]/;
 
     if (
+        videoId &&
+        req.user &&
         origin === 'https://www.youtube.com' &&
         pathname === '/watch' &&
         videoIdRegex.test(videoId) &&
@@ -35,15 +37,15 @@ const getLinkMetadata = async (req: Request, res: Response, logger: Logger) => {
             const response = await got(requestUrl, { timeout: 3000 });
 
             const $ = cheerio.load(response.body);
-            result.videoTitle = $("meta[property='og:title']").attr('content');
+            result.videoTitle = $("meta[property='og:title']").attr('content') || '';
             result.channelTitle = $("*[itemprop = 'author']")
                 .find('link:nth-child(2)')
-                .attr('content');
+                .attr('content') || '';
         } catch (error) {
             return res.status(404);
         }
 
-        res.json(result);
+        return res.json(result);
     } else {
         return res.status(404);
     }
