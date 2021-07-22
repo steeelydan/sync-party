@@ -14,7 +14,7 @@ type RequestUser = {
 };
 
 type AuthenticatedPassportUser = {
-    id: string;
+    id?: string;
 };
 
 type Models = {
@@ -79,7 +79,7 @@ type PlayWish = {
     type: 'web' | 'file';
     isPlaying: boolean;
     position: number;
-    lastPosition: LastPosition | null;
+    lastPosition?: LastPosition | null;
     requestLastPosition: boolean;
     timestamp: number;
     direction?: 'left' | 'right';

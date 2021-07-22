@@ -29,6 +29,7 @@ const removeItemFromParty = async (
     const party = await models.Party.findOne({ where: { id: partyId } });
 
     if (
+        requestUser &&
         party.members.includes(requestUser.id) &&
         (party.status === 'active' || requestUser.role === 'admin')
     ) {
@@ -98,6 +99,7 @@ const addItemToParty = async (
     const party = await models.Party.findOne({ where: { id: partyId } });
 
     if (
+        requestUser &&
         party.members.includes(requestUser.id) &&
         (party.status === 'active' || requestUser.role === 'admin')
     ) {
@@ -161,6 +163,7 @@ const updatePartyItems = async (
     const party = await models.Party.findOne({ where: { id: partyId } });
 
     if (
+        requestUser &&
         party.members.includes(requestUser.id) &&
         (party.status === 'active' || requestUser.role === 'admin')
     ) {

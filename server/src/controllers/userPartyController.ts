@@ -11,81 +11,88 @@ import { Request, Response } from 'express';
  * @apiSuccess {Object[]} userParties All media items.
  */
 const getUserParties = async (req: Request, res: Response, models: Models) => {
-    const allParties = await models.Party.findAll();
+    const requestUser = req.user;
 
-    // Restrict parties to those where given user is member
-    const userParties = allParties.filter((party: Party) => {
-        return party.members.includes(req.user.id);
-    });
+    if (requestUser && requestUser.id) {
+        const allParties = await models.Party.findAll();
 
-    // Get lists of ALL users & items of bespoke parties (later assigned to specific party)
-    const userPartiesMemberList: string[] = [];
-    const userPartiesItemList: string[] = [];
+        // Restrict parties to those where given user is member
+        const userParties = allParties.filter((party: Party) => {
+            // @ts-ignore FIXME
+            return party.members.includes(requestUser.id);
+        });
 
-    userParties.forEach((userParty: Party) => {
-        userParty.members.forEach((member) => {
-            if (!userPartiesMemberList.includes(member)) {
-                userPartiesMemberList.push(member);
+        // Get lists of ALL users & items of bespoke parties (later assigned to specific party)
+        const userPartiesMemberList: string[] = [];
+        const userPartiesItemList: string[] = [];
+
+        userParties.forEach((userParty: Party) => {
+            userParty.members.forEach((member) => {
+                if (!userPartiesMemberList.includes(member)) {
+                    userPartiesMemberList.push(member);
+                }
+            });
+
+            userParty.items.forEach((item) => {
+                if (!userPartiesItemList.includes(item)) {
+                    userPartiesItemList.push(item);
+                }
+            });
+        });
+
+        // Get all formatted users (only id & username) & complete items for all parties this user is member of
+
+        const userPartiesMembers: AppUser[] = await models.User.findAll({
+            attributes: ['id', 'username'],
+            where: {
+                id: {
+                    [Op.in]: userPartiesMemberList
+                }
             }
         });
 
-        userParty.items.forEach((item) => {
-            if (!userPartiesItemList.includes(item)) {
-                userPartiesItemList.push(item);
+        const userPartiesItems: MediaItem[] = await models.MediaItem.findAll({
+            where: {
+                id: {
+                    [Op.in]: userPartiesItemList
+                }
             }
         });
-    });
 
-    // Get all formatted users (only id & username) & complete items for all parties this user is member of
-
-    const userPartiesMembers: AppUser[] = await models.User.findAll({
-        attributes: ['id', 'username'],
-        where: {
-            id: {
-                [Op.in]: userPartiesMemberList
-            }
-        }
-    });
-
-    const userPartiesItems: MediaItem[] = await models.MediaItem.findAll({
-        where: {
-            id: {
-                [Op.in]: userPartiesItemList
-            }
-        }
-    });
-
-    // Create final user parties array with respective members & items
-    const formattedUserParties = userParties.map((userParty: Party) => {
-        return {
-            id: userParty.id,
-            owner: userParty.owner,
-            name: userParty.name,
-            status: userParty.status,
-            members: userPartiesMembers.filter((member: PartyMember) => {
-                return userParty.members.includes(member.id);
-            }),
-            items: userParty.items
-                .filter((itemId: string) =>
-                    userPartiesItems.find(
-                        (item: MediaItem) => item.id === itemId
-                    )
-                )
-                .map((itemId) => {
-                    return userPartiesItems.find(
-                        (item: MediaItem) => item.id === itemId
-                    );
+        // Create final user parties array with respective members & items
+        const formattedUserParties = userParties.map((userParty: Party) => {
+            return {
+                id: userParty.id,
+                owner: userParty.owner,
+                name: userParty.name,
+                status: userParty.status,
+                members: userPartiesMembers.filter((member: PartyMember) => {
+                    return userParty.members.includes(member.id);
                 }),
-            metadata: userParty.metadata || {},
-            settings: userParty.settings || {}
-        };
-    });
+                items: userParty.items
+                    .filter((itemId: string) =>
+                        userPartiesItems.find(
+                            (item: MediaItem) => item.id === itemId
+                        )
+                    )
+                    .map((itemId) => {
+                        return userPartiesItems.find(
+                            (item: MediaItem) => item.id === itemId
+                        );
+                    }),
+                metadata: userParty.metadata || {},
+                settings: userParty.settings || {}
+            };
+        });
 
-    return res.status(200).json({
-        success: true,
-        msg: '',
-        userParties: formattedUserParties
-    });
+        return res.status(200).json({
+            success: true,
+            msg: '',
+            userParties: formattedUserParties
+        });
+    } else {
+        return res.status(400).json({ success: false });
+    }
 };
 
 export default { getUserParties };

@@ -33,6 +33,7 @@ const insertNewMediaItem = async (
 
     if (
         requestParty &&
+        req.user &&
         req.user.id === newMediaItem.owner &&
         requestParty.members.includes(req.user.id) &&
         newMediaItem.name !== '' &&
