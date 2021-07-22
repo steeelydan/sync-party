@@ -48,15 +48,19 @@ const auth = async (req: Request, res: Response, logger: Logger) => {
  */
 const login = (req: Request, res: Response) => {
     // At this point the user is already authenticated by passport middleware.
-    res.json({
-        success: true,
-        msg: 'loginSuccessful',
-        user: {
-            id: req.user.id,
-            username: req.user.username,
-            role: req.user.role
-        }
-    });
+    if (req.user) {
+        return res.json({
+            success: true,
+            msg: 'loginSuccessful',
+            user: {
+                id: req.user.id,
+                username: req.user.username,
+                role: req.user.role
+            }
+        });
+    } else {
+        return res.json({ sucess: false });
+    }
 };
 
 /**

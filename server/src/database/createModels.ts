@@ -16,7 +16,7 @@ class Party extends Model {
     name!: string;
     status!: 'active | stopped';
     members!: string[];
-    items: MediaItem[];
+    items!: MediaItem[];
     readonly createdAt!: Date;
     readonly updatedAt!: Date;
 }

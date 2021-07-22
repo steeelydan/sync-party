@@ -7,28 +7,32 @@ const configureSession = (
     SequelizeStore: any,
     expressSession: (options?: SessionOptions) => RequestHandler
 ) => {
-    const sessionStore = new SequelizeStore({
-        db: sequelize,
-        tableName: 'sessions'
-    });
+    if (process.env.SESSION_SECRET) {
+        const sessionStore = new SequelizeStore({
+            db: sequelize,
+            tableName: 'sessions'
+        });
 
-    sessionStore.sync();
+        sessionStore.sync();
 
-    const session = expressSession({
-        secret: process.env.SESSION_SECRET,
-        saveUninitialized: false,
-        resave: false,
-        store: sessionStore,
-        proxy: process.env.USE_PROXY === 'true',
-        cookie: {
-            sameSite: true,
-            httpOnly: true,
-            maxAge: 28 * 24 * 60 * 60 * 1000,
-            secure: process.env.NODE_ENV === 'production'
-        }
-    });
+        const session = expressSession({
+            secret: process.env.SESSION_SECRET,
+            saveUninitialized: false,
+            resave: false,
+            store: sessionStore,
+            proxy: process.env.USE_PROXY === 'true',
+            cookie: {
+                sameSite: true,
+                httpOnly: true,
+                maxAge: 28 * 24 * 60 * 60 * 1000,
+                secure: process.env.NODE_ENV === 'production'
+            }
+        });
 
-    return { session, sessionStore };
+        return { session, sessionStore };
+    } else {
+        throw new Error('env: Session secret must be set.');
+    }
 };
 
 export default configureSession;

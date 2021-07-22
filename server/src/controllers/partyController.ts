@@ -24,7 +24,7 @@ const createParty = async (
 ) => {
     const requestUser = req.user;
 
-    if (req.body.partyName !== '') {
+    if (req.body.partyName !== '' && requestUser && requestUser.id) {
         try {
             const newParty: NewParty = {
                 owner: requestUser.id,

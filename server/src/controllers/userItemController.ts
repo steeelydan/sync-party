@@ -16,7 +16,7 @@ const getUserItems = async (
     models: Models,
     logger: Logger
 ) => {
-    const userId = req.user.id;
+    const userId = req.user?.id;
 
     try {
         const userItems = await models.MediaItem.findAll({
