@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Picker } from 'emoji-mart';
+import { BaseEmoji, Picker } from 'emoji-mart';
 import 'emoji-mart/css/emoji-mart.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmile } from '@fortawesome/free-solid-svg-icons';
@@ -118,7 +118,7 @@ export default function Chat({
         focusTextInput();
     };
 
-    const addEmoji = (emoji: any): void => {
+    const addEmoji = (emoji: BaseEmoji): void => {
         if (textInputRef.current) {
             textInputRef.current.focus();
 
@@ -247,7 +247,7 @@ export default function Chat({
                                     sheetSize={16}
                                     showPreview={false}
                                     useButton={false}
-                                    onSelect={(emoji): void => {
+                                    onSelect={(emoji: BaseEmoji): void => {
                                         addEmoji(emoji);
                                     }}
                                 ></Picker>

@@ -10,7 +10,8 @@
         "deploy": "npm ci && npm run build",
         "test": "react-scripts test",
         "build:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
-        "watch:css": "postcss src/assets/tailwind.css -o src/assets/main.css"
+        "watch:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
+        "lint": "eslint '**/*.tsx'"
     },
     "eslintConfig": {
         "extends": "react-app"

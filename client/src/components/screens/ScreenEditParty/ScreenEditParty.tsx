@@ -13,9 +13,15 @@ type Props = {
     socket: Socket | null;
 };
 
+type Location = {
+    state: {
+        referrer: string;
+    }
+}
+
 export default function ScreenEditParty(props: Props): JSX.Element | null {
     const [redirectBack, setRedirectBack] = useState(false);
-    const location: any = useLocation(); // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/41674
+    const location: Location = useLocation(); // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/41674
     const params: {
         id: string;
     } = useParams();
