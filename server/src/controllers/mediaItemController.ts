@@ -5,7 +5,7 @@ import {
     mediaItemValidator,
     newMediaItemValidator
 } from '../common/validation';
-import { request, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { Logger } from 'winston';
 
 /**
