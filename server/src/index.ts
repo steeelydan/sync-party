@@ -13,7 +13,7 @@ const socketio = require('socket.io');
 const { ExpressPeerServer } = require('peer');
 import express from 'express';
 
-import helmet from 'helmet';
+import helmet, { contentSecurityPolicy } from 'helmet';
 import bodyParser from 'body-parser';
 import expressSession from 'express-session';
 const SequelizeStore = require('connect-session-sequelize')(
@@ -161,7 +161,7 @@ const runApp = async () => {
                 app.use(
                     helmet.contentSecurityPolicy({
                         directives: {
-                            defaultSrc: ["'self'"],
+                            defaultSrc: contentSecurityPolicy.dangerouslyDisableDefaultSrc,
                             scriptSrc:
                                 "'self' 'unsafe-inline' www.youtube.com s.ytimg.com player.vimeo.com w.soundcloud.com",
                             styleSrc: "'self' 'unsafe-inline'",
