@@ -1,10 +1,10 @@
 {
     "name": "sync-party-server",
-    "version": "0.7.1",
+    "version": "0.8.0",
     "main": "index.js",
     "private": true,
     "author": "steeelydan",
-    "license": "MIT",
+    "license": "GPL-3.0",
     "scripts": {
         "setup": "([ -d './uploads' ] && echo './uploads folder exists.') || (mkdir './uploads' && echo './uploads folder created.')",
         "doc": "apidoc -i src/ -o doc/",
