@@ -158,7 +158,17 @@ const runApp = async () => {
 
                 // MIDDLEWARE
 
-                app.use(helmet());
+                app.use(
+                    helmet.contentSecurityPolicy({
+                        directives: {
+                            defaultSrc: ["'self'"],
+                            scriptSrc:
+                                "'self' 'unsafe-inline' www.youtube.com s.ytimg.com player.vimeo.com w.soundcloud.com",
+                            styleSrc: "'self' 'unsafe-inline'",
+                            MediaSource: "'*'"
+                        }
+                    })
+                );
                 app.use(compression());
 
                 // HTTP HEADERS
