@@ -2,12 +2,12 @@ import React, { ReactElement, Ref, useState } from 'react';
 
 interface Props {
     textInput: string;
-    setPlayerFocused: Function;
-    freezeUiVisible: Function;
-    handleInputFieldKeyDown: Function;
-    setTextInput: Function;
+    setPlayerFocused: (focused: boolean) => void;
+    freezeUiVisible: (visible: boolean) => void;
+    handleInputFieldKeyDown: (event: React.KeyboardEvent) => void;
+    setTextInput: (value: string) => void;
     textInputRef: Ref<HTMLTextAreaElement>;
-    t: Function;
+    t: (translationKey: string) => string;
 }
 
 export default function ChatInput({

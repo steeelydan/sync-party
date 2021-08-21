@@ -19,8 +19,8 @@ import { Socket } from 'socket.io-client';
 interface Props {
     isActive: boolean;
     socket: Socket | null;
-    setPlayerFocused: Function;
-    freezeUiVisible: Function;
+    setPlayerFocused: (focused: boolean) => void;
+    freezeUiVisible: (visible: boolean) => void;
 }
 
 export default function Chat({
@@ -82,7 +82,7 @@ export default function Chat({
         }
     };
 
-    const handleInputFieldKeyDown = (event: KeyboardEvent): void => {
+    const handleInputFieldKeyDown = (event: React.KeyboardEvent): void => {
         if (event.key === 'Enter') {
             event.preventDefault();
             sendMessage(textInput);
@@ -101,7 +101,7 @@ export default function Chat({
     };
 
     const handleEmojiPickerKeydown = (
-        event: React.KeyboardEvent<HTMLDivElement>
+        event: React.KeyboardEvent
     ): void => {
         if (event.key === 'Escape') {
             setShowEmojiPicker(false);

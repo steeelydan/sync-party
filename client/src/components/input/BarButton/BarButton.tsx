@@ -4,7 +4,7 @@ import React, { ReactElement } from 'react';
 
 interface Props {
     isActive: boolean;
-    clickHandler: Function;
+    clickHandler: () => void;
     icon: IconDefinition;
     titleText: string;
     size: 'large' | 'small';

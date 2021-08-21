@@ -738,7 +738,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     playerState={playerState}
                     playerTimeoutState={playerTimeoutState}
                     setPlayerTimeoutState={(
-                        playerTimeoutState: PlayerTimeoutState
+                        playerTimeoutState: PlayerTimeoutStateActionProperties
                     ): void => setPlayerTimeoutState(playerTimeoutState)}
                     actionMessageDelay={actionMessageDelay}
                 ></MediaPlayerOverlay>

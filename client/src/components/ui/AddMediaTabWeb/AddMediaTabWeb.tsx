@@ -6,10 +6,10 @@ import InputText from '../../input/InputText/InputText';
 
 interface Props {
     mediaItem: NewMediaItem;
-    setMediaItem: Function;
-    addWebItem: Function;
-    handleLinkInput: Function;
-    setPlayerFocused: Function;
+    setMediaItem: (mediaItem: NewMediaItem) => void;
+    addWebItem: (event: React.MouseEvent) => void;
+    handleLinkInput: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
+    setPlayerFocused: (focused: boolean) => void;
     linkMetadata: {
         videoTitle: string;
         channelTitle: string;
@@ -36,7 +36,7 @@ export default function AddMediaTabWeb({
             <InputText
                 labelWidth="w-20"
                 value={mediaItem.url}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
+                onChange={(event: React.ChangeEvent<HTMLInputElement>): Promise<void> =>
                     handleLinkInput(event)
                 }
                 onFocus={(): void => setPlayerFocused(false)}

@@ -8,9 +8,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
+type ActiveTab = 'user' | 'web' | 'file';
+
 interface Props {
-    activeTab: 'user' | 'web' | 'file';
-    changeTab: Function;
+    activeTab: ActiveTab;
+    changeTab: (activeTab: ActiveTab) => void;
     isUploading: boolean;
     toggleCollapseAddMediaMenu: React.MouseEventHandler;
 }

@@ -3,9 +3,9 @@ import React, { ReactElement } from 'react';
 interface Props {
     item: MediaItem;
     probablyEditedItem: MediaItem;
-    setProbablyEditedItem: Function;
+    setProbablyEditedItem: (probablyEditedItem: MediaItem) => void;
     editMode: boolean;
-    handleItemClick: Function;
+    handleItemClick: (mediaItem: MediaItem) => void;
     nameEditingAllowed: boolean;
 }
 

@@ -9,7 +9,7 @@ interface Props {
     userId: string;
     isActive: boolean;
     uiVisible: boolean;
-    t: Function;
+    t: (translationKey: string) => React.ReactNode;
 }
 
 export default function ChatHistory({

@@ -7,9 +7,9 @@ import { useSelector } from 'react-redux';
 
 interface Props {
     partyItemsSet: Set<string>;
-    addUserItem: Function;
-    setPlayerFocused: Function;
-    handleItemEditSave: Function;
+    addUserItem: (mediaItem: MediaItem) => Promise<void>;
+    setPlayerFocused: (focused: boolean) => void;
+    handleItemEditSave: (mediaItem: MediaItem) => void;
 }
 
 export default function AddMediaTabUser({

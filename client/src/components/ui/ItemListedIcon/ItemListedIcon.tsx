@@ -5,7 +5,7 @@ import { getIconFromFileType } from '../../../common/helpers';
 type Props = {
     item: MediaItem;
     editMode: boolean;
-    handleItemClick: Function;
+    handleItemClick: (mediaItem: MediaItem) => void;
 };
 
 export default function ItemListedIcon({

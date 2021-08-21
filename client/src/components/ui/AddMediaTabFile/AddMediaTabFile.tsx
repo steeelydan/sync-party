@@ -8,12 +8,12 @@ import { audioExtensions, videoExtensions } from '../../../common/helpers';
 
 interface Props {
     file: File | null;
-    setFile: Function;
+    setFile: (file: File) => void;
     mediaItem: NewMediaItem;
-    setMediaItem: Function;
-    addFileItem: Function;
-    resetUploadForm: Function;
-    setPlayerFocused: Function;
+    setMediaItem: (mediaItem: NewMediaItem) => void;
+    addFileItem: (event: React.MouseEvent) => Promise<void>;
+    resetUploadForm: () => void;
+    setPlayerFocused: (focused: boolean) => void;
 }
 
 export default function AddMediaTabFile({

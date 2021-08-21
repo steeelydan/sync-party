@@ -14,9 +14,9 @@ import BarButton from '../../input/BarButton/BarButton';
 interface Props {
     isActive: boolean;
     displayVertically: boolean;
-    setDisplayVertically: Function;
+    setDisplayVertically: (displayVertically: boolean) => void;
     displayOwnVideo: boolean;
-    setDisplayOwnVideo: Function;
+    setDisplayOwnVideo: (displayOwnVideo: boolean) => void;
     otherVideosAmount: number;
 }
 

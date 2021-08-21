@@ -7,7 +7,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 interface Props {
     children: JSX.Element | JSX.Element[];
     heading: string;
-    onClose: Function;
+    onClose: () => void;
 }
 
 export default function AdminActionOverlay({

@@ -15,7 +15,7 @@ interface Props {
     ourUserId: string;
     webRtcIds: WebRtcIds;
     showVideos: boolean;
-    handlePlayPause: Function;
+    handlePlayPause: () => void;
 }
 
 export default function WebRtc({

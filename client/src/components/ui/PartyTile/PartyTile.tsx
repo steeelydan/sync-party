@@ -10,8 +10,8 @@ import { setGlobalState } from '../../../actions/globalActions';
 interface Props {
     user: User;
     userParty: ClientParty;
-    handlePartyChoose: Function;
-    setRedirectToPartySettings: Function;
+    handlePartyChoose: (userParty: ClientParty) => void;
+    setRedirectToPartySettings: (partyId: string) => void;
 }
 
 export default function PartyTile({

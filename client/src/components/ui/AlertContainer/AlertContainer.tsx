@@ -7,9 +7,17 @@ import Button from '../../input/Button/Button';
 
 interface Props {
     playerState: PlayerState;
-    emitPlayWish: Function;
+    emitPlayWish: (
+        mediaItem: MediaItem,
+        isPlaying: boolean,
+        lastPositionItemId: string | null,
+        requestLastPosition: boolean,
+        newPosition?: number,
+        noIssuer?: boolean,
+        direction?: 'left' | 'right'
+    ) => void;
     hasLastPosition: boolean;
-    setHasLastPosition: Function;
+    setHasLastPosition: (hasLastPosition: boolean) => void;
 }
 
 export default function AlertContainer({

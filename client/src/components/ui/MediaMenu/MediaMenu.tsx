@@ -20,9 +20,17 @@ import { Socket } from 'socket.io-client';
 
 type Props = {
     socket: Socket | null;
-    setPlayerFocused: Function;
-    emitPlayWish: Function;
-    freezeUiVisible: Function;
+    setPlayerFocused: (focused: boolean) => void;
+    emitPlayWish: (
+        mediaItem: MediaItem,
+        isPlaying: boolean,
+        lastPositionItemId: string | null,
+        requestLastPosition: boolean,
+        newPosition?: number,
+        noIssuer?: boolean,
+        direction?: 'left' | 'right'
+    ) => void;
+    freezeUiVisible: (freezeUiVisible: boolean) => void;
     isPlaying: boolean;
     playerState: PlayerState;
 };

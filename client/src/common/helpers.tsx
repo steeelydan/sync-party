@@ -110,8 +110,8 @@ const getSite = (url: string): string => {
 };
 
 // https://overreacted.io/making-setinterval-declarative-with-react-hooks/
-const useInterval = (callback: Function, delay: number): void => {
-    const savedCallback = useRef<Function | null>(null);
+const useInterval = (callback: () => void, delay: number): void => {
+    const savedCallback = useRef<() => void>();
 
     // Remember the latest callback.
     useEffect(() => {
@@ -150,13 +150,27 @@ const updateCurrentParty = (
 const handleKeyCommands = (
     reactPlayer: ReactPlayer,
     event: KeyboardEvent,
-    handlePlayPause: Function,
-    handleFullScreen: Function,
+    handlePlayPause: () => void,
+    handleFullScreen: () => void,
     playerState: PlayerState,
     volumeStep: number,
-    setPlayerState: Function,
+    setPlayerState: ({
+        volume,
+        isSeeking
+    }: {
+        volume?: number;
+        isSeeking?: boolean;
+    }) => void,
     seekStepSize: number,
-    emitPlayWish: Function
+    emitPlayWish: (
+        mediaItem: MediaItem,
+        isPlaying: boolean,
+        lastPositionItemId: string | null,
+        requestLastPosition: boolean,
+        newPosition?: number,
+        noIssuer?: boolean,
+        direction?: 'left' | 'right'
+    ) => void
 ): void => {
     switch (event.code) {
         case 'Space': {

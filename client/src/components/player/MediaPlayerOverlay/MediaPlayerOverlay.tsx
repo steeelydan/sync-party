@@ -8,7 +8,7 @@ import { faSync } from '@fortawesome/free-solid-svg-icons';
 type Props = {
     playerState: PlayerState;
     playerTimeoutState: PlayerTimeoutState;
-    setPlayerTimeoutState: Function;
+    setPlayerTimeoutState: (playerTimeoutState: PlayerTimeoutStateActionProperties) => void;
     actionMessageDelay: number;
 };
 

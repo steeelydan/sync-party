@@ -24,10 +24,10 @@ import { Socket } from 'socket.io-client';
 type Props = {
     isActive: boolean;
     partyItemsSet: Set<string>;
-    setAddMediaIsActive: Function;
+    setAddMediaIsActive: (isActive: boolean) => void;
     socket: Socket | null;
-    setPlayerFocused: Function;
-    handleItemEditSave: Function;
+    setPlayerFocused: (focused: boolean) => void;
+    handleItemEditSave: (mediaItem: MediaItem) => Promise<void>;
 };
 
 export default function AddMedia({

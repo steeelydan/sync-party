@@ -21,10 +21,10 @@ interface Props {
     partyId: string | null;
     webRtcIds: WebRtcIds;
     ourUserId: string;
-    setPlayerState: Function;
+    setPlayerState: (playerState: PlayerStateActionProperties) => void;
     uiVisible: boolean;
-    freezeUiVisible: Function;
-    handlePlayPause: Function;
+    freezeUiVisible: (freeze: boolean) => void;
+    handlePlayPause: () => void;
 }
 
 export default function CommunicationContainer({

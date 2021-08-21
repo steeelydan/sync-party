@@ -15,14 +15,14 @@ import ItemListedClipboardButton from '../ItemListedClipboardButton/ItemListedCl
 
 type Props = {
     item: MediaItem;
-    handleItemSave: Function;
-    setPlayerFocused: Function;
+    handleItemSave: (probablyEditedItem: MediaItem) => void;
+    setPlayerFocused: (focused: boolean) => void;
     isCurrentlyPlayingItem?: boolean;
     alreadyPlayed?: boolean;
     isPlaying?: boolean;
     nameEditingAllowed: boolean;
-    handleItemClick: Function;
-    onRemoveButtonClick?: Function;
+    handleItemClick: () => void;
+    onRemoveButtonClick?: (mediaItem: MediaItem) => void;
     partyItemListRef?: React.RefObject<HTMLDivElement>;
 };
 

@@ -13,19 +13,19 @@ import { useTranslation } from 'react-i18next';
 import BarButton from '../../input/BarButton/BarButton';
 
 interface Props {
-    toggleChat: Function;
-    toggleWebRtcAudio: Function;
-    toggleWebRtcVideo: Function;
+    toggleChat: () => void;
+    toggleWebRtcAudio: () => void;
+    toggleWebRtcVideo: () => void;
     chatIsActive: boolean;
     webRtcAudioIsActive: boolean;
     webRtcVideoIsActive: boolean;
     uiVisible: boolean;
     showVideos: boolean;
-    setShowVideos: Function;
+    setShowVideos: (showVideos: boolean) => void;
     audioIsMuted: boolean;
     videoIsMuted: boolean;
-    toggleAudioIsMuted: Function;
-    toggleVideoIsMuted: Function;
+    toggleAudioIsMuted: () => void;
+    toggleVideoIsMuted: () => void;
 }
 
 export default function CommunicationBar({
