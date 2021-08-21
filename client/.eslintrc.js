@@ -22,7 +22,7 @@ module.exports = {
         'no-warning-comments': 'warn',
         '@typescript-eslint/no-use-before-define': ['off'],
         '@typescript-eslint/ban-ts-comment': 'warn',
-        '@typescript-eslint/ban-types': 'warn',
+        '@typescript-eslint/ban-types': 'error',
         '@typescript-eslint/no-explicit-any': 'error',
         'no-console': 'warn'
     },
