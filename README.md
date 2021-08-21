@@ -4,13 +4,21 @@ Watch videos or listen to music synchronously with your friends. Imagine a virtu
 
 Demo video: https://www.youtube.com/watch?v=6t5-cAwSfjk
 
+Features:
+
+-   Any amount of user accounts
+-   As many Sync Parties as you wish
+-   Invite up to 6 other users to your parties
+-   Support for many sites & media formats
+-   Video, audio, and text chat
+
 Use cases:
 
 -   Watch a documentary or a vlog on YouTube with a friend from another country
 -   Listen to a podcast together
 -   Listen to the radio together, just like the old times, they say
 -   Listen to an audiobook with your Australian boyfriend
--   Make party in the literal sense! 🤘 Useful when it isn't feasible to meet in real life, COVID-19 I'm looking at you 😠 Just fire up a Zoom/Jitsi/what-have-you session. Put headphones on. Turn up some music. Go for it!
+-   Make party in the literal sense! 🤘 Useful when it isn't feasible to meet in real life, COVID-19 I'm looking at you 😠 Put headphones on. Fire up a video chat session. Turn up some music. Go for it!
 -   Annoy your friends with your latest recordings
 -   Review your recordings with your producer / manager
 -   Present your films to your friends
@@ -141,6 +149,8 @@ In `/server/build/admin-cli`: `admin.js` +
 
 ## Changelog
 
+-   0.8.1: Add video chat; license change to GPL-3.0; TS strict mode for back end as well
+-   0.7.0: Add text chat
 -   0.6.0:
     -   Ported the back end to TypeScript
     -   Global type definitions in the client app
