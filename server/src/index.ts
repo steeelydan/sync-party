@@ -151,14 +151,22 @@ const runApp = async () => {
 
         // MIDDLEWARE
 
+        const dir = contentSecurityPolicy.getDefaultDirectives();
+
         app.use(
-            helmet.contentSecurityPolicy({
-                directives: {
-                    defaultSrc:
-                        contentSecurityPolicy.dangerouslyDisableDefaultSrc,
-                    scriptSrc:
-                        "'self' 'unsafe-inline' www.youtube.com s.ytimg.com player.vimeo.com w.soundcloud.com",
-                    styleSrc: "'self' https: 'unsafe-inline'"
+            helmet({
+                contentSecurityPolicy: {
+                    directives: {
+                        defaultSrc:
+                            contentSecurityPolicy.dangerouslyDisableDefaultSrc,
+                        baseUri: ["'self'"],
+                        fontSrc: ["'self'"],
+                        objectSorc: ["'none'"],
+                        scriptSrc:
+                            "'self' 'unsafe-inline' www.youtube.com s.ytimg.com player.vimeo.com w.soundcloud.com",
+                        scriptSrcAttr: ["'none'"],
+                        styleSrc: "'self' https: 'unsafe-inline'"
+                    }
                 }
             })
         );
