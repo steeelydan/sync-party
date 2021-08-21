@@ -164,8 +164,7 @@ const runApp = async () => {
                             defaultSrc: contentSecurityPolicy.dangerouslyDisableDefaultSrc,
                             scriptSrc:
                                 "'self' 'unsafe-inline' www.youtube.com s.ytimg.com player.vimeo.com w.soundcloud.com",
-                            styleSrc: "'self' 'unsafe-inline'",
-                            MediaSource: "'*'"
+                            styleSrc: "'self' 'unsafe-inline'"
                         }
                     })
                 );
