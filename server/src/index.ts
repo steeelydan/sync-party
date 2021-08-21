@@ -157,7 +157,7 @@ const runApp = async () => {
                     defaultSrc:
                         contentSecurityPolicy.dangerouslyDisableDefaultSrc,
                     scriptSrc:
-                        "'self' www.youtube.com s.ytimg.com player.vimeo.com w.soundcloud.com",
+                        "'self' 'unsafe-inline' www.youtube.com s.ytimg.com player.vimeo.com w.soundcloud.com",
                     styleSrc: "'self' https: 'unsafe-inline'"
                 }
             })
