@@ -10,8 +10,8 @@
         "doc": "apidoc -i src/ -o doc/",
         "build": "tsc",
         "start": "npm run setup && npm run doc && tsc-watch --project . --outDir ./build --onSuccess \"nodemon ./build/index.js\"",
-        "start-production": "pm2 start ./build/index.js",
-        "stop": "pm2 stop ./build/index.js",
+        "start-production": "pm2 start ./build/index.js --name sync-party",
+        "stop": "pm2 stop sync-party",
         "deploy": "npm ci && npm run setup && npm run build && npm run start-production && pm2 log"
     },
     "dependencies": {
