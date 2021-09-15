@@ -50,7 +50,10 @@ const noPartyState: PartyPartialState = {
 
 const axiosConfig = (): AxiosConfig => {
     return {
-        withCredentials: true
+        withCredentials: true,
+        headers: {
+            'Cache-Control': 'no-cache, no-store, max-age=0'
+        }
         /* TBI
         xsrfCookieName: '_csrf',
         xsrfHeaderName: 'X-CSRF-TOKEN' */
