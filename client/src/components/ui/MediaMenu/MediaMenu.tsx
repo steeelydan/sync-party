@@ -62,7 +62,7 @@ export default function MediaMenu({
 
     const [addMediaIsActive, setAddMediaIsActive] = useState(false);
 
-    const [partyItemsSet, setPartyItemsMap] = useState<Set<string>>(new Set());
+    const [partyItemsSet, setPartyItemsSet] = useState<Set<string>>(new Set());
 
     const partyItemListRef = useRef<HTMLDivElement | null>(null);
 
@@ -72,13 +72,13 @@ export default function MediaMenu({
     // Collect items in active party in a set for faster checks
     useEffect(() => {
         if (party) {
-            const itemsMap = new Set<string>();
+            const itemsSet = new Set<string>();
 
             party.items.forEach((item) => {
-                itemsMap.add(item.id);
+                itemsSet.add(item.id);
             });
 
-            setPartyItemsMap(itemsMap);
+            setPartyItemsSet(itemsSet);
         }
     }, [party]);
 
