@@ -250,9 +250,9 @@ interface FormattedChatMessage extends ChatMessage {
 
 type AxiosConfig = {
     withCredentials: boolean;
-    headers: {
-        'Cache-Control': string;
-    };
+    // headers: {
+    //     'Cache-Control': string;
+    // };
     /* TBI
     xsrfCookieName: string;
     xsrfHeaderName: string;
