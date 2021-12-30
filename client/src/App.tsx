@@ -35,6 +35,7 @@ function App(): JSX.Element {
     const party = useSelector((state: RootAppState) => state.globalState.party);
     const chat = useSelector((state: RootAppState) => state.globalState.chat);
 
+    // Setup websocket logic
     useEffect(() => {
         if (socket && dispatch) {
             socket.off('partyUpdate');
@@ -120,9 +121,6 @@ function App(): JSX.Element {
             <Auth>
                 <Router>
                     <Switch>
-                        <Route path="/" exact>
-                            <ScreenDashboard socket={socket}></ScreenDashboard>
-                        </Route>
                         <Route path="/party/:id" exact>
                             <ScreenParty socket={socket}></ScreenParty>
                         </Route>
@@ -136,6 +134,9 @@ function App(): JSX.Element {
                         </Route>
                         <Route path="/user" exact>
                             <ScreenUser></ScreenUser>
+                        </Route>
+                        <Route path="/">
+                            <ScreenDashboard socket={socket}></ScreenDashboard>
                         </Route>
                     </Switch>
                 </Router>
