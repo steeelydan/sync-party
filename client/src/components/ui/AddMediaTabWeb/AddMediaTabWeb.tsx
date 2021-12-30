@@ -8,7 +8,9 @@ interface Props {
     mediaItem: NewMediaItem;
     setMediaItem: (mediaItem: NewMediaItem) => void;
     addWebItem: (event: React.MouseEvent) => void;
-    handleLinkInput: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
+    handleLinkInput: (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => Promise<void>;
     setPlayerFocused: (focused: boolean) => void;
     linkMetadata: {
         videoTitle: string;
@@ -36,9 +38,9 @@ export default function AddMediaTabWeb({
             <InputText
                 labelWidth="w-20"
                 value={mediaItem.url}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>): Promise<void> =>
-                    handleLinkInput(event)
-                }
+                onChange={(
+                    event: React.ChangeEvent<HTMLInputElement>
+                ): Promise<void> => handleLinkInput(event)}
                 onFocus={(): void => setPlayerFocused(false)}
                 onBlur={(): void => setPlayerFocused(true)}
                 placeholder={t('mediaMenu.addWebUrl')}
@@ -98,8 +100,10 @@ export default function AddMediaTabWeb({
                         text={t('common.add')}
                         type="submit"
                         onClick={(event: React.MouseEvent): void => {
-                            setPlayerFocused(true);
-                            addWebItem(event);
+                            if (!fetchingLinkMetadata) {
+                                setPlayerFocused(true);
+                                addWebItem(event);
+                            }
                         }}
                     ></Button>
                 </>
