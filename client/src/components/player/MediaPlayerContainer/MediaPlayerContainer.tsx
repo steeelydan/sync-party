@@ -16,7 +16,7 @@ import {
     calculateSyncDelta
 } from '../../../common/helpers';
 import Axios from 'axios';
-import screenfull, { Screenfull } from 'screenfull';
+import screenfull from 'screenfull';
 
 import ReactPlayer from 'react-player';
 import TopBar from '../../ui/TopBar/TopBar';
@@ -581,9 +581,9 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
 
     const handleFullScreen = async (): Promise<void> => {
         if (!playerState.isFullScreen) {
-            await (screenfull as Screenfull).request();
+            await screenfull.request();
         } else {
-            await (screenfull as Screenfull).exit();
+            await screenfull.exit();
         }
     };
 
