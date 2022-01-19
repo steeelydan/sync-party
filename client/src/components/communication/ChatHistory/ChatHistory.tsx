@@ -1,4 +1,4 @@
-import React, { ReactElement, Ref } from 'react';
+import { ReactElement, Ref } from 'react';
 
 interface Props {
     chatHistoryRef: Ref<HTMLDivElement>;

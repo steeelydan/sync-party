@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
 import Avatar from '../../display/Avatar/Avatar';

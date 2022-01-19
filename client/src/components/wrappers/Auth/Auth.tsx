@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 import Axios from 'axios';

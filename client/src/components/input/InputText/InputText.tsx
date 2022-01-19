@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler } from 'react';
+import { ChangeEventHandler } from 'react';
 import { v4 as uuid } from 'uuid';
 
 type Props = {

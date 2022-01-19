@@ -1,5 +1,5 @@
 import Peer from 'peerjs';
-import React, {
+import {
     ReactElement,
     useCallback,
     useEffect,
