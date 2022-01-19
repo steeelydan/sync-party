@@ -21,7 +21,7 @@ module.exports = {
         '@typescript-eslint/no-use-before-define': ['off'],
         '@typescript-eslint/ban-ts-comment': 'warn',
         '@typescript-eslint/ban-types': 'error',
-        '@typescript-eslint/no-explicit-any': 'error',
+        '@typescript-eslint/no-explicit-any': 'warn',
         'no-console': 'warn'
     },
     settings: {

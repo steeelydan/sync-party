@@ -109,7 +109,7 @@ export default function CommunicationContainer({
                         channelCount: 1
                     }
                 });
-            } catch (error) {
+            } catch (error: any) {
                 let message;
 
                 if (error.name === 'AbortError') {
