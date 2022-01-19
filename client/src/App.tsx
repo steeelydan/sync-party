@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from './actions/globalActions';
 import socketIOClient, { Socket } from 'socket.io-client';
@@ -120,25 +120,42 @@ function App(): JSX.Element {
         <div className="flex flex-col text-gray-300 bg-black">
             <Auth>
                 <Router>
-                    <Switch>
-                        <Route path="/party/:id" exact>
-                            <ScreenParty socket={socket}></ScreenParty>
-                        </Route>
-                        <Route path="/editParty/:id" exact>
-                            <ScreenEditParty socket={socket}></ScreenEditParty>
-                        </Route>
-                        <Route path="/mediaItems" exact>
-                            <ScreenMediaItems
-                                socket={socket}
-                            ></ScreenMediaItems>
-                        </Route>
-                        <Route path="/user" exact>
-                            <ScreenUser></ScreenUser>
-                        </Route>
-                        <Route path="/">
-                            <ScreenDashboard socket={socket}></ScreenDashboard>
-                        </Route>
-                    </Switch>
+                    <Routes>
+                        <Route
+                            path="/party/:id"
+                            element={
+                                <ScreenParty socket={socket}></ScreenParty>
+                            }
+                        />
+                        <Route
+                            path="/editParty/:id"
+                            element={
+                                <ScreenEditParty
+                                    socket={socket}
+                                ></ScreenEditParty>
+                            }
+                        />
+                        <Route
+                            path="/mediaItems"
+                            element={
+                                <ScreenMediaItems
+                                    socket={socket}
+                                ></ScreenMediaItems>
+                            }
+                        />
+                        <Route
+                            path="/user"
+                            element={<ScreenUser></ScreenUser>}
+                        />
+                        <Route
+                            path="/"
+                            element={
+                                <ScreenDashboard
+                                    socket={socket}
+                                ></ScreenDashboard>
+                            }
+                        ></Route>
+                    </Routes>
                 </Router>
             </Auth>
         </div>

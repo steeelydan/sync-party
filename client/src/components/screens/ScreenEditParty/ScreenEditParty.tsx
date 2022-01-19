@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation, useParams, Redirect } from 'react-router-dom';
+import { useState } from 'react';
+import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import Heading from '../../display/Heading/Heading';
@@ -16,15 +16,12 @@ type Props = {
 type Location = {
     state: {
         referrer: string;
-    }
-}
-
+    };
+};
 export default function ScreenEditParty(props: Props): JSX.Element | null {
     const [redirectBack, setRedirectBack] = useState(false);
-    const location: Location = useLocation(); // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/41674
-    const params: {
-        id: string;
-    } = useParams();
+    const location = useLocation() as Location;
+    const params = useParams();
     const { t } = useTranslation();
 
     const partyId = params.id;
@@ -38,13 +35,12 @@ export default function ScreenEditParty(props: Props): JSX.Element | null {
 
     if (redirectBack) {
         if (!location || !location.state || !location.state.referrer) {
-            return <Redirect push to={`/`}></Redirect>;
+            return <Navigate to={`/`}></Navigate>;
         } else {
             return party ? (
-                <Redirect
-                    push
+                <Navigate
                     to={`${location.state.referrer}${party.id}`}
-                ></Redirect>
+                ></Navigate>
             ) : (
                 <></>
             );

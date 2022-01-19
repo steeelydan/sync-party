@@ -1,5 +1,5 @@
-import React, { ReactElement, useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
+import { ReactElement, useState, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 import { useTranslation } from 'react-i18next';
@@ -129,7 +129,7 @@ export default function EditParty({
     };
 
     if (redirect) {
-        return <Redirect to="/"></Redirect>;
+        return <Navigate to="/"></Navigate>;
     }
 
     return (
