@@ -34,7 +34,15 @@ const getLinkMetadata = async (req: Request, res: Response, logger: Logger) => {
         );
 
         try {
-            const response = await got(requestUrl, { timeout: 3000 });
+            const response = await got(requestUrl, {
+                timeout: {
+                    connect: 50,
+                    secureConnect: 50,
+                    socket: 1000,
+                    send: 2000,
+                    response: 1000
+                }
+            });
 
             const $ = cheerio.load(response.body);
             result.videoTitle = $("meta[property='og:title']").attr('content') || '';

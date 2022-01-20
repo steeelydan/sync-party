@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import { insertNewMediaItem } from '../database/generalOperations';
+import { insertNewMediaItem } from '../database/generalOperations.js';
 import {
     mediaItemValidator,
     newMediaItemValidator
-} from '../common/validation';
+} from '../common/validation.js';
 import { Request, Response } from 'express';
 import { Logger } from 'winston';
 
@@ -179,7 +179,7 @@ const deleteMediaItem = async (
         if (item.owner === requestUser.id || requestUser.role === 'admin') {
             if (item.type === 'file') {
                 fs.unlinkSync(
-                    path.join(__dirname, '/../../uploads/', item.url)
+                    path.join(path.resolve('uploads'), item.url)
                 );
             }
 

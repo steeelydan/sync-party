@@ -1,7 +1,7 @@
-import { newPartyValidator, partyValidator } from '../common/validation';
+import { newPartyValidator, partyValidator } from '../common/validation.js';
 import { Logger } from 'winston';
 import { Request, Response } from 'express';
-import helpers from '../common/helpers';
+import helpers from '../common/helpers.js';
 import { v4 as uuid } from 'uuid';
 
 /**

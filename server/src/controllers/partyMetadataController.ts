@@ -1,4 +1,4 @@
-import { partyMetadataValidator } from '../common/validation';
+import { partyMetadataValidator } from '../common/validation.js';
 import { Logger } from 'winston';
 import { Request, Response } from 'express';
 

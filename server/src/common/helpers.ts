@@ -56,7 +56,7 @@ const envCheck = (logger: Logger) => {
 };
 
 const getFilePathFromId = (dbMediaItemId: string): string => {
-    return path.resolve(path.join(__dirname, '/../../uploads/', dbMediaItemId));
+    return path.join(path.resolve('uploads'), dbMediaItemId);
 };
 
 const createLogger = () => {

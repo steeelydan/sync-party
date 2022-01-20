@@ -1,7 +1,7 @@
 import {
     mediaItemValidator,
     partyMediaItemsValidator
-} from '../common/validation';
+} from '../common/validation.js';
 import { Request, Response } from 'express';
 import { Logger } from 'winston';
 

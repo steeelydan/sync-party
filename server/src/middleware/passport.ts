@@ -34,7 +34,10 @@ Otherwise you must define a custom field mapping, see below. */
             const isValid = await bcrypt.compare(password, user.password);
 
             if (isValid) {
-                logger.log('info', `Successful login by user: ${username} (${user.id})`);
+                logger.log(
+                    'info',
+                    `Successful login by user: ${username} (${user.id})`
+                );
 
                 return done(null, user);
             } else {
@@ -77,4 +80,4 @@ Otherwise you must define a custom field mapping, see below. */
     return passport;
 };
 
-export default configurePassport;
+export { configurePassport };
