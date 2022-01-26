@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { Draggable, DraggableProvided } from 'react-beautiful-dnd';
 
 interface Props {

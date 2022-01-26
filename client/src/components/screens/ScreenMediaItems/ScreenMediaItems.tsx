@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Axios from 'axios';
 import { axiosConfig, updateCurrentParty } from '../../../common/helpers';
@@ -174,7 +174,7 @@ export default function ScreenMediaItems({
     };
 
     if (redirect) {
-        return <Redirect push to="/"></Redirect>;
+        return <Navigate to="/"></Navigate>;
     }
 
     return sortedMediaItems &&

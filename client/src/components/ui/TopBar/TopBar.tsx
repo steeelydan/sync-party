@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
@@ -30,7 +30,7 @@ export default function TopBar({ socket }: Props): JSX.Element {
 
     if (party && redirect !== '') {
         if (redirect === 'home' && socket) {
-            return <Redirect push to="/"></Redirect>;
+            return <Navigate to="/"></Navigate>;
         }
     }
 

@@ -5,7 +5,7 @@ import {
     faUserAlt,
     faUserAltSlash
 } from '@fortawesome/free-solid-svg-icons';
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';

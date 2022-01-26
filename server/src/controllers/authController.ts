@@ -80,7 +80,7 @@ const logout = async (req: Request, res: Response, logger: Logger) => {
         logger.log('error', error);
         res.status(500).json({ success: false, msg: 'error' });
 
-        return Promise.reject(new Error(error));
+        return Promise.reject(new Error(error as any));
     }
 };
 

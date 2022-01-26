@@ -1,8 +1,6 @@
 module.exports = {
     parser: '@typescript-eslint/parser', // Specifies the ESLint parser
-    plugins: ['react'],
     extends: [
-        'plugin:react/recommended', // Uses the recommended rules from @eslint-plugin-react
         'plugin:react-hooks/recommended',
         'plugin:@typescript-eslint/recommended', // Uses the recommended rules from @typescript-eslint/eslint-plugin
         // 'prettier',
@@ -23,7 +21,7 @@ module.exports = {
         '@typescript-eslint/no-use-before-define': ['off'],
         '@typescript-eslint/ban-ts-comment': 'warn',
         '@typescript-eslint/ban-types': 'error',
-        '@typescript-eslint/no-explicit-any': 'error',
+        '@typescript-eslint/no-explicit-any': 'warn',
         'no-console': 'warn'
     },
     settings: {

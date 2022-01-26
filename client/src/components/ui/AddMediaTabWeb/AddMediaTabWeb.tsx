@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Spinner from '../../display/Spinner/Spinner';
 import Button from '../../input/Button/Button';

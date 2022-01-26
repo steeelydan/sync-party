@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { setGlobalState } from '../../../actions/globalActions';
@@ -51,7 +51,7 @@ export default function ScreenUser(): JSX.Element | null {
     };
 
     if (loggedOut || redirect) {
-        return <Redirect push to="/"></Redirect>;
+        return <Navigate to="/"></Navigate>;
     }
 
     return user ? (

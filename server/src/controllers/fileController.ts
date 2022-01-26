@@ -1,24 +1,21 @@
 import multer from 'multer';
 import path from 'path';
 import { v4 as uuid } from 'uuid';
-import { insertNewMediaItem } from '../database/generalOperations';
+import { insertNewMediaItem } from '../database/generalOperations.js';
 import {
     newFileMediaItemValidator,
     multerFileValidator
-} from '../common/validation';
+} from '../common/validation.js';
 import { Request, Response } from 'express';
 import { Logger } from 'winston';
-import helpers from '../common/helpers';
-import { Model } from 'sequelize';
+import helpers from '../common/helpers.js';
 
 // HELPERS
 
 // Create multer instance for uploading files
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        const uploadPath = path.resolve(
-            path.join(__dirname, '/../../uploads/')
-        );
+        const uploadPath = path.resolve('uploads');
         callback(null, uploadPath);
     },
     filename: (req: Request, file, callback) => {
@@ -95,7 +92,7 @@ const getFile = async (req: Request, res: Response, models: Models) => {
                 .json({ success: false, msg: 'noFileAccess' });
         }
     } catch (error) {
-        return Promise.reject(new Error(error));
+        return Promise.reject(new Error(error as any));
     }
 };
 

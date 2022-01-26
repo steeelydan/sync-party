@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, ChangeEventHandler } from 'react';
+import { MouseEventHandler, ChangeEventHandler } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 

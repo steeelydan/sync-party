@@ -9,39 +9,38 @@ import { Sequelize } from 'sequelize';
 
 import morgan from 'morgan';
 
-const socketio = require('socket.io');
-const { ExpressPeerServer } = require('peer');
+import { Server as SocketIoServer } from 'socket.io';
+import { ExpressPeerServer } from 'peer';
 import express from 'express';
 
 import helmet, { contentSecurityPolicy } from 'helmet';
 import bodyParser from 'body-parser';
 import expressSession from 'express-session';
-const SequelizeStore = require('connect-session-sequelize')(
-    expressSession.Store
-);
+import sequelizeStoreInit from 'connect-session-sequelize';
 import compression from 'compression';
+// @ts-ignore @types/passport.socketio seems to have problems
 import passportSocketIo from 'passport.socketio';
 import cookieParser from 'cookie-parser';
 import { v4 as uuid } from 'uuid';
 
-import configurePassport from './middleware/passport';
-import configureSession from './middleware/session';
-import rateLimiters from './middleware/rateLimiters';
-import { isAuthenticated, isAdmin } from './middleware/auth';
+import { configurePassport } from './middleware/passport.js';
+import configureSession from './middleware/session.js';
+import rateLimiters from './middleware/rateLimiters.js';
+import { isAuthenticated, isAdmin } from './middleware/auth.js';
 
-import authController from './controllers/authController';
-import fileController from './controllers/fileController';
-import mediaItemController from './controllers/mediaItemController';
-import userController from './controllers/userController';
-import partyController from './controllers/partyController';
-import partyItemController from './controllers/partyItemController';
-import partyMetadataController from './controllers/partyMetadataController';
-import userPartyController from './controllers/userPartyController';
-import userItemController from './controllers/userItemController';
-import externalDataController from './controllers/externalDataController';
+import authController from './controllers/authController.js';
+import fileController from './controllers/fileController.js';
+import mediaItemController from './controllers/mediaItemController.js';
+import userController from './controllers/userController.js';
+import partyController from './controllers/partyController.js';
+import partyItemController from './controllers/partyItemController.js';
+import partyMetadataController from './controllers/partyMetadataController.js';
+import userPartyController from './controllers/userPartyController.js';
+import userItemController from './controllers/userItemController.js';
+import externalDataController from './controllers/externalDataController.js';
 
-import helpers from './common/helpers';
-import createModels from './database/createModels';
+import helpers from './common/helpers.js';
+import createModels from './database/createModels.js';
 
 const runApp = async () => {
     // Config
@@ -183,6 +182,9 @@ const runApp = async () => {
                     process.env.CORS_ALLOW
                 );
             }
+            if (process.env.NODE_ENV === 'development') {
+                res.header('Cross-Origin-Resource-Policy', 'cross-origin');
+            }
             res.header('Access-Control-Allow-Credentials', 'true');
             res.header(
                 'Access-Control-Allow-Headers',
@@ -198,7 +200,7 @@ const runApp = async () => {
 
         // Static files middleware
         if (process.env.NODE_ENV === 'production') {
-            app.use(express.static(path.join(__dirname, '../client-build')));
+            app.use(express.static(path.resolve('client-build')));
         }
 
         // Parser middleware
@@ -206,6 +208,8 @@ const runApp = async () => {
         app.use(cookieParser(process.env.SESSION_SECRET));
 
         // Session & Auth
+
+        const SequelizeStore = sequelizeStoreInit(expressSession.Store);
 
         const { session, sessionStore } = configureSession(
             sequelize,
@@ -243,7 +247,7 @@ const runApp = async () => {
 
         // WEBSOCKETS
 
-        const io = socketio(server, { transports: ['websocket'] });
+        const io = new SocketIoServer(server, { transports: ['websocket'] });
 
         // Apply session middleware to socket
         io.use(
@@ -438,8 +442,8 @@ const runApp = async () => {
         // WebRTC
 
         const peerServer = ExpressPeerServer(server, {
-            debug: true,
-            proxies: process.env.USE_PROXY === 'true',
+            // debug: true,
+            proxied: process.env.USE_PROXY === 'true',
             key: webRtcServerKey
         });
 
@@ -653,7 +657,7 @@ const runApp = async () => {
         if (process.env.NODE_ENV === 'production') {
             app.get('*', rateLimiters.indexRateLimiter, (req, res) => {
                 res.sendFile(
-                    path.join(__dirname, '../client-build', 'index.html')
+                    path.join(path.resolve('client-build'), 'index.html')
                 );
             });
         }

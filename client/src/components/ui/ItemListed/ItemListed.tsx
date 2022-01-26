@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -52,7 +52,7 @@ export default function ItemListed({
     const { t } = useTranslation();
 
     // Scroll item into view if it gets activated
-    React.useEffect(() => {
+    useEffect(() => {
         if (
             partyItemListRef &&
             partyItemListRef.current &&
@@ -103,7 +103,7 @@ export default function ItemListed({
     );
 
     // Add key listeners if editMode is active
-    React.useEffect(() => {
+    useEffect(() => {
         if (itemListedRef.current) {
             const itemRef = itemListedRef.current;
 

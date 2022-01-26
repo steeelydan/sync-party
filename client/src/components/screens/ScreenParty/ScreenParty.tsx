@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Redirect } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Navigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCurrentParty } from '../../../common/helpers';
 import MediaPlayerContainer from '../../player/MediaPlayerContainer/MediaPlayerContainer';
@@ -11,7 +11,7 @@ type Props = {
 
 export default function ScreenParty({ socket }: Props): JSX.Element {
     const dispatch = useDispatch();
-    const params: { id: string } = useParams();
+    const params = useParams();
     const partyId = params.id;
     const [redirect, setRedirect] = useState(false);
 
@@ -46,7 +46,7 @@ export default function ScreenParty({ socket }: Props): JSX.Element {
         if (socket && user) {
             socket.emit('disconnect', { userId: user.id });
         }
-        return <Redirect to="/"></Redirect>;
+        return <Navigate to="/"></Navigate>;
     }
 
     return <MediaPlayerContainer socket={socket}></MediaPlayerContainer>;

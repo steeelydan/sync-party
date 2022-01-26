@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 
@@ -21,6 +20,7 @@ import PartyTile from '../../ui/PartyTile/PartyTile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHdd } from '@fortawesome/free-solid-svg-icons';
 import { Socket } from 'socket.io-client';
+import { Navigate } from 'react-router-dom';
 
 type Props = {
     socket: Socket | null;
@@ -99,24 +99,21 @@ export default function ScreenDashboard(props: Props): JSX.Element | null {
     };
 
     if (redirectToParty !== '') {
-        return <Redirect push to={'/party/' + redirectToParty}></Redirect>;
+        return <Navigate to={'/party/' + redirectToParty}></Navigate>;
     }
 
     if (redirectToPartySettings !== '') {
         return (
-            <Redirect
-                push
-                to={'/editParty/' + redirectToPartySettings}
-            ></Redirect>
+            <Navigate to={'/editParty/' + redirectToPartySettings}></Navigate>
         );
     }
 
     if (redirectToUser) {
-        return <Redirect push to={'/user'}></Redirect>;
+        return <Navigate to={'/user'}></Navigate>;
     }
 
     if (redirectToMediaItems) {
-        return <Redirect push to={'/mediaItems'}></Redirect>;
+        return <Navigate to={'/mediaItems'}></Navigate>;
     }
 
     return (
@@ -170,9 +167,7 @@ export default function ScreenDashboard(props: Props): JSX.Element | null {
                                             placeholder={t('common.name')}
                                             value={partyName}
                                             onChange={(
-                                                event: React.ChangeEvent<
-                                                    HTMLInputElement
-                                                >
+                                                event: React.ChangeEvent<HTMLInputElement>
                                             ): void =>
                                                 setPartyName(event.target.value)
                                             }
