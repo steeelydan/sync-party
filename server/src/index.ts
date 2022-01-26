@@ -412,7 +412,7 @@ const runApp = async () => {
 
         const peerServer = ExpressPeerServer(server, {
             // debug: true,
-            proxied: process.env.USE_PROXY === 'true',
+            proxied: process.env.NODE_ENV === 'production',
             key: webRtcServerKey
         });
 

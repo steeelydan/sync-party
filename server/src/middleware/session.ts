@@ -20,7 +20,7 @@ const configureSession = (
             saveUninitialized: false,
             resave: false,
             store: sessionStore,
-            proxy: process.env.USE_PROXY === 'true',
+            proxy: process.env.NODE_ENV === 'production',
             cookie: {
                 sameSite: true,
                 httpOnly: true,
