@@ -182,6 +182,9 @@ const runApp = async () => {
                     process.env.CORS_ALLOW
                 );
             }
+            if (process.env.NODE_ENV === 'development') {
+                res.header('Cross-Origin-Resource-Policy', 'cross-origin');
+            }
             res.header('Access-Control-Allow-Credentials', 'true');
             res.header(
                 'Access-Control-Allow-Headers',
