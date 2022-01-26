@@ -176,12 +176,8 @@ const runApp = async () => {
         // TODO: Consider cors package
 
         app.use((req, res, next) => {
-            if (process.env.CORS_ALLOW) {
-                res.header(
-                    'Access-Control-Allow-Origin',
-                    process.env.CORS_ALLOW
-                );
-            }
+            res.header('Access-Control-Allow-Origin', process.env.URL);
+            res.header('Cross-Origin-Resource-Policy', 'cross-origin');
             if (process.env.NODE_ENV === 'development') {
                 res.header('Cross-Origin-Resource-Policy', 'cross-origin');
             }
