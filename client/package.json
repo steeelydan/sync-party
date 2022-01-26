@@ -1,6 +1,9 @@
 {
     "name": "sync-party-client",
     "version": "0.8.1",
+    "engines": {
+        "node": ">=14.0.0"
+    },
     "private": true,
     "author": "steeelydan",
     "license": "GPL-3.0",

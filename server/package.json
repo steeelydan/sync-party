@@ -2,6 +2,9 @@
     "name": "sync-party-server",
     "type": "module",
     "version": "0.8.1",
+    "engines": {
+        "node": ">=14.0.0"
+    },
     "main": "index.js",
     "private": true,
     "author": "steeelydan",
