@@ -178,9 +178,7 @@ const runApp = async () => {
         app.use((req, res, next) => {
             res.header('Access-Control-Allow-Origin', process.env.URL);
             res.header('Cross-Origin-Resource-Policy', 'cross-origin');
-            if (process.env.NODE_ENV === 'development') {
-                res.header('Cross-Origin-Resource-Policy', 'cross-origin');
-            }
+            res.header('Cross-Origin-Embedder-Policy', 'unsafe-none');
             res.header('Access-Control-Allow-Credentials', 'true');
             res.header(
                 'Access-Control-Allow-Headers',
