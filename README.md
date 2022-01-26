@@ -129,9 +129,9 @@ The client is a React application in TypeScript.
 
 Realtime communication is realized with Socket.io.
 
-In production mode, the client application is delivered via the back end app. If you run `npm run deploy` the `build` folder's contents are copied into the `client-build` dir of the server, whose `index.html` is statically served to all requests except those routed to `/api/...`. This non-microservicy architecture prevents any CORS or cookie problems. If you want to customize how the app is routed or use a subdomain I'd suggest using a reverse proxy.
+In production mode, the client application is delivered via the back end app. If you run `npm run deploy` the `build` folder's contents are copied into the `client-build` dir of the server, whose `index.html` is statically served to all requests except those routed to `/api/...`. A reverse proxy like nginx is needed to use HTTPS. You can find an example configuration above.
 
-In development, you'll want to run the front end via a separate server. CORS issues can be mitigated in the corresponding `.env` file.
+In development, you'll run the front end via the webpack dev server included in `create-react-app`.
 
 ### Documentation
 

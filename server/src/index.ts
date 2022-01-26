@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-import https from 'https';
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
@@ -45,7 +44,7 @@ import createModels from './database/createModels.js';
 const runApp = async () => {
     // Config
     dotenv.config();
-    if (process.env.URL && process.env.PORT && process.env.WEBSOCKETS_PORT) {
+    if (process.env.PORT && process.env.WEBSOCKETS_PORT) {
         const port = parseInt(process.env.PORT, 10) || 4000;
         const webRtcServerKey = uuid();
 
@@ -84,35 +83,7 @@ const runApp = async () => {
         // HTTP(S) SERVER
 
         let server;
-        if (
-            process.env.NODE_ENV !== 'production' ||
-            process.env.USE_SSL !== 'true'
-        ) {
-            server = http.createServer(app);
-        } else if (
-            process.env.SSL_KEY_PATH &&
-            process.env.SSL_CERT_PATH &&
-            process.env.SSL_CHAIN_PATH
-        ) {
-            const redirectionToHttpsApp = express();
-            redirectionToHttpsApp.get('*', (req, res) => {
-                res.redirect(301, process.env.URL!);
-            });
-            redirectionToHttpsApp.listen(80, () => {
-                logger.log('info', 'HTTPS Redirection server is listening');
-            });
-
-            server = https.createServer(
-                {
-                    key: fs.readFileSync(process.env.SSL_KEY_PATH),
-                    cert: fs.readFileSync(process.env.SSL_CERT_PATH),
-                    ca: fs.readFileSync(process.env.SSL_CHAIN_PATH)
-                },
-                app
-            );
-        } else {
-            throw new Error('SSL env vars must be set.');
-        }
+        server = http.createServer(app);
 
         // DEFAULT VALUES
 
@@ -176,13 +147,11 @@ const runApp = async () => {
         // TODO: Consider cors package
 
         app.use((req, res, next) => {
-            if (process.env.CORS_ALLOW) {
+            if (process.env.NODE_ENV === 'development') {
                 res.header(
                     'Access-Control-Allow-Origin',
-                    process.env.CORS_ALLOW
+                    'http://localhost:3000'
                 );
-            }
-            if (process.env.NODE_ENV === 'development') {
                 res.header('Cross-Origin-Resource-Policy', 'cross-origin');
             }
             res.header('Access-Control-Allow-Credentials', 'true');
