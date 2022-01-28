@@ -17,8 +17,6 @@ import bodyParser from 'body-parser';
 import expressSession from 'express-session';
 import sequelizeStoreInit from 'connect-session-sequelize';
 import compression from 'compression';
-// @ts-ignore @types/passport.socketio seems to have problems
-import passportSocketIo from 'passport.socketio';
 import cookieParser from 'cookie-parser';
 import { v4 as uuid } from 'uuid';
 
@@ -26,6 +24,7 @@ import { configurePassport } from './middleware/passport.js';
 import configureSession from './middleware/session.js';
 import rateLimiters from './middleware/rateLimiters.js';
 import { isAuthenticated, isAdmin } from './middleware/auth.js';
+import { authenticateSocketRequest } from './middleware/socketMiddleware.js';
 
 import authController from './controllers/authController.js';
 import fileController from './controllers/fileController.js';
@@ -210,19 +209,20 @@ const runApp = async () => {
         //     });
         // });
 
-        // WEBSOCKETS
+        // WEBSOCKETS SERVER
 
-        const io = new SocketIoServer(server, { transports: ['websocket'] });
+        const io = new SocketIoServer({
+            transports: ['websocket'],
+            cors:
+                process.env.NODE_ENV === 'development'
+                    ? {
+                          origin: 'http://localhost:3000',
+                          methods: ['GET']
+                      }
+                    : undefined
+        });
 
-        // Apply session middleware to socket
-        io.use(
-            passportSocketIo.authorize({
-                key: 'connect.sid',
-                secret: process.env.SESSION_SECRET,
-                store: sessionStore,
-                passport
-            })
-        );
+        authenticateSocketRequest(io, session, passport);
 
         // Socket listeners
         io.on('connection', (socket: any) => {
