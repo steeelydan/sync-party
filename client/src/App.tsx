@@ -94,9 +94,9 @@ function App(): JSX.Element {
     }, [socket, dispatch, party, t, chat]);
 
     useEffect(() => {
-        if (loggedIn && dispatch && process.env.REACT_APP_SOCKET_ROUTE) {
+        if (loggedIn && dispatch && process.env.REACT_APP_SOCKET_URL) {
             setSocket(
-                socketIOClient(process.env.REACT_APP_SOCKET_ROUTE, {
+                socketIOClient(process.env.REACT_APP_SOCKET_URL, {
                     transports: ['websocket'],
                     secure: process.env.NODE_ENV === 'production'
                 })

@@ -13,14 +13,24 @@ const envCheck = (logger: Logger) => {
             `Wrong environment configuration ("${process.env.NODE_ENV}"). Must be either "development" or "production".`
         );
     }
+    if (!process.env.SERVER_PORT) {
+        throw new Error(
+            'No port setting found. Did you configure the .env file?'
+        );
+    }
+    if (!process.env.WEBSOCKETS_PORT) {
+        throw new Error(
+            'No port setting for Websockets found. Did you configure the .env file?'
+        );
+    }
     if (!process.env.SESSION_SECRET) {
         throw new Error(
             'No session secret set. Did you configure the .env file?'
         );
     }
-    if (!process.env.PORT) {
+    if (!process.env.CLIENT_URL) {
         throw new Error(
-            'No port setting found. Did you configure the .env file?'
+            'Client URL not setup. Did you configure the .env file?'
         );
     }
 

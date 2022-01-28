@@ -102,7 +102,7 @@ export default function MediaMenu({
 
             try {
                 const response = await Axios.delete(
-                    process.env.REACT_APP_API_ROUTE + 'partyItems',
+                    process.env.REACT_APP_SERVER_URL + '/api/partyItems',
                     {
                         data: { itemId: item.id, partyId: party.id },
                         ...axiosConfig()
@@ -157,7 +157,9 @@ export default function MediaMenu({
         if (socket && party) {
             try {
                 const response = await Axios.put(
-                    process.env.REACT_APP_API_ROUTE + 'mediaItem/' + item.id,
+                    process.env.REACT_APP_SERVER_URL +
+                        '/api/mediaItem/' +
+                        item.id,
                     item,
                     axiosConfig()
                 );
@@ -217,7 +219,7 @@ export default function MediaMenu({
 
             try {
                 const response = await Axios.put(
-                    process.env.REACT_APP_API_ROUTE + 'partyItems',
+                    process.env.REACT_APP_SERVER_URL + '/api/partyItems',
                     { orderedItems: orderedItems, partyId: party.id },
                     axiosConfig()
                 );

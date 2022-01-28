@@ -43,8 +43,8 @@ import createModels from './database/createModels.js';
 const runApp = async () => {
     // Config
     dotenv.config();
-    if (process.env.PORT && process.env.WEBSOCKETS_PORT) {
-        const port = parseInt(process.env.PORT, 10) || 4000;
+    if (process.env.SERVER_PORT && process.env.WEBSOCKETS_PORT) {
+        const port = parseInt(process.env.SERVER_PORT, 10) || 4000;
         const webRtcServerKey = uuid();
 
         // Init app
@@ -146,7 +146,7 @@ const runApp = async () => {
         // TODO: Consider cors package
 
         app.use((req, res, next) => {
-            res.header('Access-Control-Allow-Origin', process.env.URL);
+            res.header('Access-Control-Allow-Origin', process.env.CLIENT_URL);
             res.header('Cross-Origin-Resource-Policy', 'cross-origin');
             res.header('Cross-Origin-Embedder-Policy', 'unsafe-none');
             res.header('Access-Control-Allow-Credentials', 'true');

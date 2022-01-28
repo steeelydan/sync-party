@@ -24,8 +24,8 @@ export default function ItemListedDownloadLink({
             }
             title={t('mediaMenu.download')}
             href={
-                process.env.REACT_APP_API_ROUTE +
-                'file/' +
+                process.env.REACT_APP_SERVER_URL +
+                '/api/file/' +
                 itemId +
                 '?party=' +
                 partyId +

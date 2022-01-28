@@ -76,7 +76,7 @@ export default function ScreenLogin(): JSX.Element {
     const submit = async (): Promise<void> => {
         try {
             const response = await Axios.post(
-                process.env.REACT_APP_API_ROUTE + 'login',
+                process.env.REACT_APP_SERVER_URL + '/api/login',
                 {
                     username: username,
                     password: password

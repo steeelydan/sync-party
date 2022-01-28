@@ -57,7 +57,7 @@ export default function ScreenDashboard(props: Props): JSX.Element | null {
 
         try {
             const response = await Axios.post(
-                process.env.REACT_APP_API_ROUTE + 'party',
+                process.env.REACT_APP_SERVER_URL + '/api/party',
                 { partyName: partyName },
                 axiosConfig()
             );

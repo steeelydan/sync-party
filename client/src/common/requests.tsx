@@ -10,7 +10,7 @@ const getUpdatedUserParties = async (
 ): Promise<ClientParty[]> => {
     try {
         const response = await Axios.get(
-            process.env.REACT_APP_API_ROUTE + 'userParties',
+            process.env.REACT_APP_SERVER_URL + '/api/userParties',
             axiosConfig()
         );
 
@@ -47,7 +47,7 @@ const getUpdatedUserItems = async (
 ): Promise<MediaItem[]> => {
     try {
         const response = await Axios.get(
-            process.env.REACT_APP_API_ROUTE + 'userItems',
+            process.env.REACT_APP_SERVER_URL + '/api/userItems',
             axiosConfig()
         );
 

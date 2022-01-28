@@ -24,7 +24,7 @@ export default function Auth(props: Props): JSX.Element {
         const auth = async (): Promise<void> => {
             try {
                 const response = await Axios.post(
-                    process.env.REACT_APP_API_ROUTE + 'auth',
+                    process.env.REACT_APP_SERVER_URL + '/api/auth',
                     {},
                     axiosConfig()
                 );

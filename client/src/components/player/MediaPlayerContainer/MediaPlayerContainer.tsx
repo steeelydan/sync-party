@@ -1,10 +1,4 @@
-import {
-    useRef,
-    useEffect,
-    useReducer,
-    useCallback,
-    useState
-} from 'react';
+import { useRef, useEffect, useReducer, useCallback, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 
@@ -297,8 +291,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                     let newSourceUrl;
                     if (playOrder.type === 'file') {
                         newSourceUrl =
-                            process.env.REACT_APP_API_ROUTE +
-                            'file/' +
+                            process.env.REACT_APP_SERVER_URL +
+                            '/api/file/' +
                             playOrder.mediaItemId +
                             '?party=' +
                             party.id;
@@ -626,7 +620,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
             if (playerState.playingItem) {
                 try {
                     const response = await Axios.put(
-                        process.env.REACT_APP_API_ROUTE + 'partyMetadata',
+                        process.env.REACT_APP_SERVER_URL + '/api/partyMetadata',
                         {
                             partyId: party.id,
                             metadata: {

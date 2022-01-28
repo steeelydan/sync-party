@@ -51,7 +51,7 @@ export default function ScreenMediaItems({
                 const fetchAllItems = async (): Promise<void> => {
                     try {
                         const response = await Axios.get(
-                            process.env.REACT_APP_API_ROUTE + 'allMediaItems',
+                            process.env.REACT_APP_SERVER_URL + '/api/allMediaItems',
                             axiosConfig()
                         );
 
@@ -81,7 +81,7 @@ export default function ScreenMediaItems({
                 const fetchAllUsers = async (): Promise<void> => {
                     try {
                         const response = await Axios.get(
-                            process.env.REACT_APP_API_ROUTE + 'allUsers',
+                            process.env.REACT_APP_SERVER_URL + '/api/allUsers',
                             axiosConfig()
                         );
                         if (response.data.success) {
@@ -121,7 +121,9 @@ export default function ScreenMediaItems({
         if (socket) {
             try {
                 const response = await Axios.delete(
-                    process.env.REACT_APP_API_ROUTE + 'mediaItem/' + itemId,
+                    process.env.REACT_APP_SERVER_URL +
+                        '/api/mediaItem/' +
+                        itemId,
                     axiosConfig()
                 );
 

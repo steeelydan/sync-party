@@ -23,7 +23,7 @@ export default function ScreenUser(): JSX.Element | null {
     const handleLogoutButton = async (): Promise<void> => {
         try {
             const response = await Axios.post(
-                process.env.REACT_APP_API_ROUTE + 'logout',
+                process.env.REACT_APP_SERVER_URL + '/api/logout',
                 {},
                 axiosConfig()
             );

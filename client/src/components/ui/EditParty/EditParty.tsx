@@ -32,7 +32,7 @@ export default function EditParty({
             const fetchAllUsers = async (): Promise<void> => {
                 try {
                     const response = await Axios.get(
-                        process.env.REACT_APP_API_ROUTE + 'allUsers',
+                        process.env.REACT_APP_SERVER_URL + '/api/allUsers',
                         axiosConfig()
                     );
 
@@ -92,7 +92,7 @@ export default function EditParty({
 
             try {
                 const response = await Axios.put(
-                    process.env.REACT_APP_API_ROUTE + 'party/',
+                    process.env.REACT_APP_SERVER_URL + '/api/party/',
                     { party: formattedParty, deleteParty },
                     axiosConfig()
                 );

@@ -86,7 +86,7 @@ export default function AddMedia({
         if (party) {
             try {
                 const response = await Axios.post(
-                    process.env.REACT_APP_API_ROUTE + 'partyItems',
+                    process.env.REACT_APP_SERVER_URL + '/api/partyItems',
                     { mediaItem: item, partyId: party.id },
                     axiosConfig()
                 );
@@ -118,7 +118,7 @@ export default function AddMedia({
         if (party) {
             try {
                 const response = await Axios.post(
-                    process.env.REACT_APP_API_ROUTE + 'mediaItem',
+                    process.env.REACT_APP_SERVER_URL + '/api/mediaItem',
                     { mediaItem: mediaItem, partyId: party.id },
                     axiosConfig()
                 );
@@ -165,7 +165,7 @@ export default function AddMedia({
             setUploadStartTime(Date.now());
             try {
                 const response = await Axios.post(
-                    process.env.REACT_APP_API_ROUTE + 'file',
+                    process.env.REACT_APP_SERVER_URL + '/api/file',
                     formData,
                     {
                         headers: {
@@ -274,7 +274,7 @@ export default function AddMedia({
 
             try {
                 const response = await Axios.post(
-                    process.env.REACT_APP_API_ROUTE + 'linkMetadata',
+                    process.env.REACT_APP_SERVER_URL + '/api/linkMetadata',
                     { url: url },
                     { ...axiosConfig(), timeout: 3000 }
                 );

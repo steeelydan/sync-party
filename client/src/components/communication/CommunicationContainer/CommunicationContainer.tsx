@@ -73,7 +73,7 @@ export default function CommunicationContainer({
     const createWebRtcPeer = async (): Promise<void> => {
         if (ourWebRtcId) {
             const response = await Axios.post(
-                process.env.REACT_APP_API_ROUTE + 'webRtcServerKey',
+                process.env.REACT_APP_SERVER_URL + '/api/webRtcServerKey',
                 {
                     partyId: partyId,
                     userId: ourUserId,
@@ -85,7 +85,7 @@ export default function CommunicationContainer({
             const webRtcServerKey = response.data.webRtcServerKey;
 
             const peer = new Peer(ourWebRtcId, {
-                host: process.env.REACT_APP_WEBRTC_ROUTE,
+                host: process.env.REACT_APP_WEBRTC_HOST,
                 port: parseInt(process.env.REACT_APP_WEBRTC_PORT || '4000'),
                 path: '/peerjs',
                 key: webRtcServerKey,
