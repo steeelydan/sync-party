@@ -148,6 +148,7 @@ In `/server/build/admin-cli`: `admin.js` +
 
 ## Changelog
 
+-   0.9.0: [breaking] Simplify setup
 -   0.8.1: Add video chat; license change to GPL-3.0; TS strict mode for back end as well
 -   0.7.0: Add text chat
 -   0.6.0:
