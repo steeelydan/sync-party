@@ -15,7 +15,7 @@
         "prod:build": "tsc",
         "prod:start": "pm2 start ./build/index.js --name sync-party",
         "prod:stop": "pm2 stop sync-party || echo 'PM2 process not stopped (not running atm)'",
-        "prod:deploy": "npm run --prefix ../client prod:deploy && npm ci && npm run prod:build && npm run prod:stop && npm run prod:start && pm2 log"
+        "prod:deploy": "npm run --prefix ../client prod:deploy && npm ci && npm run prod:build && npm run prod:stop && npm run prod:start && pm2 log sync-party"
     },
     "dependencies": {
         "@hapi/joi": "17.1.1",
