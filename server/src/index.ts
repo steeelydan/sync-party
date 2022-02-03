@@ -43,6 +43,11 @@ import createModels from './database/createModels.js';
 const runApp = async () => {
     // Config
     dotenv.config();
+
+    if (!fs.existsSync(path.resolve('uploads'))) {
+        fs.mkdirSync(path.resolve('uploads'));
+    }
+
     if (process.env.SERVER_PORT && process.env.WEBSOCKETS_PORT) {
         const port = parseInt(process.env.SERVER_PORT, 10) || 4000;
         const webRtcServerKey = uuid();

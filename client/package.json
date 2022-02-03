@@ -8,9 +8,9 @@
     "author": "steeelydan",
     "license": "GPL-3.0",
     "scripts": {
-        "start": "react-scripts start",
-        "build": "GENERATE_SOURCEMAP=false react-scripts build && rm -rf ../server/client-build && cp -r ./build ../server/client-build",
-        "deploy": "npm ci && npm run build",
+        "dev:start": "react-scripts start",
+        "prod:deploy": "npm ci && npm run prod:build",
+        "prod:build": "GENERATE_SOURCEMAP=false react-scripts build && rm -rf ../server/client-build && cp -r ./build ../server/client-build",
         "test": "react-scripts test",
         "lint": "tsc --noemit && eslint '**/*.tsx'"
     },

@@ -57,7 +57,7 @@ If you spot a bug or want to contribute feel free to create an issue.
 
 -   Clone the repository
 -   In `/server` & in `/client`:
-    -   `npm install`
+    -   `npm ci`
     -   Copy `.env.example`
     -   Rename to `.env`
     -   Enter your specific config values
@@ -74,8 +74,7 @@ If you spot a bug or want to contribute feel free to create an issue.
 -   If required, configure the `.env` files to run the app exposing only a local port and use a reverse proxy (see example below)
 -   Make sure your firewall is configured correctly
 -   You might want to use a tool like `authbind` to run pm2 without root; see https://pm2.keymetrics.io/docs/usage/specifics/#listening-on-port-80-w-o-root
--   In `/client`: `npm run deploy`
--   In `/server`: `npm run deploy` or `npm install && npm run setup && npm run start-production`
+-   In `/server`: `npm run deploy`
 
 ### nginx Reverse Proxy Example
 
@@ -119,8 +118,8 @@ If you spot a bug or want to contribute feel free to create an issue.
 
 ## Development
 
--   In `/client`: `npm install && npm start`
--   In `/server`: `npm install && npm start`
+-   In `/client`: `npm ci && npm start`
+-   In `/server`: `npm ci && npm start`
 
 ### Architecture
 
