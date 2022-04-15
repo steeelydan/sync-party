@@ -1,12 +1,5 @@
-server/node_modules
-server/build
-server/.env
-server/db
-server/db-journal
-server/doc/
-server/uploads/
-server/log-combined.json
-server/persistence.json
-server/client-build/
-client/.env
-client/src/assets/main.css
+.env
+
+node_modules/
+build/
+data/

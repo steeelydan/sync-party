@@ -1,9 +1,0 @@
-{
-    "name": "Sync Party API",
-    "version": "0.6.0",
-    "description": "API for Sync Party",
-    "header": {
-        "title": "Default params & responses",
-        "filename": "./apidoc-defaults.md"
-    }
-}

@@ -1,8 +1,0 @@
-{
-    "ignore": [
-        "log-combined.json",
-        "db",
-        "src/client-build/",
-        "persistence.json"
-    ]
-}

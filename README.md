@@ -1,18 +1,24 @@
 # Sync Party
 
+---
+
+**v0.12.0 is a massive breaking change.** If you have an instance of SyncParty deployed with data you care about, please make sure to **copy the following files** to a different directory **before** pulling the new version:
+
+-   `server/db` (the database)
+-   `server/uploads` (all uploaded files)
+-   `server/persistence.json` (current playing position for each item, for each user)
+
+After pulling the current version, create a `data` directory on 1st level.
+
+After setting up (see below), copy both files as well as the `uploads` folder back into `data`. If you run `npm run prod:deploy` now, the app should work the same as before. Fingers crossed 🤞
+
+---
+
 Watch videos or listen to music synchronously with your friends. Imagine a virtual living room of a shared flat in a terribly cool city.
 
 Demo video: https://www.youtube.com/watch?v=6t5-cAwSfjk
 
-Features:
-
--   Any amount of user accounts
--   As many Sync Parties as you wish
--   Invite up to 6 other users to your parties
--   Support for many sites & media formats
--   Video, audio, and text chat
-
-Use cases:
+## Use cases
 
 -   Watch a documentary or a vlog on YouTube with a friend from another country
 -   Listen to a podcast together
@@ -28,7 +34,15 @@ Use cases:
 -   Watch a coding tutorial in sync with a coworker & improve your skills
 -   Watch a cooking tutorial and do your deeds once in each kitchen
 
-Supported media sources:
+## Features
+
+-   Any amount of user accounts
+-   As many Sync Parties as you wish
+-   Invite up to 6 other users to your parties
+-   Support for many sites & media formats
+-   Video, audio, and text chat
+
+## Supported media sources
 
 -   Uploaded video or audio files (`.mp4`, `.mp3`, `.m4a`, `.flac` etc.)
 -   YouTube
@@ -42,40 +56,29 @@ Supported media sources:
 
 As this application is self-hosted, your & your friends' data stays as private as your server is secure. This project is completely open source and there is no tracking involved. However, if you're watching content on YouTube or similar sites, the 3rd party's usual tracking will happen.
 
-## Contributing
+## Hosting SyncParty
 
-If you spot a bug or want to contribute feel free to create an issue.
+### Requirements
 
-## Requirements
-
--   A Linux server (tested with Ubuntu 18.04)
--   Node.js >= 12
+-   A Linux VPS (tested with Ubuntu 20.04)
+    -   Unfortunately, at the moment you can't deploy SyncParty on non-persisting nodes, like Heroku.
+-   Node.js >= 14
 -   pm2 globally installed
 -   SSL certificate (e.g. Let's Encrypt)
 
-## Setup
+### Setup
 
 -   Clone the repository
--   In `/server` & in `/client`:
-    -   `npm install`
-    -   Copy `.env.example`
-    -   Rename to `.env`
-    -   Enter your specific config values
--   You can run the following commands with a preceding space, preventing the passwords from being written into your bash history.
--   In `/server/build`: Create an admin user:
-    -   Choose an excellent & unique password!
-    -   In `/server/build/admin-cli`: `[SPACE] node admin.js create-user <USERNAME> <PASSWORD> admin`
--   In `/server`: Create other users:
-    -   Choose a good & unique password! Users can upload arbitrary files to your server.
-    -   In `/server/build/admin-cli`: `[SPACE] node admin.js create-user <USERNAME> <PASSWORD>`
-
-## Production
-
--   If required, configure the `.env` files to run the app exposing only a local port and use a reverse proxy (see example below)
+-   `npm ci`
+-   Copy `.env.example` into a new `.env`
+-   Configure the `.env` file:
+    -   `NODE_ENV=production`
+    -   Choose a **different** port for the server & the websockets server. `3000` and `4000` work just fine; they are also used in the nginx example below.
+    -   Choose a solid, random SESSION_SECRET
+-   Use a reverse proxy to map requests to your domain to the app and use SSL (see example below)
 -   Make sure your firewall is configured correctly
 -   You might want to use a tool like `authbind` to run pm2 without root; see https://pm2.keymetrics.io/docs/usage/specifics/#listening-on-port-80-w-o-root
--   In `/client`: `npm run deploy`
--   In `/server`: `npm run deploy` or `npm install && npm run setup && npm run start-production`
+-   `npm run prod:deploy`
 
 ### nginx Reverse Proxy Example
 
@@ -119,36 +122,73 @@ If you spot a bug or want to contribute feel free to create an issue.
 
 ## Development
 
--   In `/client`: `npm install && npm start`
--   In `/server`: `npm install && npm start`
+### Contributing
+
+If you spot a bug or want to contribute feel free to create an issue.
+
+### Requirements
+
+-   Node.js >= 14
+
+### Setup
+
+-   Clone the repository
+-   `npm ci`
+-   Copy `.env.example` into a new `.env`
+-   Configure the `.env` file:
+    -   `NODE_ENV=development` (default)
+    -   Choose a **different** port for the server & the websockets server. `3000` and `4000` are default.
+    -   Choose some SESSION_SECRET
+-   You have to start two processes for development.
+    -   `npm run dev:server`
+    -   `npm run dev:client`
+-   The app is accessible at `https://localhost:3000`
 
 ### Architecture
 
-The server is written in Express, using Sequelize, sqlite, express-session. Cookie-based authentication: Passport.js.
+SyncParty is written in TypeScript, using ES Modules.
+
+The server uses my 'framework' TSFS (https://github.com/steeelydan/tsfs). TSFS uses Express, Sequelize, sqlite, express-session. Cookie-based authentication: Passport.js.
+
 The client is a React application in TypeScript.
 
-Realtime communication is realized with Socket.io.
+Realtime communication is realized with Socket.io. Video chat via PeerJS.
 
-In production mode, the client application is delivered via the back end app. If you run `npm run deploy` the `build` folder's contents are copied into the `client-build` dir of the server, whose `index.html` is statically served to all requests except those routed to `/api/...`. A reverse proxy like nginx is needed to use HTTPS. You can find an example configuration above.
-
-In development, you'll run the front end via the webpack dev server included in `create-react-app`.
-
-### Documentation
-
-Autogenerated API documentation is found under `/server/doc/index.html`. This document is generated everytime you `npm start` your dev server.
+The built client application is delivered via the app server. If you run `npm run prod:deploy`, the built files are copied into the `public` dir of the build folder. An `index.html` is statically served to respond to all requests, except those routed to `/api/...`. A reverse proxy like nginx is needed to use HTTPS. You can find an example configuration above.
 
 ## Admin CLI
 
-In `/server/build/admin-cli`: `admin.js` +
+### Creating Users
 
--   `[SPACE] create-user <USERNAME> <PASSWORD> [admin]`
+The app has to be built before you can create users.
+
+-   Development: Just run `npm run dev:server`
+-   Production: `npm run prod:server:build` or having run `npm run prod:deploy` at least once
+
+You can run the following commands with a **preceding space**, preventing the passwords from being written into your bash history. [TODO better CLI]
+
+-   Create an admin user:
+    -   This user can create parties, add guests to parties etc. Usually there is only one admin and this is you.
+    -   Choose an excellent & unique password!
+    -   `[SPACE] npm run cli create-user <USERNAME> <PASSWORD> admin`
+-   Create other users:
+    -   Choose a good & unique password! Users can upload arbitrary files to your server.
+    -   `[SPACE] npm run cli create-user <USERNAME> <PASSWORD>`
+
+### All Commands
+
+`[SPACE TO BYPASS BASH HISTORY] npm run cli ` +
+
+-   `create-user <USERNAME> <PASSWORD> [admin]`
 -   `list-users`
 -   `delete-user <USERNAME>`
 -   `delete-all-users`
--   `[SPACE] change-password <USERNAME> <NEW PASSWORD>`
+-   `change-password <USERNAME> <NEW PASSWORD>`
 
 ## Changelog
 
+-   0.12.0: [breaking] Use my TSFS framework; get rid of Create React App; unify into one npm project
+-   0.9.0: [breaking] Simplify setup
 -   0.8.1: Add video chat; license change to GPL-3.0; TS strict mode for back end as well
 -   0.7.0: Add text chat
 -   0.6.0:

@@ -1,0 +1,11 @@
+{
+    "extends": "../../tsconfig.common.json",
+    "include": ["./src", "../shared", "types.d.ts"],
+    "compilerOptions": {
+        "outDir": "../../build",
+        "lib": ["ES6", "dom"],
+        "module": "ES6",
+        "target": "ES6",
+        "jsx": "react-jsx"
+    }
+}
