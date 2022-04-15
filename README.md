@@ -71,7 +71,7 @@ If you spot a bug or want to contribute feel free to create an issue.
 
 -   Clone the repository
 -   `npm ci`
--   Copy `.env.example` into `.env`
+-   Copy `.env.example` into a new `.env`
 -   Configure the `.env` file:
     -   `NODE_ENV=development` (default)
     -   Choose a **different** port for the server & the websockets server. `3000` and `4000` are default.
@@ -82,7 +82,7 @@ If you spot a bug or want to contribute feel free to create an issue.
 
 ### Architecture
 
-SyncParty is written in TypeScript, using ES Modules throughout.
+SyncParty is written in TypeScript, using ES Modules.
 
 The server uses my 'framework' TSFS (https://github.com/steeelydan/tsfs). TSFS uses Express, Sequelize, sqlite, express-session. Cookie-based authentication: Passport.js.
 
@@ -97,7 +97,7 @@ The built client application is delivered via the app server. If you run `npm ru
 ### Requirements
 
 -   A Linux VPS (tested with Ubuntu 20.04)
-    -   Unfortunately, at the moment you cannot deploy SyncParty on non-persisting nodes, like Heroku.
+    -   Unfortunately, at the moment you can't deploy SyncParty on non-persisting nodes, like Heroku.
 -   Node.js >= 14
 -   pm2 globally installed
 -   SSL certificate (e.g. Let's Encrypt)
@@ -106,7 +106,7 @@ The built client application is delivered via the app server. If you run `npm ru
 
 -   Clone the repository
 -   `npm ci`
--   Copy `.env.example` into `.env`
+-   Copy `.env.example` into a new `.env`
 -   Configure the `.env` file:
     -   `NODE_ENV=production`
     -   Choose a **different** port for the server & the websockets server. `3000` and `4000` work just fine; they are also used in the nginx example below.
@@ -168,6 +168,7 @@ The app has to be built before you can create users.
 You can run the following commands with a **preceding space**, preventing the passwords from being written into your bash history. [TODO better CLI]
 
 -   Create an admin user:
+    -   This user can create parties, add guests to parties etc. Usually there is only one admin and this is you.
     -   Choose an excellent & unique password!
     -   `[SPACE] npm run cli create-user <USERNAME> <PASSWORD> admin`
 -   Create other users:
