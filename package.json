@@ -13,7 +13,7 @@
         "dev:server": "tsc-watch --project ./src/server/tsconfig.json --outDir ./build --onSuccess \"nodemon ./build/server/index.js\"",
         "prod:client:build": "webpack --config ./src/client/webpack.config.js",
         "prod:server:build": "tsc --project ./src/server/tsconfig.json",
-        "prod:start": "pm2 start ./build/index.js --name sync-party",
+        "prod:start": "pm2 start ./build/server/index.js --name sync-party",
         "prod:stop": "pm2 stop sync-party || echo 'PM2 process not stopped (not running atm)'",
         "prod:deploy": "npm ci && npm run prod:server:build && npm run prod:client:build && npm run prod:stop && npm run prod:start && pm2 log sync-party",
         "lint": "tsc -p ./src/server/tsconfig.json --noemit && tsc -p ./src/client/tsconfig.json --noemit && eslint -c ./src/server/.eslintrc.cjs ./src/server && eslint -c ./src/client/.eslintrc.cjs ./src/client",
