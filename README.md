@@ -18,15 +18,7 @@ Watch videos or listen to music synchronously with your friends. Imagine a virtu
 
 Demo video: https://www.youtube.com/watch?v=6t5-cAwSfjk
 
-Features:
-
--   Any amount of user accounts
--   As many Sync Parties as you wish
--   Invite up to 6 other users to your parties
--   Support for many sites & media formats
--   Video, audio, and text chat
-
-Use cases:
+## Use cases
 
 -   Watch a documentary or a vlog on YouTube with a friend from another country
 -   Listen to a podcast together
@@ -42,7 +34,15 @@ Use cases:
 -   Watch a coding tutorial in sync with a coworker & improve your skills
 -   Watch a cooking tutorial and do your deeds once in each kitchen
 
-Supported media sources:
+## Features
+
+-   Any amount of user accounts
+-   As many Sync Parties as you wish
+-   Invite up to 6 other users to your parties
+-   Support for many sites & media formats
+-   Video, audio, and text chat
+
+## Supported media sources
 
 -   Uploaded video or audio files (`.mp4`, `.mp3`, `.m4a`, `.flac` etc.)
 -   YouTube
@@ -55,41 +55,6 @@ Supported media sources:
     -   You name it...
 
 As this application is self-hosted, your & your friends' data stays as private as your server is secure. This project is completely open source and there is no tracking involved. However, if you're watching content on YouTube or similar sites, the 3rd party's usual tracking will happen.
-
-## Contributing
-
-If you spot a bug or want to contribute feel free to create an issue.
-
-## Development
-
-### Requirements
-
--   Node.js >= 14
-
-### Setup
-
--   Clone the repository
--   `npm ci`
--   Copy `.env.example` into a new `.env`
--   Configure the `.env` file:
-    -   `NODE_ENV=development` (default)
-    -   Choose a **different** port for the server & the websockets server. `3000` and `4000` are default.
-    -   Choose some SESSION_SECRET
--   You have to start two processes for development.
-    -   `npm run dev:server`
-    -   `npm run dev:client`
-
-### Architecture
-
-SyncParty is written in TypeScript, using ES Modules.
-
-The server uses my 'framework' TSFS (https://github.com/steeelydan/tsfs). TSFS uses Express, Sequelize, sqlite, express-session. Cookie-based authentication: Passport.js.
-
-The client is a React application in TypeScript.
-
-Realtime communication is realized with Socket.io. Video chat via PeerJS.
-
-The built client application is delivered via the app server. If you run `npm run prod:deploy`, the built files are copied into the `public` dir of the build folder. An `index.html` is statically served to respond to all requests, except those routed to `/api/...`. A reverse proxy like nginx is needed to use HTTPS. You can find an example configuration above.
 
 ## Hosting SyncParty
 
@@ -154,6 +119,41 @@ The built client application is delivered via the app server. If you run `npm ru
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 ```
+
+## Development
+
+### Contributing
+
+If you spot a bug or want to contribute feel free to create an issue.
+
+### Requirements
+
+-   Node.js >= 14
+
+### Setup
+
+-   Clone the repository
+-   `npm ci`
+-   Copy `.env.example` into a new `.env`
+-   Configure the `.env` file:
+    -   `NODE_ENV=development` (default)
+    -   Choose a **different** port for the server & the websockets server. `3000` and `4000` are default.
+    -   Choose some SESSION_SECRET
+-   You have to start two processes for development.
+    -   `npm run dev:server`
+    -   `npm run dev:client`
+
+### Architecture
+
+SyncParty is written in TypeScript, using ES Modules.
+
+The server uses my 'framework' TSFS (https://github.com/steeelydan/tsfs). TSFS uses Express, Sequelize, sqlite, express-session. Cookie-based authentication: Passport.js.
+
+The client is a React application in TypeScript.
+
+Realtime communication is realized with Socket.io. Video chat via PeerJS.
+
+The built client application is delivered via the app server. If you run `npm run prod:deploy`, the built files are copied into the `public` dir of the build folder. An `index.html` is statically served to respond to all requests, except those routed to `/api/...`. A reverse proxy like nginx is needed to use HTTPS. You can find an example configuration above.
 
 ## Admin CLI
 
