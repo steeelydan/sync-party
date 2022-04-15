@@ -4,12 +4,12 @@ import { v4 as uuid } from 'uuid';
 import { insertNewMediaItem } from '../database/generalOperations.js';
 import { Request, Response } from 'express';
 import { Logger } from 'winston';
-import helpers from '../../shared/helpers.js';
 import { Models } from '../../shared/types.js';
 import {
     multerFileValidator,
     newFileMediaItemValidator
 } from '../../shared/validation.js';
+import { getFilePathFromId } from '../serverHelpers.js';
 
 // HELPERS
 
@@ -81,11 +81,11 @@ const getFile = async (req: Request, res: Response, models: Models) => {
                 const fileNameWithoutUuid = dbMediaItem.url.substr(37);
 
                 res.download(
-                    helpers.getFilePathFromId(dbMediaItem.url),
+                    getFilePathFromId(dbMediaItem.url),
                     fileNameWithoutUuid
                 );
             } else {
-                return res.sendFile(helpers.getFilePathFromId(dbMediaItem.url));
+                return res.sendFile(getFilePathFromId(dbMediaItem.url));
             }
         } else {
             return res

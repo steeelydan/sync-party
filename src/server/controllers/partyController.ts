@@ -1,8 +1,8 @@
 import { newPartyValidator, partyValidator } from '../../shared/validation.js';
-import helpers from '../../shared/helpers.js';
 import { Logger } from 'winston';
 import { Request, Response } from 'express';
 import { v4 as uuid } from 'uuid';
+import { createWebRtcIds } from '../serverHelpers.js';
 import { Models, NewParty } from '../../shared/types.js';
 
 /**
@@ -35,7 +35,7 @@ const createParty = async (
                 items: [],
                 metadata: {},
                 settings: {
-                    webRtcIds: helpers.createWebRtcIds([requestUser.id])
+                    webRtcIds: createWebRtcIds([requestUser.id])
                 }
             };
 
@@ -112,14 +112,14 @@ const editParty = async (
     if (dbParty.status !== requestParty.status) {
         requestParty.settings = {
             ...requestParty.settings,
-            webRtcIds: helpers.createWebRtcIds(requestParty.members)
+            webRtcIds: createWebRtcIds(requestParty.members)
         };
     }
 
     if (dbParty.members.length !== requestParty.members.length) {
         if (!requestParty.settings.webRtcIds) {
             // Legacy: create webRtcIds if there are none
-            requestParty.settings.webRtcIds = helpers.createWebRtcIds(
+            requestParty.settings.webRtcIds = createWebRtcIds(
                 requestParty.members
             );
         }
