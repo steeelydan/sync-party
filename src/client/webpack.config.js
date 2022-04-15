@@ -21,41 +21,21 @@ console.log(
     clientEnvVars
 );
 
-const webpackEntry = [path.resolve('src/client/src/index.tsx')];
-
-const webpackOutput = {
-    filename: 'bundle.[contenthash].js',
-    path: path.resolve('build/public')
-};
-
-const webpackPlugins = [
-    new webpack.DefinePlugin(clientEnvVars),
-    new HtmlWebpackPlugin({
-        template: path.resolve('src/client/index.html'),
-        publicPath: '/'
-    }),
-    new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin({
-        filename: 'style.[contenthash].css'
-    }),
-    new WebpackAssetsManifest({
-        output: './assets-manifest.json'
-    }),
-    new CopyPlugin({
-        patterns: [{ from: path.resolve('src/client/static'), to: './static' }]
-    })
-];
-
 export default {
     mode:
-        clientEnvVars.NODE_ENV === 'production' ? 'production' : 'development',
+        clientEnvVars.NODE_ENV === '"production"'
+            ? 'production'
+            : 'development', // FIXME Can't be correct
     devtool:
-        clientEnvVars.NODE_ENV === 'production' ? false : 'inline-source-map',
-    entry: webpackEntry,
+        clientEnvVars.NODE_ENV === '"production"' ? false : 'inline-source-map', // FIXME Can't be correct
+    entry: [path.resolve('src/client/src/index.tsx')],
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
     },
-    output: webpackOutput,
+    output: {
+        filename: 'bundle.[contenthash].js',
+        path: path.resolve('build/public')
+    },
     module: {
         rules: [
             {
@@ -76,5 +56,23 @@ export default {
             }
         ]
     },
-    plugins: webpackPlugins
+    plugins: [
+        new webpack.DefinePlugin(clientEnvVars),
+        new HtmlWebpackPlugin({
+            template: path.resolve('src/client/index.html'),
+            publicPath: '/'
+        }),
+        new CleanWebpackPlugin(),
+        new MiniCssExtractPlugin({
+            filename: 'style.[contenthash].css'
+        }),
+        new WebpackAssetsManifest({
+            output: './assets-manifest.json'
+        }),
+        new CopyPlugin({
+            patterns: [
+                { from: path.resolve('src/client/static'), to: './static' }
+            ]
+        })
+    ]
 };
