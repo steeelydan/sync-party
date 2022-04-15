@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { CronJob } from 'cron';
+import http from 'http';
 import https from 'https';
 
 import { Server as SocketIoServer, Socket } from 'socket.io';
@@ -56,6 +57,7 @@ import {
 import { contentSecurityPolicy } from 'helmet';
 import dbConfig from './dbConfig.cjs';
 import { pathConfig, requiredEnvVars, validEnvValues } from './constants.js';
+import { createServer } from 'http';
 
 const sslDevCert = fs.readFileSync(
     path.resolve('ssl-dev/server.cert'),
@@ -233,10 +235,13 @@ const runApp = async () => {
 
         // WEBSOCKETS SERVER
 
-        const socketServer = https.createServer({
-            key: sslDevKey,
-            cert: sslDevCert
-        });
+        const socketServer =
+            process.env.NODE_ENV === 'development'
+                ? https.createServer({
+                      key: sslDevKey,
+                      cert: sslDevCert
+                  })
+                : http.createServer();
 
         const io = new SocketIoServer(socketServer, {
             transports: ['websocket'],
