@@ -9,6 +9,6 @@ module.exports = {
     production: {
         dialect: 'sqlite',
         logging: false,
-        storage: path.resolve('data/db-prod')
+        storage: path.resolve('data/db')
     }
 };
