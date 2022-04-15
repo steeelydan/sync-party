@@ -54,32 +54,56 @@ As this application is self-hosted, your & your friends' data stays as private a
 
 If you spot a bug or want to contribute feel free to create an issue.
 
-## Requirements
+## Development
 
--   A Linux server (tested with Ubuntu 20.04)
+### Requirements
+
+-   Node.js >= 14
+
+### Setup
+
+-   Clone the repository
+-   `npm ci`
+-   Copy `.env.example` into `.env`
+-   Configure the `.env` file:
+    -   `NODE_ENV=development` (default)
+    -   Choose a **different** port for the server & the websockets server. `3000` and `4000` are default.
+    -   Choose some SESSION_SECRET
+-   You have to start two processes for development.
+    -   `npm run dev:server`
+    -   `npm run dev:client`
+
+### Architecture
+
+SyncParty is written in TypeScript, using ES Modules throughout.
+
+The server uses my 'framework' TSFS (https://github.com/steeelydan/tsfs). TSFS uses Express, Sequelize, sqlite, express-session. Cookie-based authentication: Passport.js.
+
+The client is a React application in TypeScript.
+
+Realtime communication is realized with Socket.io. Video chat via PeerJS.
+
+The built client application is delivered via the app server. If you run `npm run prod:deploy`, the built files are copied into the `public` dir of the build folder. An `index.html` is statically served to respond to all requests, except those routed to `/api/...`. A reverse proxy like nginx is needed to use HTTPS. You can find an example configuration above.
+
+## Hosting SyncParty
+
+### Requirements
+
+-   A Linux VPS (tested with Ubuntu 20.04)
+    -   Unfortunately, at the moment you cannot deploy SyncParty on non-persisting nodes, like Heroku.
 -   Node.js >= 14
 -   pm2 globally installed
 -   SSL certificate (e.g. Let's Encrypt)
 
-## Setup
+### Setup
 
 -   Clone the repository
 -   `npm ci`
--   Copy `.env.example`
--   Rename to `.env`
--   Enter your specific config values
--   Create users (`npm run prod:server:build` the app beforehand):
-    You can run the following commands with a preceding space, preventing the passwords from being written into your bash history.
-    -   Create an admin user:
-        -   Choose an excellent & unique password!
-        -   `[SPACE] npm run cli create-user <USERNAME> <PASSWORD> admin`
-    -   Create other users:
-        -   Choose a good & unique password! Users can upload arbitrary files to your server.
-        -   `[SPACE] npm run cli create-user <USERNAME> <PASSWORD>`
-
-## Production
-
--   Configure the `.env` files to run the app exposing a **different** port for the server & the websockets server
+-   Copy `.env.example` into `.env`
+-   Configure the `.env` file:
+    -   `NODE_ENV=production`
+    -   Choose a **different** port for the server & the websockets server. `3000` and `4000` work just fine; they are also used in the nginx example below.
+    -   Choose a solid, random SESSION_SECRET
 -   Use a reverse proxy to map requests to your domain to the app and use SSL (see example below)
 -   Make sure your firewall is configured correctly
 -   You might want to use a tool like `authbind` to run pm2 without root; see https://pm2.keymetrics.io/docs/usage/specifics/#listening-on-port-80-w-o-root
@@ -125,26 +149,25 @@ If you spot a bug or want to contribute feel free to create an issue.
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 ```
 
-## Development
-
-You have to start two processes for development.
-
--   `npm run dev:server`
--   `npm run dev:client`
-
-### Architecture
-
-SyncParty is written in TypeScript, using ES Modules throughout.
-
-The server uses my 'framework' TSFS (https://github.com/steeelydan/tsfs). TSFS uses Express, Sequelize, sqlite, express-session. Cookie-based authentication: Passport.js.
-
-The client is a React application in TypeScript.
-
-Realtime communication is realized with Socket.io. Video chat via PeerJS.
-
-The built client application is delivered via the app server. If you run `npm run prod:deploy`, the built files are copied into the `public` dir of the build folder. An `index.html` is statically served to respond to all requests, except those routed to `/api/...`. A reverse proxy like nginx is needed to use HTTPS. You can find an example configuration above.
-
 ## Admin CLI
+
+### Creating Users
+
+The app has to be built before you can create users.
+
+-   Development: Just run `npm run dev:server`
+-   Production: `npm run prod:server:build` or having run `npm run prod:deploy` at least once
+
+You can run the following commands with a **preceding space**, preventing the passwords from being written into your bash history. [TODO better CLI]
+
+-   Create an admin user:
+    -   Choose an excellent & unique password!
+    -   `[SPACE] npm run cli create-user <USERNAME> <PASSWORD> admin`
+-   Create other users:
+    -   Choose a good & unique password! Users can upload arbitrary files to your server.
+    -   `[SPACE] npm run cli create-user <USERNAME> <PASSWORD>`
+
+### All Commands
 
 `[SPACE TO BYPASS BASH HISTORY] npm run cli ` +
 
