@@ -1,0 +1,4 @@
+{
+    "watch": ["src/server"],
+    "ignore": ["data", "src/client"]
+}
