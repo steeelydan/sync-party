@@ -2,8 +2,7 @@
 
 ---
 
-**v0.12.0 is a massive breaking change.**
-Make sure to **copy the following files** to a different directory **before** pulling the new version:
+**v0.12.0 is a massive breaking change.** If you have an instance of SyncParty deployed with data you care about, please make sure to **copy the following files** to a different directory **before** pulling the new version:
 
 -   `server/db` (the database)
 -   `server/uploads` (all uploaded files)
