@@ -46,15 +46,6 @@ const webpackPlugins = [
     })
 ];
 
-// if (clientEnvVars.NODE_ENV === 'development') {
-//     webpackEntry.push('webpack-hot-middleware/client?path=/__webpack_hmr');
-
-//     webpackOutput.hotUpdateChunkFilename = '.hot/hot-update.js';
-//     webpackOutput.hotUpdateMainFilename = '.hot/hot-update.json';
-
-//     webpackPlugins.unshift(new webpack.HotModuleReplacementPlugin());
-// }
-
 export default {
     mode:
         clientEnvVars.NODE_ENV === 'production' ? 'production' : 'development',

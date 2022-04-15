@@ -5,7 +5,6 @@ import {
     Route,
     Navigate
 } from 'react-router-dom';
-import { hot } from 'react-hot-loader';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from './actions/globalActions';
 import socketIOClient, { Socket } from 'socket.io-client';
@@ -160,5 +159,4 @@ function App(): JSX.Element {
     );
 }
 
-// export default NODE_ENV === 'development' ? hot(module)(App) : App;
 export default App;

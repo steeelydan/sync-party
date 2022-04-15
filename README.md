@@ -142,6 +142,7 @@ If you spot a bug or want to contribute feel free to create an issue.
 -   You have to start two processes for development.
     -   `npm run dev:server`
     -   `npm run dev:client`
+-   The app is accessible at `https://localhost:3000`
 
 ### Architecture
 

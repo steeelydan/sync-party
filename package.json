@@ -44,7 +44,6 @@
         "react-beautiful-dnd": "13.1.0",
         "react-copy-to-clipboard": "5.1.0",
         "react-dom": "17.0.2",
-        "react-hot-loader": "4.13.0",
         "react-i18next": "11.16.6",
         "react-player": "2.10.0",
         "react-redux": "7.2.8",
@@ -58,9 +57,7 @@
         "sqlite3": "5.0.2",
         "tailwindcss": "3.0.24",
         "typeface-open-sans": "1.1.13",
-        "uuid": "8.3.2",
-        "webpack-dev-middleware": "5.3.1",
-        "webpack-hot-middleware": "2.25.1"
+        "uuid": "8.3.2"
     },
     "devDependencies": {
         "@types/bcryptjs": "2.4.2",
@@ -82,7 +79,6 @@
         "@types/sequelize": "4.28.11",
         "@types/uuid": "8.3.4",
         "@types/validator": "13.7.2",
-        "@types/webpack-hot-middleware": "2.25.6",
         "@typescript-eslint/eslint-plugin": "5.19.0",
         "@typescript-eslint/parser": "5.19.0",
         "ajv": "8.11.0",

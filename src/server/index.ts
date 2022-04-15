@@ -25,12 +25,6 @@ import {
     TSFSDbConfig
 } from '@steeelydan/tsfs';
 
-// import webpackDevMiddleware from 'webpack-dev-middleware';
-// import webpackHotMiddleware from 'webpack-hot-middleware';
-// // @ts-ignore
-// import webpackConfig from './webpack.config.client.js';
-// import webpack from 'webpack';
-
 import authController from './controllers/authController.js';
 import fileController from './controllers/fileController.js';
 import mediaItemController from './controllers/mediaItemController.js';
@@ -141,21 +135,6 @@ const runApp = async () => {
         ).start();
 
         // MIDDLEWARE
-
-        // // Hot Module Replacement (HMR) server
-        // if (process.env.NODE_ENV === 'development') {
-        //     // @ts-ignore
-        //     const webpackCompiler = webpack(webpackConfig);
-
-        //     app.use(
-        //         webpackDevMiddleware(webpackCompiler, {
-        //             // @ts-ignore
-        //             publicPath: webpackConfig.output.publicPath
-        //         })
-        //     );
-
-        //     app.use(webpackHotMiddleware(webpackCompiler));
-        // }
 
         headers.setup(app, {
             contentSecurityPolicy: {
