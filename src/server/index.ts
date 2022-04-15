@@ -19,7 +19,7 @@ import {
     httpServer,
     loggers,
     performance,
-    rateLimiters,
+    rateLimiting,
     requestParsers,
     session,
     TSFSDbConfig
@@ -57,7 +57,6 @@ import {
 import { contentSecurityPolicy } from 'helmet';
 import dbConfig from './dbConfig.cjs';
 import { pathConfig, requiredEnvVars, validEnvValues } from './constants.js';
-import { createServer } from 'http';
 
 const sslDevCert = fs.readFileSync(
     path.resolve('ssl-dev/server.cert'),
@@ -67,6 +66,9 @@ const sslDevKey = fs.readFileSync(path.resolve('ssl-dev/server.key'), 'utf-8');
 
 const runApp = async () => {
     environment.setup(pathConfig, requiredEnvVars, validEnvValues);
+
+    const authRateLimiter = rateLimiting.createRateLimiter(15);
+    const catchallRateLimiter = rateLimiting.createRateLimiter(15);
 
     if (!fs.existsSync(path.resolve('data/uploads'))) {
         fs.mkdirSync(path.resolve('data/uploads'));
@@ -196,7 +198,7 @@ const runApp = async () => {
         // Static files middleware
         app.use(express.static(path.resolve('build/public')));
 
-        // FIXME
+        // FIXME is this still applied with tsfs?
         // app.use(cookieParser(process.env.SESSION_SECRET));
 
         requestParsers.setup(app);
@@ -505,17 +507,13 @@ const runApp = async () => {
 
         // Auth & login
 
-        app.post(
-            '/api/auth',
-            rateLimiters.authRateLimiter,
-            async (req, res) => {
-                await authController.auth(req, res, logger);
-            }
-        );
+        app.post('/api/auth', authRateLimiter, async (req, res) => {
+            await authController.auth(req, res, logger);
+        });
 
         app.post(
             '/api/login',
-            rateLimiters.authRateLimiter,
+            authRateLimiter,
             passport.authenticate('local'),
             (req, res) => {
                 authController.login(req, res);
@@ -744,12 +742,9 @@ const runApp = async () => {
         );
 
         // Route everything not caught by above routes to index.html
-        app.get(
-            '*',
-            /* FIXME rate limiter */ (req, res) => {
-                res.sendFile(path.resolve('build/public/index.html'));
-            }
-        );
+        app.get('*', catchallRateLimiter, (req, res) => {
+            res.sendFile(path.resolve('build/public/index.html'));
+        });
 
         // Start Websockets server
         socketServer.listen(parseInt(process.env.WEBSOCKETS_PORT, 10), () => {
