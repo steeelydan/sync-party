@@ -3,8 +3,15 @@
 ---
 
 **v0.12.0 is a massive breaking change.**
-Make sure to copy your **database file** (`server/db`) as well as your **uploads folder** (`server/uploads`) into a different directory, as the paths of these files have changed.
-You can copy them back into `data` after the upgrade is done.
+Make sure to **copy the following files** to a different directory **before** pulling the new version:
+
+-   `server/db` (the database)
+-   `server/uploads` (all uploaded files)
+-   `server/persistence.json` (current playing position for each item, for each user)
+
+After pulling the current version, create a `data` directory on 1st level.
+
+After setting up (see below), copy both files as well as the `uploads` folder back into `data`. If you run `npm run prod:deploy` now, the app should work the same as before. Fingers crossed 🤞
 
 ---
 
