@@ -3,8 +3,8 @@
 ---
 
 **v0.12.0 is a massive breaking change.**
-Make sure to copy your database file (`server/db`) into a different folder, as the path of this file has changed.
-You can copy your old database back into `data` after the upgrade is done.
+Make sure to copy your **database file** (`server/db`) as well as your **uploads folder** (`server/uploads`) into a different directory, as the paths of these files have changed.
+You can copy them back into `data` after the upgrade is done.
 
 ---
 
@@ -68,7 +68,7 @@ If you spot a bug or want to contribute feel free to create an issue.
 -   Copy `.env.example`
 -   Rename to `.env`
 -   Enter your specific config values
--   Create users (`npm run build` the app beforehand):
+-   Create users (`npm run prod:server:build` the app beforehand):
     You can run the following commands with a preceding space, preventing the passwords from being written into your bash history.
     -   Create an admin user:
         -   Choose an excellent & unique password!
@@ -83,7 +83,7 @@ If you spot a bug or want to contribute feel free to create an issue.
 -   Use a reverse proxy to map requests to your domain to the app and use SSL (see example below)
 -   Make sure your firewall is configured correctly
 -   You might want to use a tool like `authbind` to run pm2 without root; see https://pm2.keymetrics.io/docs/usage/specifics/#listening-on-port-80-w-o-root
--   `npm run deploy`
+-   `npm run prod:deploy`
 
 ### nginx Reverse Proxy Example
 
@@ -142,7 +142,7 @@ The client is a React application in TypeScript.
 
 Realtime communication is realized with Socket.io. Video chat via PeerJS.
 
-The built client application is delivered via the app server. If you run `npm run deploy`, the built files are copied into the `public` dir of the build folder. An `index.html` is statically served to respond to all requests, except those routed to `/api/...`. A reverse proxy like nginx is needed to use HTTPS. You can find an example configuration above.
+The built client application is delivered via the app server. If you run `npm run prod:deploy`, the built files are copied into the `public` dir of the build folder. An `index.html` is statically served to respond to all requests, except those routed to `/api/...`. A reverse proxy like nginx is needed to use HTTPS. You can find an example configuration above.
 
 ## Admin CLI
 
