@@ -1,8 +1,7 @@
 import { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { BaseEmoji, Picker } from 'emoji-mart';
-import 'emoji-mart/css/emoji-mart.css';
+import EmojiPicker from '../../input/EmojiPicker/EmojiPicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmile } from '@fortawesome/free-solid-svg-icons';
 import ChatHistory from '../ChatHistory/ChatHistory';
@@ -111,7 +110,7 @@ export default function Chat({
         focusTextInput();
     };
 
-    const addEmoji = (emoji: BaseEmoji): void => {
+    const addEmoji = useCallback((emoji: any): void => {
         if (textInputRef.current) {
             textInputRef.current.focus();
 
@@ -143,7 +142,7 @@ export default function Chat({
                 }
             }, 10);
         }
-    };
+    }, []);
 
     // At mounting
     useEffect(() => {
@@ -238,15 +237,7 @@ export default function Chat({
                                 className="ml-2 mb-1"
                                 onKeyDown={handleEmojiPickerKeydown}
                             >
-                                <Picker
-                                    native={true}
-                                    sheetSize={16}
-                                    showPreview={false}
-                                    useButton={false}
-                                    onSelect={(emoji: BaseEmoji): void => {
-                                        addEmoji(emoji);
-                                    }}
-                                ></Picker>
+                                <EmojiPicker addEmoji={addEmoji} />
                             </div>
                         )}
                         {!showEmojiPicker && uiVisible && (

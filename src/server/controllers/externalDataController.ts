@@ -1,6 +1,6 @@
 import { Logger } from 'winston';
 import { Request, Response } from 'express';
-import got from 'got';
+import axios from 'axios';
 import cheerio from 'cheerio';
 
 const getLinkMetadata = async (req: Request, res: Response, logger: Logger) => {
@@ -34,23 +34,27 @@ const getLinkMetadata = async (req: Request, res: Response, logger: Logger) => {
         );
 
         try {
-            const response = await got(requestUrl, {
-                timeout: {
-                    connect: 50,
-                    secureConnect: 50,
-                    socket: 1000,
-                    send: 2000,
-                    response: 1000
-                }
-            });
+            const response = await axios.get(requestUrl, { timeout: 3000 });
 
-            const $ = cheerio.load(response.body);
+            const $ = cheerio.load(response.data);
+
+            let author;
+
+            try {
+                const authorPos = response.data.indexOf('"author":') + 10;
+                const authorRaw = response.data.slice(
+                    authorPos,
+                    authorPos + 100
+                );
+
+                author = authorRaw.slice(0, authorRaw.indexOf('"'));
+            } catch (e) {
+                author = '';
+            }
+
             result.videoTitle =
                 $("meta[property='og:title']").attr('content') || '';
-            result.channelTitle =
-                $("*[itemprop = 'author']")
-                    .find('link:nth-child(2)')
-                    .attr('content') || '';
+            result.channelTitle = author;
         } catch (error) {
             return res.status(404);
         }
