@@ -3,7 +3,6 @@ import webpack from 'webpack';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
-import WebpackAssetsManifest from 'webpack-assets-manifest';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import dotenv from 'dotenv';
 
@@ -33,7 +32,7 @@ export default {
         extensions: ['.tsx', '.ts', '.js']
     },
     output: {
-        filename: 'bundle.[contenthash].js',
+        filename: 'static/bundle.[contenthash].js',
         path: path.resolve('build/public')
     },
     module: {
@@ -53,6 +52,13 @@ export default {
                     'sass-loader',
                     'postcss-loader'
                 ]
+            },
+            {
+                test: /\.(woff(2)?|eot|ttf|otf)$/,
+                type: 'asset',
+                generator: {
+                    filename: 'static/[name][hash][ext][query]'
+                }
             }
         ]
     },
@@ -64,14 +70,12 @@ export default {
         }),
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
-            filename: 'style.[contenthash].css'
-        }),
-        new WebpackAssetsManifest({
-            output: './assets-manifest.json'
+            filename: 'static/style.[contenthash].css'
         }),
         new CopyPlugin({
             patterns: [
-                { from: path.resolve('src/client/static'), to: './static' }
+                { from: path.resolve('src/client/static'), to: './static' },
+                { from: path.resolve('src/client/static-toplevel'), to: '.' }
             ]
         })
     ]
