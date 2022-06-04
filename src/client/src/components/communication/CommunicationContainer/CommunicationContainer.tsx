@@ -1,4 +1,4 @@
-import Peer from 'peerjs';
+import Peer, { MediaConnection } from 'peerjs';
 import { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -58,7 +58,7 @@ export default function CommunicationContainer({
     const mediaStreamsRef = useRef(mediaStreams);
 
     const [callList, setCallList] = useState<{
-        [userId: string]: Peer.MediaConnection;
+        [userId: string]: MediaConnection;
     }>({});
     const callListRef = useRef(callList);
 
@@ -250,7 +250,7 @@ export default function CommunicationContainer({
     );
 
     const handleCall = useCallback(
-        (call: Peer.MediaConnection): void => {
+        (call: MediaConnection): void => {
             if (ourWebRtcId) {
                 call.answer(mediaStreamsRef.current[ourWebRtcId]);
                 const theirWebRtcId = call.peer;
