@@ -21,9 +21,14 @@ type Props = {
     socket: Socket | null;
 };
 
-type IndexableMediaItem = {
-    [index: string]: string;
-};
+type SortableKey =
+    | 'name'
+    | 'type'
+    | 'owner'
+    | 'url'
+    | 'id'
+    | 'createdAt'
+    | 'updatedAt';
 
 export default function ScreenMediaItems({
     socket
@@ -156,15 +161,14 @@ export default function ScreenMediaItems({
     const handleSort = async (
         event: React.MouseEvent<Element, MouseEvent>
     ): Promise<void> => {
-        const attribute = (event.target as HTMLTableRowElement).id;
+        const attribute: SortableKey = (event.target as HTMLTableRowElement)
+            .id as SortableKey;
 
         if (!sorted[attribute] && allMediaItems) {
             setSortedMediaItems(
-                [...allMediaItems].sort(
-                    (a: IndexableMediaItem, b: IndexableMediaItem) => {
-                        return a[attribute] < b[attribute] ? -1 : 1;
-                    }
-                )
+                [...allMediaItems].sort((a: MediaItem, b: MediaItem) => {
+                    return a[attribute] < b[attribute] ? -1 : 1;
+                })
             );
 
             setSorted({ [attribute]: true });
@@ -210,7 +214,7 @@ export default function ScreenMediaItems({
             <div className="text-xs">
                 <table className="select-text w-full">
                     <thead>
-                        <tr className="border-b border-gray-700 text-left">
+                        <tr className="border-b border-gray-700 text-left select-none">
                             <th
                                 id="name"
                                 onClick={(event): void => {

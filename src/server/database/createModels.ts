@@ -14,9 +14,10 @@ class Party extends Model {
     id!: string;
     owner!: string;
     name!: string;
-    status!: 'active | stopped';
+    status!: 'active' | 'stopped';
     members!: string[];
     items!: MediaItem[];
+    settings!: { webRtcIds: Record<string, string> };
     readonly createdAt!: Date;
     readonly updatedAt!: Date;
 }
@@ -30,7 +31,9 @@ class MediaItem extends Model {
     settings!: object;
 }
 
-const createModels = (sequelize: Sequelize): any => {
+const createModels = (
+    sequelize: Sequelize
+): { User: typeof User; Party: typeof Party; MediaItem: typeof MediaItem } => {
     User.init(
         {
             id: {

@@ -35,7 +35,7 @@ export type NewParty = {
             [mediaItemId: string]: boolean;
         };
     };
-    settings: Record<string, unknown>;
+    settings: { webRtcIds: Record<string, string> };
 };
 
 export type Party = NewParty & {
@@ -53,6 +53,7 @@ export type MediaItem = {
     name: string;
     owner: string;
     url: string;
+    settings: object;
     createdAt: string;
     updatedAt: string;
 };

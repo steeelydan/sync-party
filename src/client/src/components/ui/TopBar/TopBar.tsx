@@ -8,7 +8,7 @@ import TitleDisplay from '../TitleDisplay/TitleDisplay';
 import EditParty from '../EditParty/EditParty';
 import AdminActionOverlay from '../AdminActionOverlay/AdminActionOverlay';
 
-import { faHome, faHouseUser, faTh } from '@fortawesome/free-solid-svg-icons';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Socket } from 'socket.io-client';
 import { RootAppState } from '../../../../../shared/types';

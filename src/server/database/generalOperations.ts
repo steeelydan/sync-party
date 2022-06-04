@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { Logger } from 'winston';
-import { Models } from '../../shared/types';
+import { MediaItem, Models } from '../../shared/types';
 
 const updatePartyItems = async (
     models: Models,
@@ -22,7 +22,7 @@ const updatePartyItems = async (
 
 const insertNewMediaItem = async (
     req: Request,
-    newMediaItem: any,
+    newMediaItem: Omit<MediaItem, 'id' | 'createdAt' | 'updatedAt'>,
     models: Models,
     logger: Logger
 ) => {

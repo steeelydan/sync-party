@@ -478,8 +478,11 @@ const runApp = async () => {
             );
         });
 
-        peerServer.on('disconnect', (client: any) => {
-            logger.log('info', `PeerJS: client disconnected: ${client.id}`);
+        peerServer.on('disconnect', (client) => {
+            logger.log(
+                'info',
+                `PeerJS: client disconnected: ${client.getId()}`
+            );
         });
 
         // API Endpoints

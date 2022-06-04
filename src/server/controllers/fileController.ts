@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { insertNewMediaItem } from '../database/generalOperations.js';
 import { Request, Response } from 'express';
 import { Logger } from 'winston';
-import { Models } from '../../shared/types.js';
+import { MediaItem, Models } from '../../shared/types.js';
 import {
     multerFileValidator,
     newFileMediaItemValidator
@@ -127,8 +127,8 @@ const upload = (
         }
 
         if (req.file) {
-            const newMediaItem = {
-                id: req.newFileId, // Implicitly set by multer
+            const newMediaItem: Omit<MediaItem, 'createdAt' | 'updatedAt'> = {
+                id: req.newFileId || uuid(), // Implicitly set by multer
                 type: 'file',
                 owner: req.body.owner,
                 name: req.body.name,
