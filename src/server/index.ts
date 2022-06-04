@@ -48,7 +48,6 @@ import {
     SyncStatusOutgoingMessage,
     WebRtcJoinLeaveMessage
 } from '../shared/types.js';
-import { contentSecurityPolicy } from 'helmet';
 import dbConfig from './dbConfig.cjs';
 import { pathConfig, requiredEnvVars, validEnvValues } from './constants.js';
 
@@ -139,13 +138,17 @@ const runApp = async () => {
         headers.setup(app, {
             contentSecurityPolicy: {
                 directives: {
-                    defaultSrc:
-                        contentSecurityPolicy.dangerouslyDisableDefaultSrc,
+                    defaultSrc: ["'self'"],
                     baseUri: ["'self'"],
                     fontSrc: ["'self'"],
                     objectSrc: ["'none'"],
                     scriptSrc:
                         "'self' 'unsafe-inline' www.youtube.com s.ytimg.com player.vimeo.com w.soundcloud.com",
+                    connectSrc: ["'self' *"],
+                    mediaSrc: ['*'],
+                    frameSrc: [
+                        'www.youtube.com w.soundcloud.com player.vimeo.com'
+                    ],
                     scriptSrcAttr: ["'none'"],
                     styleSrc: "'self' https: 'unsafe-inline'"
                 }

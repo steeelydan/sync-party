@@ -1,6 +1,6 @@
 // ENDPOINTS
 
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { Logger } from 'winston';
 
 /**
@@ -72,16 +72,16 @@ const login = (req: Request, res: Response) => {
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
  */
 const logout = async (req: Request, res: Response, logger: Logger) => {
-    try {
-        req.logout();
+    req.logout((error) => {
+        if (error) {
+            logger.log('error', error);
+            res.status(500).json({ success: false, msg: 'error' });
+
+            return Promise.reject(new Error(error as any));
+        }
 
         return res.status(200).json({ success: true, msg: 'logoutSuccessful' });
-    } catch (error) {
-        logger.log('error', error);
-        res.status(500).json({ success: false, msg: 'error' });
-
-        return Promise.reject(new Error(error as any));
-    }
+    });
 };
 
 export default { auth, login, logout };
