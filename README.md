@@ -62,6 +62,7 @@ As this application is self-hosted, your & your friends' data stays as private a
 
 -   A Linux VPS (tested with Ubuntu 20.04)
     -   Unfortunately, at the moment you can't deploy SyncParty on non-persisting nodes, like Heroku.
+-   git
 -   Node.js >= 14
 -   pm2 globally installed
 -   SSL certificate (e.g. Let's Encrypt)
