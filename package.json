@@ -1,7 +1,7 @@
 {
     "name": "sync-party",
     "type": "module",
-    "version": "0.12.5",
+    "version": "0.12.6",
     "engines": {
         "node": ">=14.0.0"
     },
@@ -27,7 +27,7 @@
         "@fortawesome/free-regular-svg-icons": "6.1.2",
         "@fortawesome/free-solid-svg-icons": "6.1.2",
         "@fortawesome/react-fontawesome": "0.2.0",
-        "@steeelydan/tsfs": "0.0.19",
+        "@steeelydan/tsfs": "0.0.20",
         "axios": "0.27.2",
         "bcryptjs": "2.4.3",
         "cheerio": "1.0.0-rc.11",
@@ -75,7 +75,7 @@
         "@types/react-dom": "18.0.6",
         "@types/react-redux": "7.1.24",
         "@types/react-router-dom": "5.3.3",
-        "@types/sequelize": "4.28.13",
+        "@types/sequelize": "4.28.14",
         "@types/uuid": "8.3.4",
         "@types/validator": "13.7.2",
         "@typescript-eslint/eslint-plugin": "5.27.0",
