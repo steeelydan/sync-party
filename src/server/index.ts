@@ -11,19 +11,19 @@ import express from 'express';
 import { v4 as uuid } from 'uuid';
 
 import { authenticateSocketRequest } from './middleware/socketMiddleware.js';
+import { setupEnvironment } from './core/environment/environment.js';
+import { createRateLimiter } from './core/rateLimiting/rateLimiting.js';
+import { createGeneralLogger } from './core/logger/generalLogger.js';
+import { createDatabase } from './core/database/database.js';
+import { setupHeaders } from './core/headers/headers.js';
+import { useCompression } from './core/performance/performance.js';
+import { setupRequestParsers } from './core/requestParsers/requestParsers.js';
+import { setupSession } from './core/session/session.js';
+import { setupAuthentication } from './core/authentication/setup.js';
 import {
-    authentication,
-    database,
-    environment,
-    headers,
-    httpServer,
-    loggers,
-    performance,
-    rateLimiting,
-    requestParsers,
-    session,
-    TSFSDbConfig
-} from '@steeelydan/tsfs';
+    mustBeAdmin,
+    mustBeAuthenticated
+} from './core/authentication/middleware.js';
 
 import authController from './controllers/authController.js';
 import fileController from './controllers/fileController.js';
@@ -46,6 +46,7 @@ import {
     PlayWish,
     SyncStatus,
     SyncStatusOutgoingMessage,
+    TSFSDbConfig,
     WebRtcJoinLeaveMessage
 } from '../shared/types.js';
 import dbConfig from './dbConfig.cjs';
@@ -58,10 +59,10 @@ const sslDevCert = fs.readFileSync(
 const sslDevKey = fs.readFileSync(path.resolve('ssl-dev/server.key'), 'utf-8');
 
 const runApp = async () => {
-    environment.setup(pathConfig, requiredEnvVars, validEnvValues);
+    setupEnvironment(pathConfig, requiredEnvVars, validEnvValues);
 
-    const authRateLimiter = rateLimiting.createRateLimiter(15);
-    const catchallRateLimiter = rateLimiting.createRateLimiter(15);
+    const authRateLimiter = createRateLimiter(15);
+    const catchallRateLimiter = createRateLimiter(15);
 
     if (!fs.existsSync(path.resolve('data/uploads'))) {
         fs.mkdirSync(path.resolve('data/uploads'));
@@ -74,11 +75,11 @@ const runApp = async () => {
         const app = express();
 
         // LOGGING
-        const logger = loggers.createGeneralLogger(pathConfig);
+        const logger = createGeneralLogger(pathConfig);
 
         // DATABASE
 
-        const sequelize = await database.create(dbConfig as TSFSDbConfig);
+        const sequelize = await createDatabase(dbConfig as TSFSDbConfig);
 
         const models = createModels(sequelize);
 
@@ -90,7 +91,7 @@ const runApp = async () => {
 
         // HTTP(S) SERVER
 
-        const server = httpServer.create(app, sslDevKey, sslDevCert);
+        const server = http.createServer(app);
 
         // DEFAULT VALUES
 
@@ -135,7 +136,7 @@ const runApp = async () => {
 
         // MIDDLEWARE
 
-        headers.setup(app, {
+        setupHeaders(app, {
             contentSecurityPolicy: {
                 directives: {
                     defaultSrc: ["'self'"],
@@ -155,7 +156,7 @@ const runApp = async () => {
             }
         });
 
-        performance.useCompression(app);
+        useCompression(app);
 
         // HTTP HEADERS
 
@@ -183,17 +184,17 @@ const runApp = async () => {
         // FIXME is this still applied with tsfs?
         // app.use(cookieParser(process.env.SESSION_SECRET));
 
-        requestParsers.setup(app);
+        setupRequestParsers(app);
 
         // Session & Auth
 
-        const { sessionMiddleware } = session.setup(
+        const { sessionMiddleware } = setupSession(
             app,
             sequelize,
             28 * 24 * 60 * 60 * 1000
         );
 
-        const { passport } = authentication.setup(app, models.User);
+        const { passport } = setupAuthentication(app, models.User);
 
         // TBI
         // app.use(
@@ -430,7 +431,7 @@ const runApp = async () => {
             key: webRtcServerKey
         });
 
-        app.use('/peerjs', authentication.mustBeAuthenticated, peerServer);
+        app.use('/peerjs', mustBeAuthenticated, peerServer);
 
         peerServer.on('connection', async (client) => {
             const requestWebRtcId = client.getId();
@@ -505,18 +506,14 @@ const runApp = async () => {
             }
         );
 
-        app.post(
-            '/api/logout',
-            authentication.mustBeAuthenticated,
-            async (req, res) => {
-                await authController.logout(req, res, logger);
-            }
-        );
+        app.post('/api/logout', mustBeAuthenticated, async (req, res) => {
+            await authController.logout(req, res, logger);
+        });
 
         // WebRTC Key
         app.post(
             '/api/webRtcServerKey',
-            authentication.mustBeAuthenticated,
+            mustBeAuthenticated,
             async (req, res) => {
                 const partyId = req.body.partyId;
                 const userId = req.body.userId;
@@ -545,8 +542,8 @@ const runApp = async () => {
 
         app.get(
             '/api/allMediaItems',
-            authentication.mustBeAuthenticated,
-            authentication.mustBeAdmin,
+            mustBeAuthenticated,
+            mustBeAdmin,
             async (req, res) => {
                 await mediaItemController.getAllMediaItems(
                     req,
@@ -557,35 +554,17 @@ const runApp = async () => {
             }
         );
 
-        app.post(
-            '/api/mediaItem',
-            authentication.mustBeAuthenticated,
-            async (req, res) => {
-                await mediaItemController.createMediaItem(
-                    req,
-                    res,
-                    models,
-                    logger
-                );
-            }
-        );
+        app.post('/api/mediaItem', mustBeAuthenticated, async (req, res) => {
+            await mediaItemController.createMediaItem(req, res, models, logger);
+        });
 
-        app.put(
-            '/api/mediaItem/:id',
-            authentication.mustBeAuthenticated,
-            async (req, res) => {
-                await mediaItemController.editMediaItem(
-                    req,
-                    res,
-                    models,
-                    logger
-                );
-            }
-        );
+        app.put('/api/mediaItem/:id', mustBeAuthenticated, async (req, res) => {
+            await mediaItemController.editMediaItem(req, res, models, logger);
+        });
 
         app.delete(
             '/api/mediaItem/:id',
-            authentication.mustBeAuthenticated,
+            mustBeAuthenticated,
             async (req, res) => {
                 await mediaItemController.deleteMediaItem(
                     req,
@@ -598,38 +577,26 @@ const runApp = async () => {
 
         // UserItems
 
-        app.get(
-            '/api/userItems',
-            authentication.mustBeAuthenticated,
-            async (req, res) => {
-                await userItemController.getUserItems(req, res, models, logger);
-            }
-        );
+        app.get('/api/userItems', mustBeAuthenticated, async (req, res) => {
+            await userItemController.getUserItems(req, res, models, logger);
+        });
 
         // Files
 
-        app.get(
-            '/api/file/:id',
-            authentication.mustBeAuthenticated,
-            async (req, res) => {
-                await fileController.getFile(req, res, models);
-            }
-        );
+        app.get('/api/file/:id', mustBeAuthenticated, async (req, res) => {
+            await fileController.getFile(req, res, models);
+        });
 
-        app.post(
-            '/api/file',
-            authentication.mustBeAuthenticated,
-            (req, res) => {
-                fileController.upload(req, res, models, logger);
-            }
-        );
+        app.post('/api/file', mustBeAuthenticated, (req, res) => {
+            fileController.upload(req, res, models, logger);
+        });
 
         // Users
 
         app.get(
             '/api/allUsers',
-            authentication.mustBeAuthenticated,
-            authentication.mustBeAdmin,
+            mustBeAuthenticated,
+            mustBeAdmin,
             async (req, res) => {
                 await userController.getAllUsers(req, res, models);
             }
@@ -639,8 +606,8 @@ const runApp = async () => {
 
         app.post(
             '/api/party',
-            authentication.mustBeAuthenticated,
-            authentication.mustBeAdmin,
+            mustBeAuthenticated,
+            mustBeAdmin,
             async (req, res) => {
                 await partyController.createParty(req, res, models, logger);
             }
@@ -648,8 +615,8 @@ const runApp = async () => {
 
         app.put(
             '/api/party',
-            authentication.mustBeAuthenticated,
-            authentication.mustBeAdmin,
+            mustBeAuthenticated,
+            mustBeAdmin,
             async (req, res) => {
                 await partyController.editParty(req, res, models, logger);
             }
@@ -657,74 +624,45 @@ const runApp = async () => {
 
         // User Parties
 
-        app.get(
-            '/api/userParties',
-            authentication.mustBeAuthenticated,
-            async (req, res) => {
-                await userPartyController.getUserParties(req, res, models);
-            }
-        );
+        app.get('/api/userParties', mustBeAuthenticated, async (req, res) => {
+            await userPartyController.getUserParties(req, res, models);
+        });
 
         // Party items
 
-        app.delete(
-            '/api/partyItems',
-            authentication.mustBeAuthenticated,
-            async (req, res) => {
-                await partyItemController.removeItemFromParty(req, res, models);
-            }
-        );
+        app.delete('/api/partyItems', mustBeAuthenticated, async (req, res) => {
+            await partyItemController.removeItemFromParty(req, res, models);
+        });
 
-        app.post(
-            '/api/partyItems',
-            authentication.mustBeAuthenticated,
-            async (req, res) => {
-                await partyItemController.addItemToParty(
-                    req,
-                    res,
-                    models,
-                    logger
-                );
-            }
-        );
+        app.post('/api/partyItems', mustBeAuthenticated, async (req, res) => {
+            await partyItemController.addItemToParty(req, res, models, logger);
+        });
 
-        app.put(
-            '/api/partyItems',
-            authentication.mustBeAuthenticated,
-            async (req, res) => {
-                await partyItemController.updatePartyItems(
-                    req,
-                    res,
-                    models,
-                    logger
-                );
-            }
-        );
+        app.put('/api/partyItems', mustBeAuthenticated, async (req, res) => {
+            await partyItemController.updatePartyItems(
+                req,
+                res,
+                models,
+                logger
+            );
+        });
 
         // Party metadata
 
-        app.put(
-            '/api/partyMetadata',
-            authentication.mustBeAuthenticated,
-            async (req, res) => {
-                await partyMetadataController.updatePartyMetadata(
-                    req,
-                    res,
-                    models,
-                    logger
-                );
-            }
-        );
+        app.put('/api/partyMetadata', mustBeAuthenticated, async (req, res) => {
+            await partyMetadataController.updatePartyMetadata(
+                req,
+                res,
+                models,
+                logger
+            );
+        });
 
         // Data from external websites
 
-        app.post(
-            '/api/linkMetadata',
-            authentication.mustBeAuthenticated,
-            async (req, res) => {
-                await externalDataController.getLinkMetadata(req, res, logger);
-            }
-        );
+        app.post('/api/linkMetadata', mustBeAuthenticated, async (req, res) => {
+            await externalDataController.getLinkMetadata(req, res, logger);
+        });
 
         // Route everything not caught by above routes to index.html
         app.get('*', catchallRateLimiter, (req, res) => {

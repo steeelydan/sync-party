@@ -1,7 +1,6 @@
 import { RequestHandler } from 'express';
 import { PassportStatic } from 'passport';
 import { Server, Socket } from 'socket.io';
-import { ExtendedError } from 'socket.io/dist/namespace';
 
 // https://github.com/jfromaniello/passport.socketio/issues/148
 export const authenticateSocketRequest = (
@@ -10,10 +9,8 @@ export const authenticateSocketRequest = (
     passport: PassportStatic
 ) => {
     const socketIoWrap = (middleware: any) => {
-        return (
-            socket: Socket,
-            next: (err?: ExtendedError | undefined) => void
-        ) => {
+        // FIXME error type
+        return (socket: Socket, next: (err?: Error | undefined) => void) => {
             return middleware(socket.request, {}, next);
         };
     };

@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { AppUser, Models, NewUser, UserRole } from '../../shared/types';
+import { AppUser, Models, NewUser, UserRole } from '../../shared/types.js';
 
 const createUser = (
     models: Models,

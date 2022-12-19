@@ -6,7 +6,7 @@ import {
     Models,
     Party,
     PartyMember
-} from '../../shared/types';
+} from '../../shared/types.js';
 
 /**
  * @api {get} /api/userParties Get All User Parties

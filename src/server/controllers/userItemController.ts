@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Logger } from 'winston';
-import { Models } from '../../shared/types';
+import { Models } from '../../shared/types.js';
 
 /**
  * @api {get} /api/userItems Get User MediaItems

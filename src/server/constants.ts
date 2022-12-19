@@ -1,9 +1,9 @@
+import path from 'path';
 import {
     TSFSPathConfig,
     TSFSRequiredEnvVars,
     TSFSValidEnvValues
-} from '@steeelydan/tsfs';
-import path from 'path';
+} from '../shared/types.js';
 
 export const pathConfig: TSFSPathConfig = {
     envPath: path.resolve('.env'),

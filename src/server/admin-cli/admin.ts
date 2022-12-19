@@ -1,5 +1,5 @@
 import createModels from '../database/createModels.js';
-import { UserRole } from '../../shared/types';
+import { TSFSDbConfig, UserRole } from '../../shared/types.js';
 import {
     createUser,
     deleteUser,
@@ -7,14 +7,15 @@ import {
     deleteAllUsers,
     changePassword
 } from './operations.js';
-import { database, environment, TSFSDbConfig } from '@steeelydan/tsfs';
+import { setupEnvironment } from '../core/environment/environment.js';
+import { createDatabase } from '../core/database/database.js';
 import dbConfig from '../dbConfig.cjs';
 import { pathConfig, requiredEnvVars, validEnvValues } from '../constants.js';
 
 const runAdminCli = async () => {
-    environment.setup(pathConfig, requiredEnvVars, validEnvValues);
+    setupEnvironment(pathConfig, requiredEnvVars, validEnvValues);
 
-    const sequelize = await database.create(dbConfig as TSFSDbConfig);
+    const sequelize = await createDatabase(dbConfig as TSFSDbConfig);
 
     const models = createModels(sequelize);
 

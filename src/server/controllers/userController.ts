@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { AppUser, Models } from '../../shared/types';
+import { AppUser, Models } from '../../shared/types.js';
 
 /**
  * @api {get} /api/allUsers Get All Users (Admin only)

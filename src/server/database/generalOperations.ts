@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { Logger } from 'winston';
-import { MediaItem, Models } from '../../shared/types';
+import { MediaItem, Models } from '../../shared/types.js';
 
 const updatePartyItems = async (
     models: Models,

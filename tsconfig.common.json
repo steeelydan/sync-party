@@ -2,7 +2,8 @@
     "exclude": ["node_modules"],
     "compilerOptions": {
         "strict": true,
-        "moduleResolution": "node",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "esModuleInterop": true,
         "allowJs": true,
         "resolveJsonModule": true,
