@@ -42,7 +42,6 @@ export default function CommunicationContainer({
 
     const [webRtcPeer, setWebRtcPeer] = useState<Peer | null>(null);
     const webRtcPeerRef = useRef(webRtcPeer);
-    webRtcPeerRef.current = webRtcPeer;
     const [chatIsActive, setChatIsActive] = useState(false);
     const [webRtcAudioIsActive, setWebRtcAudioIsActive] = useState(false);
     const [webRtcVideoIsActive, setWebRtcVideoIsActive] = useState(false);
@@ -61,6 +60,10 @@ export default function CommunicationContainer({
         [userId: string]: MediaConnection;
     }>({});
     const callListRef = useRef(callList);
+
+    useEffect(() => {
+        webRtcPeerRef.current = webRtcPeer;
+    });
 
     // Update references
     useEffect(() => {

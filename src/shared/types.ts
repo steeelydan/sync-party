@@ -175,9 +175,9 @@ export type PlayerStateActionProperties = {
 };
 
 export type PlayerTimeoutState = {
-    actionMessageTimeoutId: ReturnType<typeof setTimeout> | null;
+    actionMessageTimeoutId: null | NodeJS.Timeout;
     actionMessageTimeoutDone: boolean;
-    uiTimeoutId: ReturnType<typeof setTimeout> | null;
+    uiTimeoutId: null | NodeJS.Timeout;
     uiTimeoutDelay: number;
     uiTimeoutTimestamp: number;
 };
