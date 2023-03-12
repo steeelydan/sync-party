@@ -52,6 +52,18 @@ type Props = {
     socket: Socket | null;
 };
 
+const savedVolume = localStorage.getItem('volume');
+
+let initialVolume = 1;
+
+if (savedVolume) {
+    const savedVolumeAsNumber = parseFloat(savedVolume);
+
+    if (savedVolumeAsNumber >= 0 && savedVolumeAsNumber <= 1) {
+        initialVolume = savedVolumeAsNumber;
+    }
+}
+
 export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     // Constants
     const uiTimeoutIntervalResolution = 500;
@@ -101,7 +113,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         ),
         duration: 0,
         sourceUrl: '',
-        volume: 1
+        volume: initialVolume
     };
     const playerStateReducer = (
         playerState: PlayerState,
@@ -538,6 +550,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         setPlayerState({
             volume: parseFloat(event.target.value)
         });
+
+        localStorage.setItem('volume', event.target.value.toString());
     };
 
     const handlePlayPause = (): void => {
