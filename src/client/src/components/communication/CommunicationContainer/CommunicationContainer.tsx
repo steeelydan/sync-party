@@ -84,7 +84,7 @@ export default function CommunicationContainer({
 
             const peer = new Peer(ourWebRtcId, {
                 host: '/',
-                port: parseInt(SERVER_PORT),
+                port: NODE_ENV === 'development' ? parseInt(SERVER_PORT) : 443,
                 path: '/peerjs',
                 key: webRtcServerKey,
                 debug: NODE_ENV === 'development' ? 2 : 0,
