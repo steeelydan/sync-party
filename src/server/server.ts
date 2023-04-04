@@ -189,7 +189,7 @@ setupRequestParsers(app);
 const { sessionMiddleware } = setupSession(
     app,
     sequelize,
-    28 * 24 * 60 * 60 * 1000
+    365 * 24 * 60 * 60 * 1000
 );
 
 const { passport } = setupAuthentication(app);
