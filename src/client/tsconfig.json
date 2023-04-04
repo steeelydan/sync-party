@@ -1,6 +1,6 @@
 {
     "extends": "../../tsconfig.common.json",
-    "include": ["./src", "../shared", "types.d.ts"],
+    "include": ["./src", "../shared"],
     "compilerOptions": {
         "outDir": "../../build",
         "lib": ["ES6", "dom"],

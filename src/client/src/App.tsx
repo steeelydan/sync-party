@@ -24,6 +24,7 @@ import ScreenMediaItems from './components/screens/ScreenMediaItems/ScreenMediaI
 import { ChatMessage, RootAppState } from '../../shared/types';
 
 i18n.use(initReactI18next).init({
+    returnNull: false,
     resources: translations,
     lng: 'en',
     fallbackLng: 'en'
