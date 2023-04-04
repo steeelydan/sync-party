@@ -22,7 +22,6 @@ const getUserParties = async (req: Request, res: Response) => {
 
         // Restrict parties to those where given user is member
         const userParties = allParties.filter((party: Party) => {
-            // @ts-ignore FIXME
             return party.members.includes(requestUser.id);
         });
 

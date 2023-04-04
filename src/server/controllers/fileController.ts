@@ -50,12 +50,11 @@ const uploadFile = multer({
 const getFile = async (req: Request, res: Response) => {
     const userId = req.user?.id;
     const mediaItemId = req.params.id;
-    const requestPartyId = req.query.party;
+    const requestPartyId = req.query.party?.toString();
     const download = req.query.download;
 
     try {
         const requestParty = await Party.findOne({
-            // @ts-ignore FIXME
             where: { id: requestPartyId }
         });
 
@@ -103,7 +102,7 @@ const getFile = async (req: Request, res: Response) => {
                 .json({ success: false, msg: 'noFileAccess' });
         }
     } catch (error) {
-        return Promise.reject(new Error(error as any));
+        return Promise.reject(new Error(error as string));
     }
 };
 
@@ -120,7 +119,7 @@ const getFile = async (req: Request, res: Response) => {
  * @apiError fileUploadError An error occurred during upload.
  */
 const upload = (req: Request, res: Response, logger: Logger) => {
-    uploadFile(req, res, (err: any) => {
+    uploadFile(req, res, (err) => {
         if (err instanceof multer.MulterError) {
             logger.log('error', 'Multer error uploading file', err);
 

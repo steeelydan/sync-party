@@ -3,7 +3,11 @@ import passport from 'passport';
 
 export const authenticateLocal = passport.authenticate('local');
 
-export const mustBeAuthenticated = (req: Request, res: Response, next: NextFunction): void => {
+export const mustBeAuthenticated = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): void => {
     if (req.isAuthenticated()) {
         next();
     } else {
@@ -11,7 +15,11 @@ export const mustBeAuthenticated = (req: Request, res: Response, next: NextFunct
     }
 };
 
-export const mustBeAdmin = (req: Request, res: Response, next: NextFunction): void => {
+export const mustBeAdmin = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): void => {
     if (req.user && req.user.role === 'admin') {
         next();
     } else {

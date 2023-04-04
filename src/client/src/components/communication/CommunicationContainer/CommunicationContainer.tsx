@@ -110,23 +110,24 @@ export default function CommunicationContainer({
                         channelCount: 1
                     }
                 });
-            } catch (error: any) {
+            } catch (error) {
                 let message;
 
-                if (error.name === 'AbortError') {
+                if ((error as Error).name === 'AbortError') {
                     message = t('webRtc.abortError');
-                } else if (error.name === 'NotAllowedError') {
+                } else if ((error as Error).name === 'NotAllowedError') {
                     message = t(
                         withVideo
                             ? 'webRtc.missingPermissionsVideo'
                             : 'webRtc.missingPermissionsAudio'
                     );
-                } else if (error.name === 'NotFoundError') {
+                } else if ((error as Error).name === 'NotFoundError') {
                     message = t(
                         withVideo ? 'webRtc.noCamera' : 'webRtc.noMicrophone'
                     );
                 } else {
-                    message = error.name + ': ' + error.message;
+                    message =
+                        (error as Error).name + ': ' + (error as Error).message;
                 }
 
                 dispatch(

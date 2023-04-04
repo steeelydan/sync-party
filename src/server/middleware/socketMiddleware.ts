@@ -9,7 +9,6 @@ export const authenticateSocketRequest = (
     passport: PassportStatic
 ) => {
     const socketIoWrap = (middleware: any) => {
-        // FIXME error type
         return (socket: Socket, next: (err?: Error | undefined) => void) => {
             return middleware(socket.request, {}, next);
         };
