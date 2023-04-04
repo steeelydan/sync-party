@@ -1,7 +1,8 @@
-import { ReactElement } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUnlink } from '@fortawesome/free-solid-svg-icons';
-import {
+
+import type { ReactElement } from 'react';
+import type {
     ClientParty,
     MemberStatus,
     PlayerState,

@@ -1,13 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import { insertNewMediaItem } from '../database/generalOperations.js';
-import { Request, Response } from 'express';
-import { Logger } from 'winston';
 import {
     mediaItemValidator,
     newMediaItemValidator
 } from '../../shared/validation.js';
 import { MediaItem } from '../models/MediaItem.js';
+
+import type { Request, Response } from 'express';
+import type { Logger } from 'winston';
 
 /**
  * @api {get} /api/allMediaItems Get All MediaItems (Admin only)

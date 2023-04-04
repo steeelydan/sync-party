@@ -6,18 +6,15 @@ import Axios from 'axios';
 import { axiosConfig, reorderItems } from '../../../common/helpers';
 import { getUpdatedUserItems } from '../../../common/requests';
 
-import {
-    DragDropContext,
-    Droppable,
-    DropResult,
-    DroppableProvided
-} from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 import ItemListed from '../ItemListed/ItemListed';
 import AddMedia from '../AddMedia/AddMedia';
 import MediaMenuDraggable from '../MediaMenuDraggable/MediaMenuDraggable';
-import { Socket } from 'socket.io-client';
-import {
+
+import type { Socket } from 'socket.io-client';
+import type { DropResult, DroppableProvided } from 'react-beautiful-dnd';
+import type {
     ClientParty,
     IMediaItem,
     PlayerState,

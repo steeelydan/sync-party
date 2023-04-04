@@ -1,4 +1,4 @@
-import { ChangeEventHandler } from 'react';
+import type { ChangeEventHandler } from 'react';
 
 type Props = {
     value: number;

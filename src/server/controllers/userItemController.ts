@@ -1,6 +1,7 @@
-import { Request, Response } from 'express';
-import { Logger } from 'winston';
 import { MediaItem } from '../models/MediaItem.js';
+
+import type { Request, Response } from 'express';
+import type { Logger } from 'winston';
 
 /**
  * @api {get} /api/userItems Get User MediaItems

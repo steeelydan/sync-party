@@ -30,6 +30,7 @@ module.exports = {
         '@typescript-eslint/no-namespace': 'off',
         '@typescript-eslint/no-empty-interface': 'off',
         // '@typescript-eslint/explicit-function-return-type': 'error',
+        '@typescript-eslint/consistent-type-imports': 'error',
         '@typescript-eslint/no-var-requires': 'off',
         '@typescript-eslint/ban-ts-comment': 'warn'
     },

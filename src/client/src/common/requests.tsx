@@ -1,9 +1,10 @@
 import { setGlobalState } from '../actions/globalActions';
-import { Dispatch } from 'react';
-import { TFunction } from 'i18next';
 import Axios from 'axios';
 import { axiosConfig } from './helpers';
-import { AppAction, ClientParty, IMediaItem } from '../../../shared/types';
+
+import type { Dispatch } from 'react';
+import type { TFunction } from 'i18next';
+import type { AppAction, ClientParty, IMediaItem } from '../../../shared/types';
 
 const getUpdatedUserParties = async (
     dispatch: Dispatch<AppAction>,

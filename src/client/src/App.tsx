@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setGlobalState } from './actions/globalActions';
-import socketIOClient, { Socket } from 'socket.io-client';
+import socketIOClient from 'socket.io-client';
 import i18n from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
 
@@ -21,7 +21,9 @@ import ScreenParty from './components/screens/ScreenParty/ScreenParty';
 import ScreenUser from './components/screens/ScreenUser/ScreenUser';
 import ScreenEditParty from './components/screens/ScreenEditParty/ScreenEditParty';
 import ScreenMediaItems from './components/screens/ScreenMediaItems/ScreenMediaItems';
-import { ChatMessage, RootAppState } from '../../shared/types';
+
+import type { Socket } from 'socket.io-client';
+import type { ChatMessage, RootAppState } from '../../shared/types';
 
 i18n.use(initReactI18next).init({
     returnNull: false,

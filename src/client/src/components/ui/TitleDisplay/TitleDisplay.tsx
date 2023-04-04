@@ -1,7 +1,8 @@
 import { useSelector } from 'react-redux';
 import { getIconFromFileType } from '../../../common/helpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { RootAppState } from '../../../../../shared/types';
+
+import type { RootAppState } from '../../../../../shared/types';
 
 export default function TitleDisplay(): JSX.Element | null {
     const playingItem = useSelector(

@@ -2,9 +2,10 @@ import {
     mediaItemValidator,
     partyMediaItemsValidator
 } from '../../shared/validation.js';
-import { Request, Response } from 'express';
-import { Logger } from 'winston';
 import { Party } from '../models/Party.js';
+
+import type { Request, Response } from 'express';
+import type { Logger } from 'winston';
 
 /**
  * @api {delete} /api/partyItems Remove Item From Party

@@ -1,5 +1,4 @@
 import initModels from '../database/initModels.js';
-import { DbConfig, UserRole } from '../../shared/types.js';
 import {
     createUser,
     deleteUser,
@@ -11,6 +10,8 @@ import { setupEnvironment } from '../core/environment/environment.js';
 import { createDatabase } from '../core/database/database.js';
 import dbConfig from '../dbConfig.cjs';
 import { pathConfig, requiredEnvVars, validEnvValues } from '../constants.js';
+
+import type { DbConfig, UserRole } from '../../shared/types.js';
 
 const runAdminCli = async () => {
     setupEnvironment(pathConfig, requiredEnvVars, validEnvValues);

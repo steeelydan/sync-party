@@ -1,6 +1,10 @@
 import { useSelector } from 'react-redux';
-import { ClientPartyMember, RootAppState } from '../../../../../shared/types';
 import Avatar from '../Avatar/Avatar';
+
+import type {
+    ClientPartyMember,
+    RootAppState
+} from '../../../../../shared/types';
 
 export default function Avatars(): JSX.Element | null {
     const party = useSelector((state: RootAppState) => state.globalState.party);

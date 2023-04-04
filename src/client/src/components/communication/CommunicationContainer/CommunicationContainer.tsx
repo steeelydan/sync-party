@@ -1,5 +1,5 @@
-import Peer, { MediaConnection } from 'peerjs';
-import { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
+import Peer from 'peerjs';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
@@ -8,11 +8,14 @@ import { axiosConfig } from '../../../common/helpers';
 import Chat from '../Chat/Chat';
 import CommunicationBar from '../CommunicationBar/CommunicationBar';
 import WebRtc from '../WebRtc/WebRtc';
-import { Socket } from 'socket.io-client';
-import {
+
+import type { ReactElement } from 'react';
+import type { Socket } from 'socket.io-client';
+import type {
     PlayerStateActionProperties,
     WebRtcIds
 } from '../../../../../shared/types';
+import type { MediaConnection } from 'peerjs';
 
 interface Props {
     socket: Socket | null;

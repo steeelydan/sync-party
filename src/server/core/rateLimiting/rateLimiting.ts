@@ -1,4 +1,6 @@
-import rateLimit, { RateLimitRequestHandler } from 'express-rate-limit';
+import rateLimit from 'express-rate-limit';
+
+import type { RateLimitRequestHandler } from 'express-rate-limit';
 
 export const createRateLimiter = (
     hitsPerMinute: number

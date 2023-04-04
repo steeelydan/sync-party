@@ -7,7 +7,8 @@ import { useTranslation } from 'react-i18next';
 
 import Spinner from '../../display/Spinner/Spinner';
 import ScreenLogin from '../../screens/ScreenLogin/ScreenLogin';
-import { RootAppState } from '../../../../../shared/types';
+
+import type { RootAppState } from '../../../../../shared/types';
 
 type Props = {
     children: JSX.Element;

@@ -1,7 +1,8 @@
-import { Logger } from 'winston';
-import { Request, Response } from 'express';
 import { partyMetadataValidator } from '../../shared/validation.js';
 import { Party } from '../models/Party.js';
+
+import type { Logger } from 'winston';
+import type { Request, Response } from 'express';
 
 /**
  * @api {put} /api/partyMetadata Update Party Metadata

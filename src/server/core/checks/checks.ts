@@ -1,10 +1,11 @@
 import fs from 'fs';
-import {
+import { checkIfPathExistsAndIsAbsolute } from '../helpers.js';
+
+import type {
     PathConfig,
     RequiredEnvVars,
     ValidEnvValues
 } from '../../../shared/types.js';
-import { checkIfPathExistsAndIsAbsolute } from '../helpers.js';
 
 const checkPathConfig = (pathConfig: PathConfig): void => {
     for (let i = 0; i < Object.keys(pathConfig).length; i++) {

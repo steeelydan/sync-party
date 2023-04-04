@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import { Logger } from 'winston';
+import type { Request, Response } from 'express';
+import type { Logger } from 'winston';
 
 /**
  * @api {post} /api/auth User Authentication

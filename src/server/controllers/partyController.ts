@@ -1,10 +1,11 @@
 import { newPartyValidator, partyValidator } from '../../shared/validation.js';
-import { Logger } from 'winston';
-import { Request, Response } from 'express';
 import { v4 as uuid } from 'uuid';
 import { createWebRtcIds } from '../serverHelpers.js';
-import { NewParty } from '../../shared/types.js';
 import { Party } from '../models/Party.js';
+
+import type { Request, Response } from 'express';
+import type { Logger } from 'winston';
+import type { NewParty } from '../../shared/types.js';
 
 /**
  * @api {post} /api/party Create New Party (Admin only)

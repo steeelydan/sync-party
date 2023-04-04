@@ -1,6 +1,7 @@
-import { ReactElement } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
+
+import type { ReactElement } from 'react';
+import type { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface Props {
     icon: IconProp;

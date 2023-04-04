@@ -10,8 +10,9 @@ import AdminActionOverlay from '../AdminActionOverlay/AdminActionOverlay';
 
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Socket } from 'socket.io-client';
-import { RootAppState } from '../../../../../shared/types';
+
+import type { Socket } from 'socket.io-client';
+import type { RootAppState } from '../../../../../shared/types';
 
 type Props = {
     socket: Socket | null;

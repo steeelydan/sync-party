@@ -19,9 +19,10 @@ import PartyTile from '../../ui/PartyTile/PartyTile';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHdd } from '@fortawesome/free-solid-svg-icons';
-import { Socket } from 'socket.io-client';
 import { Navigate } from 'react-router-dom';
-import { ClientParty, RootAppState } from '../../../../../shared/types';
+
+import type { ClientParty, RootAppState } from '../../../../../shared/types';
+import type { Socket } from 'socket.io-client';
 
 type Props = {
     socket: Socket | null;

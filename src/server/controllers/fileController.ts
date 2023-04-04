@@ -2,8 +2,6 @@ import multer from 'multer';
 import path from 'path';
 import { v4 as uuid } from 'uuid';
 import { insertNewMediaItem } from '../database/generalOperations.js';
-import { Request, Response } from 'express';
-import { Logger } from 'winston';
 import {
     multerFileValidator,
     newFileMediaItemValidator
@@ -11,7 +9,10 @@ import {
 import { getFilePathFromId } from '../serverHelpers.js';
 import { Party } from '../models/Party.js';
 import { MediaItem } from '../models/MediaItem.js';
-import { CreationAttributes } from 'sequelize';
+
+import type { Request, Response } from 'express';
+import type { CreationAttributes } from 'sequelize';
+import type { Logger } from 'winston';
 
 // HELPERS
 

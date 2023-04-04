@@ -1,7 +1,8 @@
-import { Logger } from 'winston';
-import { Request, Response } from 'express';
 import axios from 'axios';
 import cheerio from 'cheerio';
+
+import type { Request, Response } from 'express';
+import type { Logger } from 'winston';
 
 const getLinkMetadata = async (req: Request, res: Response, logger: Logger) => {
     let url;

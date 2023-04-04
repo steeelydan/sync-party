@@ -19,8 +19,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import AddMediaTabFile from '../AddMediaTabFile/AddMediaTabFile';
-import { Socket } from 'socket.io-client';
-import {
+
+import type { Socket } from 'socket.io-client';
+import type {
     AddMediaTab,
     ClientParty,
     IMediaItem,

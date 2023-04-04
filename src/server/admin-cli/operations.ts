@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
-import { IUser, UserRole } from '../../shared/types.js';
 import { User } from '../models/User.js';
+
+import type { IUser, UserRole } from '../../shared/types.js';
 
 const createUser = (username: string, role: UserRole, passwordRaw: string) => {
     const user: IUser = {} as IUser;

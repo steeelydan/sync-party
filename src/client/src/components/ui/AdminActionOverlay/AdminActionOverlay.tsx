@@ -1,8 +1,9 @@
-import { ReactElement } from 'react';
 import Heading from '../../display/Heading/Heading';
 import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
+import type { ReactElement } from 'react';
 
 interface Props {
     children: JSX.Element | JSX.Element[];

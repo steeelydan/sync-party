@@ -1,20 +1,19 @@
-import { useRef, useEffect, Dispatch } from 'react';
+import { useRef, useEffect } from 'react';
 import { setGlobalState } from '../actions/globalActions';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-import {
-    faMusic,
-    faFilm,
-    IconDefinition
-} from '@fortawesome/free-solid-svg-icons';
+import { faMusic, faFilm } from '@fortawesome/free-solid-svg-icons';
 import {
     faYoutube,
     faSoundcloud,
     faTwitch
 } from '@fortawesome/free-brands-svg-icons';
 import { faFile } from '@fortawesome/free-regular-svg-icons';
-import ReactPlayer from 'react-player';
-import {
+
+import type { Dispatch } from 'react';
+import type { IconProp } from '@fortawesome/fontawesome-svg-core';
+import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import type ReactPlayer from 'react-player';
+import type {
     AppAction,
     AppState,
     AxiosConfig,

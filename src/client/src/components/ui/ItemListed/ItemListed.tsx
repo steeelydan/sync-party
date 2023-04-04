@@ -12,7 +12,8 @@ import ItemListedPlayStatus from '../ItemListedPlayStatus/ItemListedPlayStatus';
 import ItemListedNewIndicator from '../ItemListedNewIndicator/ItemListedNewIndicator';
 import ItemListedDownloadLink from '../ItemListedDownloadLink/ItemListedDownloadLink';
 import ItemListedClipboardButton from '../ItemListedClipboardButton/ItemListedClipboardButton';
-import { IMediaItem, RootAppState } from '../../../../../shared/types';
+
+import type { IMediaItem, RootAppState } from '../../../../../shared/types';
 
 type Props = {
     item: IMediaItem;

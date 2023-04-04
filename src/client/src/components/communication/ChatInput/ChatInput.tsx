@@ -1,4 +1,6 @@
-import { ReactElement, Ref, useState } from 'react';
+import { useState } from 'react';
+
+import type { ReactElement, Ref } from 'react';
 
 interface Props {
     textInput: string;

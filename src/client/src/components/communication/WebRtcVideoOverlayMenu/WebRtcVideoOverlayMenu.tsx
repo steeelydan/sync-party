@@ -5,12 +5,13 @@ import {
     faUserAlt,
     faUserAltSlash
 } from '@fortawesome/free-solid-svg-icons';
-import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootAppState } from '../../../../../shared/types';
 import { setGlobalState } from '../../../actions/globalActions';
 import BarButton from '../../input/BarButton/BarButton';
+
+import type { ReactElement } from 'react';
+import type { RootAppState } from '../../../../../shared/types';
 
 interface Props {
     isActive: boolean;

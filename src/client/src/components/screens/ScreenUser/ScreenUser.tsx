@@ -11,7 +11,8 @@ import Heading from '../../display/Heading/Heading';
 import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { RootAppState } from '../../../../../shared/types';
+
+import type { RootAppState } from '../../../../../shared/types';
 
 export default function ScreenUser(): JSX.Element | null {
     const [loggedOut, setLoggedOut] = useState(false);

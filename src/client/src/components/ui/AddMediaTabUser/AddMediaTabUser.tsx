@@ -1,10 +1,12 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ItemListed from '../ItemListed/ItemListed';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSadCry } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
-import { IMediaItem, RootAppState } from '../../../../../shared/types';
+
+import type { ReactElement } from 'react';
+import type { IMediaItem, RootAppState } from '../../../../../shared/types';
 
 interface Props {
     partyItemsSet: Set<string>;

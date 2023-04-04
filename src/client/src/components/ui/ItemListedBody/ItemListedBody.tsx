@@ -1,5 +1,5 @@
-import { ReactElement } from 'react';
-import { IMediaItem } from '../../../../../shared/types';
+import type { ReactElement } from 'react';
+import type { IMediaItem } from '../../../../../shared/types';
 
 interface Props {
     item: IMediaItem;

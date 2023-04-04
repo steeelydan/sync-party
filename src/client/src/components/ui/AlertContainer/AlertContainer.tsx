@@ -1,10 +1,11 @@
-import { ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 import { useTranslation } from 'react-i18next';
 import Alert from '../../display/Alert/Alert';
 import Button from '../../input/Button/Button';
-import {
+
+import type { ReactElement } from 'react';
+import type {
     IMediaItem,
     PlayerState,
     RootAppState

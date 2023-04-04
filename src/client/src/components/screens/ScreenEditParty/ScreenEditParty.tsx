@@ -7,8 +7,9 @@ import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
 import EditParty from '../../ui/EditParty/EditParty';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { Socket } from 'socket.io-client';
-import { ClientParty, RootAppState } from '../../../../../shared/types';
+
+import type { Socket } from 'socket.io-client';
+import type { ClientParty, RootAppState } from '../../../../../shared/types';
 
 type Props = {
     socket: Socket | null;

@@ -1,14 +1,15 @@
 import dotenv from 'dotenv';
 import {
-    PathConfig,
-    RequiredEnvVars,
-    ValidEnvValues
-} from '../../../shared/types.js';
-import {
     checkConfigFiles,
     checkEnv,
     checkPublicDir
 } from '../checks/checks.js';
+
+import type {
+    PathConfig,
+    RequiredEnvVars,
+    ValidEnvValues
+} from '../../../shared/types.js';
 
 export const setupEnvironment = (
     pathConfig: PathConfig,

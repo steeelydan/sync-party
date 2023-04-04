@@ -1,5 +1,6 @@
 import helmet from 'helmet';
-import { Express } from 'express';
+
+import type { Express } from 'express';
 
 // https://github.com/helmetjs/helmet/issues/235
 type ExtractedHelmetOptions = Parameters<typeof helmet>[0];

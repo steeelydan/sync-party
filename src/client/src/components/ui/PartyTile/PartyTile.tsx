@@ -1,4 +1,3 @@
-import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
 import Avatar from '../../display/Avatar/Avatar';
@@ -6,7 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
-import {
+
+import type { ReactElement } from 'react';
+import type {
     ClientParty,
     ClientPartyMember,
     ClientUser

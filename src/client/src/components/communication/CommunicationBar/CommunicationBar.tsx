@@ -1,4 +1,3 @@
-import { ReactElement } from 'react';
 import {
     faComment,
     faEye,
@@ -11,6 +10,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import BarButton from '../../input/BarButton/BarButton';
+
+import type { ReactElement } from 'react';
 
 interface Props {
     toggleChat: () => void;

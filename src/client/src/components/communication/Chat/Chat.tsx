@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import EmojiPicker from '../../input/EmojiPicker/EmojiPicker';
@@ -7,8 +7,10 @@ import { faSmile } from '@fortawesome/free-solid-svg-icons';
 import ChatHistory from '../ChatHistory/ChatHistory';
 import ChatInput from '../ChatInput/ChatInput';
 import { setGlobalState } from '../../../actions/globalActions';
-import { Socket } from 'socket.io-client';
-import { RootAppState } from '../../../../../shared/types';
+
+import type { ReactElement } from 'react';
+import type { Socket } from 'socket.io-client';
+import type { RootAppState } from '../../../../../shared/types';
 
 interface Props {
     isActive: boolean;

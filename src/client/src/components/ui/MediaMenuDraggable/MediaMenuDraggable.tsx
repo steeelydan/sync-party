@@ -1,5 +1,7 @@
-import { ReactElement } from 'react';
-import { Draggable, DraggableProvided } from 'react-beautiful-dnd';
+import { Draggable } from 'react-beautiful-dnd';
+
+import type { ReactElement } from 'react';
+import type { DraggableProvided } from 'react-beautiful-dnd';
 
 interface Props {
     children: JSX.Element;

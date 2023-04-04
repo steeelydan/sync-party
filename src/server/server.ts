@@ -1,29 +1,35 @@
 import fs from 'fs';
 import path from 'path';
-import { CronJob } from 'cron';
 import http from 'http';
 import https from 'https';
-
-import { Server as SocketIoServer, Socket } from 'socket.io';
-import { ExpressPeerServer } from 'peer';
-import express from 'express';
-
 import { v4 as uuid } from 'uuid';
+import express from 'express';
+import { CronJob } from 'cron';
+import { ExpressPeerServer } from 'peer';
+import { Server as SocketIoServer } from 'socket.io';
 
-import { authenticateSocketRequest } from './middleware/socketMiddleware.js';
 import { setupEnvironment } from './core/environment/environment.js';
-import { createRateLimiter } from './core/rateLimiting/rateLimiting.js';
-import { createGeneralLogger } from './core/logger/generalLogger.js';
-import { createDatabase } from './core/database/database.js';
 import { setupHeaders } from './core/headers/headers.js';
 import { useCompression } from './core/performance/performance.js';
 import { setupRequestParsers } from './core/requestParsers/requestParsers.js';
 import { setupSession } from './core/session/session.js';
+import { createGeneralLogger } from './core/logger/generalLogger.js';
+import { createDatabase } from './core/database/database.js';
 import { setupAuthentication } from './core/authentication/setup.js';
+import { createRateLimiter } from './core/rateLimiting/rateLimiting.js';
+
+import dbConfig from './dbConfig.cjs';
+import initModels from './database/initModels.js';
+import { Party } from './models/Party.js';
+import { User } from './models/User.js';
+
+import { pathConfig, requiredEnvVars, validEnvValues } from './constants.js';
+
 import {
     mustBeAdmin,
     mustBeAuthenticated
 } from './core/authentication/middleware.js';
+import { authenticateSocketRequest } from './middleware/socketMiddleware.js';
 
 import authController from './controllers/authController.js';
 import fileController from './controllers/fileController.js';
@@ -36,8 +42,7 @@ import userPartyController from './controllers/userPartyController.js';
 import userItemController from './controllers/userItemController.js';
 import externalDataController from './controllers/externalDataController.js';
 
-import initModels from './database/initModels.js';
-import {
+import type {
     ChatMessage,
     JoinPartyMessage,
     LeavePartyMessage,
@@ -49,10 +54,7 @@ import {
     DbConfig,
     WebRtcJoinLeaveMessage
 } from '../shared/types.js';
-import dbConfig from './dbConfig.cjs';
-import { pathConfig, requiredEnvVars, validEnvValues } from './constants.js';
-import { Party } from './models/Party.js';
-import { User } from './models/User.js';
+import type { Socket } from 'socket.io';
 
 const sslDevCert = fs.readFileSync(
     path.resolve('ssl-dev/server.cert'),

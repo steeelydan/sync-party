@@ -1,9 +1,11 @@
-import { ReactElement, useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Rnd } from 'react-rnd';
-import { RootAppState, WebRtcIds } from '../../../../../shared/types';
 import { rndHandleStyles } from '../../../common/helpers';
 import WebRtcVideoOverlayMenu from '../WebRtcVideoOverlayMenu/WebRtcVideoOverlayMenu';
+
+import type { ReactElement } from 'react';
+import type { RootAppState, WebRtcIds } from '../../../../../shared/types';
 
 interface Props {
     videoIsActive: boolean;

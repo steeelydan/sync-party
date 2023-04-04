@@ -1,6 +1,6 @@
-import { RequestHandler } from 'express';
-import { PassportStatic } from 'passport';
-import { Server, Socket } from 'socket.io';
+import type { RequestHandler } from 'express';
+import type { PassportStatic } from 'passport';
+import type { Server, Socket } from 'socket.io';
 
 // https://github.com/jfromaniello/passport.socketio/issues/148
 export const authenticateSocketRequest = (

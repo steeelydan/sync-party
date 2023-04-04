@@ -1,6 +1,7 @@
-import { ReactElement } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+
+import type { ReactElement } from 'react';
 
 interface Props {
     size?:

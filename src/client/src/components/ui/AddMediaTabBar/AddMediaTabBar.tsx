@@ -1,4 +1,3 @@
-import { ReactElement } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faAngleUp,
@@ -7,7 +6,9 @@ import {
     faGlobe
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import { AddMediaTab } from '../../../../../shared/types';
+
+import type { ReactElement } from 'react';
+import type { AddMediaTab } from '../../../../../shared/types';
 
 interface Props {
     activeTab: AddMediaTab;

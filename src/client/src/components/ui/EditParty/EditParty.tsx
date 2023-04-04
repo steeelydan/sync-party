@@ -1,4 +1,4 @@
-import { ReactElement, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
@@ -8,8 +8,10 @@ import { axiosConfig } from '../../../common/helpers';
 
 import Heading from '../../display/Heading/Heading';
 import ButtonLink from '../../input/ButtonLink/ButtonLink';
-import { Socket } from 'socket.io-client';
-import {
+
+import type { ReactElement } from 'react';
+import type { Socket } from 'socket.io-client';
+import type {
     ClientParty,
     ClientPartyMember,
     ServerParty,

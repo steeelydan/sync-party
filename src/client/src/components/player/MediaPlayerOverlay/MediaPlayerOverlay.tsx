@@ -1,10 +1,12 @@
-import { MutableRefObject, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { testMediaType } from '../../../common/helpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSync } from '@fortawesome/free-solid-svg-icons';
-import {
+
+import type { MutableRefObject } from 'react';
+import type {
     PlayerState,
     PlayerTimeoutState,
     RootAppState

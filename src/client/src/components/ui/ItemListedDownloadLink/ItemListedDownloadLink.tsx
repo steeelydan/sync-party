@@ -1,7 +1,8 @@
-import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
+
+import type { ReactElement } from 'react';
 
 interface Props {
     partyId: string;

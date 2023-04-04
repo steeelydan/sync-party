@@ -1,5 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
 import passport from 'passport';
+
+import type { NextFunction, Request, Response } from 'express';
 
 export const authenticateLocal = passport.authenticate('local');
 

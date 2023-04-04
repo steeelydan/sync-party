@@ -1,9 +1,11 @@
-import { ReactElement, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NewMediaItem } from '../../../../../shared/types';
 import Spinner from '../../display/Spinner/Spinner';
 import Button from '../../input/Button/Button';
 import InputText from '../../input/InputText/InputText';
+
+import type { ReactElement } from 'react';
+import type { NewMediaItem } from '../../../../../shared/types';
 
 interface Props {
     mediaItem: NewMediaItem;

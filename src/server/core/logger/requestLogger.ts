@@ -1,6 +1,7 @@
 import morgan from 'morgan';
-import { Express } from 'express';
-import { Logger } from 'winston';
+
+import type { Express } from 'express';
+import type { Logger } from 'winston';
 
 export const setup = (generalLogger: Logger, app: Express): void => {
     const requestLogger = morgan(

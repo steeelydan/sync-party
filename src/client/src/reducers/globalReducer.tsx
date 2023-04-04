@@ -1,6 +1,7 @@
-import { AppAction, AppState } from '../../../shared/types';
 import { SET_GLOBAL_STATE } from '../actions/actionTypes';
 import { baseState } from '../common/helpers';
+
+import type { AppAction, AppState } from '../../../shared/types';
 
 const initialState: AppState = { ...baseState, loggedIn: null };
 

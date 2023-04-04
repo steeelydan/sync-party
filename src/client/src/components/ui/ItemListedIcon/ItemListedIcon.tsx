@@ -1,7 +1,8 @@
-import { ReactElement } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getIconFromFileType } from '../../../common/helpers';
-import { IMediaItem } from '../../../../../shared/types';
+
+import type { ReactElement } from 'react';
+import type { IMediaItem } from '../../../../../shared/types';
 
 type Props = {
     item: IMediaItem;

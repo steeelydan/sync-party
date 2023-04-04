@@ -1,6 +1,7 @@
-import { Options } from 'sequelize';
 import { Sequelize } from 'sequelize';
-import { DbConfig } from '../../../shared/types.js';
+
+import type { Options } from 'sequelize';
+import type { DbConfig } from '../../../shared/types.js';
 
 export const createDatabase = async (
     dbConfig: DbConfig

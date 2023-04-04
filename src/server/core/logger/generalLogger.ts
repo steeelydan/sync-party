@@ -1,6 +1,8 @@
 import path from 'path';
-import winston, { Logger } from 'winston';
-import { PathConfig } from '../../../shared/types.js';
+import winston from 'winston';
+
+import type { Logger } from 'winston';
+import type { PathConfig } from '../../../shared/types.js';
 
 export const createGeneralLogger = (pathConfig: PathConfig): Logger => {
     if (!pathConfig.logfileDirPath) {

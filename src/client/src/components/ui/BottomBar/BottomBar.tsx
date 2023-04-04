@@ -1,4 +1,3 @@
-import { MouseEventHandler, ChangeEventHandler } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -14,7 +13,9 @@ import {
     faCompress
 } from '@fortawesome/free-solid-svg-icons';
 import SyncStatus from '../SyncStatus/SyncStatus';
-import { PlayerState, RootAppState } from '../../../../../shared/types';
+
+import type { MouseEventHandler, ChangeEventHandler } from 'react';
+import type { PlayerState, RootAppState } from '../../../../../shared/types';
 
 type Props = {
     playerState: PlayerState;

@@ -1,8 +1,10 @@
-import passport, { PassportStatic } from 'passport';
-import { Express } from 'express';
+import passport from 'passport';
 import * as PassportLocal from 'passport-local';
 import bcrypt from 'bcryptjs';
 import { User } from '../../models/User.js';
+
+import type { PassportStatic } from 'passport';
+import type { Express } from 'express';
 
 export const setupAuthentication = (
     app: Express

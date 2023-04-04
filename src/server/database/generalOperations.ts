@@ -1,8 +1,9 @@
-import { Request } from 'express';
-import { Logger } from 'winston';
 import { Party } from '../models/Party.js';
 import { MediaItem } from '../models/MediaItem.js';
-import { CreationAttributes } from 'sequelize';
+
+import type { Request } from 'express';
+import type { Logger } from 'winston';
+import type { CreationAttributes } from 'sequelize';
 
 const updatePartyItems = async (partyId: string, mediaItemId: string) => {
     const party = await Party.findOne({ where: { id: partyId } });

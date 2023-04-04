@@ -1,5 +1,6 @@
 import path from 'path';
-import {
+
+import type {
     PathConfig,
     RequiredEnvVars,
     ValidEnvValues

@@ -1,11 +1,12 @@
-import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 import InputText from '../../input/InputText/InputText';
 import Button from '../../input/Button/Button';
 import { audioExtensions, videoExtensions } from '../../../common/helpers';
-import { NewMediaItem } from '../../../../../shared/types';
+
+import type { ReactElement } from 'react';
+import type { NewMediaItem } from '../../../../../shared/types';
 
 interface Props {
     file: File | null;

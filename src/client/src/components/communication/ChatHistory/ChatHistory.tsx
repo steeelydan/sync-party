@@ -1,5 +1,8 @@
-import { ReactElement, Ref } from 'react';
-import { ClientParty, FormattedChatMessage } from '../../../../../shared/types';
+import type { ReactElement, Ref } from 'react';
+import type {
+    ClientParty,
+    FormattedChatMessage
+} from '../../../../../shared/types';
 
 interface Props {
     chatHistoryRef: Ref<HTMLDivElement>;

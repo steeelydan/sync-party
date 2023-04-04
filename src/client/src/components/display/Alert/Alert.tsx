@@ -1,7 +1,8 @@
-import { EventHandler } from 'react';
 import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
+import type { EventHandler } from 'react';
 
 type Props = {
     text: string;

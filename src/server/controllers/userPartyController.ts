@@ -1,9 +1,10 @@
 import { Op } from 'sequelize';
-import { Request, Response } from 'express';
-import { PartyMember } from '../../shared/types.js';
 import { Party } from '../models/Party.js';
 import { User } from '../models/User.js';
 import { MediaItem } from '../models/MediaItem.js';
+
+import type { Request, Response } from 'express';
+import type { PartyMember } from '../../shared/types.js';
 
 /**
  * @api {get} /api/userParties Get All User Parties

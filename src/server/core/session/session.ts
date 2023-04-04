@@ -1,7 +1,8 @@
-import { Sequelize } from 'sequelize';
-import { Express, RequestHandler } from 'express';
 import expressSession from 'express-session';
 import connectSessionSequelize from 'connect-session-sequelize';
+
+import type { Express, RequestHandler } from 'express';
+import type { Sequelize } from 'sequelize';
 
 export const setupSession = (
     app: Express,

@@ -1,8 +1,10 @@
-import { ReactElement, useState } from 'react';
+import { useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClipboard } from '@fortawesome/free-solid-svg-icons';
+
+import type { ReactElement } from 'react';
 
 interface Props {
     itemUrl: string;

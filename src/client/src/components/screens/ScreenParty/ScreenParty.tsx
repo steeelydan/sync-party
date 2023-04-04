@@ -3,8 +3,9 @@ import { Navigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCurrentParty } from '../../../common/helpers';
 import MediaPlayerContainer from '../../player/MediaPlayerContainer/MediaPlayerContainer';
-import { Socket } from 'socket.io-client';
-import { ClientParty, RootAppState } from '../../../../../shared/types';
+
+import type { Socket } from 'socket.io-client';
+import type { ClientParty, RootAppState } from '../../../../../shared/types';
 
 type Props = {
     socket: Socket | null;
