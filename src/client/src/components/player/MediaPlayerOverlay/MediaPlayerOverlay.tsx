@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { MutableRefObject, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { testMediaType } from '../../../common/helpers';
@@ -7,16 +7,12 @@ import { faSync } from '@fortawesome/free-solid-svg-icons';
 import {
     PlayerState,
     PlayerTimeoutState,
-    PlayerTimeoutStateActionProperties,
     RootAppState
 } from '../../../../../shared/types';
 
 type Props = {
     playerState: PlayerState;
-    playerTimeoutState: PlayerTimeoutState;
-    setPlayerTimeoutState: (
-        playerTimeoutState: PlayerTimeoutStateActionProperties
-    ) => void;
+    playerTimeoutState: MutableRefObject<PlayerTimeoutState>;
     actionMessageDelay: number;
 };
 
@@ -36,23 +32,29 @@ export default function MediaPlayerOverlay(props: Props): JSX.Element {
     // Display updated actionMessage when updated in global state
     useEffect(() => {
         if (actionMessage && actionMessage.text) {
-            if (props.playerTimeoutState.actionMessageTimeoutId) {
-                clearTimeout(props.playerTimeoutState.actionMessageTimeoutId);
+            if (props.playerTimeoutState.current.actionMessageTimeoutId) {
+                clearTimeout(
+                    props.playerTimeoutState.current.actionMessageTimeoutId
+                );
             }
 
-            props.setPlayerTimeoutState({
+            props.playerTimeoutState.current = {
+                ...props.playerTimeoutState.current,
                 actionMessageTimeoutDone: false,
                 actionMessageTimeoutId: setTimeout(() => {
-                    props.setPlayerTimeoutState({
+                    props.playerTimeoutState.current = {
+                        ...props.playerTimeoutState.current,
                         actionMessageTimeoutDone: true
-                    });
+                    };
                 }, props.actionMessageDelay)
-            });
+            };
         }
 
         return (): void => {
-            if (props.playerTimeoutState.actionMessageTimeoutId) {
-                clearTimeout(props.playerTimeoutState.actionMessageTimeoutId);
+            if (props.playerTimeoutState.current.actionMessageTimeoutId) {
+                clearTimeout(
+                    props.playerTimeoutState.current.actionMessageTimeoutId
+                );
             }
         };
         // eslint-disable-next-line
@@ -82,7 +84,7 @@ export default function MediaPlayerOverlay(props: Props): JSX.Element {
             )}
             {actionMessage &&
                 actionMessage.text &&
-                !props.playerTimeoutState.actionMessageTimeoutDone && (
+                !props.playerTimeoutState.current.actionMessageTimeoutDone && (
                     <div className="flex w-full h-full absolute">
                         <div className="mt-12 mx-auto mb-auto py-2 px-3 rounded backgroundShade z-50">
                             {actionMessage.text}

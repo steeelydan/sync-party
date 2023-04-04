@@ -208,6 +208,7 @@ const handleKeyCommands = (
             setPlayerState({
                 volume: newVolume
             });
+            localStorage.setItem('volume', newVolume.toString());
             break;
         }
         case 'ArrowDown': {
@@ -219,6 +220,7 @@ const handleKeyCommands = (
             setPlayerState({
                 volume: newVolume
             });
+            localStorage.setItem('volume', newVolume.toString());
             break;
         }
         case 'ArrowLeft': {

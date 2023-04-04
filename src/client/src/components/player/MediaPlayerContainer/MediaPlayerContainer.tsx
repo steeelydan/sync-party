@@ -38,7 +38,6 @@ import {
     PlayerState,
     PlayerStateActionProperties,
     PlayerTimeoutState,
-    PlayerTimeoutStateActionProperties,
     PlayOrder,
     PlayWish,
     ReactPlayerState,
@@ -51,6 +50,18 @@ import {
 type Props = {
     socket: Socket | null;
 };
+
+const savedVolume = localStorage.getItem('volume');
+
+let initialVolume = 1;
+
+if (savedVolume) {
+    const savedVolumeAsNumber = parseFloat(savedVolume);
+
+    if (savedVolumeAsNumber >= 0 && savedVolumeAsNumber <= 1) {
+        initialVolume = savedVolumeAsNumber;
+    }
+}
 
 export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     // Constants
@@ -101,7 +112,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         ),
         duration: 0,
         sourceUrl: '',
-        volume: 1
+        volume: initialVolume
     };
     const playerStateReducer = (
         playerState: PlayerState,
@@ -114,37 +125,26 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         initialPlayerState
     );
     const playerStateRef = useRef(playerState);
-    playerStateRef.current = playerState;
 
-    const initialPlayerTimeoutState = {
+    const initialPlayerTimeoutState: PlayerTimeoutState = {
         actionMessageTimeoutId: null,
         actionMessageTimeoutDone: false,
         uiTimeoutId: null,
         uiTimeoutDelay: uiTimeoutShortDelay,
         uiTimeoutTimestamp: Date.now()
     };
-    const playerTimeoutReducer = (
-        playerTimeoutState: PlayerTimeoutState,
-        updatedProperties: PlayerTimeoutStateActionProperties
-    ): PlayerTimeoutState => {
-        return { ...playerTimeoutState, ...updatedProperties };
-    };
-    const [playerTimeoutState, setPlayerTimeoutState] = useReducer(
-        playerTimeoutReducer,
-        initialPlayerTimeoutState
-    );
-    const playerTimeoutStateRef = useRef(playerTimeoutState);
-    playerTimeoutStateRef.current = playerTimeoutState;
+    const playerTimeoutStateRef = useRef(initialPlayerTimeoutState);
 
     // Clear all timeouts
-    const clearAllTimeouts = (): void => {
-        if (playerTimeoutStateRef.current.uiTimeoutId) {
-            clearTimeout(playerTimeoutStateRef.current.uiTimeoutId);
-        }
-        if (playerTimeoutStateRef.current.actionMessageTimeoutId) {
-            clearTimeout(playerTimeoutStateRef.current.actionMessageTimeoutId);
-        }
-    };
+    // const clearAllTimeouts = (): void => {
+    //     if (playerTimeoutStateRef.current.uiTimeoutId) {
+    //         clearTimeout(playerTimeoutStateRef.current.uiTimeoutId);
+    //         console.log('UI timeout cleared');
+    //     }
+    //     if (playerTimeoutStateRef.current.actionMessageTimeoutId) {
+    //         clearTimeout(playerTimeoutStateRef.current.actionMessageTimeoutId);
+    //     }
+    // };
 
     // Player functions
 
@@ -236,6 +236,10 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     );
 
     // Effects
+
+    useEffect(() => {
+        playerStateRef.current = playerState;
+    });
 
     // Attach key event listener
     useEffect(() => {
@@ -442,10 +446,6 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 );
             });
         }
-
-        return (): void => {
-            clearAllTimeouts();
-        };
     }, [socket, party, user, joinedParty, dispatch, updatePlaylistIndex]);
 
     // Sync procedure finish: Seek, isPlaying, start buffering state
@@ -538,6 +538,8 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
         setPlayerState({
             volume: parseFloat(event.target.value)
         });
+
+        localStorage.setItem('volume', event.target.value.toString());
     };
 
     const handlePlayPause = (): void => {
@@ -675,14 +677,6 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
 
     // UI Event handlers
 
-    // UI movement detection
-    const setUiVisible = useCallback(
-        (visible: boolean): void => {
-            dispatch(setGlobalState({ uiVisible: visible }));
-        },
-        [dispatch]
-    );
-
     // Prevent UI from hiding when mouse moves
     const handleMouseMovementOverUi = (): void => {
         if (
@@ -690,18 +684,21 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
             playerTimeoutStateRef.current.uiTimeoutTimestamp +
                 uiTimeoutIntervalResolution
         ) {
-            setUiVisible(true);
+            dispatch(setGlobalState({ uiVisible: true }));
 
             if (playerTimeoutStateRef.current.uiTimeoutId) {
                 clearTimeout(playerTimeoutStateRef.current.uiTimeoutId);
+                // console.log('UI timeout cleared');
             }
 
-            setPlayerTimeoutState({
+            // console.log('UI Timeout set');
+            playerTimeoutStateRef.current = {
+                ...playerTimeoutStateRef.current,
                 uiTimeoutId: setTimeout(() => {
-                    setUiVisible(false);
+                    dispatch(setGlobalState({ uiVisible: false }));
                 }, playerTimeoutStateRef.current.uiTimeoutDelay),
                 uiTimeoutTimestamp: Date.now()
-            });
+            };
         }
     };
 
@@ -714,19 +711,22 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
 
             if (playerTimeoutStateRef.current.uiTimeoutId) {
                 clearTimeout(playerTimeoutStateRef.current.uiTimeoutId);
+                // console.log('UI timeout cleared');
             }
 
+            // console.log('UI Timeout set');
             const newTimeoutId = setTimeout(() => {
-                setUiVisible(false);
+                dispatch(setGlobalState({ uiVisible: false }));
             }, currentDelay);
 
-            setPlayerTimeoutState({
+            playerTimeoutStateRef.current = {
+                ...playerTimeoutStateRef.current,
                 uiTimeoutId: newTimeoutId,
                 uiTimeoutDelay: currentDelay,
                 uiTimeoutTimestamp: Date.now()
-            });
+            };
         },
-        [setUiVisible]
+        [dispatch]
     );
 
     return (
@@ -745,10 +745,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
             >
                 <MediaPlayerOverlay
                     playerState={playerState}
-                    playerTimeoutState={playerTimeoutState}
-                    setPlayerTimeoutState={(
-                        playerTimeoutState: PlayerTimeoutStateActionProperties
-                    ): void => setPlayerTimeoutState(playerTimeoutState)}
+                    playerTimeoutState={playerTimeoutStateRef}
                     actionMessageDelay={actionMessageDelay}
                 ></MediaPlayerOverlay>
                 <div className="flex w-full h-full pointer-events-none">

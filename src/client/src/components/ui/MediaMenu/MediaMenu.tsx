@@ -64,7 +64,6 @@ export default function MediaMenu({
 
     const [hoverTimestamp, setHoverTimestamp] = useState(0);
     const hoverTimestampRef = useRef(hoverTimestamp);
-    hoverTimestampRef.current = hoverTimestamp;
 
     const [addMediaIsActive, setAddMediaIsActive] = useState(false);
 
@@ -74,6 +73,10 @@ export default function MediaMenu({
 
     const dispatch = useDispatch();
     const { t } = useTranslation();
+
+    useEffect(() => {
+        hoverTimestampRef.current = hoverTimestamp;
+    });
 
     // Collect items in active party in a set for faster checks
     useEffect(() => {
@@ -256,12 +259,14 @@ export default function MediaMenu({
                 const now = Date.now();
 
                 if (hoverTimestampRef.current + 10000 < now) {
+                    // console.log('uiVisible set as TRUE');
                     freezeUiVisible(true);
                     setHoverTimestamp(now);
                 }
             }}
             onMouseLeave={(): void => {
                 if (!uiFocused.chat && !addMediaIsActive) {
+                    // console.log('uiVisible set as FALSE');
                     freezeUiVisible(false);
                     setHoverTimestamp(0);
                 }
