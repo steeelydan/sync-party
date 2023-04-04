@@ -63,8 +63,7 @@ const sslDevKey = fs.readFileSync(path.resolve('ssl-dev/server.key'), 'utf-8');
 const runApp = async () => {
     setupEnvironment(pathConfig, requiredEnvVars, validEnvValues);
 
-    const authRateLimiter = createRateLimiter(15);
-    const catchallRateLimiter = createRateLimiter(15);
+    const rateLimiter = createRateLimiter(200);
 
     if (!fs.existsSync(path.resolve('data/uploads'))) {
         fs.mkdirSync(path.resolve('data/uploads'));
@@ -182,6 +181,8 @@ const runApp = async () => {
 
             next();
         });
+
+        app.use(rateLimiter);
 
         // Static files middleware
         app.use(express.static(path.resolve('build/public')));
@@ -495,18 +496,13 @@ const runApp = async () => {
 
         // Auth & login
 
-        app.post('/api/auth', authRateLimiter, async (req, res) => {
+        app.post('/api/auth', async (req, res) => {
             await authController.auth(req, res, logger);
         });
 
-        app.post(
-            '/api/login',
-            authRateLimiter,
-            passport.authenticate('local'),
-            (req, res) => {
-                authController.login(req, res);
-            }
-        );
+        app.post('/api/login', passport.authenticate('local'), (req, res) => {
+            authController.login(req, res);
+        });
 
         app.post('/api/logout', mustBeAuthenticated, async (req, res) => {
             await authController.logout(req, res, logger);
@@ -647,7 +643,7 @@ const runApp = async () => {
         });
 
         // Route everything not caught by above routes to index.html
-        app.get('*', catchallRateLimiter, (req, res) => {
+        app.get('*', (req, res) => {
             res.sendFile(path.resolve('build/public/index.html'));
         });
 
