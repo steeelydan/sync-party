@@ -1,11 +1,9 @@
 import path from 'path';
-import winston from 'winston';
-import { TSFSLogger, TSFSPathConfig } from '../../../shared/types.js';
+import winston, { Logger } from 'winston';
+import { PathConfig } from '../../../shared/types.js';
 
-export const createGeneralLogger = (
-    tsfsPathConfig: TSFSPathConfig
-): TSFSLogger => {
-    if (!tsfsPathConfig.logfileDirPath) {
+export const createGeneralLogger = (pathConfig: PathConfig): Logger => {
+    if (!pathConfig.logfileDirPath) {
         throw new Error('Logfile dir has to be configured');
     }
 
@@ -18,7 +16,7 @@ export const createGeneralLogger = (
         transports: [
             new winston.transports.File({
                 filename: path.join(
-                    tsfsPathConfig.logfileDirPath,
+                    pathConfig.logfileDirPath,
                     'log-combined.json'
                 )
             })

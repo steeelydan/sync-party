@@ -1,40 +1,37 @@
 import fs from 'fs';
 import {
-    TSFSPathConfig,
-    TSFSRequiredEnvVars,
-    TSFSValidEnvValues
+    PathConfig,
+    RequiredEnvVars,
+    ValidEnvValues
 } from '../../../shared/types.js';
 import { checkIfPathExistsAndIsAbsolute } from '../helpers.js';
 
-const checkPathConfig = (tsfsPathConfig: TSFSPathConfig): void => {
-    for (let i = 0; i < Object.keys(tsfsPathConfig).length; i++) {
-        const key = Object.keys(tsfsPathConfig)[i];
-        const value = tsfsPathConfig[key as keyof TSFSPathConfig];
+const checkPathConfig = (pathConfig: PathConfig): void => {
+    for (let i = 0; i < Object.keys(pathConfig).length; i++) {
+        const key = Object.keys(pathConfig)[i];
+        const value = pathConfig[key as keyof PathConfig];
         checkIfPathExistsAndIsAbsolute(value, key);
     }
 };
 
-export const checkConfigFiles = (tsfsPathConfig: TSFSPathConfig): void => {
-    checkPathConfig(tsfsPathConfig);
+export const checkConfigFiles = (pathConfig: PathConfig): void => {
+    checkPathConfig(pathConfig);
 
-    if (!tsfsPathConfig.envPath) {
+    if (!pathConfig.envPath) {
         throw new Error('.env path has to be configured.');
     }
 
-    const okay = fs.existsSync(tsfsPathConfig.envPath);
+    const okay = fs.existsSync(pathConfig.envPath);
 
     if (!okay) {
         throw new Error('You have to create a .env file.\n');
     }
 };
 
-export const checkPublicDir = (tsfsPathConfig: TSFSPathConfig): void => {
-    checkIfPathExistsAndIsAbsolute(tsfsPathConfig.publicDirPath, 'Public Dir');
+export const checkPublicDir = (pathConfig: PathConfig): void => {
+    checkIfPathExistsAndIsAbsolute(pathConfig.publicDirPath, 'Public Dir');
 
-    if (
-        tsfsPathConfig.publicDirPath &&
-        !fs.existsSync(tsfsPathConfig.publicDirPath)
-    ) {
+    if (pathConfig.publicDirPath && !fs.existsSync(pathConfig.publicDirPath)) {
         throw new Error(
             'Public directory does not exist. Did you forget to build the client?'
         );
@@ -42,8 +39,8 @@ export const checkPublicDir = (tsfsPathConfig: TSFSPathConfig): void => {
 };
 
 export const checkEnv = (
-    requiredEnvVars: TSFSRequiredEnvVars | undefined,
-    validEnvValues: TSFSValidEnvValues | undefined
+    requiredEnvVars: RequiredEnvVars | undefined,
+    validEnvValues: ValidEnvValues | undefined
 ): void => {
     if (!requiredEnvVars || !validEnvValues) {
         throw new Error(

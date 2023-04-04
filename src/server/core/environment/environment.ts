@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import {
-    TSFSPathConfig,
-    TSFSRequiredEnvVars,
-    TSFSValidEnvValues
+    PathConfig,
+    RequiredEnvVars,
+    ValidEnvValues
 } from '../../../shared/types.js';
 import {
     checkConfigFiles,
@@ -11,17 +11,17 @@ import {
 } from '../checks/checks.js';
 
 export const setupEnvironment = (
-    tsfsPathConfig: TSFSPathConfig,
-    requiredEnvVars: TSFSRequiredEnvVars,
-    validEnvValues: TSFSValidEnvValues,
+    pathConfig: PathConfig,
+    requiredEnvVars: RequiredEnvVars,
+    validEnvValues: ValidEnvValues,
     doCheckConfigFiles = true,
     doCheckEnv = true,
     doCheckPublicDir = true
 ): void => {
-    dotenv.config({ path: tsfsPathConfig.envPath });
+    dotenv.config({ path: pathConfig.envPath });
 
     if (doCheckConfigFiles) {
-        checkConfigFiles(tsfsPathConfig);
+        checkConfigFiles(pathConfig);
     }
 
     if (doCheckEnv) {
@@ -29,6 +29,6 @@ export const setupEnvironment = (
     }
 
     if (doCheckPublicDir) {
-        checkPublicDir(tsfsPathConfig);
+        checkPublicDir(pathConfig);
     }
 };

@@ -1,5 +1,5 @@
 import createModels from '../database/createModels.js';
-import { TSFSDbConfig, UserRole } from '../../shared/types.js';
+import { DbConfig, UserRole } from '../../shared/types.js';
 import {
     createUser,
     deleteUser,
@@ -15,7 +15,7 @@ import { pathConfig, requiredEnvVars, validEnvValues } from '../constants.js';
 const runAdminCli = async () => {
     setupEnvironment(pathConfig, requiredEnvVars, validEnvValues);
 
-    const sequelize = await createDatabase(dbConfig as TSFSDbConfig);
+    const sequelize = await createDatabase(dbConfig as DbConfig);
 
     const models = createModels(sequelize);
 

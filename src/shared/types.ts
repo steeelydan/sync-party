@@ -1,5 +1,4 @@
 import { Logger } from 'winston';
-import { CoreTestUser } from '../server/core/testModels.js';
 
 export type AuthenticatedPassportUser = {
     id?: string;
@@ -348,16 +347,11 @@ export type JoinPartyMessage = {
 
 export type LeavePartyMessage = { partyId: string };
 
-// FIXME ex-TSFS types
+export type CreationAttributes<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>;
 
-export type TSFSCreationAttributes<T> = Omit<
-    T,
-    'id' | 'createdAt' | 'updatedAt'
->;
+export type SyncPartyUserRole = 'admin' | 'user';
 
-export type TSFSUserRole = 'admin' | 'user';
-
-export type TSFSRequestUser = {
+export type RequestUser = {
     id: string;
     username: string;
     role: string;
@@ -365,13 +359,11 @@ export type TSFSRequestUser = {
 
 declare global {
     namespace Express {
-        interface User extends TSFSRequestUser {}
+        interface User extends RequestUser {}
     }
 }
 
-export type TSFSLogger = Logger;
-
-export type TSFSPathConfig = {
+export type PathConfig = {
     publicDirPath?: string;
     envPath?: string;
     manifestFilePath?: string;
@@ -379,29 +371,21 @@ export type TSFSPathConfig = {
     logfileDirPath?: string;
 };
 
-export type TSFSRequiredEnvVars = string[];
+export type RequiredEnvVars = string[];
 
-export type TSFSValidEnvValues = Record<
+export type ValidEnvValues = Record<
     string,
     string[] | ((...args: string[]) => boolean)
 >;
 
-export type TSFSDbOptions = {
+export type DbOptions = {
     logging: boolean;
     storage: string;
     dialect: 'sqlite';
 };
 
-export type TSFSDbConfig = {
-    development?: TSFSDbOptions;
-    test?: TSFSDbOptions;
-    production?: TSFSDbOptions;
-};
-
-export type TestGlobal = {
-    testPathConfig: TSFSPathConfig;
-};
-
-export type CoreTestModels = {
-    CoreTestUser: typeof CoreTestUser;
+export type DbConfig = {
+    development?: DbOptions;
+    test?: DbOptions;
+    production?: DbOptions;
 };

@@ -1,9 +1,9 @@
 import { Options } from 'sequelize';
 import { Sequelize } from 'sequelize';
-import { TSFSDbConfig } from '../../../shared/types.js';
+import { DbConfig } from '../../../shared/types.js';
 
 export const createDatabase = async (
-    dbConfig: TSFSDbConfig
+    dbConfig: DbConfig
 ): Promise<Sequelize> => {
     if (
         !process.env.NODE_ENV ||
@@ -15,7 +15,7 @@ export const createDatabase = async (
     }
 
     const sequelize = new Sequelize(
-        (dbConfig as TSFSDbConfig)[process.env.NODE_ENV] as Options
+        (dbConfig as DbConfig)[process.env.NODE_ENV] as Options
     );
 
     console.log('Database initialized, env: ' + process.env.NODE_ENV);

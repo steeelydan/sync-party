@@ -46,7 +46,7 @@ import {
     PlayWish,
     SyncStatus,
     SyncStatusOutgoingMessage,
-    TSFSDbConfig,
+    DbConfig,
     WebRtcJoinLeaveMessage
 } from '../shared/types.js';
 import dbConfig from './dbConfig.cjs';
@@ -79,7 +79,7 @@ const runApp = async () => {
 
         // DATABASE
 
-        const sequelize = await createDatabase(dbConfig as TSFSDbConfig);
+        const sequelize = await createDatabase(dbConfig as DbConfig);
 
         const models = createModels(sequelize);
 

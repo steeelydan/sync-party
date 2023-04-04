@@ -188,6 +188,7 @@ You can run the following commands with a **preceding space**, preventing the pa
 
 ## Changelog
 
+-   0.13.0: [breaking] Remove TSFS again :)
 -   0.12.0: [breaking] Use my TSFS framework; get rid of Create React App; unify into one npm project
 -   0.9.0: [breaking] Simplify setup
 -   0.8.1: Add video chat; license change to GPL-3.0; TS strict mode for back end as well
