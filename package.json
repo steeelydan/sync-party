@@ -1,7 +1,7 @@
 {
     "name": "sync-party",
     "type": "module",
-    "version": "0.12.6",
+    "version": "0.13.0",
     "engines": {
         "node": ">=14.0.0"
     },
