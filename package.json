@@ -1,7 +1,7 @@
 {
     "name": "sync-party",
     "type": "module",
-    "version": "0.13.0",
+    "version": "0.13.1",
     "engines": {
         "node": ">=14.0.0"
     },
@@ -12,7 +12,7 @@
         "dev:client": "webpack --config ./src/client/webpack.config.js --watch",
         "dev:server": "tsc-watch --project ./src/server/tsconfig.json --outDir ./build --onSuccess \"nodemon ./build/server/server.js\"",
         "prod:client:build": "webpack --config ./src/client/webpack.config.js",
-        "prod:server:build": "tsc --project ./src/server/tsconfig.json",
+        "prod:server:build": "rm -rf ./build/server/* && tsc --project ./src/server/tsconfig.json",
         "prod:start": "pm2 start ./build/server/server.js --name sync-party",
         "prod:stop": "pm2 stop sync-party || echo 'PM2 process not stopped (not running atm)'",
         "prod:deploy": "npm ci && npm run prod:server:build && npm run prod:client:build && npm run prod:stop && npm run prod:start && pm2 log sync-party",
