@@ -149,7 +149,7 @@ If you spot a bug or want to contribute feel free to create an issue.
 
 SyncParty is written in TypeScript, using ES Modules.
 
-The server uses my 'framework' TSFS (https://github.com/steeelydan/tsfs). TSFS uses Express, Sequelize, sqlite, express-session. Cookie-based authentication: Passport.js.
+The server is built with Express, Sequelize, sqlite, express-session. Cookie-based authentication: Passport.js.
 
 The client is a React application in TypeScript.
 

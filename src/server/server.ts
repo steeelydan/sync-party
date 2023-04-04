@@ -184,9 +184,6 @@ const runApp = async () => {
         // Static files middleware
         app.use(express.static(path.resolve('build/public')));
 
-        // FIXME is this still applied with tsfs?
-        // app.use(cookieParser(process.env.SESSION_SECRET));
-
         setupRequestParsers(app);
 
         // Session & Auth
