@@ -1,9 +1,9 @@
 {
     "name": "sync-party",
     "type": "module",
-    "version": "0.13.1",
+    "version": "0.13.2",
     "engines": {
-        "node": ">=14.0.0"
+        "node": ">=18.0.0"
     },
     "private": true,
     "author": "steeelydan",
