@@ -1,23 +1,20 @@
 import bcrypt from 'bcryptjs';
-import { AppUser, Models, NewUser, UserRole } from '../../shared/types.js';
+import { IUser, UserRole } from '../../shared/types.js';
+import { User } from '../models/User.js';
 
-const createUser = (
-    models: Models,
-    username: string,
-    role: UserRole,
-    passwordRaw: string
-) => {
-    const user: NewUser = {} as NewUser;
+const createUser = (username: string, role: UserRole, passwordRaw: string) => {
+    const user: IUser = {} as IUser;
 
     bcrypt.hash(passwordRaw, 10, (error, passwordHashed) => {
         user.username = username;
         user.password = passwordHashed;
         user.role = role;
+        user.settings = {};
 
-        models.User.findOne({ where: { username: user.username } }).then(
-            async (previousUser: AppUser) => {
+        User.findOne({ where: { username: user.username } }).then(
+            async (previousUser: User | null) => {
                 if (!previousUser) {
-                    const newUser = await models.User.create(user);
+                    const newUser = await User.create(user);
 
                     console.log('User created');
                     console.log(newUser.dataValues, 'Your new user');
@@ -29,9 +26,9 @@ const createUser = (
     });
 };
 
-const deleteUser = async (models: Models, username: string) => {
+const deleteUser = async (username: string) => {
     try {
-        const user = await models.User.findOne({ where: { username } });
+        const user = await User.findOne({ where: { username } });
 
         if (!user) {
             console.log(`No user found with username: ${username}. Exiting`);
@@ -46,8 +43,8 @@ const deleteUser = async (models: Models, username: string) => {
     }
 };
 
-const listUsers = async (models: Models) => {
-    const allUsers = await models.User.findAll();
+const listUsers = async () => {
+    const allUsers = await User.findAll();
 
     if (allUsers.length === 0) {
         return Promise.reject(new Error('No users found'));
@@ -56,27 +53,20 @@ const listUsers = async (models: Models) => {
     }
 };
 
-const deleteAllUsers = async (models: Models) => {
-    await models.User.destroy({ where: {}, truncate: true });
+const deleteAllUsers = async () => {
+    await User.destroy({ where: {}, truncate: true });
 
     console.log('All users deleted.');
 };
 
-const changePassword = async (
-    models: Models,
-    username: string,
-    newPasswordRaw: string
-) => {
-    const user = await models.User.findOne({ where: { username } });
+const changePassword = async (username: string, newPasswordRaw: string) => {
+    const user = await User.findOne({ where: { username } });
     if (!user) {
         throw new Error(`User ${username} does not exist!`);
     }
     const newPasswordHashed = await bcrypt.hash(newPasswordRaw, 10);
     user.password = newPasswordHashed;
-    await models.User.update(
-        { password: newPasswordHashed },
-        { where: { username } }
-    );
+    await User.update({ password: newPasswordHashed }, { where: { username } });
 };
 
 export { createUser, deleteUser, listUsers, deleteAllUsers, changePassword };

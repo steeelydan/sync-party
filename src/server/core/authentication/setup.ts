@@ -2,12 +2,10 @@ import passport, { PassportStatic } from 'passport';
 import { Express } from 'express';
 import * as PassportLocal from 'passport-local';
 import bcrypt from 'bcryptjs';
+import { User } from '../../models/User.js';
 
 export const setupAuthentication = (
-    app: Express,
-    User: {
-        findOne: (where: { where: { username?: string; id?: string } }) => any;
-    } /* FIXME */
+    app: Express
 ): { passport: PassportStatic } => {
     const LocalStrategy = PassportLocal.Strategy;
 

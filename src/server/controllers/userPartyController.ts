@@ -1,12 +1,9 @@
 import { Op } from 'sequelize';
 import { Request, Response } from 'express';
-import {
-    AppUser,
-    MediaItem,
-    Models,
-    Party,
-    PartyMember
-} from '../../shared/types.js';
+import { PartyMember } from '../../shared/types.js';
+import { Party } from '../models/Party.js';
+import { User } from '../models/User.js';
+import { MediaItem } from '../models/MediaItem.js';
 
 /**
  * @api {get} /api/userParties Get All User Parties
@@ -17,11 +14,11 @@ import {
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
  * @apiSuccess {Object[]} userParties All media items.
  */
-const getUserParties = async (req: Request, res: Response, models: Models) => {
+const getUserParties = async (req: Request, res: Response) => {
     const requestUser = req.user;
 
     if (requestUser && requestUser.id) {
-        const allParties = await models.Party.findAll();
+        const allParties = await Party.findAll();
 
         // Restrict parties to those where given user is member
         const userParties = allParties.filter((party: Party) => {
@@ -49,7 +46,7 @@ const getUserParties = async (req: Request, res: Response, models: Models) => {
 
         // Get all formatted users (only id & username) & complete items for all parties this user is member of
 
-        const userPartiesMembers: AppUser[] = await models.User.findAll({
+        const userPartiesMembers = await User.findAll({
             attributes: ['id', 'username'],
             where: {
                 id: {
@@ -58,7 +55,7 @@ const getUserParties = async (req: Request, res: Response, models: Models) => {
             }
         });
 
-        const userPartiesItems: MediaItem[] = await models.MediaItem.findAll({
+        const userPartiesItems = await MediaItem.findAll({
             where: {
                 id: {
                     [Op.in]: userPartiesItemList
@@ -78,13 +75,11 @@ const getUserParties = async (req: Request, res: Response, models: Models) => {
                 }),
                 items: userParty.items
                     .filter((itemId: string) =>
-                        userPartiesItems.find(
-                            (item: MediaItem) => item.id === itemId
-                        )
+                        userPartiesItems.find((item) => item.id === itemId)
                     )
                     .map((itemId) => {
                         return userPartiesItems.find(
-                            (item: MediaItem) => item.id === itemId
+                            (item) => item.id === itemId
                         );
                     }),
                 metadata: userParty.metadata || {},

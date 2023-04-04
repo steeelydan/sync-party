@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Logger } from 'winston';
-import { Models } from '../../shared/types.js';
+import { MediaItem } from '../models/MediaItem.js';
 
 /**
  * @api {get} /api/userItems Get User MediaItems
@@ -11,16 +11,11 @@ import { Models } from '../../shared/types.js';
  * @apiHeader {String} cookie Express session cookie 'connect.sid' (checked by passport.js middleware)
  * @apiSuccess {Object[]} userItems MediaItems owned by requesting user.
  */
-const getUserItems = async (
-    req: Request,
-    res: Response,
-    models: Models,
-    logger: Logger
-) => {
+const getUserItems = async (req: Request, res: Response, logger: Logger) => {
     const userId = req.user?.id;
 
     try {
-        const userItems = await models.MediaItem.findAll({
+        const userItems = await MediaItem.findAll({
             where: {
                 owner: userId
             }

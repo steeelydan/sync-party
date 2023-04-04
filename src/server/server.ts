@@ -36,7 +36,7 @@ import userPartyController from './controllers/userPartyController.js';
 import userItemController from './controllers/userItemController.js';
 import externalDataController from './controllers/externalDataController.js';
 
-import createModels from './database/createModels.js';
+import initModels from './database/initModels.js';
 import {
     ChatMessage,
     JoinPartyMessage,
@@ -51,6 +51,8 @@ import {
 } from '../shared/types.js';
 import dbConfig from './dbConfig.cjs';
 import { pathConfig, requiredEnvVars, validEnvValues } from './constants.js';
+import { Party } from './models/Party.js';
+import { User } from './models/User.js';
 
 const sslDevCert = fs.readFileSync(
     path.resolve('ssl-dev/server.cert'),
@@ -81,7 +83,7 @@ const runApp = async () => {
 
         const sequelize = await createDatabase(dbConfig as DbConfig);
 
-        const models = createModels(sequelize);
+        initModels(sequelize);
 
         try {
             await sequelize.sync({ alter: true });
@@ -194,7 +196,7 @@ const runApp = async () => {
             28 * 24 * 60 * 60 * 1000
         );
 
-        const { passport } = setupAuthentication(app, models.User);
+        const { passport } = setupAuthentication(app);
 
         // TBI
         // app.use(
@@ -261,7 +263,7 @@ const runApp = async () => {
 
                 if (!members.has(socketUserId)) {
                     try {
-                        const party = await models.Party.findOne({
+                        const party = await Party.findOne({
                             where: {
                                 id: data.partyId
                             }
@@ -435,7 +437,7 @@ const runApp = async () => {
 
         peerServer.on('connection', async (client) => {
             const requestWebRtcId = client.getId();
-            const allParties = await models.Party.findAll();
+            const allParties = await Party.findAll();
             let isInActiveParty = false;
             let userId = '';
 
@@ -462,7 +464,7 @@ const runApp = async () => {
                 }
             }
 
-            const user = await models.User.findOne({
+            const user = await User.findOne({
                 where: { id: userId }
             });
 
@@ -518,10 +520,10 @@ const runApp = async () => {
                 const partyId = req.body.partyId;
                 const userId = req.body.userId;
                 const webRtcId = req.body.webRtcId;
-                const party = await models.Party.findOne({
+                const party = await Party.findOne({
                     where: { id: partyId }
                 });
-                const user = await models.User.findOne({
+                const user = await User.findOne({
                     where: { id: userId }
                 });
 
@@ -545,50 +547,40 @@ const runApp = async () => {
             mustBeAuthenticated,
             mustBeAdmin,
             async (req, res) => {
-                await mediaItemController.getAllMediaItems(
-                    req,
-                    res,
-                    models,
-                    logger
-                );
+                await mediaItemController.getAllMediaItems(req, res, logger);
             }
         );
 
         app.post('/api/mediaItem', mustBeAuthenticated, async (req, res) => {
-            await mediaItemController.createMediaItem(req, res, models, logger);
+            await mediaItemController.createMediaItem(req, res, logger);
         });
 
         app.put('/api/mediaItem/:id', mustBeAuthenticated, async (req, res) => {
-            await mediaItemController.editMediaItem(req, res, models, logger);
+            await mediaItemController.editMediaItem(req, res, logger);
         });
 
         app.delete(
             '/api/mediaItem/:id',
             mustBeAuthenticated,
             async (req, res) => {
-                await mediaItemController.deleteMediaItem(
-                    req,
-                    res,
-                    models,
-                    logger
-                );
+                await mediaItemController.deleteMediaItem(req, res, logger);
             }
         );
 
         // UserItems
 
         app.get('/api/userItems', mustBeAuthenticated, async (req, res) => {
-            await userItemController.getUserItems(req, res, models, logger);
+            await userItemController.getUserItems(req, res, logger);
         });
 
         // Files
 
         app.get('/api/file/:id', mustBeAuthenticated, async (req, res) => {
-            await fileController.getFile(req, res, models);
+            await fileController.getFile(req, res);
         });
 
         app.post('/api/file', mustBeAuthenticated, (req, res) => {
-            fileController.upload(req, res, models, logger);
+            fileController.upload(req, res, logger);
         });
 
         // Users
@@ -598,7 +590,7 @@ const runApp = async () => {
             mustBeAuthenticated,
             mustBeAdmin,
             async (req, res) => {
-                await userController.getAllUsers(req, res, models);
+                await userController.getAllUsers(req, res);
             }
         );
 
@@ -609,7 +601,7 @@ const runApp = async () => {
             mustBeAuthenticated,
             mustBeAdmin,
             async (req, res) => {
-                await partyController.createParty(req, res, models, logger);
+                await partyController.createParty(req, res, logger);
             }
         );
 
@@ -618,44 +610,34 @@ const runApp = async () => {
             mustBeAuthenticated,
             mustBeAdmin,
             async (req, res) => {
-                await partyController.editParty(req, res, models, logger);
+                await partyController.editParty(req, res, logger);
             }
         );
 
         // User Parties
 
         app.get('/api/userParties', mustBeAuthenticated, async (req, res) => {
-            await userPartyController.getUserParties(req, res, models);
+            await userPartyController.getUserParties(req, res);
         });
 
         // Party items
 
         app.delete('/api/partyItems', mustBeAuthenticated, async (req, res) => {
-            await partyItemController.removeItemFromParty(req, res, models);
+            await partyItemController.removeItemFromParty(req, res);
         });
 
         app.post('/api/partyItems', mustBeAuthenticated, async (req, res) => {
-            await partyItemController.addItemToParty(req, res, models, logger);
+            await partyItemController.addItemToParty(req, res, logger);
         });
 
         app.put('/api/partyItems', mustBeAuthenticated, async (req, res) => {
-            await partyItemController.updatePartyItems(
-                req,
-                res,
-                models,
-                logger
-            );
+            await partyItemController.updatePartyItems(req, res, logger);
         });
 
         // Party metadata
 
         app.put('/api/partyMetadata', mustBeAuthenticated, async (req, res) => {
-            await partyMetadataController.updatePartyMetadata(
-                req,
-                res,
-                models,
-                logger
-            );
+            await partyMetadataController.updatePartyMetadata(req, res, logger);
         });
 
         // Data from external websites

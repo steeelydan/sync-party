@@ -1,4 +1,4 @@
-import createModels from '../database/createModels.js';
+import initModels from '../database/initModels.js';
 import { DbConfig, UserRole } from '../../shared/types.js';
 import {
     createUser,
@@ -17,7 +17,7 @@ const runAdminCli = async () => {
 
     const sequelize = await createDatabase(dbConfig as DbConfig);
 
-    const models = createModels(sequelize);
+    initModels(sequelize);
 
     const mode = process.argv[2].trim();
     if (
@@ -47,7 +47,7 @@ const runAdminCli = async () => {
         }
         const username = process.argv[3];
         const passwordRaw = process.argv[4];
-        createUser(models, username, role, passwordRaw);
+        createUser(username, role, passwordRaw);
     }
 
     if (mode === 'delete-user') {
@@ -57,17 +57,17 @@ const runAdminCli = async () => {
             return;
         }
         const username = process.argv[3];
-        await deleteUser(models, username);
+        await deleteUser(username);
         console.log(`User ${username} deleted.`);
     }
 
     if (mode === 'list-users') {
-        const allUsers = await listUsers(models);
+        const allUsers = await listUsers();
         console.log(JSON.stringify(allUsers, null, 4));
     }
 
     if (mode === 'delete-all-users') {
-        await deleteAllUsers(models);
+        await deleteAllUsers();
         console.log('All users deleted.');
     }
 
@@ -80,7 +80,7 @@ const runAdminCli = async () => {
         }
         const username = process.argv[3];
         const newPasswordRaw = process.argv[4];
-        await changePassword(models, username, newPasswordRaw);
+        await changePassword(username, newPasswordRaw);
     }
 };
 

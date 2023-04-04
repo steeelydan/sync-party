@@ -7,12 +7,11 @@ import {
     faGlobe
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-
-type ActiveTab = 'user' | 'web' | 'file';
+import { AddMediaTab } from '../../../../../shared/types';
 
 interface Props {
-    activeTab: ActiveTab;
-    changeTab: (activeTab: ActiveTab) => void;
+    activeTab: AddMediaTab;
+    changeTab: (activeTab: AddMediaTab) => void;
     isUploading: boolean;
     toggleCollapseAddMediaMenu: React.MouseEventHandler;
 }

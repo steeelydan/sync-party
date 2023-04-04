@@ -4,7 +4,7 @@ import {
 } from '../../shared/validation.js';
 import { Request, Response } from 'express';
 import { Logger } from 'winston';
-import { MediaItem, Models } from '../../shared/types.js';
+import { Party } from '../models/Party.js';
 
 /**
  * @api {delete} /api/partyItems Remove Item From Party
@@ -18,16 +18,16 @@ import { MediaItem, Models } from '../../shared/types.js';
  * @apiSuccess removePartyItemSuccessful Item was successfully removed from the party.
  * @apiError notAuthorized Requesting user is not authorized or not a member of the party or party is not active.
  */
-const removeItemFromParty = async (
-    req: Request,
-    res: Response,
-    models: Models
-) => {
+const removeItemFromParty = async (req: Request, res: Response) => {
     const requestUser = req.user;
     const partyId = req.body.partyId;
     const itemId = req.body.itemId;
 
-    const party = await models.Party.findOne({ where: { id: partyId } });
+    const party = await Party.findOne({ where: { id: partyId } });
+
+    if (!party) {
+        return res.status(500).json({ success: false, msg: 'Party not found' });
+    }
 
     if (
         requestUser &&
@@ -35,7 +35,7 @@ const removeItemFromParty = async (
         (party.status === 'active' || requestUser.role === 'admin')
     ) {
         const newPartyItems = party.items.filter(
-            (item: MediaItem) => item !== itemId
+            (item: string) => item !== itemId
         );
         party.items = newPartyItems;
 
@@ -76,12 +76,7 @@ const removeItemFromParty = async (
  * @apiError notAuthorized Requesting user not a member of the party or party is not active.
  * @apiError itemAlreadyInParty Item is already in party.
  */
-const addItemToParty = async (
-    req: Request,
-    res: Response,
-    models: Models,
-    logger: Logger
-) => {
+const addItemToParty = async (req: Request, res: Response, logger: Logger) => {
     const requestUser = req.user;
     const partyId = req.body.partyId;
     const item = req.body.mediaItem;
@@ -97,7 +92,11 @@ const addItemToParty = async (
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
-    const party = await models.Party.findOne({ where: { id: partyId } });
+    const party = await Party.findOne({ where: { id: partyId } });
+
+    if (!party) {
+        return res.status(500).json({ success: false, msg: 'Party not found' });
+    }
 
     if (
         requestUser &&
@@ -143,7 +142,6 @@ const addItemToParty = async (
 const updatePartyItems = async (
     req: Request,
     res: Response,
-    models: Models,
     logger: Logger
 ) => {
     const requestUser = req.user;
@@ -161,7 +159,11 @@ const updatePartyItems = async (
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
-    const party = await models.Party.findOne({ where: { id: partyId } });
+    const party = await Party.findOne({ where: { id: partyId } });
+
+    if (!party) {
+        return res.status(500).json({ success: false, msg: 'Party not found' });
+    }
 
     if (
         requestUser &&

@@ -4,12 +4,14 @@ import { v4 as uuid } from 'uuid';
 import { insertNewMediaItem } from '../database/generalOperations.js';
 import { Request, Response } from 'express';
 import { Logger } from 'winston';
-import { MediaItem, Models } from '../../shared/types.js';
 import {
     multerFileValidator,
     newFileMediaItemValidator
 } from '../../shared/validation.js';
 import { getFilePathFromId } from '../serverHelpers.js';
+import { Party } from '../models/Party.js';
+import { MediaItem } from '../models/MediaItem.js';
+import { CreationAttributes } from 'sequelize';
 
 // HELPERS
 
@@ -45,19 +47,21 @@ const uploadFile = multer({
  * @apiSuccess {File} YourFile The requested file.
  * @apiError noFileAccess User is not member of party or file was not found or party is not active.
  */
-const getFile = async (req: Request, res: Response, models: Models) => {
+const getFile = async (req: Request, res: Response) => {
     const userId = req.user?.id;
     const mediaItemId = req.params.id;
     const requestPartyId = req.query.party;
     const download = req.query.download;
 
     try {
-        const requestParty = await models.Party.findOne({
+        const requestParty = await Party.findOne({
+            // @ts-ignore FIXME
             where: { id: requestPartyId }
         });
 
         if (
             !requestParty ||
+            !userId ||
             (req.user &&
                 requestParty.status !== 'active' &&
                 req.user.role !== 'admin') ||
@@ -73,9 +77,15 @@ const getFile = async (req: Request, res: Response, models: Models) => {
         );
 
         if (wantedItem) {
-            const dbMediaItem = await models.MediaItem.findOne({
+            const dbMediaItem = await MediaItem.findOne({
                 where: { id: mediaItemId }
             });
+
+            if (!dbMediaItem) {
+                return res
+                    .status(500)
+                    .json({ success: 'False', msg: 'MediaItem not found' });
+            }
 
             if (download) {
                 const fileNameWithoutUuid = dbMediaItem.url.substr(37);
@@ -109,12 +119,7 @@ const getFile = async (req: Request, res: Response, models: Models) => {
  * @apiParam {String} name Name for the new item, chosen by the user
  * @apiError fileUploadError An error occurred during upload.
  */
-const upload = (
-    req: Request,
-    res: Response,
-    models: Models,
-    logger: Logger
-) => {
+const upload = (req: Request, res: Response, logger: Logger) => {
     uploadFile(req, res, (err: any) => {
         if (err instanceof multer.MulterError) {
             logger.log('error', 'Multer error uploading file', err);
@@ -127,7 +132,7 @@ const upload = (
         }
 
         if (req.file) {
-            const newMediaItem: Omit<MediaItem, 'createdAt' | 'updatedAt'> = {
+            const newMediaItem: CreationAttributes<MediaItem> = {
                 id: req.newFileId || uuid(), // Implicitly set by multer
                 type: 'file',
                 owner: req.body.owner,
@@ -166,7 +171,6 @@ const upload = (
                 const insertSuccessful = await insertNewMediaItem(
                     req,
                     newMediaItem,
-                    models,
                     logger
                 );
 

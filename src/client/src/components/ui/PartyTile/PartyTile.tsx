@@ -9,11 +9,11 @@ import { setGlobalState } from '../../../actions/globalActions';
 import {
     ClientParty,
     ClientPartyMember,
-    User
+    ClientUser
 } from '../../../../../shared/types';
 
 interface Props {
-    user: User;
+    user: ClientUser;
     userParty: ClientParty;
     handlePartyChoose: (userParty: ClientParty) => void;
     setRedirectToPartySettings: (partyId: string) => void;

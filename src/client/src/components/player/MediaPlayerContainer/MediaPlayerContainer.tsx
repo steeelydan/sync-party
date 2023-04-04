@@ -33,7 +33,7 @@ import { useTranslation } from 'react-i18next';
 import { Socket } from 'socket.io-client';
 import {
     ClientPartyMember,
-    MediaItem,
+    IMediaItem,
     MemberStatus,
     PlayerState,
     PlayerStateActionProperties,
@@ -175,7 +175,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
     // Playback functions
 
     const emitPlayWish = (
-        mediaItem: MediaItem,
+        mediaItem: IMediaItem,
         isPlaying: boolean,
         lastPositionItemId: string | null,
         requestLastPosition: boolean,
@@ -223,10 +223,10 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
 
     // Point currently playing item index to the right item in the playlist
     const updatePlaylistIndex = useCallback(
-        (playlistItem: MediaItem): void => {
+        (playlistItem: IMediaItem): void => {
             if (party && party.items.length) {
                 const index = party.items.findIndex(
-                    (listItem: MediaItem) => listItem.id === playlistItem.id
+                    (listItem: IMediaItem) => listItem.id === playlistItem.id
                 );
 
                 setPlayerState({ playlistIndex: index });
@@ -304,7 +304,7 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
                 setPlayerState({ playOrder: playOrder });
                 setHasLastPosition(false);
 
-                const playOrderItem = party.items.find((item: MediaItem) => {
+                const playOrderItem = party.items.find((item: IMediaItem) => {
                     return item.id === playOrder.mediaItemId;
                 });
 

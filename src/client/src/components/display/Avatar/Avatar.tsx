@@ -1,12 +1,12 @@
 import { faPhoneAlt, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
-import { User, WebRtcState } from '../../../../../shared/types';
+import { ClientUser, WebRtcState } from '../../../../../shared/types';
 
 type Props = {
     username: string;
     size: 10 | 8;
-    user: User;
+    user: ClientUser;
     showTitle?: boolean;
     online?: boolean;
     webRtc?: WebRtcState | null;

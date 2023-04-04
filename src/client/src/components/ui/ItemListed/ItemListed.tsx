@@ -12,18 +12,18 @@ import ItemListedPlayStatus from '../ItemListedPlayStatus/ItemListedPlayStatus';
 import ItemListedNewIndicator from '../ItemListedNewIndicator/ItemListedNewIndicator';
 import ItemListedDownloadLink from '../ItemListedDownloadLink/ItemListedDownloadLink';
 import ItemListedClipboardButton from '../ItemListedClipboardButton/ItemListedClipboardButton';
-import { MediaItem, RootAppState } from '../../../../../shared/types';
+import { IMediaItem, RootAppState } from '../../../../../shared/types';
 
 type Props = {
-    item: MediaItem;
-    handleItemSave: (probablyEditedItem: MediaItem) => void;
+    item: IMediaItem;
+    handleItemSave: (probablyEditedItem: IMediaItem) => void;
     setPlayerFocused: (focused: boolean) => void;
     isCurrentlyPlayingItem?: boolean;
     alreadyPlayed?: boolean;
     isPlaying?: boolean;
     nameEditingAllowed: boolean;
     handleItemClick: () => void;
-    onRemoveButtonClick?: (mediaItem: MediaItem) => void;
+    onRemoveButtonClick?: (mediaItem: IMediaItem) => void;
     partyItemListRef?: React.RefObject<HTMLDivElement>;
 };
 
@@ -149,7 +149,7 @@ export default function ItemListed({
                     <ItemListedBody
                         item={item}
                         probablyEditedItem={probablyEditedItem}
-                        setProbablyEditedItem={(item: MediaItem): void =>
+                        setProbablyEditedItem={(item: IMediaItem): void =>
                             setProbablyEditedItem(item)
                         }
                         editMode={editMode}

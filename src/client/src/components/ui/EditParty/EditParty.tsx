@@ -13,12 +13,12 @@ import {
     ClientParty,
     ClientPartyMember,
     ServerParty,
-    User
+    ClientUser
 } from '../../../../../shared/types';
 
 interface Props {
     party: ClientParty;
-    user: User;
+    user: ClientUser;
     socket: Socket | null;
 }
 
@@ -215,7 +215,7 @@ export default function EditParty({
                     </div>
                     <div className="">
                         {allUsers
-                            .filter((user: User) => {
+                            .filter((user: ClientUser) => {
                                 return !party.members.find(
                                     (member: ClientPartyMember) => {
                                         return member.id === user.id;

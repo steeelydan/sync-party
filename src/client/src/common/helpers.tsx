@@ -19,12 +19,12 @@ import {
     AppState,
     AxiosConfig,
     ClientParty,
-    MediaItem,
+    IMediaItem,
     MediaTypes,
     PartyPartialState,
     PlayerState,
     SyncStatusPartyMember,
-    User
+    ClientUser
 } from '../../../shared/types';
 
 const baseState: AppState = {
@@ -179,7 +179,7 @@ const handleKeyCommands = (
     }) => void,
     seekStepSize: number,
     emitPlayWish: (
-        mediaItem: MediaItem,
+        mediaItem: IMediaItem,
         isPlaying: boolean,
         lastPositionItemId: string | null,
         requestLastPosition: boolean,
@@ -281,7 +281,7 @@ const handleKeyCommands = (
 const calculateSyncDelta = (
     syncStatusParty: { [userId: string]: SyncStatusPartyMember },
     playerStateRef: React.MutableRefObject<PlayerState>,
-    user: User,
+    user: ClientUser,
     memberId: string
 ): number => {
     const userPositionMs =
@@ -306,7 +306,7 @@ const calculateSyncDelta = (
 };
 
 const reorderItems = (
-    list: MediaItem[],
+    list: IMediaItem[],
     startIndex: number,
     endIndex: number
 ): string[] => {

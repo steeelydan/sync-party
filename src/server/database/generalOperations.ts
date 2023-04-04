@@ -1,13 +1,16 @@
 import { Request } from 'express';
 import { Logger } from 'winston';
-import { MediaItem, Models } from '../../shared/types.js';
+import { Party } from '../models/Party.js';
+import { MediaItem } from '../models/MediaItem.js';
+import { CreationAttributes } from 'sequelize';
 
-const updatePartyItems = async (
-    models: Models,
-    partyId: string,
-    mediaItemId: string
-) => {
-    const party = await models.Party.findOne({ where: { id: partyId } });
+const updatePartyItems = async (partyId: string, mediaItemId: string) => {
+    const party = await Party.findOne({ where: { id: partyId } });
+
+    if (!party) {
+        return Promise.reject('Party not found: ' + partyId);
+    }
+
     const newPartyItems = [...party.items];
     if (!newPartyItems.includes(mediaItemId)) {
         newPartyItems.push(mediaItemId);
@@ -22,13 +25,12 @@ const updatePartyItems = async (
 
 const insertNewMediaItem = async (
     req: Request,
-    newMediaItem: Omit<MediaItem, 'id' | 'createdAt' | 'updatedAt'>,
-    models: Models,
+    newMediaItem: CreationAttributes<MediaItem>,
     logger: Logger
 ) => {
     const requestPartyId = req.body.partyId;
 
-    const requestParty = await models.Party.findOne({
+    const requestParty = await Party.findOne({
         where: { id: requestPartyId }
     });
 
@@ -42,8 +44,8 @@ const insertNewMediaItem = async (
         (requestParty.status === 'active' || req.user.role === 'admin')
     ) {
         try {
-            const dbMediaItem = await models.MediaItem.create(newMediaItem);
-            await updatePartyItems(models, requestParty.id, dbMediaItem.id);
+            const dbMediaItem = await MediaItem.create(newMediaItem);
+            await updatePartyItems(requestParty.id, dbMediaItem.id);
 
             return Promise.resolve(true);
         } catch (error) {

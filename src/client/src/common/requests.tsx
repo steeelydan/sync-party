@@ -3,7 +3,7 @@ import { Dispatch } from 'react';
 import { TFunction } from 'i18next';
 import Axios from 'axios';
 import { axiosConfig } from './helpers';
-import { AppAction, ClientParty, MediaItem } from '../../../shared/types';
+import { AppAction, ClientParty, IMediaItem } from '../../../shared/types';
 
 const getUpdatedUserParties = async (
     dispatch: Dispatch<AppAction>,
@@ -42,7 +42,7 @@ const getUpdatedUserParties = async (
 const getUpdatedUserItems = async (
     dispatch: Dispatch<AppAction>,
     t: TFunction
-): Promise<MediaItem[]> => {
+): Promise<IMediaItem[]> => {
     try {
         const response = await Axios.get('/api/userItems', axiosConfig());
 

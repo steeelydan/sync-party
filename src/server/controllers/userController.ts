@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { AppUser, Models } from '../../shared/types.js';
+import { User } from '../models/User.js';
 
 /**
  * @api {get} /api/allUsers Get All Users (Admin only)
@@ -11,10 +11,10 @@ import { AppUser, Models } from '../../shared/types.js';
  * @apiSuccess {Object[]} allUsers Array of all users, formatted.
  * @apiError notAuthorized Requesting user is not admin.
  */
-const getAllUsers = async (req: Request, res: Response, models: Models) => {
-    const users = await models.User.findAll();
+const getAllUsers = async (req: Request, res: Response) => {
+    const users = await User.findAll();
     if (users) {
-        const formattedUsers = users.map((user: AppUser) => {
+        const formattedUsers = users.map((user) => {
             return {
                 username: user.username,
                 id: user.id

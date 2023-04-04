@@ -1,35 +1,27 @@
-import { Logger } from 'winston';
-
 export type AuthenticatedPassportUser = {
     id?: string;
 };
 
-export type Models = {
-    User: any;
-    Party: any;
-    MediaItem: any;
-};
-
-export type AppUser = {
+export type ClientUser = {
     // Named this way to prevent conflict with passport & express session user types
     id: string;
     username: string;
     role: UserRole;
+    settings: {};
 };
 
-export type NewUser = {
-    id: string;
-    username: string;
-    role: UserRole;
+export type IUser = ClientUser & {
     password: string;
 };
 
 export type UserRole = 'admin' | 'user';
 
+export type PartyStatus = 'active' | 'stopped';
+
 export type NewParty = {
     name: string;
     owner: string;
-    status: 'active' | 'stopped';
+    status: PartyStatus;
     members: string[];
     items: string[];
     metadata: {
@@ -40,7 +32,7 @@ export type NewParty = {
     settings: { webRtcIds: Record<string, string> };
 };
 
-export type Party = NewParty & {
+export type IParty = NewParty & {
     id: string;
 };
 
@@ -49,22 +41,24 @@ export type PartyMember = {
     username: string;
 };
 
-export type MediaItem = {
+export type MediaItemType = 'web' | 'file';
+
+export type IMediaItem = {
     id: string;
-    type: 'web' | 'file';
+    type: MediaItemType;
     name: string;
     owner: string;
     url: string;
     settings: object;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
 };
 
 export type PlayWish = {
     issuer: string;
     partyId: string;
     mediaItemId: string;
-    type: 'web' | 'file';
+    type: MediaItemType;
     isPlaying: boolean;
     position: number;
     lastPosition?: LastPosition | null;
@@ -97,18 +91,18 @@ export type RootAppState = {
 
 export type AppState = {
     loggedIn: boolean | null;
-    user: User | null;
+    user: ClientUser | null;
     uiVisible: boolean;
     uiFocused: {
         chat: boolean;
     };
-    playingItem: MediaItem | null;
+    playingItem: IMediaItem | null;
     position: number;
     party: ClientParty | null;
     syncStatus: SyncStatusReceiveMember[] | null;
     memberStatus: MemberStatus | null;
     userParties: ClientParty[] | null;
-    userItems: MediaItem[] | null;
+    userItems: IMediaItem[] | null;
     actionMessage: ActionMessage | null;
     errorMessage: string | null;
     initialServerTimeOffset: number;
@@ -120,18 +114,18 @@ export type AppState = {
 
 export type GlobalStateActionProperties = {
     loggedIn?: boolean | null;
-    user?: User | null;
+    user?: ClientUser | null;
     uiVisible?: boolean;
     uiFocused?: {
         chat: boolean;
     };
-    playingItem?: MediaItem | null;
+    playingItem?: IMediaItem | null;
     position?: number;
     party?: ClientParty | null;
     syncStatus?: SyncStatusReceiveMember[] | null;
     memberStatus?: MemberStatus | null;
     userParties?: ClientParty[] | null;
-    userItems?: MediaItem[] | null;
+    userItems?: IMediaItem[] | null;
     actionMessage?: ActionMessage | null;
     errorMessage?: string | null;
     initialServerTimeOffset?: number;
@@ -155,7 +149,7 @@ export type PlayerState = {
     isSyncing: boolean;
     isBuffering: boolean;
     playlistIndex: number;
-    playingItem: MediaItem | null;
+    playingItem: IMediaItem | null;
     duration: number;
     sourceUrl: string;
     volume: number;
@@ -170,7 +164,7 @@ export type PlayerStateActionProperties = {
     isSyncing?: boolean;
     isBuffering?: boolean;
     playlistIndex?: number;
-    playingItem?: MediaItem | null;
+    playingItem?: IMediaItem | null;
     duration?: number;
     sourceUrl?: string;
     volume?: number;
@@ -197,28 +191,22 @@ export type PartyPartialState = {
     syncStatus: SyncStatusReceiveMember[] | null;
     memberStatus: MemberStatus | null;
     actionMessage: ActionMessage | null;
-    playingItem: MediaItem | null;
-};
-
-export type User = {
-    id: string;
-    username: string;
-    role: 'admin' | 'user';
+    playingItem: IMediaItem | null;
 };
 
 export type ServerParty = {
     id: string;
     name: string;
-    status: 'active' | 'stopped';
+    status: PartyStatus;
     members: string[];
 };
 
 export type ClientParty = {
     id: string;
     name: string;
-    status: 'active' | 'stopped';
+    status: PartyStatus;
     members: ClientPartyMember[];
-    items: MediaItem[];
+    items: IMediaItem[];
     metadata: {
         played: {
             [mediaItemId: string]: boolean;
@@ -235,7 +223,7 @@ export type ClientPartyMember = {
 };
 
 export type NewMediaItem = {
-    type: 'web' | 'file';
+    type: MediaItemType;
     name: string;
     owner: string | null;
     url: string;
@@ -272,11 +260,13 @@ export type ActionMessage = {
     text: string | JSX.Element;
 };
 
+export type AddMediaTab = 'user' | 'web' | 'file';
+
 export type PlayOrder = {
     issuer: string;
     partyId: string;
     mediaItemId: string;
-    type: 'web' | 'file';
+    type: MediaItemType;
     isPlaying: boolean;
     lastPosition?: LastPosition;
     position: number;
@@ -346,8 +336,6 @@ export type JoinPartyMessage = {
 };
 
 export type LeavePartyMessage = { partyId: string };
-
-export type CreationAttributes<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>;
 
 export type SyncPartyUserRole = 'admin' | 'user';
 

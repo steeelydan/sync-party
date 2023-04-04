@@ -3,11 +3,11 @@ import path from 'path';
 import { insertNewMediaItem } from '../database/generalOperations.js';
 import { Request, Response } from 'express';
 import { Logger } from 'winston';
-import { Models } from '../../shared/types.js';
 import {
     mediaItemValidator,
     newMediaItemValidator
 } from '../../shared/validation.js';
+import { MediaItem } from '../models/MediaItem.js';
 
 /**
  * @api {get} /api/allMediaItems Get All MediaItems (Admin only)
@@ -20,13 +20,12 @@ import {
  * @apiError notAuthorized Requesting user is not admin.
  */
 const getAllMediaItems = async (
-    req: Request,
+    _req: Request,
     res: Response,
-    models: Models,
     logger: Logger
 ) => {
     try {
-        const allMediaItems = await models.MediaItem.findAll();
+        const allMediaItems = await MediaItem.findAll();
 
         return res.status(200).json({
             success: true,
@@ -54,12 +53,7 @@ const getAllMediaItems = async (
  * @apiParam {String} partyId Party ID.
  * @apiError notAuthorized Requesting user is not admin or party is not active.
  */
-const createMediaItem = async (
-    req: Request,
-    res: Response,
-    models: Models,
-    logger: Logger
-) => {
+const createMediaItem = async (req: Request, res: Response, logger: Logger) => {
     const newMediaItem = req.body.mediaItem;
 
     if (newMediaItemValidator.validate(newMediaItem).error) {
@@ -76,7 +70,6 @@ const createMediaItem = async (
     const insertSuccessful = await insertNewMediaItem(
         req,
         newMediaItem,
-        models,
         logger
     );
 
@@ -99,12 +92,7 @@ const createMediaItem = async (
  * @apiParam {String} id MediaItem ID.
  * @apiError notAuthorized Requesting user is not admin or party is not active.
  */
-const editMediaItem = async (
-    req: Request,
-    res: Response,
-    models: Models,
-    logger: Logger
-) => {
+const editMediaItem = async (req: Request, res: Response, logger: Logger) => {
     const id = req.params.id;
     const editedMediaItem = req.body;
 
@@ -127,11 +115,17 @@ const editMediaItem = async (
             .json({ success: false, msg: 'authenticationError' }); // FIXME Is this the way we do it?
     }
 
-    const dbMediaItem = await models.MediaItem.findOne({
+    const dbMediaItem = await MediaItem.findOne({
         where: {
             id
         }
     });
+
+    if (!dbMediaItem) {
+        return res
+            .status(500)
+            .json({ success: false, msg: 'MediaItem not found' });
+    }
 
     if (dbMediaItem.owner === requestUser.id || requestUser.role === 'admin') {
         dbMediaItem.name = editedMediaItem.name;
@@ -156,12 +150,7 @@ const editMediaItem = async (
  * @apiParam {String} id MediaItem ID.
  * @apiError notAuthorized Requesting user is not admin or party is not active.
  */
-const deleteMediaItem = async (
-    req: Request,
-    res: Response,
-    models: Models,
-    logger: Logger
-) => {
+const deleteMediaItem = async (req: Request, res: Response, logger: Logger) => {
     const requestUser = req.user;
 
     if (!requestUser) {
@@ -172,11 +161,18 @@ const deleteMediaItem = async (
 
     const mediaItemId = req.params.id;
     try {
-        const item = await models.MediaItem.findOne({
+        const item = await MediaItem.findOne({
             where: {
                 id: mediaItemId
             }
         });
+
+        if (!item) {
+            return res
+                .status(500)
+                .json({ success: false, msg: 'MediaItem not found' });
+        }
+
         if (item.owner === requestUser.id || requestUser.role === 'admin') {
             if (item.type === 'file') {
                 fs.unlinkSync(

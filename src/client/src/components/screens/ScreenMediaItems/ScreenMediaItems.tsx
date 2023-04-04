@@ -15,7 +15,11 @@ import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Socket } from 'socket.io-client';
-import { MediaItem, RootAppState, User } from '../../../../../shared/types';
+import {
+    IMediaItem,
+    RootAppState,
+    ClientUser
+} from '../../../../../shared/types';
 
 type Props = {
     socket: Socket | null;
@@ -34,11 +38,11 @@ export default function ScreenMediaItems({
     socket
 }: Props): JSX.Element | null {
     const [redirect, setRedirect] = useState(false);
-    const [allMediaItems, setAllMediaItems] = useState<MediaItem[] | null>(
+    const [allMediaItems, setAllMediaItems] = useState<IMediaItem[] | null>(
         null
     );
     const [sortedMediaItems, setSortedMediaItems] = useState<
-        MediaItem[] | null
+        IMediaItem[] | null
     >(null);
     const [allUsers, setAllUsers] = useState<{ [id: string]: string }>();
     const [sorted, setSorted] = useState<{ [attribute: string]: boolean }>({});
@@ -92,9 +96,11 @@ export default function ScreenMediaItems({
                         );
                         if (response.data.success) {
                             const userRegister: { [id: string]: string } = {};
-                            response.data.allUsers.forEach((user: User) => {
-                                userRegister[user.id] = user.username;
-                            });
+                            response.data.allUsers.forEach(
+                                (user: ClientUser) => {
+                                    userRegister[user.id] = user.username;
+                                }
+                            );
                             setAllUsers(userRegister);
                         } else {
                             dispatch(
@@ -166,7 +172,7 @@ export default function ScreenMediaItems({
 
         if (!sorted[attribute] && allMediaItems) {
             setSortedMediaItems(
-                [...allMediaItems].sort((a: MediaItem, b: MediaItem) => {
+                [...allMediaItems].sort((a: IMediaItem, b: IMediaItem) => {
                     return a[attribute] < b[attribute] ? -1 : 1;
                 })
             );

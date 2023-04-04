@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Alert from '../../display/Alert/Alert';
 import Button from '../../input/Button/Button';
 import {
-    MediaItem,
+    IMediaItem,
     PlayerState,
     RootAppState
 } from '../../../../../shared/types';
@@ -13,7 +13,7 @@ import {
 interface Props {
     playerState: PlayerState;
     emitPlayWish: (
-        mediaItem: MediaItem,
+        mediaItem: IMediaItem,
         isPlaying: boolean,
         lastPositionItemId: string | null,
         requestLastPosition: boolean,

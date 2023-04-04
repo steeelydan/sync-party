@@ -19,7 +19,7 @@ import MediaMenuDraggable from '../MediaMenuDraggable/MediaMenuDraggable';
 import { Socket } from 'socket.io-client';
 import {
     ClientParty,
-    MediaItem,
+    IMediaItem,
     PlayerState,
     RootAppState
 } from '../../../../../shared/types';
@@ -28,7 +28,7 @@ type Props = {
     socket: Socket | null;
     setPlayerFocused: (focused: boolean) => void;
     emitPlayWish: (
-        mediaItem: MediaItem,
+        mediaItem: IMediaItem,
         isPlaying: boolean,
         lastPositionItemId: string | null,
         requestLastPosition: boolean,
@@ -52,7 +52,7 @@ export default function MediaMenu({
     const party: ClientParty | null = useSelector(
         (state: RootAppState) => state.globalState.party
     );
-    const playingItem: MediaItem | null = useSelector(
+    const playingItem: IMediaItem | null = useSelector(
         (state: RootAppState) => state.globalState.playingItem
     );
     const uiVisible = useSelector(
@@ -92,7 +92,7 @@ export default function MediaMenu({
     }, [party]);
 
     const handleRemoveItemFromParty = async (
-        item: MediaItem
+        item: IMediaItem
     ): Promise<void> => {
         if (socket && party) {
             if (
@@ -159,7 +159,7 @@ export default function MediaMenu({
         }
     };
 
-    const handleItemEditSave = async (item: MediaItem): Promise<void> => {
+    const handleItemEditSave = async (item: IMediaItem): Promise<void> => {
         if (socket && party) {
             try {
                 const response = await Axios.put(
@@ -192,9 +192,9 @@ export default function MediaMenu({
         }
     };
 
-    const handleItemClick = (chosenItem: MediaItem): void => {
+    const handleItemClick = (chosenItem: IMediaItem): void => {
         if (party) {
-            const newSource = party.items.filter((mediaItem: MediaItem) => {
+            const newSource = party.items.filter((mediaItem: IMediaItem) => {
                 return mediaItem.id === chosenItem.id;
             })[0];
 
@@ -283,7 +283,7 @@ export default function MediaMenu({
                                 >
                                     {party.items.map(
                                         (
-                                            mediaItem: MediaItem,
+                                            mediaItem: IMediaItem,
                                             index: number
                                         ) => {
                                             const isCurrentlyPlayingItem =
@@ -323,14 +323,14 @@ export default function MediaMenu({
                                                             )
                                                         }
                                                         onRemoveButtonClick={(
-                                                            item: MediaItem
+                                                            item: IMediaItem
                                                         ): void => {
                                                             handleRemoveItemFromParty(
                                                                 item
                                                             );
                                                         }}
                                                         handleItemSave={(
-                                                            item: MediaItem
+                                                            item: IMediaItem
                                                         ): void => {
                                                             handleItemEditSave(
                                                                 item

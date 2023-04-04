@@ -1,12 +1,12 @@
 import { ReactElement } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getIconFromFileType } from '../../../common/helpers';
-import { MediaItem } from '../../../../../shared/types';
+import { IMediaItem } from '../../../../../shared/types';
 
 type Props = {
-    item: MediaItem;
+    item: IMediaItem;
     editMode: boolean;
-    handleItemClick: (mediaItem: MediaItem) => void;
+    handleItemClick: (mediaItem: IMediaItem) => void;
 };
 
 export default function ItemListedIcon({

@@ -1,7 +1,7 @@
 import { Logger } from 'winston';
 import { Request, Response } from 'express';
-import { Models } from '../../shared/types.js';
 import { partyMetadataValidator } from '../../shared/validation.js';
+import { Party } from '../models/Party.js';
 
 /**
  * @api {put} /api/partyMetadata Update Party Metadata
@@ -18,7 +18,6 @@ import { partyMetadataValidator } from '../../shared/validation.js';
 const updatePartyMetadata = async (
     req: Request,
     res: Response,
-    models: Models,
     logger: Logger
 ) => {
     const requestUser = req.user;
@@ -36,7 +35,11 @@ const updatePartyMetadata = async (
         return res.status(400).json({ success: false, msg: 'validationError' });
     }
 
-    const party = await models.Party.findOne({ where: { id: partyId } });
+    const party = await Party.findOne({ where: { id: partyId } });
+
+    if (!party) {
+        return res.status(500).json({ success: false, msg: 'Party not found' });
+    }
 
     if (
         requestUser &&

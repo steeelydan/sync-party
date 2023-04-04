@@ -1,12 +1,12 @@
 import { ReactElement } from 'react';
-import { MediaItem } from '../../../../../shared/types';
+import { IMediaItem } from '../../../../../shared/types';
 
 interface Props {
-    item: MediaItem;
-    probablyEditedItem: MediaItem;
-    setProbablyEditedItem: (probablyEditedItem: MediaItem) => void;
+    item: IMediaItem;
+    probablyEditedItem: IMediaItem;
+    setProbablyEditedItem: (probablyEditedItem: IMediaItem) => void;
     editMode: boolean;
-    handleItemClick: (mediaItem: MediaItem) => void;
+    handleItemClick: (mediaItem: IMediaItem) => void;
     nameEditingAllowed: boolean;
 }
 

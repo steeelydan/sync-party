@@ -21,8 +21,9 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import AddMediaTabFile from '../AddMediaTabFile/AddMediaTabFile';
 import { Socket } from 'socket.io-client';
 import {
+    AddMediaTab,
     ClientParty,
-    MediaItem,
+    IMediaItem,
     NewMediaItem,
     RootAppState
 } from '../../../../../shared/types';
@@ -33,7 +34,7 @@ type Props = {
     setAddMediaIsActive: (isActive: boolean) => void;
     socket: Socket | null;
     setPlayerFocused: (focused: boolean) => void;
-    handleItemEditSave: (mediaItem: MediaItem) => Promise<void>;
+    handleItemEditSave: (mediaItem: IMediaItem) => Promise<void>;
 };
 
 export default function AddMedia({
@@ -59,7 +60,7 @@ export default function AddMedia({
         url: ''
     };
 
-    const [activeTab, setActiveTab] = useState<'user' | 'web' | 'file'>('file');
+    const [activeTab, setActiveTab] = useState<AddMediaTab>('file');
     const [file, setFile] = useState<File | null>(null);
     const [mediaItem, setMediaItem] = useState(mediaItemDefault);
     const [uploadStartTime, setUploadStartTime] = useState(0);
@@ -81,14 +82,14 @@ export default function AddMedia({
         if (userItems && party)
             if (
                 userItems.filter(
-                    (userItem: MediaItem) => !partyItemsSet.has(userItem.id)
+                    (userItem: IMediaItem) => !partyItemsSet.has(userItem.id)
                 ).length
             ) {
                 setActiveTab('user');
             }
     }, [userItems, party, partyItemsSet]);
 
-    const addUserItem = async (item: MediaItem): Promise<void> => {
+    const addUserItem = async (item: IMediaItem): Promise<void> => {
         if (party) {
             try {
                 const response = await Axios.post(
@@ -232,9 +233,9 @@ export default function AddMedia({
             if (
                 updatedParty &&
                 !userItems.filter(
-                    (userItem: MediaItem) =>
+                    (userItem: IMediaItem) =>
                         !updatedParty.items.find(
-                            (item: MediaItem) => item.id === userItem.id
+                            (item: IMediaItem) => item.id === userItem.id
                         )
                 ).length
             ) {
@@ -311,7 +312,7 @@ export default function AddMedia({
         resetUploadForm();
     };
 
-    const changeTab = (tab: 'user' | 'web' | 'file'): void => {
+    const changeTab = (tab: AddMediaTab): void => {
         setActiveTab(tab);
         setFile(null);
         setMediaItem(mediaItemDefault);

@@ -4,13 +4,13 @@ import ItemListed from '../ItemListed/ItemListed';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSadCry } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
-import { MediaItem, RootAppState } from '../../../../../shared/types';
+import { IMediaItem, RootAppState } from '../../../../../shared/types';
 
 interface Props {
     partyItemsSet: Set<string>;
-    addUserItem: (mediaItem: MediaItem) => Promise<void>;
+    addUserItem: (mediaItem: IMediaItem) => Promise<void>;
     setPlayerFocused: (focused: boolean) => void;
-    handleItemEditSave: (mediaItem: MediaItem) => void;
+    handleItemEditSave: (mediaItem: IMediaItem) => void;
 }
 
 export default function AddMediaTabUser({
@@ -25,7 +25,7 @@ export default function AddMediaTabUser({
 
     const { t } = useTranslation();
     const [itemsFilter, setItemsFilter] = useState<string | null>(null);
-    const [filteredItems, setFilteredItems] = useState<MediaItem[]>(
+    const [filteredItems, setFilteredItems] = useState<IMediaItem[]>(
         userItems || []
     );
 
@@ -61,12 +61,12 @@ export default function AddMediaTabUser({
             {filteredItems.length ? (
                 <div className="userItemList">
                     {filteredItems
-                        .sort((a: MediaItem, b: MediaItem) => {
+                        .sort((a: IMediaItem, b: IMediaItem) => {
                             return a.name.toLowerCase() < b.name.toLowerCase()
                                 ? -1
                                 : 1;
                         })
-                        .map((source: MediaItem) => {
+                        .map((source: IMediaItem) => {
                             if (!partyItemsSet.has(source.id)) {
                                 return (
                                     <ItemListed
@@ -76,7 +76,7 @@ export default function AddMediaTabUser({
                                             addUserItem(source)
                                         }
                                         handleItemSave={(
-                                            item: MediaItem
+                                            item: IMediaItem
                                         ): void => {
                                             setPlayerFocused(true);
                                             handleItemEditSave(item);

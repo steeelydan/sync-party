@@ -3,7 +3,8 @@ import { Logger } from 'winston';
 import { Request, Response } from 'express';
 import { v4 as uuid } from 'uuid';
 import { createWebRtcIds } from '../serverHelpers.js';
-import { Models, NewParty } from '../../shared/types.js';
+import { NewParty } from '../../shared/types.js';
+import { Party } from '../models/Party.js';
 
 /**
  * @api {post} /api/party Create New Party (Admin only)
@@ -17,12 +18,7 @@ import { Models, NewParty } from '../../shared/types.js';
  * @apiError partyWithSameName A party with that name already exists.
  * @apiError notAuthorized Requesting user is not admin.
  */
-const createParty = async (
-    req: Request,
-    res: Response,
-    models: Models,
-    logger: Logger
-) => {
+const createParty = async (req: Request, res: Response, logger: Logger) => {
     const requestUser = req.user;
 
     if (req.body.partyName !== '' && requestUser && requestUser.id) {
@@ -52,12 +48,12 @@ const createParty = async (
                     .json({ success: false, msg: 'validationError' });
             }
 
-            const partyWithSameName = await models.Party.findOne({
+            const partyWithSameName = await Party.findOne({
                 where: { name: req.body.partyName }
             });
 
             if (!partyWithSameName) {
-                await models.Party.create(newParty);
+                await Party.create(newParty);
 
                 return res.status(200).json({
                     success: true,
@@ -94,19 +90,18 @@ const createParty = async (
  * @apiSuccess partyEditSuccessful Party was edited successfully.
  * @apiError notAuthorized Requesting user is not admin.
  */
-const editParty = async (
-    req: Request,
-    res: Response,
-    models: Models,
-    logger: Logger
-) => {
+const editParty = async (req: Request, res: Response, logger: Logger) => {
     const deleteParty = req.body.deleteParty;
 
     const requestParty = req.body.party;
 
-    const dbParty = await models.Party.findOne({
+    const dbParty = await Party.findOne({
         where: { id: requestParty.id }
     });
+
+    if (!dbParty) {
+        return res.status(500).json({ success: false, msg: 'Party not found' });
+    }
 
     // Recreate webRtcIds if party status changes
     if (dbParty.status !== requestParty.status) {
