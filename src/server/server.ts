@@ -91,7 +91,10 @@ const runApp = async () => {
 
         // HTTP(S) SERVER
 
-        const server = http.createServer(app);
+        const server =
+            process.env.NODE_ENV === 'development'
+                ? https.createServer({ cert: sslDevCert, key: sslDevKey }, app)
+                : http.createServer(app);
 
         // DEFAULT VALUES
 
