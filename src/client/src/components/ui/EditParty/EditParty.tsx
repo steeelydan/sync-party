@@ -13,7 +13,7 @@ import type { ReactElement } from 'react';
 import type { Socket } from 'socket.io-client';
 import type {
     ClientParty,
-    ClientPartyMember,
+    PartyMember,
     ServerParty,
     ClientUser
 } from '../../../../../shared/types';
@@ -56,9 +56,7 @@ export const EditParty = ({ party, user, socket }: Props): ReactElement => {
         }
     }, [user, dispatch, t]);
 
-    const handleAddMember = async (
-        addedMember: ClientPartyMember
-    ): Promise<void> => {
+    const handleAddMember = async (addedMember: PartyMember): Promise<void> => {
         if (party) {
             const newMembers = [...party.members, addedMember];
 
@@ -69,10 +67,10 @@ export const EditParty = ({ party, user, socket }: Props): ReactElement => {
         }
     };
 
-    const handleRemoveMember = (removedMember: ClientPartyMember): void => {
+    const handleRemoveMember = (removedMember: PartyMember): void => {
         if (party) {
             const newMembers = party.members.filter(
-                (partyMember: ClientPartyMember) => {
+                (partyMember: PartyMember) => {
                     return partyMember.id !== removedMember.id;
                 }
             );
@@ -188,10 +186,10 @@ export const EditParty = ({ party, user, socket }: Props): ReactElement => {
                         {user &&
                             party.members
                                 .filter(
-                                    (member: ClientPartyMember) =>
+                                    (member: PartyMember) =>
                                         member.id !== user.id
                                 )
-                                .map((member: ClientPartyMember) => {
+                                .map((member: PartyMember) => {
                                     return (
                                         <div key={member.id}>
                                             <ButtonLink
@@ -215,12 +213,12 @@ export const EditParty = ({ party, user, socket }: Props): ReactElement => {
                         {allUsers
                             .filter((user: ClientUser) => {
                                 return !party.members.find(
-                                    (member: ClientPartyMember) => {
+                                    (member: PartyMember) => {
                                         return member.id === user.id;
                                     }
                                 );
                             })
-                            .map((member: ClientPartyMember) => {
+                            .map((member: PartyMember) => {
                                 return (
                                     <div key={member.username}>
                                         <ButtonLink

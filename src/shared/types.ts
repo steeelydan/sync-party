@@ -1,23 +1,8 @@
-export type AuthenticatedPassportUser = {
-    id?: string;
-};
+// Entities
 
-export type ClientUser = {
-    // Named this way to prevent conflict with passport & express session user types
+export type IParty = NewParty & {
     id: string;
-    username: string;
-    role: UserRole;
-    settings: {};
 };
-
-export type IUser = ClientUser & {
-    password: string;
-};
-
-export type UserRole = 'admin' | 'user';
-
-export type PartyStatus = 'active' | 'stopped';
-
 export type NewParty = {
     name: string;
     owner: string;
@@ -31,17 +16,44 @@ export type NewParty = {
     };
     settings: { webRtcIds: Record<string, string> };
 };
-
-export type IParty = NewParty & {
+export type ServerParty = {
     id: string;
+    name: string;
+    status: PartyStatus;
+    members: string[];
 };
+export type ClientParty = {
+    id: string;
+    name: string;
+    status: PartyStatus;
+    members: PartyMember[];
+    items: IMediaItem[];
+    metadata: {
+        played: {
+            [mediaItemId: string]: boolean;
+        };
+    };
+    settings: {
+        webRtcIds: WebRtcIds;
+    };
+};
+export type PartyStatus = 'active' | 'stopped';
 
+export type IUser = ClientUser & {
+    password: string;
+};
+export type ClientUser = {
+    // Named this way to prevent conflict with passport & express session user types
+    id: string;
+    username: string;
+    role: UserRole;
+    settings: {};
+};
+export type UserRole = 'admin' | 'user';
 export type PartyMember = {
     id: string;
     username: string;
 };
-
-export type MediaItemType = 'web' | 'file';
 
 export type IMediaItem = {
     id: string;
@@ -52,6 +64,26 @@ export type IMediaItem = {
     settings: object;
     createdAt: Date;
     updatedAt: Date;
+};
+export type NewMediaItem = {
+    type: MediaItemType;
+    name: string;
+    owner: string | null;
+    url: string;
+};
+export type MediaItemType = 'web' | 'file';
+
+// Networking
+
+export type AxiosConfig = {
+    withCredentials: boolean;
+    // headers: {
+    //     'Cache-Control': string;
+    // };
+    /* TBI
+    xsrfCookieName: string;
+    xsrfHeaderName: string;
+    */
 };
 
 export type PlayWish = {
@@ -84,6 +116,84 @@ export type WebRtcState = {
     mode?: 'none' | 'audio' | 'video';
     isFullscreen?: boolean;
 };
+
+export type SyncStatusPartyMember = {
+    id: string;
+    position: number;
+    timestamp: number;
+    isPlaying: boolean;
+    serverTimeOffset: number;
+    webRtc: WebRtcState;
+};
+
+export type SyncStatusReceiveMember = {
+    id: string;
+    username: string;
+    delta: number;
+};
+
+export type MemberStatus = {
+    [userId: string]: {
+        online: boolean;
+        serverTimeOffset: number;
+        webRtc: WebRtcState;
+    };
+};
+
+export type PlayOrder = {
+    issuer: string;
+    partyId: string;
+    mediaItemId: string;
+    type: MediaItemType;
+    isPlaying: boolean;
+    lastPosition?: LastPosition;
+    position: number;
+    timestamp: number;
+    direction?: 'left' | 'right';
+};
+
+export interface ChatMessage {
+    partyId: string;
+    userId: string;
+    userName: string;
+    message: string;
+}
+
+export type FormattedChatMessage = ChatMessage & {
+    message: Element[];
+};
+
+export type WebRtcJoinLeaveMessage = {
+    webRtcId: string;
+    partyId: string;
+};
+
+export type SyncStatusIncomingMessage = {
+    [userId: string]: SyncStatusPartyMember;
+};
+
+export type SyncStatusOutgoingMessage = {
+    partyId: string;
+    userId: string;
+    timestamp: number;
+    position: number;
+    isPlaying: boolean;
+    webRtc: WebRtcState;
+};
+
+export type MediaItemUpdateMessage = Record<string, never>;
+
+export type PartyUpdateMessage = { partyId: string };
+
+export type JoinPartyMessage = {
+    userId: string;
+    partyId: string;
+    timestamp: number;
+};
+
+export type LeavePartyMessage = { partyId: string };
+
+// Client State
 
 export type RootAppState = {
     globalState: AppState;
@@ -178,14 +288,6 @@ export type PlayerTimeoutState = {
     uiTimeoutTimestamp: number;
 };
 
-export type PlayerTimeoutStateActionProperties = {
-    actionMessageTimeoutId?: ReturnType<typeof setTimeout> | null;
-    actionMessageTimeoutDone?: boolean;
-    uiTimeoutId?: ReturnType<typeof setTimeout> | null;
-    uiTimeoutDelay?: number;
-    uiTimeoutTimestamp?: number;
-};
-
 export type PartyPartialState = {
     party: ClientParty | null;
     syncStatus: SyncStatusReceiveMember[] | null;
@@ -194,109 +296,9 @@ export type PartyPartialState = {
     playingItem: IMediaItem | null;
 };
 
-export type ServerParty = {
-    id: string;
-    name: string;
-    status: PartyStatus;
-    members: string[];
-};
-
-export type ClientParty = {
-    id: string;
-    name: string;
-    status: PartyStatus;
-    members: ClientPartyMember[];
-    items: IMediaItem[];
-    metadata: {
-        played: {
-            [mediaItemId: string]: boolean;
-        };
-    };
-    settings: {
-        webRtcIds: WebRtcIds;
-    };
-};
-
-export type ClientPartyMember = {
-    id: string;
-    username: string;
-};
-
-export type NewMediaItem = {
-    type: MediaItemType;
-    name: string;
-    owner: string | null;
-    url: string;
-};
-
 export type WebRtcIds = {
     [userId: string]: string;
 };
-
-export type SyncStatusPartyMember = {
-    id: string;
-    position: number;
-    timestamp: number;
-    isPlaying: boolean;
-    serverTimeOffset: number;
-    webRtc: WebRtcState;
-};
-
-export type SyncStatusReceiveMember = {
-    id: string;
-    username: string;
-    delta: number;
-};
-
-export type MemberStatus = {
-    [userId: string]: {
-        online: boolean;
-        serverTimeOffset: number;
-        webRtc: WebRtcState;
-    };
-};
-
-export type ActionMessage = {
-    text: string | JSX.Element;
-};
-
-export type AddMediaTab = 'user' | 'web' | 'file';
-
-export type PlayOrder = {
-    issuer: string;
-    partyId: string;
-    mediaItemId: string;
-    type: MediaItemType;
-    isPlaying: boolean;
-    lastPosition?: LastPosition;
-    position: number;
-    timestamp: number;
-    direction?: 'left' | 'right';
-};
-
-export interface ChatMessage {
-    partyId: string;
-    userId: string;
-    userName: string;
-    message: string;
-}
-
-export type FormattedChatMessage = ChatMessage & {
-    message: Element[];
-};
-
-export type AxiosConfig = {
-    withCredentials: boolean;
-    // headers: {
-    //     'Cache-Control': string;
-    // };
-    /* TBI
-    xsrfCookieName: string;
-    xsrfHeaderName: string;
-    */
-};
-
-export type MediaTypes = 'audio' | 'video' | 'stream';
 
 export type ReactPlayerState = {
     played: number;
@@ -305,51 +307,19 @@ export type ReactPlayerState = {
     loadedSeconds: number;
 };
 
-// Websockets messages
+// GUI
 
-export type WebRtcJoinLeaveMessage = {
-    webRtcId: string;
-    partyId: string;
+export type ActionMessage = {
+    text: string | JSX.Element;
 };
 
-export type SyncStatusIncomingMessage = {
-    [userId: string]: SyncStatusPartyMember;
-};
+export type AddMediaTab = 'user' | 'web' | 'file';
 
-export type SyncStatusOutgoingMessage = {
-    partyId: string;
-    userId: string;
-    timestamp: number;
-    position: number;
-    isPlaying: boolean;
-    webRtc: WebRtcState;
-};
+// Media
 
-export type MediaItemUpdateMessage = Record<string, never>;
+export type MediaTypes = 'audio' | 'video' | 'stream';
 
-export type PartyUpdateMessage = { partyId: string };
-
-export type JoinPartyMessage = {
-    userId: string;
-    partyId: string;
-    timestamp: number;
-};
-
-export type LeavePartyMessage = { partyId: string };
-
-export type SyncPartyUserRole = 'admin' | 'user';
-
-export type RequestUser = {
-    id: string;
-    username: string;
-    role: string;
-};
-
-declare global {
-    namespace Express {
-        interface User extends RequestUser {}
-    }
-}
+// Environment, Paths, Database
 
 export type PathConfig = {
     publicDirPath?: string;

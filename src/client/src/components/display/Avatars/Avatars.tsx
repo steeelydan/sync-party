@@ -1,10 +1,7 @@
 import { useSelector } from 'react-redux';
 import { Avatar } from '../Avatar/Avatar';
 
-import type {
-    ClientPartyMember,
-    RootAppState
-} from '../../../../../shared/types';
+import type { PartyMember, RootAppState } from '../../../../../shared/types';
 
 export const Avatars = (): JSX.Element | null => {
     const party = useSelector((state: RootAppState) => state.globalState.party);
@@ -22,7 +19,7 @@ export const Avatars = (): JSX.Element | null => {
     return party && memberStatus && user && (uiVisible || !playingItem) ? (
         <div className="absolute right-0 top-0 flex flex-row pl-5">
             {party.members &&
-                party.members.map((member: ClientPartyMember) => {
+                party.members.map((member: PartyMember) => {
                     return (
                         <Avatar
                             showTitle={true}

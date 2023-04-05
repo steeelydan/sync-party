@@ -33,7 +33,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { Socket } from 'socket.io-client';
 import type {
-    ClientPartyMember,
+    PartyMember,
     IMediaItem,
     MemberStatus,
     PlayerState,
@@ -351,8 +351,7 @@ export const MediaPlayerContainer = ({ socket }: Props): JSX.Element => {
 
                     // None found if issuer === 'system' -> No action message
                     const memberInParty = party.members.find(
-                        (member: ClientPartyMember) =>
-                            member.id === playOrder.issuer
+                        (member: PartyMember) => member.id === playOrder.issuer
                     );
 
                     if (memberInParty) {
@@ -425,8 +424,7 @@ export const MediaPlayerContainer = ({ socket }: Props): JSX.Element => {
                         );
 
                         const memberInParty = party.members.find(
-                            (member: ClientPartyMember) =>
-                                member.id === memberId
+                            (member: PartyMember) => member.id === memberId
                         );
 
                         if (memberInParty) {

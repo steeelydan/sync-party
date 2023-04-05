@@ -9,7 +9,7 @@ import { setGlobalState } from '../../../actions/globalActions';
 import type { ReactElement } from 'react';
 import type {
     ClientParty,
-    ClientPartyMember,
+    PartyMember,
     ClientUser
 } from '../../../../../shared/types';
 
@@ -77,7 +77,7 @@ export const PartyTile = ({
             </div>
             <div className="mb-1">{userParty.name}</div>
             <div className="flex flex-row flex-wrap">
-                {userParty.members.map((member: ClientPartyMember) => {
+                {userParty.members.map((member: PartyMember) => {
                     return (
                         <Avatar
                             key={member.username}
