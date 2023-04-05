@@ -9,7 +9,7 @@
     "author": "steeelydan",
     "license": "GPL-3.0",
     "scripts": {
-        "dev:client": "webpack --config ./src/client/webpack.config.js --watch",
+        "dev:client": "webpack --config ./src/client/webpack.config.js --watch --stats=minimal",
         "dev:server": "tsc-watch --project ./src/server/tsconfig.json --outDir ./build --onSuccess \"nodemon ./build/server/server.js\"",
         "prod:client:build": "webpack --config ./src/client/webpack.config.js",
         "prod:server:build": "rm -rf ./build/server/* && tsc --project ./src/server/tsconfig.json",
