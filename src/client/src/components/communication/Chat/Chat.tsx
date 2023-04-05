@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import EmojiPicker from '../../input/EmojiPicker/EmojiPicker';
+import { EmojiPicker } from '../../input/EmojiPicker/EmojiPicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmile } from '@fortawesome/free-solid-svg-icons';
-import ChatHistory from '../ChatHistory/ChatHistory';
-import ChatInput from '../ChatInput/ChatInput';
+import { ChatHistory } from '../ChatHistory/ChatHistory';
+import { ChatInput } from '../ChatInput/ChatInput';
 import { setGlobalState } from '../../../actions/globalActions';
 
 import type { ReactElement } from 'react';
@@ -19,12 +19,12 @@ interface Props {
     freezeUiVisible: (visible: boolean) => void;
 }
 
-export default function Chat({
+export const Chat = ({
     isActive,
     socket,
     setPlayerFocused,
     freezeUiVisible
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const party = useSelector((state: RootAppState) => state.globalState.party);
     const user = useSelector((state: RootAppState) => state.globalState.user);
     const chat = useSelector((state: RootAppState) => state.globalState.chat);
@@ -254,4 +254,4 @@ export default function Chat({
             </div>
         </div>
     );
-}
+};

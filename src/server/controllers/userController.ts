@@ -36,4 +36,4 @@ const getAllUsers = async (req: Request, res: Response) => {
     }
 };
 
-export default { getAllUsers };
+export const userController = { getAllUsers };

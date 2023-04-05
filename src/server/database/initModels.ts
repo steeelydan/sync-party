@@ -4,10 +4,8 @@ import { initMediaItem } from '../models/MediaItem.js';
 
 import type { Sequelize } from 'sequelize';
 
-const initModels = (sequelize: Sequelize): void => {
+export const initModels = (sequelize: Sequelize): void => {
     initParty(sequelize);
     initUser(sequelize);
     initMediaItem(sequelize);
 };
-
-export default initModels;

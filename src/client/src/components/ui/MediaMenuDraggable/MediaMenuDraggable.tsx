@@ -9,11 +9,11 @@ interface Props {
     index: number;
 }
 
-export default function MediaMenuDraggable({
+export const MediaMenuDraggable = ({
     children,
     mediaItemId,
     index
-}: Props): ReactElement {
+}: Props): ReactElement => {
     return (
         <Draggable draggableId={mediaItemId} index={index}>
             {(provided: DraggableProvided): JSX.Element => (
@@ -29,4 +29,4 @@ export default function MediaMenuDraggable({
             )}
         </Draggable>
     );
-}
+};

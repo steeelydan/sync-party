@@ -19,7 +19,7 @@ import { setupAuthentication } from './core/authentication/setup.js';
 import { createRateLimiter } from './core/rateLimiting/rateLimiting.js';
 
 import dbConfig from './dbConfig.cjs';
-import initModels from './database/initModels.js';
+import { initModels } from './database/initModels.js';
 import { Party } from './models/Party.js';
 import { User } from './models/User.js';
 
@@ -31,16 +31,16 @@ import {
 } from './core/authentication/middleware.js';
 import { authenticateSocketRequest } from './middleware/socketMiddleware.js';
 
-import authController from './controllers/authController.js';
-import fileController from './controllers/fileController.js';
-import mediaItemController from './controllers/mediaItemController.js';
-import userController from './controllers/userController.js';
-import partyController from './controllers/partyController.js';
-import partyItemController from './controllers/partyItemController.js';
-import partyMetadataController from './controllers/partyMetadataController.js';
-import userPartyController from './controllers/userPartyController.js';
-import userItemController from './controllers/userItemController.js';
-import externalDataController from './controllers/externalDataController.js';
+import { authController } from './controllers/authController.js';
+import { fileController } from './controllers/fileController.js';
+import { mediaItemController } from './controllers/mediaItemController.js';
+import { userController } from './controllers/userController.js';
+import { partyController } from './controllers/partyController.js';
+import { partyItemController } from './controllers/partyItemController.js';
+import { partyMetadataController } from './controllers/partyMetadataController.js';
+import { userPartyController } from './controllers/userPartyController.js';
+import { userItemController } from './controllers/userItemController.js';
+import { externalDataController } from './controllers/externalDataController.js';
 
 import type {
     ChatMessage,

@@ -97,4 +97,4 @@ const getUserParties = async (req: Request, res: Response) => {
     }
 };
 
-export default { getUserParties };
+export const userPartyController = { getUserParties };

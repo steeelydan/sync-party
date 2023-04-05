@@ -8,9 +8,9 @@ import { getUpdatedUserItems } from '../../../common/requests';
 
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
-import ItemListed from '../ItemListed/ItemListed';
-import AddMedia from '../AddMedia/AddMedia';
-import MediaMenuDraggable from '../MediaMenuDraggable/MediaMenuDraggable';
+import { ItemListed } from '../ItemListed/ItemListed';
+import { AddMedia } from '../AddMedia/AddMedia';
+import { MediaMenuDraggable } from '../MediaMenuDraggable/MediaMenuDraggable';
 
 import type { Socket } from 'socket.io-client';
 import type { DropResult, DroppableProvided } from 'react-beautiful-dnd';
@@ -38,14 +38,14 @@ type Props = {
     playerState: PlayerState;
 };
 
-export default function MediaMenu({
+export const MediaMenu = ({
     socket,
     setPlayerFocused,
     emitPlayWish,
     freezeUiVisible,
     isPlaying,
     playerState
-}: Props): JSX.Element {
+}: Props): JSX.Element => {
     const party: ClientParty | null = useSelector(
         (state: RootAppState) => state.globalState.party
     );
@@ -364,4 +364,4 @@ export default function MediaMenu({
             ></AddMedia>
         </div>
     );
-}
+};

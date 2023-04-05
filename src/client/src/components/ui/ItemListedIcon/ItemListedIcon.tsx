@@ -10,11 +10,11 @@ type Props = {
     handleItemClick: (mediaItem: IMediaItem) => void;
 };
 
-export default function ItemListedIcon({
+export const ItemListedIcon = ({
     item,
     editMode,
     handleItemClick
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const icon = getIconFromFileType(item.url);
 
     return (
@@ -29,4 +29,4 @@ export default function ItemListedIcon({
             <FontAwesomeIcon icon={icon}></FontAwesomeIcon>{' '}
         </div>
     );
-}
+};

@@ -11,11 +11,11 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { getUpdatedUserParties } from '../../../common/requests';
-import InputText from '../../input/InputText/InputText';
-import Heading from '../../display/Heading/Heading';
-import Button from '../../input/Button/Button';
-import Alert from '../../display/Alert/Alert';
-import PartyTile from '../../ui/PartyTile/PartyTile';
+import { InputText } from '../../input/InputText/InputText';
+import { Heading } from '../../display/Heading/Heading';
+import { Button } from '../../input/Button/Button';
+import { Alert } from '../../display/Alert/Alert';
+import { PartyTile } from '../../ui/PartyTile/PartyTile';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHdd } from '@fortawesome/free-solid-svg-icons';
@@ -28,7 +28,7 @@ type Props = {
     socket: Socket | null;
 };
 
-export default function ScreenDashboard(props: Props): JSX.Element | null {
+export const ScreenDashboard = (props: Props): JSX.Element | null => {
     const [redirectToParty, setRedirectToParty] = useState('');
     const [redirectToUser, setRedirectToUser] = useState(false);
     const [redirectToMediaItems, setRedirectToMediaItems] = useState(false);
@@ -241,4 +241,4 @@ export default function ScreenDashboard(props: Props): JSX.Element | null {
             </div>
         </>
     );
-}
+};

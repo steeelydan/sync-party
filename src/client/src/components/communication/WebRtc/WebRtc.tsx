@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Rnd } from 'react-rnd';
 import { rndHandleStyles } from '../../../common/helpers';
-import WebRtcVideoOverlayMenu from '../WebRtcVideoOverlayMenu/WebRtcVideoOverlayMenu';
+import { WebRtcVideoOverlayMenu } from '../WebRtcVideoOverlayMenu/WebRtcVideoOverlayMenu';
 
 import type { ReactElement } from 'react';
 import type { RootAppState, WebRtcIds } from '../../../../../shared/types';
@@ -21,7 +21,7 @@ interface Props {
     handlePlayPause: () => void;
 }
 
-export default function WebRtc({
+export const WebRtc = ({
     videoIsActive,
     mediaStreams,
     mediaStreamsRef,
@@ -29,7 +29,7 @@ export default function WebRtc({
     webRtcIds,
     showVideos,
     handlePlayPause
-}: Props): ReactElement | null {
+}: Props): ReactElement | null => {
     const ourWebRtcId = webRtcIds[ourUserId];
 
     const userIdWebRtcIdMap: {
@@ -315,4 +315,4 @@ export default function WebRtc({
     } else {
         return null;
     }
-}
+};

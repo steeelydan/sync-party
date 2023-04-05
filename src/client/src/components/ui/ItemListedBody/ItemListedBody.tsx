@@ -10,14 +10,14 @@ interface Props {
     nameEditingAllowed: boolean;
 }
 
-export default function ItemListedBody({
+export const ItemListedBody = ({
     item,
     probablyEditedItem,
     setProbablyEditedItem,
     editMode,
     handleItemClick,
     nameEditingAllowed
-}: Props): ReactElement {
+}: Props): ReactElement => {
     return (
         <div
             className="flex-col w-full"
@@ -44,4 +44,4 @@ export default function ItemListedBody({
             )}
         </div>
     );
-}
+};

@@ -1,4 +1,4 @@
-import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
+import { ButtonIcon } from '../../input/ButtonIcon/ButtonIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -11,12 +11,12 @@ type Props = {
     onCloseButton?: EventHandler<React.SyntheticEvent>;
 };
 
-export default function Alert({
+export const Alert = ({
     text,
     className,
     mode,
     onCloseButton
-}: Props): JSX.Element {
+}: Props): JSX.Element => {
     return (
         <div
             className={
@@ -54,4 +54,4 @@ export default function Alert({
             )}
         </div>
     );
-}
+};

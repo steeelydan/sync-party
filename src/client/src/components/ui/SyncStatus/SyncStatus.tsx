@@ -17,13 +17,13 @@ interface Props {
     uiVisible: boolean;
 }
 
-export default function SyncStatus({
+export const SyncStatus = ({
     party,
     playerState,
     syncStatus,
     memberStatus,
     uiVisible
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const syncStatusTolerance = 400;
 
     let lostSync = false;
@@ -87,4 +87,4 @@ export default function SyncStatus({
             </div>
         </div>
     );
-}
+};

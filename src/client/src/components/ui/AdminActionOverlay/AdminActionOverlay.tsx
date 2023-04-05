@@ -1,5 +1,5 @@
-import Heading from '../../display/Heading/Heading';
-import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
+import { Heading } from '../../display/Heading/Heading';
+import { ButtonIcon } from '../../input/ButtonIcon/ButtonIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -11,11 +11,11 @@ interface Props {
     onClose: () => void;
 }
 
-export default function AdminActionOverlay({
+export const AdminActionOverlay = ({
     children,
     heading,
     onClose
-}: Props): ReactElement {
+}: Props): ReactElement => {
     return (
         <div className="w-screen h-screen absolute flex p-20">
             <div className="z-50 m-auto max-w-screen-md max-h-screen-md w-full border border-gray-500 rounded shadow-md backgroundShade p-5">
@@ -38,4 +38,4 @@ export default function AdminActionOverlay({
             </div>
         </div>
     );
-}
+};

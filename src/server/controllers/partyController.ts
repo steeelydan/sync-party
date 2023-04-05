@@ -172,4 +172,4 @@ const editParty = async (req: Request, res: Response, logger: Logger) => {
     }
 };
 
-export default { createParty, editParty };
+export const partyController = { createParty, editParty };

@@ -8,7 +8,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
-import BarButton from '../../input/BarButton/BarButton';
+import { BarButton } from '../../input/BarButton/BarButton';
 
 import type { ReactElement } from 'react';
 import type { RootAppState } from '../../../../../shared/types';
@@ -22,14 +22,14 @@ interface Props {
     otherVideosAmount: number;
 }
 
-export default function WebRtcVideoOverlayMenu({
+export const WebRtcVideoOverlayMenu = ({
     isActive,
     displayVertically,
     setDisplayVertically,
     displayOwnVideo,
     setDisplayOwnVideo,
     otherVideosAmount
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const webRtcState = useSelector(
@@ -97,4 +97,4 @@ export default function WebRtcVideoOverlayMenu({
             )}
         </div>
     );
-}
+};

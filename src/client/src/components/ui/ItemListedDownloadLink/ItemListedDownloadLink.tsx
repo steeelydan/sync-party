@@ -10,11 +10,11 @@ interface Props {
     hovering: boolean;
 }
 
-export default function ItemListedDownloadLink({
+export const ItemListedDownloadLink = ({
     partyId,
     itemId,
     hovering
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const { t } = useTranslation();
 
     return (
@@ -36,4 +36,4 @@ export default function ItemListedDownloadLink({
             ></FontAwesomeIcon>
         </a>
     );
-}
+};

@@ -10,7 +10,7 @@ type Props = {
     onMouseUp?: React.MouseEventHandler<HTMLInputElement>;
 };
 
-export default function RangeSlider({
+export const RangeSlider = ({
     value,
     onChange,
     className,
@@ -18,7 +18,7 @@ export default function RangeSlider({
     width,
     onMouseDown,
     onMouseUp
-}: Props): JSX.Element {
+}: Props): JSX.Element => {
     return (
         <input
             type="range"
@@ -37,4 +37,4 @@ export default function RangeSlider({
             onMouseUp={onMouseUp}
         />
     );
-}
+};

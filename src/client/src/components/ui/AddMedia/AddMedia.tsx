@@ -9,16 +9,16 @@ import {
 } from '../../../common/requests';
 import { useTranslation } from 'react-i18next';
 
-import AddMediaTabBar from '../AddMediaTabBar/AddMediaTabBar';
-import AddMediaTabUser from '../AddMediaTabUser/AddMediaTabUser';
-import AddMediaTabWeb from '../AddMediaTabWeb/AddMediaTabWeb';
-import AddMediaUploadProgress from '../AddMediaUploadProgress/AddMediaUploadProgress';
-import Button from '../../input/Button/Button';
+import { AddMediaTabBar } from '../AddMediaTabBar/AddMediaTabBar';
+import { AddMediaTabUser } from '../AddMediaTabUser/AddMediaTabUser';
+import { AddMediaTabWeb } from '../AddMediaTabWeb/AddMediaTabWeb';
+import { AddMediaUploadProgress } from '../AddMediaUploadProgress/AddMediaUploadProgress';
+import { Button } from '../../input/Button/Button';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import AddMediaTabFile from '../AddMediaTabFile/AddMediaTabFile';
+import { AddMediaTabFile } from '../AddMediaTabFile/AddMediaTabFile';
 
 import type { Socket } from 'socket.io-client';
 import type {
@@ -38,14 +38,14 @@ type Props = {
     handleItemEditSave: (mediaItem: IMediaItem) => Promise<void>;
 };
 
-export default function AddMedia({
+export const AddMedia = ({
     isActive,
     partyItemsSet,
     setAddMediaIsActive,
     socket,
     setPlayerFocused,
     handleItemEditSave
-}: Props): JSX.Element {
+}: Props): JSX.Element => {
     const { t } = useTranslation();
 
     const user = useSelector((state: RootAppState) => state.globalState.user);
@@ -436,4 +436,4 @@ export default function AddMedia({
             )}
         </div>
     );
-}
+};

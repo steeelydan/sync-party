@@ -1,4 +1,4 @@
-import initModels from '../database/initModels.js';
+import { initModels } from '../database/initModels.js';
 import {
     createUser,
     deleteUser,

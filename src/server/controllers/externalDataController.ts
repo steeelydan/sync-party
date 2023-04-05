@@ -66,4 +66,4 @@ const getLinkMetadata = async (req: Request, res: Response, logger: Logger) => {
     }
 };
 
-export default { getLinkMetadata };
+export const externalDataController = { getLinkMetadata };

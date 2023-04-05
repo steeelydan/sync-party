@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
-import InputText from '../../input/InputText/InputText';
-import Button from '../../input/Button/Button';
+import { InputText } from '../../input/InputText/InputText';
+import { Button } from '../../input/Button/Button';
 import { audioExtensions, videoExtensions } from '../../../common/helpers';
 
 import type { ReactElement } from 'react';
@@ -18,7 +18,7 @@ interface Props {
     setPlayerFocused: (focused: boolean) => void;
 }
 
-export default function AddMediaTabFile({
+export const AddMediaTabFile = ({
     file,
     setFile,
     mediaItem,
@@ -26,7 +26,7 @@ export default function AddMediaTabFile({
     addFileItem,
     resetUploadForm,
     setPlayerFocused
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
@@ -113,4 +113,4 @@ export default function AddMediaTabFile({
             )}
         </form>
     );
-}
+};

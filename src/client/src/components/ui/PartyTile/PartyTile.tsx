@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
-import Avatar from '../../display/Avatar/Avatar';
+import { ButtonIcon } from '../../input/ButtonIcon/ButtonIcon';
+import { Avatar } from '../../display/Avatar/Avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
@@ -20,12 +20,12 @@ interface Props {
     setRedirectToPartySettings: (partyId: string) => void;
 }
 
-export default function PartyTile({
+export const PartyTile = ({
     user,
     userParty,
     handlePartyChoose,
     setRedirectToPartySettings
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
@@ -91,4 +91,4 @@ export default function PartyTile({
             </div>
         </div>
     );
-}
+};

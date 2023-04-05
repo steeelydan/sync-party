@@ -9,11 +9,11 @@ interface Props {
     isPlaying?: boolean;
 }
 
-export default function ItemListedPlayStatus({
+export const ItemListedPlayStatus = ({
     isCurrentlyPlayingItem,
     hovering,
     isPlaying
-}: Props): ReactElement | null {
+}: Props): ReactElement | null => {
     return isCurrentlyPlayingItem && !hovering ? (
         isPlaying ? (
             <div className="my-auto ml-2">
@@ -25,4 +25,4 @@ export default function ItemListedPlayStatus({
             </div>
         )
     ) : null;
-}
+};

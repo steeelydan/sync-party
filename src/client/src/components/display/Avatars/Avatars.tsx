@@ -1,12 +1,12 @@
 import { useSelector } from 'react-redux';
-import Avatar from '../Avatar/Avatar';
+import { Avatar } from '../Avatar/Avatar';
 
 import type {
     ClientPartyMember,
     RootAppState
 } from '../../../../../shared/types';
 
-export default function Avatars(): JSX.Element | null {
+export const Avatars = (): JSX.Element | null => {
     const party = useSelector((state: RootAppState) => state.globalState.party);
     const user = useSelector((state: RootAppState) => state.globalState.user);
     const playingItem = useSelector(
@@ -45,4 +45,4 @@ export default function Avatars(): JSX.Element | null {
                 })}
         </div>
     ) : null;
-}
+};

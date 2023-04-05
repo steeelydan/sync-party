@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-export default function ItemListedNewIndicator(): ReactElement {
+export const ItemListedNewIndicator = (): ReactElement => {
     return (
         <div className="my-auto">
             <div
@@ -10,4 +10,4 @@ export default function ItemListedNewIndicator(): ReactElement {
             ></div>
         </div>
     );
-}
+};

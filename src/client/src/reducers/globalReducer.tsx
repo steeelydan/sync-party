@@ -5,7 +5,7 @@ import type { AppAction, AppState } from '../../../shared/types';
 
 const initialState: AppState = { ...baseState, loggedIn: null };
 
-export default (
+export const globalReducer = (
     state: AppState = initialState,
     action: AppAction
 ): AppState => {

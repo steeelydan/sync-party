@@ -13,7 +13,11 @@ module.exports = {
     parserOptions: {
         ecmaVersion: 2020
     },
-    plugins: ['@typescript-eslint', 'eslint-plugin-prettier'],
+    plugins: [
+        '@typescript-eslint',
+        'eslint-plugin-prettier',
+        'eslint-plugin-import'
+    ],
     rules: {
         'prettier/prettier': 'warn',
         'no-unreachable': 'error',
@@ -32,7 +36,8 @@ module.exports = {
         // '@typescript-eslint/explicit-function-return-type': 'error',
         '@typescript-eslint/consistent-type-imports': 'error',
         '@typescript-eslint/no-var-requires': 'off',
-        '@typescript-eslint/ban-ts-comment': 'warn'
+        '@typescript-eslint/ban-ts-comment': 'warn',
+        'import/no-default-export': 'error'
     },
     ignorePatterns: ['./build/**/*'],
     overrides: [

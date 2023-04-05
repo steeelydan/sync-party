@@ -192,4 +192,8 @@ const updatePartyItems = async (
     }
 };
 
-export default { removeItemFromParty, addItemToParty, updatePartyItems };
+export const partyItemController = {
+    removeItemFromParty,
+    addItemToParty,
+    updatePartyItems
+};

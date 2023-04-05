@@ -18,7 +18,7 @@ type Props = {
     actionMessageDelay: number;
 };
 
-export default function MediaPlayerOverlay(props: Props): JSX.Element {
+export const MediaPlayerOverlay = (props: Props): JSX.Element => {
     const actionMessage = useSelector(
         (state: RootAppState) => state.globalState.actionMessage
     );
@@ -111,4 +111,4 @@ export default function MediaPlayerOverlay(props: Props): JSX.Element {
             )}
         </>
     );
-}
+};

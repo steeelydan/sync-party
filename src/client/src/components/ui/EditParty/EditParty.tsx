@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import Axios from 'axios';
 import { axiosConfig } from '../../../common/helpers';
 
-import Heading from '../../display/Heading/Heading';
-import ButtonLink from '../../input/ButtonLink/ButtonLink';
+import { Heading } from '../../display/Heading/Heading';
+import { ButtonLink } from '../../input/ButtonLink/ButtonLink';
 
 import type { ReactElement } from 'react';
 import type { Socket } from 'socket.io-client';
@@ -24,11 +24,7 @@ interface Props {
     socket: Socket | null;
 }
 
-export default function EditParty({
-    party,
-    user,
-    socket
-}: Props): ReactElement {
+export const EditParty = ({ party, user, socket }: Props): ReactElement => {
     const [allUsers, setAllUsers] = useState([]);
     const [redirect, setRedirect] = useState(false);
 
@@ -243,4 +239,4 @@ export default function EditParty({
             </div>
         </>
     );
-}
+};

@@ -13,7 +13,7 @@ interface Props {
     margins?: string;
 }
 
-export default function BarButton({
+export const BarButton = ({
     isActive,
     clickHandler,
     icon,
@@ -21,7 +21,7 @@ export default function BarButton({
     size,
     className,
     margins
-}: Props): ReactElement {
+}: Props): ReactElement => {
     return (
         <div
             className={
@@ -58,4 +58,4 @@ export default function BarButton({
             ></FontAwesomeIcon>
         </div>
     );
-}
+};

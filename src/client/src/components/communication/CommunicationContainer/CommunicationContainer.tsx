@@ -5,9 +5,9 @@ import { useDispatch } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 import Axios from 'axios';
 import { axiosConfig } from '../../../common/helpers';
-import Chat from '../Chat/Chat';
-import CommunicationBar from '../CommunicationBar/CommunicationBar';
-import WebRtc from '../WebRtc/WebRtc';
+import { Chat } from '../Chat/Chat';
+import { CommunicationBar } from '../CommunicationBar/CommunicationBar';
+import { WebRtc } from '../WebRtc/WebRtc';
 
 import type { ReactElement } from 'react';
 import type { Socket } from 'socket.io-client';
@@ -28,7 +28,7 @@ interface Props {
     handlePlayPause: () => void;
 }
 
-export default function CommunicationContainer({
+export const CommunicationContainer = ({
     socket,
     partyId,
     webRtcIds,
@@ -37,7 +37,7 @@ export default function CommunicationContainer({
     uiVisible,
     freezeUiVisible,
     handlePlayPause
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
@@ -437,4 +437,4 @@ export default function CommunicationContainer({
             )}
         </>
     );
-}
+};

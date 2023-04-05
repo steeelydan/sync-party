@@ -12,7 +12,7 @@ interface Props {
     t: (translationKey: string) => string;
 }
 
-export default function ChatInput({
+export const ChatInput = ({
     textInput,
     setPlayerFocused,
     freezeUiVisible,
@@ -20,7 +20,7 @@ export default function ChatInput({
     setTextInput,
     textInputRef,
     t
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const [freezeUiTimestamp, setFreezeUiTimestamp] = useState(0);
 
     const intervallicFreezeUiVisible = (freeze: boolean): void => {
@@ -67,4 +67,4 @@ export default function ChatInput({
             ></textarea>
         </div>
     );
-}
+};

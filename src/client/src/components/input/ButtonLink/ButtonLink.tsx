@@ -7,12 +7,12 @@ type Props = {
     padding?: string;
 };
 
-export default function ButtonLink({
+export const ButtonLink = ({
     text,
     onClick,
     className,
     padding
-}: Props): JSX.Element {
+}: Props): JSX.Element => {
     return (
         <button
             className={
@@ -27,4 +27,4 @@ export default function ButtonLink({
             {text}
         </button>
     );
-}
+};

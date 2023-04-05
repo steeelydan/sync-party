@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import RangeSlider from '../../input/RangeSlider/RangeSlider';
-import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
-import Duration from '../../display/Duration/Duration';
+import { RangeSlider } from '../../input/RangeSlider/RangeSlider';
+import { ButtonIcon } from '../../input/ButtonIcon/ButtonIcon';
+import { Duration } from '../../display/Duration/Duration';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -12,7 +12,7 @@ import {
     faExpand,
     faCompress
 } from '@fortawesome/free-solid-svg-icons';
-import SyncStatus from '../SyncStatus/SyncStatus';
+import { SyncStatus } from '../SyncStatus/SyncStatus';
 
 import type { MouseEventHandler, ChangeEventHandler } from 'react';
 import type { PlayerState, RootAppState } from '../../../../../shared/types';
@@ -27,7 +27,7 @@ type Props = {
     handleFullScreen: MouseEventHandler;
 };
 
-export default function BottomBar({
+export const BottomBar = ({
     playerState,
     handlePlayPause,
     handleSeekMouseDown,
@@ -35,7 +35,7 @@ export default function BottomBar({
     handleSeekMouseUp,
     handleVolumeChange,
     handleFullScreen
-}: Props): JSX.Element {
+}: Props): JSX.Element => {
     const { t } = useTranslation();
 
     const party = useSelector((state: RootAppState) => state.globalState.party);
@@ -146,4 +146,4 @@ export default function BottomBar({
             </div>
         </div>
     );
-}
+};

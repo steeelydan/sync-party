@@ -7,10 +7,10 @@ interface Props {
     uploadStartTime: number;
 }
 
-export default function AddMediaUploadProgress({
+export const AddMediaUploadProgress = ({
     progress,
     uploadStartTime
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const { t } = useTranslation();
 
     return (
@@ -30,4 +30,4 @@ export default function AddMediaUploadProgress({
             {t('common.minLeft')})
         </div>
     );
-}
+};

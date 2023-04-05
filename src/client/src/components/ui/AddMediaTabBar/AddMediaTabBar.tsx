@@ -17,12 +17,12 @@ interface Props {
     toggleCollapseAddMediaMenu: React.MouseEventHandler;
 }
 
-export default function AddMediaTabBar({
+export const AddMediaTabBar = ({
     activeTab,
     changeTab,
     isUploading,
     toggleCollapseAddMediaMenu
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const { t } = useTranslation();
 
     return (
@@ -103,4 +103,4 @@ export default function AddMediaTabBar({
             </div>
         </div>
     );
-}
+};

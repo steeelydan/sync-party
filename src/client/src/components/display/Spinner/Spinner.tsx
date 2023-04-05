@@ -21,7 +21,7 @@ interface Props {
         | undefined;
 }
 
-export default function Spinner({ size }: Props): ReactElement {
+export const Spinner = ({ size }: Props): ReactElement => {
     return (
         <FontAwesomeIcon
             className="m-auto"
@@ -30,4 +30,4 @@ export default function Spinner({ size }: Props): ReactElement {
             size={size ? size : '5x'}
         ></FontAwesomeIcon>
     );
-}
+};

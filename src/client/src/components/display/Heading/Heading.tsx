@@ -4,7 +4,7 @@ type Props = {
     className?: string;
 };
 
-export default function Heading({ text, size, className }: Props): JSX.Element {
+export const Heading = ({ text, size, className }: Props): JSX.Element => {
     switch (size) {
         case 1: {
             return <h1 className={'text-3xl ' + className}>{text}</h1>;
@@ -16,4 +16,4 @@ export default function Heading({ text, size, className }: Props): JSX.Element {
             return <h1 className={'text-xl ' + className}>{text}</h1>;
         }
     }
-}
+};

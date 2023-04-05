@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Spinner from '../../display/Spinner/Spinner';
-import Button from '../../input/Button/Button';
-import InputText from '../../input/InputText/InputText';
+import { Spinner } from '../../display/Spinner/Spinner';
+import { Button } from '../../input/Button/Button';
+import { InputText } from '../../input/InputText/InputText';
 
 import type { ReactElement } from 'react';
 import type { NewMediaItem } from '../../../../../shared/types';
@@ -22,7 +22,7 @@ interface Props {
     fetchingLinkMetadata: boolean;
 }
 
-export default function AddMediaTabWeb({
+export const AddMediaTabWeb = ({
     mediaItem,
     setMediaItem,
     addWebItem,
@@ -30,7 +30,7 @@ export default function AddMediaTabWeb({
     setPlayerFocused,
     linkMetadata,
     fetchingLinkMetadata
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const { t } = useTranslation();
 
     const [nameWithChannelTitle, setNameWithChannelTitle] = useState(false);
@@ -114,4 +114,4 @@ export default function AddMediaTabWeb({
             {fetchingLinkMetadata && <Spinner size="1x"></Spinner>}
         </form>
     );
-}
+};

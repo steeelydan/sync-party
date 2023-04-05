@@ -1,6 +1,6 @@
 import { createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import rootReducer from './reducers';
+import { combinedReducers } from './reducers';
 
 import type { Store } from 'redux';
 
@@ -8,9 +8,9 @@ const initialState = {};
 
 let store: Store;
 if (NODE_ENV === 'production') {
-    store = createStore(rootReducer, initialState);
+    store = createStore(combinedReducers, initialState);
 } else {
-    store = createStore(rootReducer, initialState, composeWithDevTools());
+    store = createStore(combinedReducers, initialState, composeWithDevTools());
 }
 
-export default store;
+export { store };

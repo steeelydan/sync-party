@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import Heading from '../../display/Heading/Heading';
-import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
-import EditParty from '../../ui/EditParty/EditParty';
+import { Heading } from '../../display/Heading/Heading';
+import { ButtonIcon } from '../../input/ButtonIcon/ButtonIcon';
+import { EditParty } from '../../ui/EditParty/EditParty';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -20,7 +20,7 @@ type Location = {
         referrer: string;
     };
 };
-export default function ScreenEditParty(props: Props): JSX.Element | null {
+export const ScreenEditParty = (props: Props): JSX.Element | null => {
     const [redirectBack, setRedirectBack] = useState(false);
     const location = useLocation() as Location;
     const params = useParams();
@@ -77,4 +77,4 @@ export default function ScreenEditParty(props: Props): JSX.Element | null {
             ></EditParty>
         </div>
     ) : null;
-}
+};

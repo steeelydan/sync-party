@@ -16,7 +16,7 @@ interface Props {
     t: (translationKey: string) => React.ReactNode;
 }
 
-export default function ChatHistory({
+export const ChatHistory = ({
     chatHistoryRef,
     chat,
     party,
@@ -24,7 +24,7 @@ export default function ChatHistory({
     isActive,
     uiVisible,
     t
-}: Props): ReactElement {
+}: Props): ReactElement => {
     return (
         <div
             className={
@@ -64,4 +64,4 @@ export default function ChatHistory({
             })}
         </div>
     );
-}
+};

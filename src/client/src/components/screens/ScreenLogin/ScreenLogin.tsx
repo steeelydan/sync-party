@@ -5,11 +5,11 @@ import Axios from 'axios';
 import { axiosConfig } from '../../../common/helpers';
 import { useTranslation } from 'react-i18next';
 
-import InputText from '../../input/InputText/InputText';
-import Button from '../../input/Button/Button';
-import Alert from '../../display/Alert/Alert';
+import { InputText } from '../../input/InputText/InputText';
+import { Button } from '../../input/Button/Button';
+import { Alert } from '../../display/Alert/Alert';
 
-export default function ScreenLogin(): JSX.Element {
+export const ScreenLogin = (): JSX.Element => {
     const [displayState, setDisplayState] = useState<'username' | 'password'>(
         'username'
     );
@@ -192,4 +192,4 @@ export default function ScreenLogin(): JSX.Element {
             </div>
         </div>
     );
-}
+};

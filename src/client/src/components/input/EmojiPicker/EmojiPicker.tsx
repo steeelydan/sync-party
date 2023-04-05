@@ -6,7 +6,7 @@ type Props = {
     addEmoji: (emoji: any) => void;
 };
 
-const EmojiPicker = ({ addEmoji }: Props) => {
+export const EmojiPicker = ({ addEmoji }: Props) => {
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -25,5 +25,3 @@ const EmojiPicker = ({ addEmoji }: Props) => {
 
     return <div ref={ref} />;
 };
-
-export default EmojiPicker;

@@ -11,7 +11,7 @@ type Props = {
     padding?: string;
 };
 
-export default function Button({
+export const Button = ({
     text,
     type,
     onClick,
@@ -20,7 +20,7 @@ export default function Button({
     disabled,
     color,
     padding
-}: Props): JSX.Element {
+}: Props): JSX.Element => {
     return (
         <button
             title={title}
@@ -41,4 +41,4 @@ export default function Button({
             {text}
         </button>
     );
-}
+};

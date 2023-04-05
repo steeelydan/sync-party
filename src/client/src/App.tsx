@@ -13,14 +13,14 @@ import { initReactI18next, useTranslation } from 'react-i18next';
 
 import { getUpdatedUserParties, getUpdatedUserItems } from './common/requests';
 import { formatChatMessage, updateCurrentParty } from './common/helpers';
-import translations from './translations';
+import { translations } from './translations';
 
-import Auth from './components/wrappers/Auth/Auth';
-import ScreenDashboard from './components/screens/ScreenDashboard/ScreenDashboard';
-import ScreenParty from './components/screens/ScreenParty/ScreenParty';
-import ScreenUser from './components/screens/ScreenUser/ScreenUser';
-import ScreenEditParty from './components/screens/ScreenEditParty/ScreenEditParty';
-import ScreenMediaItems from './components/screens/ScreenMediaItems/ScreenMediaItems';
+import { Auth } from './components/wrappers/Auth/Auth';
+import { ScreenDashboard } from './components/screens/ScreenDashboard/ScreenDashboard';
+import { ScreenParty } from './components/screens/ScreenParty/ScreenParty';
+import { ScreenUser } from './components/screens/ScreenUser/ScreenUser';
+import { ScreenEditParty } from './components/screens/ScreenEditParty/ScreenEditParty';
+import { ScreenMediaItems } from './components/screens/ScreenMediaItems/ScreenMediaItems';
 
 import type { Socket } from 'socket.io-client';
 import type { ChatMessage, RootAppState } from '../../shared/types';
@@ -32,7 +32,7 @@ i18n.use(initReactI18next).init({
     fallbackLng: 'en'
 });
 
-function App(): JSX.Element {
+export const App = (): JSX.Element => {
     const loggedIn = useSelector(
         (state: RootAppState) => state.globalState.loggedIn
     );
@@ -160,6 +160,4 @@ function App(): JSX.Element {
             </Auth>
         </div>
     );
-}
-
-export default App;
+};

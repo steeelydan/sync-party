@@ -14,7 +14,7 @@ type Props = {
     fontSize?: string;
 };
 
-export default function Avatar({
+export const Avatar = ({
     username,
     size,
     user,
@@ -22,7 +22,7 @@ export default function Avatar({
     online,
     webRtc,
     fontSize
-}: Props): JSX.Element {
+}: Props): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -73,4 +73,4 @@ export default function Avatar({
             </span>
         </div>
     );
-}
+};

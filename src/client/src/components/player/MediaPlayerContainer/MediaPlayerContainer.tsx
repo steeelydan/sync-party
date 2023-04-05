@@ -13,13 +13,13 @@ import Axios from 'axios';
 import screenfull from 'screenfull';
 
 import ReactPlayer from 'react-player';
-import TopBar from '../../ui/TopBar/TopBar';
-import BottomBar from '../../ui/BottomBar/BottomBar';
-import MediaMenu from '../../ui/MediaMenu/MediaMenu';
-import MediaPlayerOverlay from '../MediaPlayerOverlay/MediaPlayerOverlay';
-import ActionMessageContent from '../../display/ActionMessageContent/ActionMessageContent';
-import CommunicationContainer from '../../communication/CommunicationContainer/CommunicationContainer';
-import AlertContainer from '../../ui/AlertContainer/AlertContainer';
+import { TopBar } from '../../ui/TopBar/TopBar';
+import { BottomBar } from '../../ui/BottomBar/BottomBar';
+import { MediaMenu } from '../../ui/MediaMenu/MediaMenu';
+import { MediaPlayerOverlay } from '../MediaPlayerOverlay/MediaPlayerOverlay';
+import { ActionMessageContent } from '../../display/ActionMessageContent/ActionMessageContent';
+import { CommunicationContainer } from '../../communication/CommunicationContainer/CommunicationContainer';
+import { AlertContainer } from '../../ui/AlertContainer/AlertContainer';
 
 import {
     faPlay,
@@ -64,7 +64,7 @@ if (savedVolume) {
     }
 }
 
-export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
+export const MediaPlayerContainer = ({ socket }: Props): JSX.Element => {
     // Constants
     const uiTimeoutIntervalResolution = 500;
     const uiTimeoutShortDelay = 5000;
@@ -809,4 +809,4 @@ export default function MediaPlayerContainer({ socket }: Props): JSX.Element {
             ></AlertContainer>
         </div>
     );
-}
+};

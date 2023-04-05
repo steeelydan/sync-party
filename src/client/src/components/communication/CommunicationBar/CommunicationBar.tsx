@@ -9,7 +9,7 @@ import {
     faVideoSlash
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import BarButton from '../../input/BarButton/BarButton';
+import { BarButton } from '../../input/BarButton/BarButton';
 
 import type { ReactElement } from 'react';
 
@@ -29,7 +29,7 @@ interface Props {
     toggleVideoIsMuted: () => void;
 }
 
-export default function CommunicationBar({
+export const CommunicationBar = ({
     toggleChat,
     toggleWebRtcAudio,
     toggleWebRtcVideo,
@@ -43,7 +43,7 @@ export default function CommunicationBar({
     videoIsMuted,
     toggleAudioIsMuted,
     toggleVideoIsMuted
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const { t } = useTranslation();
 
     return (
@@ -129,4 +129,4 @@ export default function CommunicationBar({
             </div>
         </div>
     );
-}
+};

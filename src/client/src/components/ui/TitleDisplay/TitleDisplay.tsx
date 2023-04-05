@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import type { RootAppState } from '../../../../../shared/types';
 
-export default function TitleDisplay(): JSX.Element | null {
+export const TitleDisplay = (): JSX.Element | null => {
     const playingItem = useSelector(
         (state: RootAppState) => state.globalState.playingItem
     );
@@ -30,4 +30,4 @@ export default function TitleDisplay(): JSX.Element | null {
             )}
         </div>
     ) : null;
-}
+};

@@ -37,4 +37,4 @@ const getUserItems = async (req: Request, res: Response, logger: Logger) => {
     }
 };
 
-export default { getUserItems };
+export const userItemController = { getUserItems };

@@ -19,7 +19,7 @@ type Props = {
     onKeyDown?: React.EventHandler<React.KeyboardEvent>;
 };
 
-export default function InputText({
+export const InputText = ({
     value,
     id,
     type,
@@ -34,7 +34,7 @@ export default function InputText({
     onKeyDown,
     onFocus,
     onBlur
-}: Props): JSX.Element {
+}: Props): JSX.Element => {
     const randomId = uuid();
 
     return (
@@ -76,4 +76,4 @@ export default function InputText({
             </div>
         </div>
     );
-}
+};

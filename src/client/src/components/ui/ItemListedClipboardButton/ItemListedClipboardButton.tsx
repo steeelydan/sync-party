@@ -11,10 +11,10 @@ interface Props {
     hovering: boolean;
 }
 
-export default function ItemListedClipboardButton({
+export const ItemListedClipboardButton = ({
     itemUrl,
     hovering
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const { t } = useTranslation();
     const [isClicked, setIsClicked] = useState(false);
 
@@ -36,4 +36,4 @@ export default function ItemListedClipboardButton({
             </div>
         </CopyToClipboard>
     );
-}
+};

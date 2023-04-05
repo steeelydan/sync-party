@@ -10,8 +10,8 @@ import {
     getUpdatedUserItems,
     getUpdatedUserParties
 } from '../../../common/requests';
-import Heading from '../../display/Heading/Heading';
-import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
+import { Heading } from '../../display/Heading/Heading';
+import { ButtonIcon } from '../../input/ButtonIcon/ButtonIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -35,9 +35,7 @@ type SortableKey =
     | 'createdAt'
     | 'updatedAt';
 
-export default function ScreenMediaItems({
-    socket
-}: Props): JSX.Element | null {
+export const ScreenMediaItems = ({ socket }: Props): JSX.Element | null => {
     const [redirect, setRedirect] = useState(false);
     const [allMediaItems, setAllMediaItems] = useState<IMediaItem[] | null>(
         null
@@ -363,4 +361,4 @@ export default function ScreenMediaItems({
             </div>
         </div>
     ) : null;
-}
+};

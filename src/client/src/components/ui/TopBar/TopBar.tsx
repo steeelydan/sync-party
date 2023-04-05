@@ -3,10 +3,10 @@ import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import Avatars from '../../display/Avatars/Avatars';
-import TitleDisplay from '../TitleDisplay/TitleDisplay';
-import EditParty from '../EditParty/EditParty';
-import AdminActionOverlay from '../AdminActionOverlay/AdminActionOverlay';
+import { Avatars } from '../../display/Avatars/Avatars';
+import { TitleDisplay } from '../TitleDisplay/TitleDisplay';
+import { EditParty } from '../EditParty/EditParty';
+import { AdminActionOverlay } from '../AdminActionOverlay/AdminActionOverlay';
 
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,7 +18,7 @@ type Props = {
     socket: Socket | null;
 };
 
-export default function TopBar({ socket }: Props): JSX.Element {
+export const TopBar = ({ socket }: Props): JSX.Element => {
     const [editPartyOverlay, setEditPartyOverlay] = useState(false);
     const [redirect, setRedirect] = useState<'home' | ''>('');
 
@@ -94,4 +94,4 @@ export default function TopBar({ socket }: Props): JSX.Element {
             )}
         </div>
     );
-}
+};

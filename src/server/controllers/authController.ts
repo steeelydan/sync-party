@@ -82,4 +82,4 @@ const logout = async (req: Request, res: Response, logger: Logger) => {
     });
 };
 
-export default { auth, login, logout };
+export const authController = { auth, login, logout };

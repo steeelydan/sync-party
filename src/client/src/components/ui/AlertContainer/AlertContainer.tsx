@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { setGlobalState } from '../../../actions/globalActions';
 import { useTranslation } from 'react-i18next';
-import Alert from '../../display/Alert/Alert';
-import Button from '../../input/Button/Button';
+import { Alert } from '../../display/Alert/Alert';
+import { Button } from '../../input/Button/Button';
 
 import type { ReactElement } from 'react';
 import type {
@@ -26,12 +26,12 @@ interface Props {
     setHasLastPosition: (hasLastPosition: boolean) => void;
 }
 
-export default function AlertContainer({
+export const AlertContainer = ({
     playerState,
     emitPlayWish,
     hasLastPosition,
     setHasLastPosition
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const errorMessage = useSelector(
         (state: RootAppState) => state.globalState.errorMessage
     );
@@ -100,4 +100,4 @@ export default function AlertContainer({
                 )}
         </>
     );
-}
+};

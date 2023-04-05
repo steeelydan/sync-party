@@ -2,16 +2,16 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
+import { ButtonIcon } from '../../input/ButtonIcon/ButtonIcon';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTimes } from '@fortawesome/free-solid-svg-icons';
-import ItemListedBody from '../ItemListedBody/ItemListedBody';
-import ItemListedIcon from '../ItemListedIcon/ItemListedIcon';
-import ItemListedPlayStatus from '../ItemListedPlayStatus/ItemListedPlayStatus';
-import ItemListedNewIndicator from '../ItemListedNewIndicator/ItemListedNewIndicator';
-import ItemListedDownloadLink from '../ItemListedDownloadLink/ItemListedDownloadLink';
-import ItemListedClipboardButton from '../ItemListedClipboardButton/ItemListedClipboardButton';
+import { ItemListedBody } from '../ItemListedBody/ItemListedBody';
+import { ItemListedIcon } from '../ItemListedIcon/ItemListedIcon';
+import { ItemListedPlayStatus } from '../ItemListedPlayStatus/ItemListedPlayStatus';
+import { ItemListedNewIndicator } from '../ItemListedNewIndicator/ItemListedNewIndicator';
+import { ItemListedDownloadLink } from '../ItemListedDownloadLink/ItemListedDownloadLink';
+import { ItemListedClipboardButton } from '../ItemListedClipboardButton/ItemListedClipboardButton';
 
 import type { IMediaItem, RootAppState } from '../../../../../shared/types';
 
@@ -28,7 +28,7 @@ type Props = {
     partyItemListRef?: React.RefObject<HTMLDivElement>;
 };
 
-export default function ItemListed({
+export const ItemListed = ({
     item,
     handleItemSave,
     setPlayerFocused,
@@ -39,7 +39,7 @@ export default function ItemListed({
     handleItemClick,
     onRemoveButtonClick,
     partyItemListRef
-}: Props): JSX.Element {
+}: Props): JSX.Element => {
     const [editMode, setEditMode] = useState(false);
     const [probablyEditedItem, setProbablyEditedItem] = useState(item);
     const [hovering, setHovering] = useState(false);
@@ -227,4 +227,4 @@ export default function ItemListed({
             </div>
         </div>
     );
-}
+};

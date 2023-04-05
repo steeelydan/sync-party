@@ -6,15 +6,15 @@ import { setGlobalState } from '../../../actions/globalActions';
 import Axios from 'axios';
 import { baseState, axiosConfig } from '../../../common/helpers';
 
-import ButtonLink from '../../input/ButtonLink/ButtonLink';
-import Heading from '../../display/Heading/Heading';
-import ButtonIcon from '../../input/ButtonIcon/ButtonIcon';
+import { ButtonLink } from '../../input/ButtonLink/ButtonLink';
+import { Heading } from '../../display/Heading/Heading';
+import { ButtonIcon } from '../../input/ButtonIcon/ButtonIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import type { RootAppState } from '../../../../../shared/types';
 
-export default function ScreenUser(): JSX.Element | null {
+export const ScreenUser = (): JSX.Element | null => {
     const [loggedOut, setLoggedOut] = useState(false);
     const [redirect, setRedirect] = useState(false);
 
@@ -82,4 +82,4 @@ export default function ScreenUser(): JSX.Element | null {
             ></ButtonLink>
         </div>
     ) : null;
-}
+};

@@ -68,4 +68,4 @@ const updatePartyMetadata = async (
     }
 };
 
-export default { updatePartyMetadata };
+export const partyMetadataController = { updatePartyMetadata };

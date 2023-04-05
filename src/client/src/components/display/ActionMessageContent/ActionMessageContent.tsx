@@ -8,14 +8,11 @@ interface Props {
     text: string;
 }
 
-export default function ActionMessageContent({
-    icon,
-    text
-}: Props): ReactElement {
+export const ActionMessageContent = ({ icon, text }: Props): ReactElement => {
     return (
         <>
             <FontAwesomeIcon icon={icon}></FontAwesomeIcon>
             <span> {text}</span>
         </>
     );
-}
+};

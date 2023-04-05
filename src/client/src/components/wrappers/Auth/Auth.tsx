@@ -5,8 +5,8 @@ import Axios from 'axios';
 import { axiosConfig } from '../../../common/helpers';
 import { useTranslation } from 'react-i18next';
 
-import Spinner from '../../display/Spinner/Spinner';
-import ScreenLogin from '../../screens/ScreenLogin/ScreenLogin';
+import { Spinner } from '../../display/Spinner/Spinner';
+import { ScreenLogin } from '../../screens/ScreenLogin/ScreenLogin';
 
 import type { RootAppState } from '../../../../../shared/types';
 
@@ -14,7 +14,7 @@ type Props = {
     children: JSX.Element;
 };
 
-export default function Auth(props: Props): JSX.Element {
+export const Auth = (props: Props): JSX.Element => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
@@ -66,4 +66,4 @@ export default function Auth(props: Props): JSX.Element {
             <Spinner></Spinner>
         </div>
     );
-}
+};

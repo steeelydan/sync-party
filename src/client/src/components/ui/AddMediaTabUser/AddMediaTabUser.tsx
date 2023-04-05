@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ItemListed from '../ItemListed/ItemListed';
+import { ItemListed } from '../ItemListed/ItemListed';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSadCry } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
@@ -15,12 +15,12 @@ interface Props {
     handleItemEditSave: (mediaItem: IMediaItem) => void;
 }
 
-export default function AddMediaTabUser({
+export const AddMediaTabUser = ({
     partyItemsSet,
     addUserItem,
     setPlayerFocused,
     handleItemEditSave
-}: Props): ReactElement {
+}: Props): ReactElement => {
     const userItems = useSelector(
         (state: RootAppState) => state.globalState.userItems
     );
@@ -114,4 +114,4 @@ export default function AddMediaTabUser({
             )}
         </div>
     );
-}
+};

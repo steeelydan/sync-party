@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCurrentParty } from '../../../common/helpers';
-import MediaPlayerContainer from '../../player/MediaPlayerContainer/MediaPlayerContainer';
+import { MediaPlayerContainer } from '../../player/MediaPlayerContainer/MediaPlayerContainer';
 
 import type { Socket } from 'socket.io-client';
 import type { ClientParty, RootAppState } from '../../../../../shared/types';
@@ -11,7 +11,7 @@ type Props = {
     socket: Socket | null;
 };
 
-export default function ScreenParty({ socket }: Props): JSX.Element {
+export const ScreenParty = ({ socket }: Props): JSX.Element => {
     const dispatch = useDispatch();
     const params = useParams();
     const partyId = params.id;
@@ -52,4 +52,4 @@ export default function ScreenParty({ socket }: Props): JSX.Element {
     }
 
     return <MediaPlayerContainer socket={socket}></MediaPlayerContainer>;
-}
+};

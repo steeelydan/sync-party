@@ -3,13 +3,13 @@ type Props = {
     className?: string;
 };
 
-export default function Duration({ className, seconds }: Props): JSX.Element {
+export const Duration = ({ className, seconds }: Props): JSX.Element => {
     return (
         <time dateTime={`P${Math.round(seconds)}S`} className={className}>
             {format(seconds)}
         </time>
     );
-}
+};
 
 function format(seconds: number): string {
     const date = new Date(seconds * 1000);

@@ -1,4 +1,4 @@
-const translations = {
+export const translations = {
     en: {
         translation: {
             common: {
@@ -197,5 +197,3 @@ const translations = {
         }
     }
 };
-
-export default translations;

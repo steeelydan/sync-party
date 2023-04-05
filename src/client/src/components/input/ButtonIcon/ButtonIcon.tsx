@@ -9,14 +9,14 @@ type Props = {
     padding?: string;
 };
 
-export default function ButtonIcon({
+export const ButtonIcon = ({
     onClick,
     icon,
     title,
     className,
     color,
     padding
-}: Props): JSX.Element {
+}: Props): JSX.Element => {
     return (
         <button
             title={title}
@@ -37,4 +37,4 @@ export default function ButtonIcon({
             {icon}
         </button>
     );
-}
+};

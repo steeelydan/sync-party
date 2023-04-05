@@ -193,4 +193,4 @@ const upload = (req: Request, res: Response, logger: Logger) => {
     });
 };
 
-export default { getFile, upload };
+export const fileController = { getFile, upload };
