@@ -75,10 +75,10 @@ const changePassword = async (username: string, newPasswordRaw: string) => {
     await User.update({ password: newPasswordHashed }, { where: { username } });
 };
 
-const addFile = async (filePath: string, name: string, ownerName: string) => {
-    const url = path.resolve('data/uploads', filePath);
-    if (!fs.existsSync(url)) {
-        throw new Error(`File ${url} does not exist!`);
+const addFile = async (url: string, name: string, ownerName: string) => {
+    const fsPath = path.resolve('data/uploads', url);
+    if (!fs.existsSync(fsPath)) {
+        throw new Error(`File ${fsPath} does not exist!`);
     }
 
     const user = await User.findOne({ where: { username: ownerName } });
