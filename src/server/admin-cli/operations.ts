@@ -1,7 +1,12 @@
 import bcrypt from 'bcryptjs';
-import { User } from '../models/User.js';
+import fs from 'fs';
+import path from 'path';
+import { v4 as uuid } from 'uuid';
+import type { CreationAttributes } from 'sequelize';
 
+import { User } from '../models/User.js';
 import type { IUser, UserRole } from '../../shared/types.js';
+import { MediaItem } from '../models/MediaItem.js';
 
 const createUser = (username: string, role: UserRole, passwordRaw: string) => {
     const user: IUser = {} as IUser;
@@ -70,4 +75,35 @@ const changePassword = async (username: string, newPasswordRaw: string) => {
     await User.update({ password: newPasswordHashed }, { where: { username } });
 };
 
-export { createUser, deleteUser, listUsers, deleteAllUsers, changePassword };
+const addFile = async (filePath: string, name: string, ownerName: string) => {
+    const url = path.resolve('data/uploads', filePath);
+    if (!fs.existsSync(url)) {
+        throw new Error(`File ${url} does not exist!`);
+    }
+
+    const user = await User.findOne({ where: { username: ownerName } });
+
+    if (!user) {
+        throw new Error(`User ${ownerName} does not exist!`);
+    }
+
+    const newMediaItem: CreationAttributes<MediaItem> = {
+        id: uuid(),
+        type: 'file',
+        owner: user.id,
+        name,
+        url,
+        settings: {}
+    };
+
+    await MediaItem.create(newMediaItem);
+};
+
+export {
+    createUser,
+    deleteUser,
+    listUsers,
+    deleteAllUsers,
+    changePassword,
+    addFile
+};
