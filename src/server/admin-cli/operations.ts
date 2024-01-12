@@ -87,16 +87,25 @@ const addFile = async (url: string, name: string, ownerName: string) => {
         throw new Error(`User ${ownerName} does not exist!`);
     }
 
+    const id = uuid();
+    const newFileName = `${id}-${url}`;
+    const newFsPath = path.resolve('data/uploads', newFileName);
+    fs.renameSync(fsPath, newFsPath);
+    console.log(`Media file at '${fsPath}' was renamed to '${newFileName}'`);
+
     const newMediaItem: CreationAttributes<MediaItem> = {
         id: uuid(),
         type: 'file',
         owner: user.id,
         name,
-        url,
+        url: newFileName,
         settings: {}
     };
 
-    await MediaItem.create(newMediaItem);
+    const mediaItem = await MediaItem.create(newMediaItem);
+    console.log(
+        `'${mediaItem.name}' (${mediaItem.id}) was added with owner '${user.username}' (${user.id})`
+    );
 };
 
 export {
