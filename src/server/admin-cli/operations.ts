@@ -1,7 +1,12 @@
 import bcrypt from 'bcryptjs';
-import { User } from '../models/User.js';
+import fs from 'fs';
+import path from 'path';
+import { v4 as uuid } from 'uuid';
+import type { CreationAttributes } from 'sequelize';
 
+import { User } from '../models/User.js';
 import type { IUser, UserRole } from '../../shared/types.js';
+import { MediaItem } from '../models/MediaItem.js';
 
 const createUser = (username: string, role: UserRole, passwordRaw: string) => {
     const user: IUser = {} as IUser;
@@ -70,4 +75,44 @@ const changePassword = async (username: string, newPasswordRaw: string) => {
     await User.update({ password: newPasswordHashed }, { where: { username } });
 };
 
-export { createUser, deleteUser, listUsers, deleteAllUsers, changePassword };
+const addFile = async (url: string, name: string, ownerName: string) => {
+    const fsPath = path.resolve('data/uploads', url);
+    if (!fs.existsSync(fsPath)) {
+        throw new Error(`File ${fsPath} does not exist!`);
+    }
+
+    const user = await User.findOne({ where: { username: ownerName } });
+
+    if (!user) {
+        throw new Error(`User ${ownerName} does not exist!`);
+    }
+
+    const id = uuid();
+    const newFileName = `${id}-${url}`;
+    const newFsPath = path.resolve('data/uploads', newFileName);
+    fs.renameSync(fsPath, newFsPath);
+    console.log(`Media file at '${fsPath}' was renamed to '${newFileName}'`);
+
+    const newMediaItem: CreationAttributes<MediaItem> = {
+        id: uuid(),
+        type: 'file',
+        owner: user.id,
+        name,
+        url: newFileName,
+        settings: {}
+    };
+
+    const mediaItem = await MediaItem.create(newMediaItem);
+    console.log(
+        `'${mediaItem.name}' (${mediaItem.id}) was added with owner '${user.username}' (${user.id})`
+    );
+};
+
+export {
+    createUser,
+    deleteUser,
+    listUsers,
+    deleteAllUsers,
+    changePassword,
+    addFile
+};

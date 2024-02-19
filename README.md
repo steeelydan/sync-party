@@ -185,6 +185,7 @@ You can run the following commands with a **preceding space**, preventing the pa
 -   `delete-user <USERNAME>`
 -   `delete-all-users`
 -   `change-password <USERNAME> <NEW PASSWORD>`
+-   `add-file <FILE_NAME> <TITLE> <OWNER_USERNAME>`
 
 ## Changelog
 
