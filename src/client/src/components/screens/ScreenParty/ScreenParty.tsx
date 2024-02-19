@@ -46,7 +46,7 @@ export const ScreenParty = ({ socket }: Props): JSX.Element => {
 
     if (redirect) {
         if (socket && user) {
-            socket.emit('disconnect', { userId: user.id });
+            socket.emit('disconnected', { userId: user.id });
         }
         return <Navigate to="/"></Navigate>;
     }

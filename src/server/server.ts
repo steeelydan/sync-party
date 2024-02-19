@@ -67,7 +67,7 @@ setupEnvironment(pathConfig, requiredEnvVars, validEnvValues);
 const rateLimiter = createRateLimiter(200);
 
 if (!fs.existsSync(path.resolve('data/uploads'))) {
-    fs.mkdirSync(path.resolve('data/uploads'));
+    fs.mkdirSync(path.resolve('data/uploads'), { recursive: true });
 }
 
 if (!process.env.SERVER_PORT || !process.env.WEBSOCKETS_PORT) {
@@ -387,7 +387,7 @@ io.on('connection', (socket: Socket) => {
     });
 
     // Disconnect
-    socket.on('disconnect', () => {
+    socket.on('disconnected', () => {
         logger.log('info', `Web Sockets: User disconnected: ${socketUserId}`);
     });
 });
