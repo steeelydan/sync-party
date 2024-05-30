@@ -4,7 +4,8 @@ import {
     deleteUser,
     listUsers,
     deleteAllUsers,
-    changePassword
+    changePassword,
+    addFile
 } from './operations.js';
 import { setupEnvironment } from '../core/environment/environment.js';
 import { createDatabase } from '../core/database/database.js';
@@ -27,7 +28,8 @@ const runAdminCli = async () => {
             'delete-user',
             'list-users',
             'delete-all-users',
-            'change-password'
+            'change-password',
+            'add-file'
         ].includes(mode) === false
     ) {
         console.log(mode);
@@ -82,6 +84,20 @@ const runAdminCli = async () => {
         const username = process.argv[3];
         const newPasswordRaw = process.argv[4];
         await changePassword(username, newPasswordRaw);
+    }
+
+    if (mode === 'add-file') {
+        if (!process.argv[3] || !process.argv[4] || !process.argv[5]) {
+            console.log(
+                'File path, file name and owner must be specified after mode arg. Exiting.'
+            );
+            process.exit(1);
+        }
+        const filePath = process.argv[3];
+        const fileName = process.argv[4];
+        const ownerUsername = process.argv[5];
+
+        await addFile(filePath, fileName, ownerUsername);
     }
 };
 
